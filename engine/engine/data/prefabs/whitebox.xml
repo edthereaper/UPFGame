@@ -1,0 +1,17 @@
+<Entity>
+	<Name generate="whitebox"/>
+	<Transform/>
+	<Mesh paintableAmount="1" />
+    <Tint color="0x00FFFF7F" />
+	<AABB/>
+	<CullingAABB/>
+    
+	<WhiteBox/>
+	<StaticBody>
+		<shape
+			is		="scene"
+			supress	="scene|prop|tool|destructible|paint-sphere"
+			report	="bullet|cannon-path|flare-shot"
+		/>
+	</StaticBody>
+</Entity>

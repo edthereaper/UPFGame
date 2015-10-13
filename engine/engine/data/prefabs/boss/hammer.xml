@@ -1,0 +1,35 @@
+<components>
+	<Name generate="hammer"/>
+    <Transform/>
+	<SelfIllumination/>
+	
+	<Mesh/>
+	<AABB/>
+	<CullingAABB/>
+	<Transformable inert="true" type="boss_hammer" /> 
+	<Tint color="brown"/>
+	<RigidBody kinematic="yes">
+		<shape type="box" size="5.45 3.186 2.96" pos="0 1.593 0"
+			is		="boss|scene"
+			supress	="all"
+			supress_not ="player|player-cannon|bullet"
+			report	="player-cannon|bullet"
+		/>
+	</RigidBody>
+	<ExtraShapes>
+		<shape type="box" size="2.865 10.529 3.052" pos="0.15 8.4505 0"
+			is		="boss|scene"
+			supress	="all"
+			supress_not ="player|player-cannon|bullet"
+			report	="player-cannon|bullet"
+		/>
+		<shape type="box" size="1.432 6.128 2.158" pos="0.15 13.501 2.605"
+			is		="boss|scene"
+			supress	="all"
+			supress_not ="player|player-cannon|bullet"
+			report	="player-cannon|bullet"
+		/>
+	</ExtraShapes>
+    <Mobile/>
+    <Emitter name="hammer_fall" position="0.000000 0.000000 0.000000" rotation="0.018028 -0.021893 -0.014354 0.999495" count="2" particles0="emitter_0" particles1="emitter_1"/>
+</components>

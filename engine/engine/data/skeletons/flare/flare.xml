@@ -1,0 +1,12 @@
+<!--NOTE: anim must have the same order as in animationPlugs/flare.xml-->
+<skeleton>
+    <mesh name="flare"/>
+	<anim name="idle"/>
+	<anim name="alert"/>
+	<anim name="reload"/>
+	<anim name="stun"/>
+	<anim name="dead"/>
+	<anim name="victory"/>
+	<anim name="shot"/>
+	<anim name="get_damage"/>
+</skeleton>

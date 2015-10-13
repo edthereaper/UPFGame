@@ -1,0 +1,6 @@
+<technique 
+	fx="paint.fx"
+	vs="VSProjectPaint"
+	vs_decl="vdcl_paint"
+	ps="PSPaintWire"
+	/>

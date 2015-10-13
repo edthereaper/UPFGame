@@ -1,0 +1,9 @@
+<componentPrefab>
+	<Name generate="scene"/>
+	<Transform/>
+	<Mesh paintableAmount="1" />
+	<Tint/>
+	<SelfIllumination/>
+	<AABB/>
+	<CullingAABB/>
+</componentPrefab>

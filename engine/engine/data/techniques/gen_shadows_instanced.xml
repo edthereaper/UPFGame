@@ -1,0 +1,6 @@
+<technique 
+	fx="lights.fx"
+	vs="VSProjectInstanced"
+	vs_decl="vdcl_punt_instance"
+	ps=""
+	/>

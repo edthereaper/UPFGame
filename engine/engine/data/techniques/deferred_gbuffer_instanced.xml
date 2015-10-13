@@ -1,0 +1,6 @@
+<technique 
+	fx="deferred.fx"
+	vs="VSInstanced"
+	vs_decl="vdcl_punt_instance"
+	ps="PSGBuffer"
+	/>

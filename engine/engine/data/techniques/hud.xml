@@ -1,0 +1,6 @@
+<technique 
+	fx="hud.fx"
+	vs="VS"
+	vs_decl="vdcl_position_uv"
+	ps="PS"
+	/>

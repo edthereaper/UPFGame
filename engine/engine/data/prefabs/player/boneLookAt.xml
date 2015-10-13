@@ -1,0 +1,49 @@
+<BoneLookAt clear="yes" strength="1" >
+	<entry
+		bone2Name="Bip001 Spine1"
+		boneName="Bip001 Spine1"
+		fadeIn="0"
+		fadeOut="0"
+		ipolTime="0.4"
+		maxAngleXZ="86"
+		maxAngleY="78"
+		referenceDir="-0.00 0.55 0.84"
+		strength="0.3"
+		threshold="85"
+	/>
+	<entry
+		bone2Name="Bip001 Head"
+		boneName="Bip001 Neck"
+		fadeIn="0"
+		fadeOut="0"
+		ipolTime="0.4"
+		maxAngleXZ="57"
+		maxAngleY="20"
+		referenceDir="-0.00 0.15 0.99"
+		strength="0.25"
+		threshold="65"
+	/>
+	<entry
+		boneName="Bip001 Head"
+		fadeIn="0"
+		fadeOut="0"
+		ipolTime="0.7"
+		maxAngleXZ="80"
+		maxAngleY="60"
+		referenceDir="-0.00 0.33 0.94"
+		strength="0.95"
+		threshold="80"
+	/>
+	<entry
+		bone2Name="Bip001 Xtra14Opp"
+		boneName="Bip001 Xtra14"
+		fadeIn="0"
+		fadeOut="0"
+		ipolTime="0.3"
+		maxAngleXZ="30"
+		maxAngleY="8"
+		referenceDir="0.00 1.00 -0.00"
+		strength="0.55"
+		threshold="75"
+	/>
+</BoneLookAt>

@@ -1,0 +1,32 @@
+<componentPrefab>
+	<Name generate="cannon"/>
+	<Transform/>
+	<Restore/>
+	<prefab name="mesh/salida_humo" default="mesh/default"/>
+	<Mesh />
+	<Tint/>
+	<SelfIllumination/>
+	<AABB/>
+	<CullingAABB/>
+	
+	<Cannon/>
+	<Transformable type="mesh" resource="canon" originalResource="salida_humo" />
+	<ThrowsPickups/>
+	
+	<StaticBody>
+		<shape type="box" size="2 3.5 2" setLocalPose="false"
+			is		="tool"
+			supress	="prop|tool|scene|liana|destructible|paint-sphere"
+			report	="player|bullet|flare-shot"
+		/>
+	</StaticBody>
+	<Trigger>
+		<shape type="box" size="2 3.5 2" setLocalPose="false"
+			is		="tool"
+			supress	="all"
+			supress_not="player|player-cannon"
+			report	="player|player-cannon"
+		/>
+	</Trigger>
+	<MaxAnim name="cannon" max="91" type="ROT" isOn="0"/>
+</componentPrefab>

@@ -1,0 +1,9 @@
+<Entity init="yes">
+	<Name name="camera"/>
+	<Camera fov="45" znear="5e-2f" zfar="500" >
+		<lookAt eye="-52.1793 20.0 46.318" target="0 0 0" up="0 1 0"/>
+	</Camera>
+	<CameraAnim/>
+	<Culling/>
+	<Transform pos="-52.1793 20.0 46.318"/>
+</Entity>

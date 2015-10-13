@@ -1,0 +1,27 @@
+<Entity>
+	<Name generate="wall"/>
+	<Transform/>
+	<!-- Procedural mesh -->
+    <Tint/>
+	<SelfIllumination/>
+	<AABB/>
+	<CullingAABB/>
+    <!--<Emitter name="glass" position="0.000000 0.000000 0.000000" rotation="0.018028 -0.021893 -0.014354 0.999495" count="1" particles0="emitter_0"/>-->
+	<Destructible/>
+	<StaticBody>
+		<shape
+			is		="destructible"
+			supress	="scene|prop|tool|destructible|player-cannon|paint-sphere"
+			report	="bullet|flare-shot"
+		/>
+	</StaticBody>
+	<Trigger>
+		<shape
+			is			="destructible"
+			supress		="all"
+			supress_not	="player|player-cannon"
+			report		="player-cannon"
+		/>
+	</Trigger>
+
+</Entity>

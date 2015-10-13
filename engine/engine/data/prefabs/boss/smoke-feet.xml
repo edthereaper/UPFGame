@@ -1,0 +1,14 @@
+<Entity>
+	<Name generate="fireHazard"/>
+    <Transform/>
+	
+    <SmokePanel alwaysHot="true"/>
+	<Trigger>
+		<shape
+			is		="smoke-panel"
+			supress	="all"
+			supress_not ="player|player-cannon"
+			report	="all"
+		/>
+	</Trigger>
+</Entity>

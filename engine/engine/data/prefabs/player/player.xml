@@ -1,0 +1,42 @@
+<Entity>
+	<Name name="Vinedetta"/>
+	<Transform pivot="0 1 0"/>
+	<Mesh motionBlur="0.1"/>
+	<Skeleton name="vinedetta"/>
+	<prefab name="mesh/vinedetta"/>
+	<AABB min="-1 0 -1" max="1 2 1" />
+	<CullingAABB />
+	
+	<prefab name="player/boneLookAt"/>
+	<BoneLookAt active="yes" />
+	<prefab name="player/armPoint"/>
+	<AnimationPlugger archetype="vinedetta"/>
+	
+	<CharacterController contactOffset="0.01" climb="0.3" slopeLimit="40" maxJumpHeight="20">
+		<shape type="capsule" radius="0.225" height="1.20"
+			is		="player"
+			supress	="player|bullet|cannon-path|flare-shot|paint-sphere"
+			report	="tool|liana|pickup|destructible|enemy|weak-spot|boss"
+			
+			ccd="true"
+		/>
+	</CharacterController>
+	<Trigger>
+		<shape type="capsule" radius="0.225" height="1.20" skin="0.05"
+			is		="player"
+			supress	="all"
+			supress_not	="flare-shot"
+			report	="flare-shot"
+		/>
+	</Trigger>
+	
+	<PlayerMov megaPaintSize="3.5" regularPaintSize="2.5" />
+	<PlayerAttack/>
+	<PlayerStats/>
+	<Slots n="3"/>
+	<Detection type="coneaim" sight="15" hearing="0" fov="30" fovHear="120"/>
+	
+	<prefab name="player/light"/>
+	<prefab name="player/textHelper"/>
+	<prefab name="../animationSounds/playerAnimationSounds"/>	
+</Entity>

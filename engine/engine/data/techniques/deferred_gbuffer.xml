@@ -1,0 +1,6 @@
+<technique 
+	fx="deferred.fx"
+	vs="VS"
+	vs_decl="vdcl_position_uv_normal_tangent"
+	ps="PSGBuffer"
+	/>

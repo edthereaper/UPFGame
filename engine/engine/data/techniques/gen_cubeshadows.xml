@@ -1,0 +1,6 @@
+<technique 
+	fx="lights.fx"
+	vs="VSWorld"
+	vs_decl="vdcl_position_uv_normal_tangent"
+	ps="PSDistanceToLight"
+	/>

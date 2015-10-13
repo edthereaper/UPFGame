@@ -1,0 +1,31 @@
+<componentPrefab>
+	<Name generate="liana"/>
+	<Transform/>
+	<Restore/>
+	<prefab name="mesh/liana" default="mesh/default"/>
+	<InstancedMesh/>
+	<Tint/>
+	<SelfIllumination/>
+	<AABB/>
+	<CullingAABB/>
+	
+	<Liana limitX="45" limitZ="45" nLinks="20" > <!-- 10m -->
+		<collider
+			type="capsule" radius="0.1" height="0.5" setLocalPose="false"
+			is		="liana"
+			supress	="all"
+			supress_not="scene|prop|destructible|tool|bullet"
+			report="bullet"
+			/>
+		<trigger
+			type="capsule" radius="0.1" height="0.5" skin="0.35" setLocalPose="false"
+			is		="liana"
+			supress	="all"
+			supress_not="player|player-cannon"
+			report	="player|player-cannon"
+			/>
+	</Liana>
+	<Transformable type="tint" tint="0x7FFF0000"
+		resource="liana" originalResource="liana" />
+	<ThrowsPickups/>
+</componentPrefab>

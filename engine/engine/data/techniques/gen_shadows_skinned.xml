@@ -1,0 +1,6 @@
+<technique 
+	fx="lights.fx"
+	vs="VSProjectSkinned"
+	vs_decl="vdcl_skin"
+	ps=""
+	/>

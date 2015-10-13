@@ -1,0 +1,13 @@
+<componentPrefab>
+	<Name generate="flareEnemy"/>
+	<prefab name="components/enemy" default="mesh/default"/>
+	<Skeleton name="flare"/>
+	<prefab name="mesh/flare" default="mesh/default"/>
+	
+	<SelfIllumination/>
+	
+    <Flare/>
+    <Detection type="klaxon" sight="25" fov="100" hearing="15"/>
+	<AnimationPlugger archetype="flare"/>
+	<prefab name="../animationSounds/flareAnimationSounds"/>
+</componentPrefab>

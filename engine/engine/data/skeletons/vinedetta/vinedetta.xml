@@ -1,0 +1,29 @@
+<skeleton>
+    <mesh name="vinedetta"/>
+    <anim name="idle_nd" />
+	<anim name="vine_right" />
+	<anim name="vine_up" />
+	<anim name="vine_down" />
+	<anim name="vine_get_top" />
+	<anim name="dash" />
+	<anim name="falling" />
+	<anim name="out_canon" />
+	<anim name="running" />
+	<anim name="jumping_nd" />
+	<anim name="landing_nd" />
+	<anim name="jumping_mushroom_nd" />
+	<anim name="creep_idle_nd" />
+	<anim name="begin" />
+	<anim name="transition_idle2_nd" />
+	<anim name="idle2_nd" />
+	<anim name="start_vine_right" />
+	<anim name="start_vine_left" />
+	<anim name="start_vine_down" />
+	<anim name="vine_left" />	
+	<anim name="earthquake_from_ground" />
+	<anim name="falling_earthquake_nd" />
+	<anim name="grounding_after_falling_earthquake_nd" />
+	<anim name="earthquake_start_falling" />
+	<anim name="dying" />
+	<anim name="liana" />
+</skeleton>

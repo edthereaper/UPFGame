@@ -1,0 +1,9 @@
+<Entity>
+	<Name generate="orthoLight-"/>
+	<Transform />
+	<Camera znear="0.3" zfar="5" orthographic="true" w="5" h="5"/>
+	<Culling />
+	<Shadow resolution="512"/>
+	<DirLight spotlight="true" radius="10" shadowIntensity="0" export="true" />
+	<CullingAABBSpecial type="dirLight"/>
+</Entity>

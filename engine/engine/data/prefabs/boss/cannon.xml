@@ -1,0 +1,38 @@
+<Entity>
+	<Name generate="boss-cannon"/>
+	<Transform/>
+	<prefab name="mesh/salida_humo" default="mesh/default"/>
+	<Tint/>
+	<SelfIllumination/>
+	<AABB/>
+	<CullingAABB/>
+	<MaxAnim name="cannon" max="91" type="ROT" isOn="0"/>
+	<FlyingMobile/>
+	
+	<!-- Upon falling:
+			Transformable.inert := false;
+			RigidBody.is := tool
+			RigidBody.report |= bullet
+			Trigger.is := tool
+	-->
+	<Cannon fovH="15" fovV="25" impulse="50" lookAt="0 25 0" bossCannon="true" />
+	<Transformable type="mesh" resource="canon" inert="true" /> 
+	<ThrowsPickups/>
+	
+	<RigidBody kinematic="yes" >
+		<shape type="box" size="2 3.5 2"
+			is		="scene"
+			supress	="prop|tool|scene|liana|destructible|boss|weak-spot|paint-sphere"
+			report	="player|flare-shot"
+		/>
+	</RigidBody>
+	<Trigger>
+		<shape type="box" size="2 3.5 2"
+			is		="scene"
+			supress	="all"
+			supress_not="player|player-cannon"
+			report	="player|player-cannon"
+		/>
+	</Trigger>
+
+</Entity>

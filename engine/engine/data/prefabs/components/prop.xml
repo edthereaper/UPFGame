@@ -1,0 +1,24 @@
+<componentPrefab>
+	<Name generate="prop"/>
+	<Transform/>
+	<Restore/>
+	<Mesh />
+	<Tint/>
+	<SelfIllumination/>
+	<AABB/>
+	<CullingAABB skin="0.5" scale="1.1"/>
+	
+	<Prop/>
+	<Transformable type="mesh" >
+		<glow color="0x882200FF"/>
+	</Transformable>
+	<ThrowsPickups/>
+	
+	<StaticBody>
+		<shape
+			is		="prop"
+			supress	="prop|tool|scene|destructible|paint-sphere"
+			report	="player|bullet|flare-shot"
+		/>
+	</StaticBody>
+</componentPrefab>

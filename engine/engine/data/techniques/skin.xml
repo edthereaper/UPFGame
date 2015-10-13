@@ -1,0 +1,7 @@
+<technique 
+	fx="deferred.fx"
+	vs="VSSkin"
+	vs_decl="vdcl_skin"
+	ps="PSGBuffer"
+    uses_bones="yes"
+	/>

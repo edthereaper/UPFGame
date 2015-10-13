@@ -1,0 +1,20 @@
+<!--NOTE: anim must have the same order as in animationPlugs/melee.xml-->
+<skeleton>
+    <mesh name="melee"/>
+	<anim name="idle"/>
+	<anim name="idle_fight" />
+	<anim name="stun"/>
+	<anim name="dash" />
+	<anim name="dead"/>
+	<anim name="alert"/>
+    <anim name="combo1"/>
+    <anim name="combo2"/>
+    <anim name="combo3"/>
+	<anim name="victory"/>
+	<anim name="cover"/>
+	<anim name="refusal"/>
+	<anim name="lost"/>
+	<anim name="run"/>
+	<anim name="angry"/>
+	<anim name="get_damage"/>
+</skeleton>

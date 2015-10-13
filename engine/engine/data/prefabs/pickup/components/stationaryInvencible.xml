@@ -1,0 +1,5 @@
+<componentPrefab>
+	<prefab name="mesh/pickup" default="mesh/default"/>
+    <Tint color="0xFFFF00FF" />
+	<Pickup type="invincible" strength="1"/>
+</componentPrefab>

@@ -1,0 +1,8 @@
+<Entity init="true">
+	<Name name="Vinedetta_Dummy" />
+	<Transform pivot="0 1 0"/>
+	<prefab name="mesh/vinedetta"/>
+	<AABB min="-0.25 0 -0.25" max="0.25 1.65 0.25" />
+	<CullingAABB />
+	<Skeleton name="vinedetta" initAnim="run" initAnimFactor="1.5" />
+</Entity>

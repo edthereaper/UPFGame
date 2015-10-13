@@ -1,0 +1,28 @@
+<componentPrefab>
+	<Name generate="meleeEnemy"/>
+	<prefab name="components/enemy" default="mesh/default"/>
+	<Skeleton name="melee"/>
+	<prefab name="mesh/melee" default="mesh/default"/>
+	
+    <Melee
+		damage_intro="7"
+		damage_combo1="4"
+		damage_combo2="3"
+		damage_combo3="7"
+		damage_idle="0"
+		damage_aggressive="0"
+		damage_stunned="0"
+	/>
+    <Detection type="klaxon" sight="20" fov="100" hearing="10"/>
+	<AnimationPlugger archetype="melee"/>
+	
+	<Knife bone="Bip001 sierra_bottom">
+		<shape type="sphere" radius="0.60"
+			is="knife"
+			supress="all"
+			supress_not="player"
+			report="player"
+		/>
+	</Knife>
+	<prefab name="../animationSounds/meleeAnimationSounds"/>
+</componentPrefab>

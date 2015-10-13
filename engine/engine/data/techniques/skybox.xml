@@ -1,0 +1,6 @@
+<technique 
+	fx="skybox.fx"
+	vs="VS"
+	vs_decl="vdcl_position"
+	ps="PSDefer"
+	/>

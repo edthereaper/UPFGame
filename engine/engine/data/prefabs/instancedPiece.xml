@@ -1,0 +1,7 @@
+<Entity>
+	<Name/>
+	<Transform/>
+	<Mesh paintableAmount="1" />
+	<InstancedMesh/>
+	<AABB/>
+</Entity>

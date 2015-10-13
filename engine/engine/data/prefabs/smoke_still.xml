@@ -1,0 +1,23 @@
+<Entity init="false">
+	<Name name="Smoke-00"/>
+	<Transform />
+	<Mesh/>
+	<Mist
+		chaotic="yes"
+		dX="1"
+		dZ="1"
+		darkenAlpha="0.4"
+		depthTolerance="200"
+		factor="1"
+		h="0.5"
+		intensity="0.8"
+		layerDecay="0.05"
+		minimun="0"
+		sqSqrt="1"
+		unitWorldSize="25"
+	>
+		<top color="c30000cc" />
+		<bottom color="ffff0099" />
+	</Mist>
+	<Emitter name="Maxi_humo" position="0.000000 0.000000 0.000000" rotation="0.018028 -0.021893 -0.014354 0.999495" count="1" particles0="emitter_0"/>
+</Entity>

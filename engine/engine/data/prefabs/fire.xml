@@ -1,0 +1,5 @@
+<Entity>
+	<Name name="Fire"/>
+    <Transform/>
+	<particle_system pos="0.000000 0.000000 0.000000" rot="0.018028 -0.021893 -0.014354 0.999495" max_particles="725" life="46.900002" technique="particles" texture="flames_2" gravity="0.000000" range="10.900001" speed="0.000000" type="1" timing="21.000000" animated="1" total_frames="16" total_frames_row="4" name="fire" is_mesh="0" color="0.000000 1.000000 0.000000 0.000000" active_lifetime_counter="0"/>
+</Entity>

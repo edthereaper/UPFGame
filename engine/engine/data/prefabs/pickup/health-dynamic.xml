@@ -1,0 +1,4 @@
+<Entity>	
+	<prefab name="pickup/components/dynamic"/>
+	<prefab name="pickup/components/dynamicHealth"/>
+</Entity>

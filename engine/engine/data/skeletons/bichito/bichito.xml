@@ -1,0 +1,8 @@
+<skeleton>
+    <mesh name="bichito"/>
+	<anim name="fly" />
+    <anim name="idle" />
+	<anim name="death" />
+	<anim name="talk" />
+	<anim name="transform" />
+</skeleton>

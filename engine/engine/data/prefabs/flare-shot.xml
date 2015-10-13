@@ -1,0 +1,21 @@
+<Entity>
+	<Name name="fireball"/>
+    <Transform pos="0 0.9 0 0"/>
+	<!--<prefab name="mesh/pickup" default="mesh/default"/>-->
+    <Tint color="0xFF7F22FF" />
+	<AABB/>
+	<CullingAABB/>
+	
+    <FlareShot ttl="5"/>
+	<AmbientSound file="Flare_shot" volume="1.0" pan="0.0" radius="50.0"/> 
+	<RigidBody mass="1000" gravity="false">
+		<shape type ="sphere" radius="0.2"
+			sFriction="0.5" dFriction="0.5" restitution="0.25"
+			
+			is		="flare-shot"
+			supress	="liana|flare-shot|pickup|cannon-path|bullet|paint-sphere"
+			report	="all"
+		/>
+	</RigidBody>
+	<Emitter name="flames_shot" position="0.000000 0.000000 0.000000" rotation="0.018028 -0.021893 -0.014354 0.999495" count="3" particles0="emitter_0" particles1="emitter_1" particles2="emitter_2"/>
+</Entity>

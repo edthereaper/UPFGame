@@ -1,0 +1,4 @@
+<componentPrefab>
+	<prefab name="pickup/components/stationary"/>
+	<prefab name="pickup/components/stationaryCollectable"/>
+</componentPrefab>

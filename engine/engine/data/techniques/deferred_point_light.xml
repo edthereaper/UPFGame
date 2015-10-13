@@ -1,0 +1,6 @@
+<technique 
+	fx="lights.fx"
+	vs="VSProject"
+	vs_decl="vdcl_position_uv"
+	ps="PSPointLight"
+	/>

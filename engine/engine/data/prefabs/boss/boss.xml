@@ -1,0 +1,19 @@
+<componentPrefab>
+	<Name generate="boss"/>
+
+	<Tint color="brown" />
+	<SelfIllumination/>
+	
+	<AABB/>
+	<CullingAABB/>
+	
+	<Boss/>
+	<StaticBody >
+		<shape
+			is		="boss|scene"
+			supress	="all"
+			supress_not="player|player-cannon|bullet"
+			report	="player-cannon"
+		/>
+	</StaticBody>	
+</componentPrefab>

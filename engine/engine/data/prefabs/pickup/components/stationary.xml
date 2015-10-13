@@ -1,0 +1,15 @@
+<componentPrefab>
+	<Name generate="pickup-"/>
+    <AABB/>
+    <Transform/>
+    
+	<RigidBody mass="1" gravity="no">
+		<shape type="box" size="0.4 0.4 0.4"
+			sFriction="50" dFriction="50" restitution="0.25"
+			
+			is="pickup"
+			supress="enemy|bullet|pickup|flare-shot|cannon-path|liana|prop|tool|destructible|paint-sphere"
+			report="player"
+		/>
+	</RigidBody>
+</componentPrefab>

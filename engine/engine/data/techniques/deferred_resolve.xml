@@ -1,0 +1,6 @@
+<technique 
+	fx="deferred.fx"
+	vs="VSTextured"
+	vs_decl="vdcl_position_uv"
+	ps="PSResolve"
+	/>

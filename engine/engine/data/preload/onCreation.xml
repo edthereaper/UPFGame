@@ -1,0 +1,13 @@
+<preload>
+	<mesh name="trampolin"/>
+	<mesh name="canon"/>
+	<mesh name="pickupgreen"/>
+	<mesh name="pickupmagenta01"/>
+	<mesh name="bala"/>
+	<material name="trampolin"/>
+	<material name="canon"/>
+	<material name="creep_transform"/>
+	<material name="bala"/>
+	<material name="pickupgreen"/>
+	<material name="pickupmagenta01"/>
+</preload>

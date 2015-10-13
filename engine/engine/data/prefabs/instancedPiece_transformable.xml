@@ -1,0 +1,7 @@
+<Entity>
+	<Name/>
+	<Transform/>
+	<Mesh />
+	<InstancedMesh/>
+	<AABB/>
+</Entity>

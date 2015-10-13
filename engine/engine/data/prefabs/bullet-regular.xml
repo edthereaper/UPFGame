@@ -1,0 +1,21 @@
+<Entity>
+	<Name name="bullet"/>
+    <Transform/>
+	<prefab name="mesh/bala" default="mesh/default"/>
+    <!-- No tint />-->
+	<AABB/>
+	<CullingAABB/>
+	
+	<!-- Bullet.ttl ajustado para que llegue a los brazos del boss! no bajar! -->
+    <Bullet ttl="3.25" mega="false"/>
+	<RigidBody mass="0.0001" gravity="true">
+		<shape type ="sphere" radius="0.2" ccd="yes"
+			sFriction="0.5" dFriction="0.5" restitution="0.25"
+			
+			is      ="bullet"
+			supress	="player|bullet|pickup|cannon-path|paint-sphere"
+			report	="all"
+		/>
+	</RigidBody>
+	<Emitter name="bullet_no_physx" position="0.00000 0.00000 0.00000" rotation="0.018028f -0.021893f -0.014354f 0.999495f" count="2" particles0="emitter_0" particles1="emitter_1"/>
+</Entity>

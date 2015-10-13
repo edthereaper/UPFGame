@@ -1,0 +1,27 @@
+<ArmPoint strength="1" flexFactor="1">
+	<upper
+		angleXZ="50"
+		angleY="52"
+		bone="Bip001 R UpperArm"
+		fadeIn="30"
+		fadeOut="25"
+		ipolTime="0.3"
+		referenceDir="0.76 -0.57 -0.30"
+		strength="0.95"
+		threshold="100"
+		twist="Bip001 RUpArmTwist"
+	/>
+	<forearm
+		angleXZ="80"
+		angleY="80"
+		bone="Bip001 R Forearm"
+		fadeIn="10"
+		fadeOut="0"
+		ipolTime="0.3"
+		referenceDir="0.99 -0.14 0.02"
+		strength="0.95"
+		threshold="80"
+		twist="Bip001 R ForeTwist"
+	/>
+	<hand bone="Bip001 R Hand" 	/>
+</ArmPoint>

@@ -1,0 +1,17 @@
+<Entity>
+	<Name name="cannon-path"/>
+    <Transform/>
+	<prefab name="mesh/flecha" default="mesh/default"/>
+	<Tint color="0x00FF00FF" />
+	<AABB/>
+	<CullingAABB/>
+    
+	<CannonPath ttl="3"/>
+	<CharacterController contactOffset="0.01" climb="0.2" slopeLimit="0.25">
+		<shape type="sphere" radius="0.25"
+			is		="cannon-path"
+			supress	="player|bullet|cannonpath|enemy|pickup|liana|flare-shot|tool|paint-sphere"
+			report	="destructible"
+		/>
+	</CharacterController>
+</Entity>

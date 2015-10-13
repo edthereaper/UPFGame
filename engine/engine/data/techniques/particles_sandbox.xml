@@ -1,0 +1,6 @@
+<technique 
+	fx="particles.fx"
+	vs="VS"
+	vs_decl="vdcl_particle_data"
+	ps="PSSandbox"
+	/>

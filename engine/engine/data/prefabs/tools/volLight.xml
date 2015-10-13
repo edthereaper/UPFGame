@@ -1,0 +1,6 @@
+<Entity>
+	<Name generate="volLight-"/>
+	<Transform/>
+	<VolPtLight export="true" />
+	<CullingAABBSpecial type="volLight"/>
+</Entity>

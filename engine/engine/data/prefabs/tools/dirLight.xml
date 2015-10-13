@@ -1,0 +1,9 @@
+<Entity>
+	<Name generate="dirLight-"/>
+	<Transform />
+	<Camera znear="0.3" zfar="5" fov="30" />
+	<Culling />
+	<Shadow resolution="512"/>
+	<DirLight spotlight="true" radius="10" shadowIntensity="0" export="true" />
+	<CullingAABBSpecial type="dirLight"/>
+</Entity>

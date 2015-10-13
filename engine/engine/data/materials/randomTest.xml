@@ -1,0 +1,5 @@
+<std_material name="random"
+	diffuse="animTest"
+	paint_clamp="0"
+	random="true"
+/>

@@ -1,0 +1,32 @@
+<componentPrefab>
+	<Name generate="trampoline"/>
+	<Transform/>
+	<Restore/>
+	<prefab name="mesh/salida_aire" default="mesh/default"/>
+	<Mesh/>
+	<Tint/>
+	<SelfIllumination/>
+	<AABB/>
+	<CullingAABB skin="0.05"/>
+	
+	<Trampoline/>
+	<Transformable type="mesh" resource="trampolin" originalResource="salida_aire"/>
+	<ThrowsPickups/>
+	
+	<StaticBody>
+		<shape type="box" size="2 1 2" setLocalPose="false"
+			is		="tool"
+			supress ="prop|tool|scene|liana|destructible|paint-sphere"
+			report	="bullet|flare-shot"
+		/>
+	</StaticBody>
+	<Trigger>
+		<shape type="box" size="2 1 2" setLocalPose="false"
+			is		="tool"
+			supress	="all"
+			supress_not="player|player-cannon"
+			report	="player|player-cannon"
+		/>
+	</Trigger>
+	<Emitter name="trampolin" position="0.000000 0.000000 0.000000" rotation="0.018028 -0.021893 -0.014354 0.999495" count="1" particles0="emitter_0"/>
+</componentPrefab>

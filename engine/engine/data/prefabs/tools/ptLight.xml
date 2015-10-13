@@ -1,0 +1,9 @@
+<Entity >
+	<Name generate="ptLight-"/>
+	<Transform />
+	<Camera fov="90" znear="0.3" zfar="5"/>
+	<CullingCube />
+	<CubeShadow resolution="512"/>
+	<PtLight radius="5" shadowIntensity="0" export="true"  />
+	<CullingAABBSpecial type="ptLight"/>
+</Entity>

@@ -1,0 +1,6 @@
+<technique 
+	fx="mist.fx"
+	vs="VSProjected"
+	vs_decl="vdcl_position_uv"
+	ps="PSMist"
+	/>

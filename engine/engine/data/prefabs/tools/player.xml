@@ -1,0 +1,8 @@
+<Entity>
+	<Name name="&lt;player&gt;"/>
+	<Transform/>
+	<AABB/>
+	
+	<prefab name="player/light"/>
+	<PtLight export="false" enabled="false"/>
+</Entity>

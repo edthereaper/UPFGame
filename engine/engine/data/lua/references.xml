@@ -1,0 +1,5 @@
+<!-- Referenciar aqui el script lua para que sea cargado en el engine -->
+<reference>
+	<script name="script" />
+	<script name="player"/>
+</reference>

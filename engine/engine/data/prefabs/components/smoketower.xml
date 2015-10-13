@@ -1,0 +1,9 @@
+<componentPrefab>
+	<Name name="Smoke-00"/>
+	<Transform pos="-1.6185 -9.76585 -0.401614" />
+	
+	<top color="c30000cc" />
+	<bottom color="ffff0099" />
+	</Mist>
+	<SmokeTower/>
+<componentPrefab>

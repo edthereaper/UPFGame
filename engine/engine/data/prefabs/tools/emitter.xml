@@ -1,0 +1,5 @@
+<Entity>
+	<Name generate="emitter-"/>
+	<Transform />
+	<Emitter export="true" />
+</Entity>

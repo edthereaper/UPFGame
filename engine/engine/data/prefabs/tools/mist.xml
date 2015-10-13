@@ -1,0 +1,8 @@
+<Entity>
+	<Name generate="mist-"/>
+	<Transform />
+	<Mist export="true" >
+		<top color="mint" a="0.8"/>
+		<bottom color="mint" a="0.6"/>
+	</Mist>
+</Entity>
