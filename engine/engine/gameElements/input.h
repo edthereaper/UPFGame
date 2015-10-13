@@ -1,0 +1,76 @@
+#ifndef GAME_ELEMENTS_INPUT_H
+#define GAME_ELEMENTS_INPUT_H
+
+#include "app.h"
+
+
+namespace gameElements {
+
+	enum gameControls_e {
+		CONTROLS_NONE = APP_NUM_ENUMS,
+		CONTROLS_UP,
+		CONTROLS_DOWN,
+		CONTROLS_LEFT,
+		CONTROLS_RIGHT,
+		CONTROLS_MENU_UP,
+		CONTROLS_MENU_DOWN,
+		CONTROLS_MENU_LEFT,
+		CONTROLS_MENU_RIGHT,
+		CONTROLS_JUMP,
+		CONTROLS_DASH,
+		CONTROLS_SHOOT_CANNON,
+		CONTROLS_GRASP,//onto liana
+		CONTROLS_SHOOT,
+		CONTROLS_ACTIVATE_MEGAPOWER,
+		CONTROLS_MOVE_CAM_UP,
+		CONTROLS_MOVE_CAM_DOWN,
+		CONTROLS_MOVE_CAM_FASTER,
+		CONTROLS_MOVE_CAM_SLOWER,
+		CONTROLS_NUM_ENUMS,
+	};
+
+	inline void initGameInput(utils::Pad& pad)
+	{
+		pad.addMapping('W', CONTROLS_UP);
+		pad.addMapping('S', CONTROLS_DOWN);
+		pad.addMapping('A', CONTROLS_LEFT);
+		pad.addMapping('D', CONTROLS_RIGHT);
+		pad.addMapping(VK_SPACE, CONTROLS_JUMP);
+		pad.addMapping(VK_SPACE, CONTROLS_SHOOT_CANNON);
+		pad.addMapping(VK_LBUTTON, CONTROLS_SHOOT_CANNON);
+		pad.addMapping(VK_SHIFT, CONTROLS_GRASP);
+		pad.addMapping(VK_RBUTTON, CONTROLS_DASH);
+#ifndef LOOKAT_TOOL
+		pad.addMapping(VK_LBUTTON, CONTROLS_SHOOT);
+#else
+		pad.addMapping('Q', CONTROLS_SHOOT);
+#endif
+		pad.addMapping('E', CONTROLS_ACTIVATE_MEGAPOWER);
+		pad.addMapping('E', CONTROLS_MOVE_CAM_UP);
+		pad.addMapping('Q', CONTROLS_MOVE_CAM_DOWN);
+		pad.addMapping(VK_SHIFT, CONTROLS_MOVE_CAM_FASTER);
+		pad.addMapping(VK_CAPITAL, CONTROLS_MOVE_CAM_SLOWER);
+		pad.addMapping(XINPUT_GAMEPAD_A, CONTROLS_JUMP);
+		pad.addMapping(XINPUT_GAMEPAD_A, CONTROLS_SHOOT_CANNON);
+		pad.addMapping(XINPUT_GAMEPAD_Y, CONTROLS_ACTIVATE_MEGAPOWER);
+		pad.addMapping(XINPUT_GAMEPAD_X, CONTROLS_DASH);
+		pad.addMapping(XINPUT_GAMEPAD_B, CONTROLS_SHOOT);
+		pad.addMapping(XINPUT_GAMEPAD_B, CONTROLS_SHOOT_CANNON);
+		pad.addMapping(VK_UP, CONTROLS_MENU_UP);
+		pad.addMapping(VK_DOWN, CONTROLS_MENU_DOWN);
+		pad.addMapping(VK_LEFT, CONTROLS_MENU_LEFT);
+		pad.addMapping(VK_RIGHT, CONTROLS_MENU_RIGHT);
+	}
+
+	inline void initXboxGameInput(utils::Pad& xboxPad)
+	{
+		xboxPad.addMapping(XINPUT_GAMEPAD_START, APP_QUIT);
+		xboxPad.addMapping(XINPUT_GAMEPAD_DPAD_DOWN, CONTROLS_MENU_DOWN);
+		xboxPad.addMapping(XINPUT_GAMEPAD_DPAD_UP, CONTROLS_MENU_UP);
+		xboxPad.addMapping(XINPUT_GAMEPAD_DPAD_LEFT, CONTROLS_MENU_LEFT);
+		xboxPad.addMapping(XINPUT_GAMEPAD_DPAD_RIGHT, CONTROLS_MENU_RIGHT);
+	}
+
+}
+
+#endif
