@@ -1,0 +1,81 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "engine", "engine\engine.vcxproj", "{85FA2C07-D9E7-4DC9-A21B-476D7E997C21}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BB9D0314-C731-4321-A394-767216A4601A} = {BB9D0314-C731-4321-A394-767216A4601A}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cal3d", "engine\cal3d\cal3d.vcxproj", "{BB9D0314-C731-4321-A394-767216A4601A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9EA4004F-4AFF-4992-ACDA-9337CBFE5923}"
+	ProjectSection(SolutionItems) = preProject
+		Performance1.psess = Performance1.psess
+		Performance2.psess = Performance2.psess
+		Performance3.psess = Performance3.psess
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		AniTool|x64 = AniTool|x64
+		checked|x64 = checked|x64
+		Debug|x64 = Debug|x64
+		LookAt tool|x64 = LookAt tool|x64
+		Music|x64 = Music|x64
+		ObjectTool|x64 = ObjectTool|x64
+		Particles|x64 = Particles|x64
+		profile|x64 = profile|x64
+		Release|x64 = Release|x64
+		Test|x64 = Test|x64
+		Tool-light|x64 = Tool-light|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{85FA2C07-D9E7-4DC9-A21B-476D7E997C21}.AniTool|x64.ActiveCfg = AniTool|x64
+		{85FA2C07-D9E7-4DC9-A21B-476D7E997C21}.AniTool|x64.Build.0 = AniTool|x64
+		{85FA2C07-D9E7-4DC9-A21B-476D7E997C21}.checked|x64.ActiveCfg = Test|x64
+		{85FA2C07-D9E7-4DC9-A21B-476D7E997C21}.checked|x64.Build.0 = Test|x64
+		{85FA2C07-D9E7-4DC9-A21B-476D7E997C21}.Debug|x64.ActiveCfg = Debug|x64
+		{85FA2C07-D9E7-4DC9-A21B-476D7E997C21}.Debug|x64.Build.0 = Debug|x64
+		{85FA2C07-D9E7-4DC9-A21B-476D7E997C21}.LookAt tool|x64.ActiveCfg = LookAt tool|x64
+		{85FA2C07-D9E7-4DC9-A21B-476D7E997C21}.LookAt tool|x64.Build.0 = LookAt tool|x64
+		{85FA2C07-D9E7-4DC9-A21B-476D7E997C21}.Music|x64.ActiveCfg = Music|x64
+		{85FA2C07-D9E7-4DC9-A21B-476D7E997C21}.Music|x64.Build.0 = Music|x64
+		{85FA2C07-D9E7-4DC9-A21B-476D7E997C21}.ObjectTool|x64.ActiveCfg = ObjectTool|x64
+		{85FA2C07-D9E7-4DC9-A21B-476D7E997C21}.ObjectTool|x64.Build.0 = ObjectTool|x64
+		{85FA2C07-D9E7-4DC9-A21B-476D7E997C21}.Particles|x64.ActiveCfg = Particles|x64
+		{85FA2C07-D9E7-4DC9-A21B-476D7E997C21}.Particles|x64.Build.0 = Particles|x64
+		{85FA2C07-D9E7-4DC9-A21B-476D7E997C21}.profile|x64.ActiveCfg = Test|x64
+		{85FA2C07-D9E7-4DC9-A21B-476D7E997C21}.profile|x64.Build.0 = Test|x64
+		{85FA2C07-D9E7-4DC9-A21B-476D7E997C21}.Release|x64.ActiveCfg = Release|x64
+		{85FA2C07-D9E7-4DC9-A21B-476D7E997C21}.Release|x64.Build.0 = Release|x64
+		{85FA2C07-D9E7-4DC9-A21B-476D7E997C21}.Test|x64.ActiveCfg = Test|x64
+		{85FA2C07-D9E7-4DC9-A21B-476D7E997C21}.Test|x64.Build.0 = Test|x64
+		{85FA2C07-D9E7-4DC9-A21B-476D7E997C21}.Tool-light|x64.ActiveCfg = Tool-light|x64
+		{85FA2C07-D9E7-4DC9-A21B-476D7E997C21}.Tool-light|x64.Build.0 = Tool-light|x64
+		{BB9D0314-C731-4321-A394-767216A4601A}.AniTool|x64.ActiveCfg = AniTool|x64
+		{BB9D0314-C731-4321-A394-767216A4601A}.AniTool|x64.Build.0 = AniTool|x64
+		{BB9D0314-C731-4321-A394-767216A4601A}.checked|x64.ActiveCfg = Release|x64
+		{BB9D0314-C731-4321-A394-767216A4601A}.Debug|x64.ActiveCfg = Debug|x64
+		{BB9D0314-C731-4321-A394-767216A4601A}.Debug|x64.Build.0 = Debug|x64
+		{BB9D0314-C731-4321-A394-767216A4601A}.LookAt tool|x64.ActiveCfg = LookAt tool|x64
+		{BB9D0314-C731-4321-A394-767216A4601A}.LookAt tool|x64.Build.0 = LookAt tool|x64
+		{BB9D0314-C731-4321-A394-767216A4601A}.Music|x64.ActiveCfg = Music|x64
+		{BB9D0314-C731-4321-A394-767216A4601A}.Music|x64.Build.0 = Music|x64
+		{BB9D0314-C731-4321-A394-767216A4601A}.ObjectTool|x64.ActiveCfg = ObjectTool|x64
+		{BB9D0314-C731-4321-A394-767216A4601A}.ObjectTool|x64.Build.0 = ObjectTool|x64
+		{BB9D0314-C731-4321-A394-767216A4601A}.Particles|x64.ActiveCfg = Particles|x64
+		{BB9D0314-C731-4321-A394-767216A4601A}.Particles|x64.Build.0 = Particles|x64
+		{BB9D0314-C731-4321-A394-767216A4601A}.profile|x64.ActiveCfg = Release|x64
+		{BB9D0314-C731-4321-A394-767216A4601A}.Release|x64.ActiveCfg = Release|x64
+		{BB9D0314-C731-4321-A394-767216A4601A}.Release|x64.Build.0 = Release|x64
+		{BB9D0314-C731-4321-A394-767216A4601A}.Test|x64.ActiveCfg = Release|x64
+		{BB9D0314-C731-4321-A394-767216A4601A}.Test|x64.Build.0 = Release|x64
+		{BB9D0314-C731-4321-A394-767216A4601A}.Tool-light|x64.ActiveCfg = Tool-light|x64
+		{BB9D0314-C731-4321-A394-767216A4601A}.Tool-light|x64.Build.0 = Tool-light|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,58 @@
+#ignore thumbnails created by windows
+Thumbs.db
+#Ignore files build by Visual Studio
+*.obj
+*.pdb
+*.user
+*.aps
+*.pch
+*.vspscc
+*_i.c
+*_p.c
+*.ncb
+*.suo
+*.tlb
+*.tlh
+*.bak
+*.cache
+*.ilk
+*.log
+*.sbr
+*.opensdf
+*.sdf
+
+*.orig
+
+# Object files
+*.o
+*.ko
+
+# Libraries
+*.a
+
+# Shared objects
+*.so
+*.so.*
+*.dylib
+
+# Executables
+*.out
+*.app
+
+# Temps
+*.TMP
+*.tmp
+
+# Local files that don't belong in the repository
+local/
+engine/ipch/
+engine/x64/
+engine/engine.sdf
+engine/engine/config.ini
+
+engine/engine/SLB/x64/
+engine/engine/SLB/x64/Debug/
+engine/engine/SLB/x64/Debug/SLB.tlog/
+engine/engine/SLB/x64/Debug/SLB.tlog/CL.read.1.tlog
+engine/engine/SLB/x64/Debug/SLB.tlog/CL.read.1.tlog
+*.exe
