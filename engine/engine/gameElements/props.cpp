@@ -234,6 +234,7 @@ fsmState_t TransformableFSMExecutor::transforming(float elapsed)
 
     setupTransforming();
     switch (type) {
+        case TRANSFORMABLE_LIANA:
         case TRANSFORMABLE_MESH: {
                 originalRotation = t->getRotation();
                 originalScale = t->getScale();
@@ -668,6 +669,8 @@ void CTransformable::loadFromProperties(const std::string& elem, utils::MKeyValu
             fsme.targetTint = atts.getHex("tint", fsme.targetTint);
         } else if (typeStr == "creep") {
             fsme.type = TRANSFORMABLE_CREEP;
+        } else if (typeStr == "liana") {
+            fsme.type = TRANSFORMABLE_LIANA;
         }
     } else if (elem == "glow") {
 	    auto& fsme = fsm.getExecutor();

@@ -2,7 +2,7 @@
 	<Name generate="liana"/>
 	<Transform/>
 	<Restore/>
-	<prefab name="mesh/liana" default="mesh/default"/>
+	<prefab name="mesh/chain" default="mesh/default"/>
 	<InstancedMesh/>
 	<Tint/>
 	<SelfIllumination/>
@@ -25,7 +25,7 @@
 			report	="player|player-cannon"
 			/>
 	</Liana>
-	<Transformable type="tint" tint="0x7FFF0000"
-		resource="liana" originalResource="liana" />
+	<Transformable type="liana"
+		resource="liana" originalResource="chain" />
 	<ThrowsPickups/>
 </componentPrefab>
