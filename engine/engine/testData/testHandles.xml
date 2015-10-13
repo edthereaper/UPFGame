@@ -1,0 +1,14 @@
+<test 	module="component"
+		desc="Cargar algunas entidades con tipos de componente usados en la pruebas, para luego inspeccionarlas">
+  <Entity>
+    <_TCA a="111" b="100"/>
+    <_TCB a="999" b="999"/>
+  </Entity>
+  <Entity>
+    <_TCA a="222" b="200"/>
+  </Entity>
+  <Entity>
+    <_TCB a="333" b="300"/>
+  </Entity>
+  <Entity/>
+</test>

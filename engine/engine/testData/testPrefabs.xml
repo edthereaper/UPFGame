@@ -1,0 +1,34 @@
+<test 	module="component"
+		desc="Cargar algunas entidades prefabricadas y cambiarles cosas">
+  
+  <Entity prefab="test">
+    <_TCA b="1110"/>
+    <_TCB b="1110"/>
+  </Entity>
+  
+  <Entity prefab="test">
+    <_TCA a="1111" b="1111"/>
+    <_TCB a="1111" b="1111"/>
+  </Entity>
+  
+  <Entity prefab="test">
+    <_TCA a="1112" b="1112"/>
+  </Entity>
+  
+  <Entity prefab="test">
+    <_TCB a="1113" b="1113"/>
+  </Entity>
+  
+  <Entity prefab="test">
+    <_TCB a="1114"/>
+    <_TCA a="1114" b="1114"/>
+  </Entity>
+  
+  <Entity prefab="test">
+    <_TCA a="1115"/>
+    <_TCB a="1115"/>
+  </Entity>
+  
+  <Entity prefab="test"/>
+  
+</test>
