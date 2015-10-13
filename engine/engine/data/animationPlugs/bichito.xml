@@ -1,0 +1,26 @@
+<archetype model="bichito">
+	<plug id="0" anim="fly" type="cycle" delay="0.3" delayOut="0.3">
+		<on key="0xC040"/> <!--idle--> 
+	</plug>
+	<plug id="1" anim="death" type="action" delay="0.3" delayOut="0.0" lock="true">
+		<on key="0xC012"/> <!--alert death--> 
+	</plug>
+	<plug id="2" anim="transform" type="action" delay="0.3" delayOut="0.3">
+		<on key="0xC017"/> <!--transform prop--> 
+	</plug>
+	<plug id="3" anim="idle" type="action" delay="0.3" delayOut="0.3">
+		<on key="0xC027"/> <!--alert tutorial--> 
+		<on key="0xC013"/> <!--alert tool--> 
+		<on key="0xC010"/> <!--alert quake--> 
+		<on key="0xC008"/> <!--alert hp--> 
+		<on key="0xC006"/> <!--alert victory--> 
+		<on key="0xC004"/> <!--alert enemy--> 
+	</plug>
+	<plug id="4" anim="talk" type="action" delay="0.3" delayOut="0.3">
+		<on key="0xC027"/> <!--alert tutorial--> 
+	</plug>
+	<!-- UNPLUG CASE: when revive we must quit the dead animation (that was on lock state) -->
+	<plug id="5" anim="death" type="action" delay="0.0" delayOut="0.0" unplug="true">
+		<on key="0xC040"/> <!--idle-->
+	</plug>
+</archetype>

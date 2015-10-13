@@ -1,0 +1,16 @@
+<pipeline name="shadowBuffer" >
+	<Blur amplitude="2.6600" factor="1.00" file="blur.fx" name="s0" ps="PSBlurDepth" toleranceX="1" toleranceY="1" >
+		<activate resource="space" />
+	</Blur>
+	
+	<Blur amplitude="1.6660" factor="1.00" file="blur.fx" name="blur" ps="PSBlurDepth" toleranceX="1" toleranceY="1" >
+		<activate resource="space" />
+	</Blur>
+	<Fetch name="Fetch space" resource="space" />
+	<BasicEffect file="FX_simple.fx" name="weight" ps="FXNegativeA" />
+	<Fetch name="Fetch blur" stage="blur" />
+	<Mix baseFactor="0.400" factor="0.80" file="mix.fx" mask="0.00 0.00 0.00 1.00" name="s5" ps="Mix" rangeMax="1.100" rangeMin="-0.100" >
+		<source resource="INPUT" />
+		<weight stage="weight" />
+	</Mix>
+</pipeline>

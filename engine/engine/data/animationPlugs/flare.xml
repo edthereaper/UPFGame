@@ -1,0 +1,31 @@
+<archetype model="flare">
+	<plug id="0" anim="idle" type="cycle" delay="0.3" delayOut="0.3">
+		<on key="0xB016"/> <!--idle--> 
+		<on key="0xC018"/> <!--Aim-->	
+		<on key="0xC020"/> <!--Align-->
+	</plug>
+	<plug id="1" anim="stun" type="cycle" delay="0.3" delayOut="0.3">
+		<on key="0xB005"/> <!--stun tackle-->
+		<on key="0xB006"/> <!--stun earthquake-->
+		<on key="0xB008"/> <!--stuned-->
+	</plug>
+	<plug id="2" anim="alert" type="action" delay="0.2" delayOut="0.2" >
+		<on key="0xB030"/> <!--Alert-->
+		<on key="0xB031"/> <!--Alert from shoot-->
+	</plug>
+	<plug id="3" anim="victory" type="cycle" delay="0.1" delayOut="0.3">
+		<on key="0xB014"/> 
+	</plug>
+	<plug id="4" anim="dead" type="cycle" delay="0.05" delayOut="0.05">
+		<on key="0xB00D"/> <!--initTransforming-->
+	</plug>
+	<plug id="5" anim="shot" type="action" delay="0.2" delayOut="0.2">
+		<on key="0xC023"/> <!--Shoot init-->
+	</plug>
+	<plug id="6" anim="reload" type="action" delay="0.2" delayOut="0.2">
+		<on key="0xC025"/>  <!--Reload-->
+	</plug>
+	<plug id="7" anim="get_damage" type="action" delay="0.1" delayOut="0.1">
+		<on key="0xB036"/>
+	</plug>
+</archetype>

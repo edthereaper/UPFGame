@@ -1,0 +1,32 @@
+<pipeline name="ambient" >
+	<Fetch name="Fetch space" resource="space" />
+	<BasicEffect file="FX_simple.fx" name="weight" ps="FXNegativeA" />
+	<DebugFX file="FX_simple.fx" name="Weight-out" on="yes" ps="FXAChannel" />
+	<SSAO bias="0.24" depthTolerance="0.8100" downsampleFactor="0.80" file="ssao.fx" intensity="10.00" jitter="1.00" name="s0" ps="SSAO" radius="0.70" scale="0.67" >
+		<normals resource="normals" />
+		<space resource="space" />
+	</SSAO>
+	<DebugFX file="FX_simple.fx" name="SSAO-out" on="yes" ps="FXRChannel" />
+	<Blur amplitude="0.6200" factor="0.80" file="blur.fx" name="Depth Blur 1" ps="PSBlurDepth" toleranceX="0.1" toleranceY="0.1" >
+		<activate resource="space" />
+	</Blur>
+	<Blur amplitude="0.7100" factor="0.50" file="blur.fx" name="Depth Blur 2" ps="PSBlurDepth" toleranceX="0.4" toleranceY="0.4" >
+		<activate resource="space" />
+	</Blur>
+	<Blur amplitude="2.7600" factor="0.50" file="blur.fx" name="Depth Blur 3" ps="PSBlurDepth" toleranceX="0.1" toleranceY="0.1" >
+		<activate resource="space" />
+	</Blur>
+	<Blur amplitude="1.8700" factor="0.50" file="blur.fx" name="Depth Blur 4" ps="PSBlurDepth" toleranceX="0.1" toleranceY="0.1" >
+		<activate resource="space" />
+	</Blur>
+	<Smudge amplitude="0.6100" factor="1.00" file="smudge.fx" name="Smudge" ps="Smudge" toleranceX="0.05" toleranceY="0.05" />
+	<Mix baseFactor="0.062" factor="2.64" file="mix.fx" mask="0.00 0.00 0.00 1.00" name="Mix1" ps="MixSq" rangeMax="1.100" rangeMin="-0.100" >
+		<source stage="Depth Blur 2" />
+		<weight stage="weight" />
+	</Mix>
+	<Mix baseFactor="1.000" factor="-0.58" file="mix.fx" mask="0.00 0.00 0.00 1.00" name="MixInput" ps="MixCube" rangeMax="1.100" rangeMin="-0.100" >
+		<source resource="INPUT" />
+		<weight resource="space" />
+	</Mix>
+	<DebugFX file="FX_simple.fx" name="dbg" on="no" ps="FXNegative" />
+</pipeline>

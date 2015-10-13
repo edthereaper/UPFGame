@@ -1,0 +1,8 @@
+<!-- Time: goes independent from the factor, same time as 3d max -->
+<AnimationSounds>
+	<animAudio anim="alert" 					sound="enemy_alert" 	time="0.0" 	volume="0.5"/>
+	<animAudio anim="victory" 					sound="enemy_win" 		time="0.0" 	volume="0.8"/>
+	<animAudio anim="get_damage" 				sound="enemy_damage" 	time="0.0" 	volume="0.8" numsounds="3"/>
+	<animAudio anim="shot" 						sound="ranged_shoot" 	time="0.0" 	volume="0.5"/>
+	<animAudio anim="reload" 					sound="ranged_reload" 	time="0.0" 	volume="0.3"/>
+</AnimationSounds>

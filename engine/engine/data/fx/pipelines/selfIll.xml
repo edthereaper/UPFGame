@@ -1,0 +1,8 @@
+<pipeline name="selfIll" >
+	<Blur amplitude="4.0500" factor="0.50" file="blur.fx" name="Halo" ps="PSBlurDepthBehind" toleranceX="0.25" toleranceY="0.25" >
+		<activate resource="space" />
+	</Blur>
+	<Blur amplitude="2.8200" factor="0.50" file="blur.fx" name="Smudge halo" ps="PSBlurBleed" toleranceX="10" toleranceY="10" >
+		<activate resource="space" />
+	</Blur>
+</pipeline>

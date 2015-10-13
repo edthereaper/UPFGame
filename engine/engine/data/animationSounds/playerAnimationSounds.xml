@@ -1,0 +1,29 @@
+<!-- Time: goes independent from the factor, same time as 3d max -->
+<AnimationSounds>	
+	<animAudio anim="running" 									sound="vine_stepL"				time="0.03" volume="1.0" numsounds="4"/>
+	<animAudio anim="running" 									sound="vine_stepR"				time="0.53" volume="1.0" numsounds="4"/>
+	<animAudio anim="jumping_nd" 								sound="vine_jump" 				time="0.0" 	volume="1.0" numsounds="2"/>
+	<animAudio anim="landing_nd" 								sound="vine_land" 				time="0.0" 	volume="1.0" numsounds="3"/>	
+	<animAudio anim="out_canon" 								sound="vine_outcannon" 			time="0.0" 	volume="1.0" numsounds="2"/>
+	<animAudio anim="jumping_mushroom_nd" 						sound="vine_mushroom" 			time="0.0" 	volume="1.0" numsounds="2"/>	
+	<animAudio anim="earthquake_from_ground" 					sound="vine_earthquake_yell" 	time="0.0" 	volume="1.0"/>
+	<animAudio anim="grounding_after_falling_earthquake_nd" 	sound="vine_earthquake_impact" 	time="0.0" 	volume="1.0"/>
+	<animAudio anim="dash" 										sound="vine_dash" 				time="0.0" 	volume="1.0" numsounds="2"/>
+	<animAudio anim="dash" 										sound="vine_fast_air_move" 		time="0.0" 	volume="1.0" numsounds="2"/>
+	<animAudio anim="earthquake_start_falling" 					sound="vine_dash" 				time="0.0" 	volume="1.0" numsounds="2"/>	
+	<animAudio anim="earthquake_start_falling"       			sound="vine_earthquake_yell"	time="0.2"	volume="1.0"/>	
+	<animAudio anim="dying"       								sound="vine_dead"				time="0.0"	volume="1.0"/>	
+	<animAudio anim="begin"       								sound="vine_begin"				time="4.5"	volume="1.0"/>
+	<animAudio anim="begin"       								sound="vine_fast_air_move" 		time="4.5" 	volume="1.0" numsounds="2"/>
+	<animAudio anim="begin"       								sound="vine_land" 				time="5.0" 	volume="1.0" numsounds="3"/>	
+	<animAudio anim="vine_up"       							sound="vine_creep" 				time="0.0" 	volume="3.0" numsounds="4"/>
+	<animAudio anim="vine_up"       							sound="vine_creep" 				time="0.26" volume="3.0" numsounds="4"/>	
+	<animAudio anim="start_vine_down"       					sound="vine_creep" 				time="0.0" 	volume="3.0" numsounds="4"/>
+	<animAudio anim="start_vine_down"       					sound="vine_creep" 				time="0.26" volume="3.0" numsounds="4"/>	
+	<animAudio anim="start_vine_right"       					sound="vine_creep" 				time="0.0" 	volume="3.0" numsounds="4"/>
+	<animAudio anim="start_vine_left"       					sound="vine_creep" 				time="0.0" 	volume="3.0" numsounds="4"/>
+	<animAudio anim="vine_get_top"       						sound="vine_creep" 				time="0.0" 	volume="3.0" numsounds="4"/>
+	<animAudio anim="vine_get_top"       						sound="vine_dash" 				time="0.3" 	volume="1.0" numsounds="2"/>
+	<animAudio anim="vine_get_top"       						sound="vine_fast_air_move" 		time="0.3" 	volume="1.0" numsounds="2"/>
+	<animAudio anim="vine_get_top"       						sound="vine_land" 				time="1.0" 	volume="1.0" numsounds="3"/>
+</AnimationSounds>

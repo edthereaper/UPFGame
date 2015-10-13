@@ -1,0 +1,66 @@
+<archetype model="melee">
+	<plug id="0" anim="idle" type="cycle" delay="0.3" delayOut="0.3">
+		<on key="0xB016"/> <!--idle--> 
+	</plug>
+	<plug id="1" anim="idle_fight" type="cycle" delay="0.3" delayOut="0.3">
+		<on key="0xB028"/> <!--idle fight-->	
+	</plug>
+	<plug id="2" anim="stun" type="cycle" delay="0.3" delayOut="0.3">
+		<on key="0xB005"/> <!--stun tackle-->
+		<on key="0xB006"/> <!--stun earthquake-->
+		<on key="0xB008"/> <!--stuned-->
+	</plug>
+	<plug id="3" anim="dash" type="action" delay="0.2" delayOut="0.1" factor="0.7">
+		<on key="0xB064"/> <!--intro attack-->
+	</plug>
+	<plug id="4" anim="combo1" type="action" delay="0.2" delayOut="0.0" factor="0.6" >
+		<on key="0xB02A"/> <!--combo1-->
+	</plug>
+	<plug id="5" anim="combo2" type="action" delay="0.0" delayOut="0.0" factor="0.6">
+		<on key="0xB02B"/> <!--combo2-->
+	</plug>
+	<plug id="6" anim="combo3" type="action" delay="0.0" delayOut="0.2" factor="0.6" >
+		<on key="0xB02C"/> <!--combo3-->
+	</plug>
+	<plug id="7" anim="alert" type="action" delay="0.2" delayOut="0.2" >
+		<on key="0xB030"/> <!--Alert-->
+		<on key="0xB031"/> <!--Alert from shoot-->
+	</plug>
+	<plug id="8" anim="victory" type="cycle" delay="0.1" delayOut="0.3">
+		<on key="0xB014"/> 
+	</plug>
+	<plug id="9" anim="cover" type="cycle" delay="0.3" delayOut="0.3">
+		<on key="0xB063"/> <!--Defensive-->
+	</plug>
+	<plug id="10" anim="refusal" type="action" delay="0.2" delayOut="0.2">
+		<on key="0xB020"/> <!--Protect-->
+	</plug>
+	<plug id="11" anim="dead" type="cycle" delay="0.05" delayOut="0.05">
+		<on key="0xB00D"/> <!--initTransforming-->
+	</plug>
+	<plug id="12" anim="lost" type="action" delay="0.2" delayOut="0.2">
+		<on key="0xB02E"/> <!--angry2-->
+	</plug>
+	<plug id="13" anim="angry" type="action" delay="0.2" delayOut="0.2" factor="0.5">
+		<on key="0xB024"/> <!--angry1-->
+		<on key="0xB061"/> <!--angry fail intro-->
+	</plug>
+	<plug id="14" anim="run" type="cycle" delay="0.3" delayOut="0.3">
+		<on key="0xB019"/> <!--chase-->
+	</plug>
+	<plug id="15" anim="get_damage" type="action" delay="0.1" delayOut="0.1">
+		<on key="0xB036"/>
+	</plug>
+	<!-- UNPLUG CASE: if player dead stop combo -->
+	<plug id="20" anim="combo1" unplug="true" type="action" delayOut="0.2">
+		<on key="0xB01A"/>			
+	</plug>	
+	<!-- UNPLUG CASE: if player dead stop combo -->
+	<plug id="21" anim="combo2" unplug="true" type="action" delayOut="0.2">
+		<on key="0xB01B"/>			
+	</plug>	
+	<!-- UNPLUG CASE: if player dead stop combo -->
+	<plug id="22" anim="combo3" unplug="true" type="action" delayOut="0.2">
+		<on key="0xB01C"/>			
+	</plug>	
+</archetype>

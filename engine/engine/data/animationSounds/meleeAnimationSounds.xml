@@ -1,0 +1,15 @@
+<!-- Time: goes independent from the factor, same time as 3d max -->
+<AnimationSounds>	
+	<animAudio anim="alert" 					sound="enemy_alert" 	time="0.0" 		volume="0.5"/>
+	<animAudio anim="victory" 					sound="enemy_win" 		time="0.0" 		volume="0.8"/>	
+	<animAudio anim="angry" 					sound="enemy_angry" 	time="0.0" 		volume="0.5" numsounds="2"/>
+	<animAudio anim="get_damage" 				sound="enemy_damage" 	time="0.0" 		volume="0.8" numsounds="3"/>
+	<animAudio anim="dash" 						sound="melee_chase" 	time="0.0" 		volume="0.8"/>
+	<animAudio anim="combo1" 					sound="melee_combo1" 	time="0.0" 		volume="0.8"/>
+	<animAudio anim="combo2" 					sound="melee_combo2" 	time="0.0" 		volume="0.8"/>
+	<animAudio anim="combo3" 					sound="melee_combo3" 	time="0.0" 		volume="0.8"/>
+	<animAudio anim="run" 						sound="melee_stepL" 	time="0.26" 	volume="2.0" numsounds="2"/>
+	<animAudio anim="run" 						sound="melee_stepR" 	time="0.63" 	volume="2.0" numsounds="2"/>
+	<animAudio anim="lost" 						sound="melee_confused1" time="0.5" 		volume="0.8"/>
+	<animAudio anim="lost" 						sound="melee_confused2" time="3.0" 		volume="0.8"/>	
+</AnimationSounds>

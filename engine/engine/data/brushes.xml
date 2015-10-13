@@ -1,0 +1,12 @@
+<paintManager>
+	<entry id="0" comment="mega">
+		<PaintGroup decay="0.725" siIntensity="0.85" >
+			<color color="lime"/>
+		</PaintGroup>
+	</entry>
+	<entry id="1" comment="regular">
+		<PaintGroup decay="0.75" siIntensity="0.75" >
+			<color color="mountain green"/>
+		</PaintGroup>
+	</entry>
+</paintManager>

@@ -1,0 +1,8 @@
+<tilemap
+	top="256"
+	left="256"
+	right="768"
+    bottom="768"
+    textureSize="1024"
+	worldSize="6"
+/>

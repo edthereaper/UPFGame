@@ -1,0 +1,136 @@
+<archetype model="vinedetta">
+	<!-- UNPLUG NOTE: only have delayOut, not delay in -->
+	<plug id="0" anim="idle_nd" type="cycle" delay="0.3" delayOut="0.2" dummy="false">
+		<on key="0x2400"/>
+	</plug>	
+	<plug id="1" anim="dash" type="action" delay="0.2" delayOut="0.2" dummy="true" factor="1.3">
+		<on key="0x2221"/>
+	</plug>	
+	<plug id="2" anim="vine_get_top" type="action" delay="0.2" delayOut="0.2" factor="1.0" dummy="true" creepControl="true">
+		<on key="0x1591"/> 
+	</plug>
+			<!-- CREEP NOTE: all cycle anims with dummy in creep must have same delay & delayout (vine_up & vine_right & creep_idle) -->
+	<plug id="4" anim="vine_up" type="cycle" delay="0.2" delayOut="0.2" factor="0.6" dummy="true" creepControl="true" limitDummyCycle="1.1">
+		<on key="0xc001"/>
+	</plug>	
+	<plug id="5" anim="start_vine_right" type="action" delay="0.1" delayOut="0.05" factor="1.0" dummy="true" creepControl="true" fakeCycle="true" limitDummyCycle="1.1">
+		<on key="0xc0c4"/>
+	</plug>	
+	<plug id="6" anim="vine_right" type="cycle" delay="0.05" delayOut="0.2" factor="1.2" dummy="true" creepControl="true" limitDummyCycle="1.1">
+		<on key="0xc004"/>
+	</plug>	
+	<plug id="7" anim="start_vine_left" type="action" delay="0.1" delayOut="0.1" factor="1.0" dummy="true" creepControl="true" fakeCycle="true" limitDummyCycle="1.1">
+		<on key="0xc0c3"/>
+	</plug>	
+	<plug id="8" anim="vine_left" type="cycle" delay="0.2" delayOut="0.2" factor="1.2" dummy="true" creepControl="true" limitDummyCycle="1.1">
+		<on key="0xc003"/>
+	</plug>	
+	<plug id="9" anim="start_vine_down" type="action" delay="0.1" delayOut="0.1" factor="0.7" dummy="true" creepControl="true" fakeCycle="true" limitDummyCycle="0.2">
+		<on key="0xc0c2"/>
+	</plug>	
+	<plug id="10" anim="vine_down" type="cycle" delay="0.2" delayOut="0.2" factor="1.0" dummy="true" creepControl="true" limitDummyCycle="0.5">
+		<on key="0xc002"/>
+	</plug>	
+	<plug id="11" anim="creep_idle_nd" type="cycle" delay="0.2" delayOut="0.2" creepControl="true">
+		<on key="0x1596"/>  <!--creep idle-->
+	</plug>
+	<plug id="12" anim="running" type="cycle" delay="0.2" delayOut="0.2" factor="1.3">
+		<on key="0x2100"/> <!--run-->
+	</plug>
+	<plug id="13" anim="falling" type="cycle" delay="0.2" delayOut="0.2" factor="0.9">
+		<on key="0x1720"/>
+		<on key="0x1620"/> <!--impulse down (trampoline)-->
+		<on key="0x2502"/> <!--spawn fall-->
+	</plug>
+	<plug id="14" anim="out_canon" type="action" delay="0.05" delayOut="0.05" dummy="false">
+		<on key="0x1141"/> <!-- cannon air impulse -->
+	</plug>
+	<plug id="15" anim="jumping_nd" type="action" delay="0.06" delayOut="0.15" dummy="false" factor="0.8">
+		<on key="0x2310"/> <!--jump impulse-->
+	</plug>
+	<plug id="16" anim="landing_nd" type="action" delay="0.04" delayOut="0.04" dummy="false" factor="0.8">
+		<on key="0x1730"/> <!--jump land-->
+		<on key="0x1630"/> <!--impulse land-->
+		<on key="0x2503"/> <!--spawn land-->
+	</plug>
+	<plug id="17" anim="jumping_mushroom_nd" type="action" delay="0.06" delayOut="0.1" dummy="false">
+		<on key="0x1609"/> <!--impulse up (trampoline)-->
+	</plug>	
+	<plug id="18" anim="begin" type="action" delay="0.3" delayOut="1.0" dummy="false">
+		<on key="0x2504"/>
+	</plug>
+	<plug id="19" anim="idle2_nd" type="cycle" delay="0.5" delayOut="0.2" factor="0.75">
+		<on key="0x24c2"/>
+	</plug>	
+	<plug id="20" anim="transition_idle2_nd" type="action" delay="0.05" delayOut="0.5">
+		<on key="0x24c1"/>			
+	</plug>					
+	<!-- UNPLUG CASE: start something while this anim is played -->
+	<plug id="21" anim="transition_idle2_nd" unplug="true" type="action" delayOut="0.2">
+		<on key="0x24c3"/>			
+	</plug>	
+	<!-- UNPLUG CASE: when in jumping we collide with creep -->
+	<plug id="22" anim="jumping_nd" unplug="true" type="action" delayOut="0.2">
+		<on key="0x231c"/> <!--jump impulse-->
+	</plug>
+	<!-- UNPLUG CASE: dash collide with enemy, we stop the dash -->
+	<plug id="23" anim="dash" unplug="true" type="action" delayOut="0.0" dummy="false">
+		<on key="0x2231"/> 
+	</plug>
+	<!-- UNPLUG CASE: stop right if stop pushing right button -->
+	<plug id="24" anim="start_vine_right" unplug="true" type="action" delayOut="0.1" dummy="true" creepControl="true">
+		<on key="0xb0c4"/>
+	</plug>
+	<!-- UNPLUG CASE: stop left if stop pushing left button -->
+	<plug id="25" anim="start_vine_left" unplug="true" type="action" delayOut="0.1" dummy="true" creepControl="true">
+		<on key="0xb0c3"/>
+	</plug>
+	<!-- UNPLUG CASE: stop down if stop pushing down button -->
+	<plug id="26" anim="start_vine_down" unplug="true" type="action" delayOut="0.1" dummy="true" creepControl="true">
+		<on key="0xb0c2"/>
+	</plug>
+	<plug id="27" anim="idle_nd" type="cycle" delay="0.3" delayOut="0.2" dummy="false">
+		<on key="0xc594"/>	
+	</plug>	
+	<plug id="28" anim="jumping_nd" type="action" delay="0.06" delayOut="0.15" dummy="false" factor="0.8">
+		<on key="0x1594"/>			
+	</plug>	
+	<plug id="29" anim="idle_nd" type="cycle" delay="0.0" delayOut="0.0" dummy="false">
+		<on key="0x1111"/>			
+	</plug>		
+	<plug id="30" anim="dying" type="action" delay="0.2" delayOut="0.0" dummy="false" lock="true">
+		<on key="0xAAAADEAD"/>			
+	</plug>	
+	<plug id="31" anim="liana" type="cycle" delay="0.3" delayOut="0.3" dummy="false">
+		<on key="0x1410"/>		
+		<on key="0x14A0"/>
+		<on key="0x14B0"/>		
+		<on key="0x14B4"/>	
+		<on key="0x14B5"/>	
+		<on key="0x14B6"/>			
+	</plug>	
+	<plug id="49" anim="earthquake_start_falling" type="action" delay="0.02" delayOut="0.1" factor="1.0">
+		<on key="0x1313"/>		<!-- Quake drop start -->	
+	</plug>	
+	<plug id="50" anim="falling_earthquake_nd" type="cycle" delay="0.1" delayOut="0.05" factor="1.4">
+		<on key="0x8314"/>
+	</plug>	
+	<plug id="52" anim="earthquake_from_ground" type="action" dummy="false" delay="0.2" delayOut="0.05" weight="100" factor="1.4">
+		<on key="0x1318"/>		<!-- Quake punchground -->	
+	</plug>	
+	<plug id="53" anim="grounding_after_falling_earthquake_nd" type="action" delay="0.02" delayOut="0.5">
+		<on key="0x1321"/>		<!-- Quake ground -->		
+	</plug>		
+	<!-- UNPLUG CASE: stop jumping anim if earthquake (with delay mixing does strange things in end jumping) -->
+	<plug id="54" anim="jumping_nd" unplug="true" type="action" delayOut="0.0">
+		<on key="0x831c"/>
+	</plug>
+	<!-- UNPLUG CASE: stop dash anim if we collide with mushroom -->
+	<plug id="55" anim="dash" unplug="true" type="action" delayOut="0.0">
+		<on key="0x835c"/>
+	</plug>
+	<!-- UNPLUG CASE: when revive we must quit the dead animation (that was on lock state) -->
+	<plug id="56" anim="dying" unplug="true" type="action" delayOut="0.0">
+		<on key="0xAADDDEAD"/>	
+	</plug>
+</archetype>
