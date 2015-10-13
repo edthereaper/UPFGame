@@ -1,138 +1,56 @@
 <scene>
-	<Entity init="true">
-		<Name name="ptLight-00"/>
-		<Transform pos="-72.564346 69.396767 144.163910"/>
-		<PtLight radius="162.900009" decay="1" color="0xb9aac2ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" offset="0.000000 0.000000 0.000000" specularAmountModifier="0" specularPowerFactor="1" intensity="1" export="true" />
-		<CullingAABBSpecial type="ptLight"/>
+	<Entity init="yes" >
+		<Name name="Smoke-00" />
+		<Transform pos="-1.90815 -18.8375 -0.295154" />
+		<Mist
+			chaotic="yes"
+			dX="1"
+			dZ="1"
+			darkenAlpha="0.4"
+			depthTolerance="200"
+			export="yes"
+			factor="1"
+			h="0.5"
+			intensity="1"
+			l="4"
+			layerDecay="0.05"
+			minimun="0"
+			sqSqrt="1"
+			unitWorldSize="25"
+			w="4"
+		>
+			<top color="9c0000cc" />
+			<bottom color="99990099" />
+		</Mist>
 	</Entity>
-	<Entity init="true">
-		<Name name="dirLight-02"/>
-		<Transform pos="-2.620433 28.174294 120.668510" lookAt="-4.781794 27.792631 119.090012"/>
-		<Camera fov="30.000000" znear="0.300000" zfar="5.000000">
-			<viewport w="512" h="512"/>
-		</Camera>
-		<Culling/>
-		<CullingAABBSpecial type="dirLight"/>
-		<DirLight spotlight="yes" spotDecay="0.7" decay="0.7" radius="10" color="0xfbed64ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.509804" export="true" />
-	</Entity>
-	<Entity init="true">
-		<Name name="dirLight-03"/>
-		<Transform pos="-2.888962 28.875532 127.896667" lookAt="-2.909012 27.874739 127.945694"/>
-		<Camera fov="30.000000" znear="0.300000" zfar="5.000000">
-			<viewport w="512" h="512"/>
-		</Camera>
-		<Culling/>
-		<CullingAABBSpecial type="dirLight"/>
-		<DirLight spotlight="yes" spotDecay="0.7" decay="0.7" radius="10" color="0xfbed64ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.509804" export="true" />
-	</Entity>
-	<Entity init="true">
-		<Name name="emitter-0E"/>
-		<Transform pos="-23.799826 57.997715 161.926270" rot="0.000000 0.000000 0.000000 0.000000"/>
-		<Emitter name="smoke" position="-23.799826 57.997715 161.926270" rotation="0.000000 0.000000 0.000000 0.000000" count="1" export="true"  particles0="emitter_0"/>
-		</Entity>
-	<Entity init="true">
-		<Name name="emitter-0F"/>
-		<Transform pos="-10.410618 58.283573 162.049255" rot="0.000000 0.000000 0.000000 0.000000"/>
-		<Emitter name="smoke" position="-10.410618 58.283573 162.049255" rotation="0.000000 0.000000 0.000000 0.000000" count="1" export="true"  particles0="emitter_0"/>
-		</Entity>
-	<Entity init="true">
-		<Name name="emitter-10"/>
-		<Transform pos="11.891539 63.381252 180.129761" rot="0.000000 0.000000 0.000000 0.000000"/>
-		<Emitter name="strong_smoke" position="11.891539 63.381252 180.129761" rotation="0.000000 0.000000 0.000000 0.000000" count="1" export="true"  particles0="emitter_0"/>
-		</Entity>
-	<Entity init="true">
-		<Name name="emitter-11"/>
-		<Transform pos="10.725663 64.465996 170.094803" rot="0.000000 0.000000 0.000000 0.000000"/>
-		<Emitter name="smoke" position="10.725663 64.465996 170.094803" rotation="0.000000 0.000000 0.000000 0.000000" count="1" export="true"  particles0="emitter_0"/>
-		</Entity>
-	<Entity init="true">
-		<Name name="emitter-12"/>
-		<Transform pos="-20.880022 64.008942 105.424217" rot="0.000000 0.000000 0.000000 0.000000"/>
-		<Emitter name="strong_smoke" position="-20.880022 64.008942 105.424217" rotation="0.000000 0.000000 0.000000 0.000000" count="1" export="true"  particles0="emitter_0"/>
-		</Entity>
-	<Entity init="true">
-		<Name name="emitter-13"/>
-		<Transform pos="-50.559067 41.227482 185.438873" rot="0.000000 0.000000 0.000000 0.000000"/>
-		<Emitter name="strong_smoke" position="-50.559067 41.227482 185.438873" rotation="0.000000 0.000000 0.000000 0.000000" count="1" export="true"  particles0="emitter_0"/>
-		</Entity>
-	<Entity init="true">
-		<Name name="emitter-14"/>
-		<Transform pos="-54.102497 42.340839 192.170837" rot="0.000000 0.000000 0.000000 0.000000"/>
-		<Emitter name="smoke" position="-54.102497 42.340839 192.170837" rotation="0.000000 0.000000 0.000000 0.000000" count="1" export="true"  particles0="emitter_0"/>
-		</Entity>
-	<Entity init="true">
-		<Name name="emitter-15"/>
-		<Transform pos="-58.116631 40.790154 177.733841" rot="0.000000 0.000000 0.000000 0.000000"/>
-		<Emitter name="strong_smoke" position="-58.116631 40.790154 177.733841" rotation="0.000000 0.000000 0.000000 0.000000" count="1" export="true"  particles0="emitter_0"/>
-		</Entity>
-	<Entity init="true">
-		<Name name="emitter-16"/>
-		<Transform pos="-21.277540 56.477558 94.267319" rot="0.000000 0.000000 0.000000 0.000000"/>
-		<Emitter name="smoke" position="-21.277540 56.477558 94.267319" rotation="0.000000 0.000000 0.000000 0.000000" count="1" export="true"  particles0="emitter_0"/>
-		</Entity>
-	<Entity init="true">
-		<Name name="emitter-00"/>
-		<Transform pos="-93.877541 67.159058 118.402031" rot="0.000000 0.000000 0.000000 0.000000"/>
-		<Emitter name="smoke" position="-93.877541 67.159058 118.402031" rotation="0.000000 0.000000 0.000000 0.000000" count="1" export="true"  particles0="emitter_0"/>
-		</Entity>
-	<Entity init="true">
-		<Name name="emitter-02"/>
-		<Transform pos="-80.897537 66.930000 118.362030" rot="0.000000 0.000000 0.000000 0.000000"/>
-		<Emitter name="smoke" position="-80.897537 66.930000 118.362030" rotation="0.000000 0.000000 0.000000 0.000000" count="1" export="true"  particles0="emitter_0"/>
-		</Entity>
-	<Entity init="true">
-		<Name name="emitter-03"/>
-		<Transform pos="-67.917534 66.940002 118.382027" rot="0.000000 0.000000 0.000000 0.000000"/>
-		<Emitter name="smoke" position="-67.917534 66.940002 118.382027" rotation="0.000000 0.000000 0.000000 0.000000" count="1" export="true"  particles0="emitter_0"/>
-		</Entity>
-	<Entity init="true">
-		<Name name="emitter-04"/>
-		<Transform pos="-57.411163 64.217743 138.486176" rot="0.000000 0.000000 0.000000 0.000000"/>
-		<Emitter name="strong_smoke" position="-57.411163 64.217743 138.486176" rotation="0.000000 0.000000 0.000000 0.000000" count="1" export="true"  particles0="emitter_0"/>
-		</Entity>
-	<Entity init="true">
-		<Name name="emitter-05"/>
-		<Transform pos="-37.053310 66.468307 127.736702" rot="0.000000 0.000000 0.000000 0.000000"/>
-		<Emitter name="strong_smoke" position="-37.053310 66.468307 127.736702" rotation="0.000000 0.000000 0.000000 0.000000" count="1" export="true"  particles0="emitter_0"/>
-		</Entity>
-	<Entity init="true">
-		<Name name="emitter-06"/>
-		<Transform pos="-37.053310 66.468307 135.736694" rot="0.000000 0.000000 0.000000 0.000000"/>
-		<Emitter name="strong_smoke" position="-37.053310 66.468307 135.736694" rotation="0.000000 0.000000 0.000000 0.000000" count="1" export="true"  particles0="emitter_0"/>
-		</Entity>
-	<Entity init="true">
-		<Name name="emitter-07"/>
-		<Transform pos="-59.345760 13.630100 137.873383" rot="0.000000 0.000000 0.000000 0.000000"/>
-		<Emitter name="fuego" position="-59.345760 13.630100 137.873383" rotation="0.000000 0.000000 0.000000 0.000000" count="2" export="true"  particles0="emitter_0" particles1="emitter_1"/>
-		</Entity>
-	<Entity init="true">
-		<Name name="emitter-0D"/>
-		<Transform pos="-59.367519 12.830682 134.730042" rot="0.000000 0.000000 0.000000 0.000000"/>
-		<Emitter name="fuego" position="-59.367519 12.830682 134.730042" rotation="0.000000 0.000000 0.000000 0.000000" count="2" export="true"  particles0="emitter_0" particles1="emitter_1"/>
-		</Entity>
-	<Entity init="true">
-		<Name name="emitter-08"/>
-		<Transform pos="-111.877014 13.729615 128.899628" rot="0.000000 0.000000 0.000000 0.000000"/>
-		<Emitter name="polution" position="-111.877014 13.729615 128.899628" rotation="0.000000 0.000000 0.000000 0.000000" count="1" export="true"  particles0="emitter_0"/>
-		</Entity>
-	<Entity init="true">
-		<Name name="emitter-09"/>
-		<Transform pos="-52.902119 20.623106 174.592194" rot="0.000000 0.000000 0.000000 0.000000"/>
-		<Emitter name="polution" position="-52.902119 20.623106 174.592194" rotation="0.000000 0.000000 0.000000 0.000000" count="1" export="true"  particles0="emitter_0"/>
-		</Entity>
-	<Entity init="true">
-		<Name name="emitter-0A"/>
-		<Transform pos="0.591803 28.172665 118.615639" rot="0.000000 0.000000 0.000000 0.000000"/>
-		<Emitter name="polution" position="0.591803 28.172665 118.615639" rotation="0.000000 0.000000 0.000000 0.000000" count="1" export="true"  particles0="emitter_0"/>
-		</Entity>
 	<Entity init="true">
 		<Name name="emitter-0B"/>
-		<Transform pos="82.871536 4.934848 81.396065" rot="0.000000 0.000000 0.000000 0.000000"/>
-		<Emitter name="polution" position="82.871536 4.934848 81.396065" rotation="0.000000 0.000000 0.000000 0.000000" count="1" export="true"  particles0="emitter_0"/>
+		<Transform pos="-5.430790 74.744637 1.787571" rot="0.000000 0.000000 0.000000 0.000000"/>
+		<Emitter name="lava_ceniza_waterfall" position="-5.430790 74.744637 1.787571" rotation="0.000000 0.000000 0.000000 0.000000" count="2" export="true"  particles0="emitter_0" particles1="emitter_1"/>
 		</Entity>
 	<Entity init="true">
 		<Name name="emitter-0C"/>
-		<Transform pos="69.670784 22.215923 45.195324" rot="0.000000 0.000000 0.000000 0.000000"/>
-		<Emitter name="polution" position="69.670784 22.215923 45.195324" rotation="0.000000 0.000000 0.000000 0.000000" count="1" export="true"  particles0="emitter_0"/>
+		<Transform pos="1.100233 75.006989 1.625561" rot="0.000000 0.000000 0.000000 0.000000"/>
+		<Emitter name="lava_ceniza_waterfall" position="1.100233 75.006989 1.625561" rotation="0.000000 0.000000 0.000000 0.000000" count="2" export="true"  particles0="emitter_0" particles1="emitter_1"/>
+		</Entity>
+	<Entity init="true">
+		<Name name="emitter-0D"/>
+		<Transform pos="-1.912912 74.945740 -4.279224" rot="0.000000 0.000000 0.000000 0.000000"/>
+		<Emitter name="lava_ceniza_waterfall" position="-1.912912 74.945740 -4.279224" rotation="0.000000 0.000000 0.000000 0.000000" count="2" export="true"  particles0="emitter_0" particles1="emitter_1"/>
+		</Entity>
+	<Entity init="true">
+		<Name name="emitter-0E"/>
+		<Transform pos="-5.866299 80.212013 -1.932106" rot="0.000000 0.000000 0.000000 0.000000"/>
+		<Emitter name="lava_ceniza_waterfall" position="-5.866299 80.212013 -1.932106" rotation="0.000000 0.000000 0.000000 0.000000" count="2" export="true"  particles0="emitter_0" particles1="emitter_1"/>
+		</Entity>
+	<Entity init="true">
+		<Name name="emitter-0F"/>
+		<Transform pos="-1.909728 79.920357 4.564344" rot="0.000000 0.000000 0.000000 0.000000"/>
+		<Emitter name="lava_ceniza_waterfall" position="-1.909728 79.920357 4.564344" rotation="0.000000 0.000000 0.000000 0.000000" count="2" export="true"  particles0="emitter_0" particles1="emitter_1"/>
+		</Entity>
+	<Entity init="true">
+		<Name name="emitter-10"/>
+		<Transform pos="2.919826 79.316483 -1.767089" rot="0.000000 0.000000 0.000000 0.000000"/>
+		<Emitter name="lava_ceniza_waterfall" position="2.919826 79.316483 -1.767089" rotation="0.000000 0.000000 0.000000 0.000000" count="2" export="true"  particles0="emitter_0" particles1="emitter_1"/>
 		</Entity>
 </scene>

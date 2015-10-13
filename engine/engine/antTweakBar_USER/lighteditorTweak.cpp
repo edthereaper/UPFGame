@@ -683,7 +683,7 @@ static void TW_CALL updatelevelLE(const void *value, void *clientData)
 {
 	int level = *static_cast<const int *>(value);
 
-	if (0 < level && level <= 4){
+	if (0 < level && level <= 5){
 		App &app = App::get();
 		app.changelvl = true;
 		app.gamelvl = level;
@@ -1766,8 +1766,6 @@ static void TW_CALL updateLightName(const void *value, void *clientData)
     }
 }
 
-
-
 void AntTWManager::selectDirectionalLightTweak(CDirLight* item)
 {
     TwDefine((std::string(TwGetBarName(bar))+"/SAVE label='SAVE'").c_str());
@@ -1897,7 +1895,11 @@ void AntTWManager::cleanupLightTool()
 static void TW_CALL readName(void *value, void *clientData)
 {
     Entity* e = Handle::fromRaw(clientData);
-    TwCopyStdStringToLibrary(*static_cast<std::string *>(value),e->getName());
+    if (e == nullptr) {
+        TwCopyStdStringToLibrary(*static_cast<std::string *>(value),"<null>");
+    } else {
+        TwCopyStdStringToLibrary(*static_cast<std::string *>(value),e->getName());
+    }
 }
   
 static void TW_CALL updateName(const void *value, void *clientData)

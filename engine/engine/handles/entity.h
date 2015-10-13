@@ -106,13 +106,13 @@ class Entity {
 
         void update(float elapsed) {}
 
-        std::string getDefaultName() {
+        std::string getDefaultName() const {
             Handle h(this);
             std::stringstream ss;
             ss << "{"<< h.getIndex() << '.' << h.getAge()<<"}";
             return ss.str();
         }
-        std::string getName() {
+        std::string getName() const {
             return has<CName>() ? ((CName*)get<CName>())->str() : getDefaultName();
         }
 
