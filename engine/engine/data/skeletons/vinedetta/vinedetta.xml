@@ -26,4 +26,5 @@
 	<anim name="earthquake_start_falling" />
 	<anim name="dying" />
 	<anim name="liana" />
+	<anim name="dash_hit" />
 </skeleton>
