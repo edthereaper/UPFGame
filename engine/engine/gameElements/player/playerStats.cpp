@@ -327,7 +327,8 @@ namespace gameElements {
 					alertLowHP = false;
 				}
 			} else {
-                me->sendMsg(MsgPlayerDead());		
+                me->sendMsg(MsgPlayerDead());	
+				((Entity *)bichitoEntity)->sendMsg(MsgPlayerDead());				
 				EntityListManager::get(CEnemy::TAG).broadcast(MsgPlayerDead());				
 				health = 0;
 				playerDead = true;

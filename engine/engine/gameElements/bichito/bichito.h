@@ -53,6 +53,7 @@ namespace gameElements {
 			TPTOPLAYER = 0xC025,
 			TUTORIAL = 0xC026,
 			ALERTTUTORIAL = 0xC027,
+			DEADRAY = 0xC028,
 			IDLE = 0xC040,
 		};
 
@@ -132,6 +133,7 @@ namespace gameElements {
 		bool doingTP = false;
 		bool playSound = true;
 
+		float speedFallDead = 0.0f;
 		float totaltime = 0.0f;
 		float timeTransform = 10.0f;
 		float max_dist = 1000000.0f;
@@ -147,6 +149,7 @@ namespace gameElements {
 		void updateSpeed(float elapsed);
 		void drawImage();
 
+		inline ret_e deadCalculus(float);
 		inline ret_e teleportToPlayer(float);
 		inline ret_e refreshProp(float);
 		inline ret_e transformProp(float);

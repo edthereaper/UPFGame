@@ -29,7 +29,7 @@ using namespace gameElements;
 #define TIME_MIN_TRANSFORM		5.0f
 #define TIME_MAX_TRANSFORM		10.0f
 #define TIME_WAIT_FOLLOW		1.5f
-
+#define TIME_FALLING_DEAD		1.0f
 #define DISTANCE_TOOL_PLAYER	10.0f
 #define DISTANCE_MAX_FAR		15.0f
 #define DISTANCE_TP_FAR			25.0f
@@ -37,11 +37,9 @@ using namespace gameElements;
 #define DISTANCE_IDLE_PLAYER	4.5f
 #define DISTANCE_CLOSE_PROP		3.0f
 #define DISTANCE_PLAYER_PROP	8.0f
-
 #define SPEED_CHASE				15.0f
 #define SPEED_TRANSFORM			10.0f
 #define SPEED_FOLLOW			7.5f
-
 #define CHASE_ROTATE_SPEED		deg2rad(600)
 #define BICHITO_HEIGHT			1.0f
 #define BICHITO_LATERAL			0.5f
@@ -65,7 +63,8 @@ namespace behavior {
 		BT_CREATECHILD_A (ALERTHP			, LOWHP				, LEAF						, doAlertHP			);
 		BT_CREATECHILD_CA(QUAKE				, EVENT				, CHAIN		, isInQuake		, goToPlayer		);
 		BT_CREATECHILD_A (ALERTQUAKE		, QUAKE				, LEAF						, doAlertQuake		);
-		BT_CREATECHILD_CA(DEAD				, EVENT				, CHAIN		, isPlayerDead	, goToPlayer		);
+		BT_CREATECHILD_CA(DEAD				, EVENT				, SEQUENCE	, isPlayerDead	, goToPlayer		);
+		BT_CREATECHILD_A (DEADRAY			, DEAD				, LEAF						, deadCalculus		);
 		BT_CREATECHILD_A (ALERTDEAD			, DEAD				, LEAF						, doAlertDead		);
 		BT_CREATECHILD_CA(TUTORIAL			, EVENT				, CHAIN		, isInTuto		, goToPlayer		);
 		BT_CREATECHILD_A (ALERTTUTORIAL		, TUTORIAL			, LEAF						, doAlertTuto		);
@@ -365,25 +364,44 @@ namespace gameElements {
 		return STAY;
 	}
 
+	ret_e BichitoBtExecutor::deadCalculus(float elapsed)
+	{
+		//dbg("deadCalculus!\n");
+		CTransform* meT = ((Entity*)meEntity)->get<CTransform>();
+		XMVECTOR origin = meT->getPosition();
+		XMVECTOR dir = -yAxis_v;
+		PxReal distance = 5.0f;
+		PxRaycastBuffer hit;
+		if (PhysicsManager::get().raycast(origin, dir, distance, hit,
+			filter_t(
+			filter_t::NONE,
+			~filter_t::id_t(filter_t::SCENE | filter_t::ENEMY | filter_t::PROP),
+			filter_t::ALL_IDS))){
+			speedFallDead = hit.block.distance / TIME_FALLING_DEAD;
+		}
+		else{
+			speedFallDead = 0.0f;
+		}
+		return DONE;
+	}
+
 	ret_e BichitoBtExecutor::doAlertDead(float elapsed)
 	{
 		//dbg("Bichito Alert Dead!\n");
-		if (timer.count(elapsed) >= TIME_ALERT_ANIM) {
+		float tim = timer.count(elapsed);
+		if (tim >= TIME_ALERT_ANIM) {
 			timer.reset();
 			canAlertEnemy = false;
 			playSound = true;
-			helperType = -1;
 			return DONE;
 		}
-		/*if(playSound){
+		if (tim < TIME_FALLING_DEAD){
 			CTransform* meT = ((Entity*)meEntity)->get<CTransform>();
 			CTransform* playerT = ((Entity*)playerEntity)->get<CTransform>();
-			CLua *lua = ((Entity*)meEntity)->get<CLua>();
-			lua->executeLua3DAudio("dead", meT->getPosition(), playerT->getPosition(), playerT->getFront());
-			playSound = false;
-		}*/
+			align3D(meT, playerT->getPosition() + playerT->getFront() * 1000, 10);
+			bichitoPos -= meT->getUp() * speedFallDead * elapsed;
+		}
 		isDead = true;
-		helperType = 1;
 		return STAY;
 	}
 
