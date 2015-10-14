@@ -46,6 +46,7 @@ class TransformableFSMExecutor {
 			STATE_changeTint,
 			STATE_transformed,
 			STATE_breathe,
+			STATE_breatheXZ,
 			STATE_spring,
 		};
         
@@ -152,6 +153,7 @@ class TransformableFSMExecutor {
 		behavior::fsmState_t changeMaterial(float elapsed);
 		behavior::fsmState_t transformed(float elapsed);
 		behavior::fsmState_t breathe(float elapsed);
+		behavior::fsmState_t breatheXZ(float elapsed);
 		behavior::fsmState_t spring(float elapsed);
 
 	public:

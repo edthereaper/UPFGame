@@ -3979,9 +3979,9 @@
 	<whiteboxes count="0">
 	</whiteboxes>
 	<wildcards count="0">
+		<wildcard pos="-1.90815 -11.3375 -0.295154" spatialIndex="-1" tag1="lava"/>
 	</wildcards>
 	<wildcardBoxes count="1">
-		<wildcardBox pos="-1.90815 -11.3375 -0.295154" rot="0.0 0.0 0.0 1.0" spatialIndex="-1" tag1="lava" width="4.0" length="4.0" height="1.0" />
 	</wildcardBoxes>
 	<collision mesh="escenario3_COLLISIONMESH" />
 </level>

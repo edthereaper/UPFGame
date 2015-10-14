@@ -47,7 +47,8 @@ CLiana::CLiana()
 void CLiana::update(float elapsed)
 {
     Entity* me(Handle(this).getOwner());
-    auto mePos = ((CTransform*)me->get<CTransform>())->getPosition();
+    CTransform* t = me->get<CTransform>();
+    auto mePos = t->getPosition();
     CInstancedMesh* iMesh = me->get<CInstancedMesh>();
     CTransformable* transformable = me->get<CTransformable>();
     bool transformed = transformable->isTransformed();
@@ -99,7 +100,7 @@ void CLiana::update(float elapsed)
 
         if (iMesh != nullptr) {
             iMesh->setInstance(i, CInstancedMesh::instance_t(
-                toXMMATRIX(world * jointWorld)
+                XMMatrixScalingFromVector(t->getScale()) * toXMMATRIX(world * jointWorld)
                 #if defined(DEBUG_LIANA_CONTROL_LINK)
                     , i == controlLink ? Color::RED : Color::WHITE
                 #else

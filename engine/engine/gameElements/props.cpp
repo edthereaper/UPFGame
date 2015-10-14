@@ -48,6 +48,7 @@ void TransformableFSM::initType()
     SET_FSM_STATE(changeTint);
     SET_FSM_STATE(transformed);
     SET_FSM_STATE(breathe);
+    SET_FSM_STATE(breatheXZ);
 	SET_FSM_STATE(spring);
 }
 
@@ -499,6 +500,25 @@ fsmState_t TransformableFSMExecutor::breathe(float elapsed)
 	return STATE_breathe;
 }
 
+fsmState_t TransformableFSMExecutor::breatheXZ(float elapsed)
+{
+    float time = M_PI_2f*2.65f*timer.count(elapsed);
+	Entity* me(meEntity);
+    CTransform* t = me->get<CTransform>();
+    CInstancedMesh* instanced = nullptr;
+    auto xz = 1.55f*xzScaBreath(time)-0.2f;
+    XMVECTOR scale = XMVectorSet(xz, 1, xz, 1);
+    if (instancedMeshYes_h.isValid()) {
+        CInstancedMesh* instancedMeshYes(instancedMeshYes_h);
+        t->setScale(scale);
+        bool ok = instancedMeshYes->replaceInstanceWorld(instanceIndex, t->getWorld());
+        assert(ok);
+    } else {
+        t->setScale(scale);
+    }
+	return STATE_breatheXZ;
+}
+
 void TransformableFSMExecutor::setupTransforming()
 {
     Entity* me = meEntity;
@@ -543,6 +563,7 @@ fsmState_t TransformableFSMExecutor::transformed(float elapsed)
 {
     switch (type) {
 	    case TRANSFORMABLE_MESH: return STATE_breathe; break;
+        case TRANSFORMABLE_LIANA: return STATE_breatheXZ; break;
         default: return STATE_transformed;
     }
 }
@@ -560,6 +581,7 @@ void TransformableFSMExecutor::revive(const MsgRevive&)
     bool isTransforming = transformable->isTransforming();
 
 	switch (type) {
+	    case TRANSFORMABLE_LIANA:
 	    case TRANSFORMABLE_MESH: {
 		        me->get<CMesh>().destroy();
 		        CMesh::load(originalresourceName, me, DEFAULT_TRANSF_MESH);

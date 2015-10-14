@@ -279,7 +279,8 @@ void LevelImport::generateLava(const MKeyValue& atts, const wildcard_t& wc)
     float z = XMVectorGetZ(wc.size);
 
     CTransform* t = currentEntity->get<CTransform>();
-    t->setPosition(atts.getPoint("pos"));
+    t->setPosition(wc.transform.getPosition());
+    t->setRotation(wc.transform.getRotation());
 
     CMesh* cmesh = currentEntity->get<CMesh>();
     Mesh* mesh = new Mesh;
