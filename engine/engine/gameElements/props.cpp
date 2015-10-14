@@ -4,6 +4,7 @@
 #include "components/transform.h"
 #include "components/color.h"
 #include "handles/entity.h"
+#include "handles/prefab.h"
 using namespace component;
 
 #include "render/mesh/CInstancedMesh.h"
@@ -50,6 +51,7 @@ void TransformableFSM::initType()
     SET_FSM_STATE(breathe);
     SET_FSM_STATE(breatheXZ);
 	SET_FSM_STATE(spring);
+	SET_FSM_STATE(hammerTransform);
 }
 
 namespace gameElements {
@@ -75,16 +77,39 @@ const float TransformableFSMExecutor:: GLOW_MARKED_FREQ = 3.f;
 const float TransformableFSMExecutor:: GLOW_MARKED_COS_DEVIATION = 0.15f;
 const float TransformableFSMExecutor:: GLOW_MARKED_COS_MEAN = 0.95f;
 
+const float TransformableFSMExecutor:: GLOW_SPECIAL_RAMP_UP_TIME = 1.f;
+const float TransformableFSMExecutor:: GLOW_SPECIAL_RAMP_DOWN_TIME = 0.5f;
+const float TransformableFSMExecutor:: GLOW_SPECIAL_FREQ = 2.f;
+const float TransformableFSMExecutor:: GLOW_SPECIAL_COS_DEVIATION = 0.45f;
+const float TransformableFSMExecutor:: GLOW_SPECIAL_COS_MEAN = 1;
+
 utils::Counter<float> TransformableFSMExecutor::glowTimer = -GLOW_RAMP_UP_TIME;
 float TransformableFSMExecutor::currGlow = 0;
 float TransformableFSMExecutor::prevGlow = 0;
 bool TransformableFSMExecutor::glowingDown = false;
 
+utils::Counter<float> TransformableFSMExecutor::glowTimer_special = -GLOW_SPECIAL_RAMP_UP_TIME;
+float TransformableFSMExecutor::currGlow_special = 0;
+float TransformableFSMExecutor::prevGlow_special = 0;
+bool TransformableFSMExecutor::glowingDown_special = false;
+
 TransformableFSMExecutor::updateHighlightsFnData TransformableFSMExecutor::generalHLUpdateData =
     updateHighlightsFnData (
         &prevGlow, &currGlow, &glowTimer, &glowingDown,
-        GLOW_RAMP_UP_TIME, GLOW_RAMP_DOWN_TIME,
-        GLOW_FREQ, GLOW_COS_DEVIATION, GLOW_COS_MEAN
+        GLOW_RAMP_UP_TIME,
+        GLOW_RAMP_DOWN_TIME,
+        GLOW_FREQ,
+        GLOW_COS_DEVIATION,
+        GLOW_COS_MEAN
+    );
+TransformableFSMExecutor::updateHighlightsFnData TransformableFSMExecutor::specialHLUpdateData =
+    updateHighlightsFnData (
+        &prevGlow_special, &currGlow_special, &glowTimer_special, &glowingDown_special,
+        GLOW_SPECIAL_RAMP_UP_TIME,
+        GLOW_SPECIAL_RAMP_DOWN_TIME,
+        GLOW_SPECIAL_FREQ,
+        GLOW_SPECIAL_COS_DEVIATION,
+        GLOW_SPECIAL_COS_MEAN
     );
 
 void TransformableFSMExecutor::updateHighlightsFn(float elapsed, bool increase,
@@ -128,6 +153,11 @@ void TransformableFSMExecutor::updateHighlightsFn(float elapsed, bool increase,
 void TransformableFSMExecutor::updateHighlights(float elapsed, bool increase)
 {
     updateHighlightsFn(elapsed, increase, generalHLUpdateData);
+}
+
+void TransformableFSMExecutor::updateSpecialHighlights(float elapsed, bool increase)
+{
+    updateHighlightsFn(elapsed, increase, specialHLUpdateData);
 }
 
 const float TransformableFSMExecutor::TRANSFORMED_DIFFUSE_SELFILLUMINATION = 0.2f;
@@ -199,13 +229,16 @@ void TransformableFSMExecutor::applyTint(const Color& color, bool transformed, b
 
 fsmState_t TransformableFSMExecutor::notTransformed(float elapsed)
 {
-    if (prevGlow != currGlow || prevMarkedGlow != currMarkedGlow) {
+    float prevG = type != TRANSFORMABLE_HAMMER ? prevGlow : prevGlow_special;
+    float currG = type != TRANSFORMABLE_HAMMER ? currGlow : currGlow_special;
+
+    if (prevG != currG || prevMarkedGlow != currMarkedGlow) {
         auto ma = currMarkedGlow*GLOW_FACTOR;
         auto mc = Color(glowMarkedColor).setAf(ma*glowMarkedColor.af());
         auto mm = glowMarkedMax*ma;
         mc.premultiplyAlpha();
         
-        auto ga = currGlow*GLOW_FACTOR-ma;
+        auto ga = currG*GLOW_FACTOR-ma;
         auto gc = Color(glowColor).setAf(ga*glowColor.af());
         auto gm = glowMax*ga;
         gc.premultiplyAlpha();
@@ -228,35 +261,57 @@ fsmState_t TransformableFSMExecutor::hit(float elapsed)
     }
 }
 
+#define TIME_TRANSF_HAMMER 2.8f
+#define TRANSFORM_ROTATE_HAMMER deg2rad(120)
+
 fsmState_t TransformableFSMExecutor::transforming(float elapsed)
 {
     Entity* me = meEntity;
     CTransform* t = me->get<CTransform>();
 
-    setupTransforming();
     switch (type) {
         case TRANSFORMABLE_LIANA:
         case TRANSFORMABLE_MESH: {
+                setupTransforming();
                 originalRotation = t->getRotation();
                 originalScale = t->getScale();
                 return STATE_changeMeshOut;
             } break;
-        case TRANSFORMABLE_MATERIAL: return STATE_changeMaterial; break;
+        case TRANSFORMABLE_MATERIAL: {
+                setupTransforming();
+                return STATE_changeMaterial;
+            } break;
         case TRANSFORMABLE_TINT: {
+                setupTransforming();
                 CTint* tint = me->get<CTint>();
                 assert(tint != nullptr);
                 previousTint = *tint;
                 return STATE_changeTint;
             } break;
         case TRANSFORMABLE_CREEP : {
+                setupTransforming();
                 originalRotation = t->getRotation();
                 originalScale = t->getScale();
                 return STATE_changeCreepOut;
             } break;
-        default: case TRANSFORMABLE_NONE:
-            setupTransformed();
-            me->sendMsg(MsgTransform());
-            return STATE_transformed; break;
+        case TRANSFORMABLE_HAMMER : {
+                originalRotation = t->getRotation();
+                originalScale = t->getScale();
+                me->sendMsg(MsgTransform());
+                
+                CMesh* m1 = xtraMesh1.getSon<CMesh>();
+                CMesh* m2 = xtraMesh2.getSon<CMesh>();
+                m1->setVisible(true);
+                m2->setVisible(true);
+
+                return STATE_hammerTransform;
+            }break;
+        default: case TRANSFORMABLE_NONE: {
+                setupTransforming();
+                setupTransformed();
+                me->sendMsg(MsgTransform());
+                return STATE_transformed;
+            } break;
     }
 }
 
@@ -663,9 +718,13 @@ void CTransformable::receive(const MsgShot& shot)
 
 void CTransformable::init()
 {
-
-	fsm.getExecutor().meEntity = Handle(this).getOwner();
+    auto& fsme(fsm.getExecutor());
+	fsme.meEntity = Handle(this).getOwner();
 	fsm.init();
+    if (fsme.type == TRANSFORMABLE_HAMMER) {
+        fsme.xtraMesh1 = PrefabManager::get().prefabricate("boss/raiz_01");
+        fsme.xtraMesh2 = PrefabManager::get().prefabricate("boss/raiz_02");
+    }
 }
 
 void CTransformable::loadFromProperties(const std::string& elem, utils::MKeyValue &atts)
@@ -693,6 +752,8 @@ void CTransformable::loadFromProperties(const std::string& elem, utils::MKeyValu
             fsme.type = TRANSFORMABLE_CREEP;
         } else if (typeStr == "liana") {
             fsme.type = TRANSFORMABLE_LIANA;
+        } else if (typeStr == "hammer") {
+            fsme.type = TRANSFORMABLE_HAMMER;
         }
     } else if (elem == "glow") {
 	    auto& fsme = fsm.getExecutor();
@@ -920,4 +981,49 @@ void CCreep::generateCreepPlane()
     }
 }
 
+
+fsmState_t TransformableFSMExecutor::hammerTransform(float elapsed)
+{
+	if (timer.count(elapsed) >= TIME_TRANSF_HAMMER) {
+		timer.reset();
+        Entity* r1 = xtraMesh1;
+        Entity* r2 = xtraMesh2;
+        CTransform* t1 = r1->get<CTransform>();
+        CTransform* t2 = r2->get<CTransform>();
+        t1->setScale(originalScale);
+        t1->setRotation(originalRotation);
+        t2->setScale(originalScale);
+        t2->setRotation(originalRotation);
+		return STATE_transformed;
+	} else {
+        Entity* r1 = xtraMesh1;
+        Entity* r2 = xtraMesh2;
+
+        CTransform* t1 = r1->get<CTransform>();
+        CTransform* t2 = r2->get<CTransform>();
+
+		float s = 1-M_PI_2f*(timer.get() / TIME_TRANSF_HAMMER);
+        auto xz = xzTransf(s);
+		float angle(angleTransf(s)*TRANSFORM_ROTATE_HAMMER);
+
+        Transform originalRotTransform;
+        originalRotTransform.setRotation(originalRotation);
+
+		t1->setScale(originalScale * XMVectorSet(xz, yTransfIn(s), xz, 0));
+		t2->setScale(originalScale * XMVectorSet(xz, yTransfIn(s), xz, 0));
+		t1->setRotation(XMQuaternionMultiply(
+			originalRotation, XMQuaternionRotationAxis(originalRotTransform.getUp(), angle)));
+		t2->setRotation(XMQuaternionMultiply(
+			originalRotation, XMQuaternionRotationAxis(originalRotTransform.getUp(), angle)));
+
+        
+
+        CTint* tint1 = r1->get<CTint>();
+        CTint* tint2 = r2->get<CTint>();
+        tint1->setAf(1-yTransfIn(s));
+        tint2->setAf(1-yTransfIn(s));
+
+		return STATE_hammerTransform;
+	}
+}
 }

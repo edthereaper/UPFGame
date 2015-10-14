@@ -68,6 +68,7 @@ class BossBtExecutor {
             COD_NONE            =0,
             COD_DONT_ALIGN      =1<<16,
             COD_ALIGN_FASTER    =1<<17,
+            COD_HIGHLIGHT       =1<<18,
         };
 
         enum nodeId_e {
@@ -101,8 +102,8 @@ class BossBtExecutor {
             EARTHQUAKE              = 0xA321,     
             SMOKE_START             = 0xA330,    
             SMOKE_DURING            = 0xA331,   
-            SETUP_PUNCH_WAIT        = 0xA340,
-            PUNCH_WAIT              = 0xA341,
+            SETUP_PUNCH_WAIT        = 0xA340|COD_HIGHLIGHT,
+            PUNCH_WAIT              = 0xA341|COD_HIGHLIGHT,
             COOL_SMOKE              = 0xA500,
             RAISE_ARM               = 0xA400,       
             RAISE_TRANSFORMATED     = 0xA410,
@@ -289,6 +290,7 @@ class CBoss {
 
     public:
         static const EntityListManager::key_t TAG = 0xBADDB055;
+        static const EntityListManager::key_t HAMMER_TAG = 0xB055A288;
         static void initType();
     public:
         void update(float elapsed);

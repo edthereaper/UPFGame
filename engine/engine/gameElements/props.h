@@ -27,6 +27,7 @@ enum transformType_e {
 	TRANSFORMABLE_CREEP,
 	TRANSFORMABLE_LIANA,
 	TRANSFORMABLE_TINT,
+	TRANSFORMABLE_HAMMER,
 };
 
 class TransformableFSMExecutor {
@@ -48,9 +49,11 @@ class TransformableFSMExecutor {
 			STATE_breathe,
 			STATE_breatheXZ,
 			STATE_spring,
+            STATE_hammerTransform,
 		};
         
         static void updateHighlights(float elapsed, bool increase);
+        static void updateSpecialHighlights(float elapsed, bool increase);
 
     private:
         struct updateHighlightsFnData {
@@ -76,6 +79,7 @@ class TransformableFSMExecutor {
             {}
         };
         static updateHighlightsFnData generalHLUpdateData;
+        static updateHighlightsFnData specialHLUpdateData;
         static void updateHighlightsFn(float elapsed, bool increase, 
             updateHighlightsFnData& data);
 
@@ -93,13 +97,26 @@ class TransformableFSMExecutor {
         static const float TransformableFSMExecutor::GLOW_MARKED_COS_DEVIATION;
         static const float TransformableFSMExecutor::GLOW_MARKED_COS_MEAN;
         
+        static const float TransformableFSMExecutor::GLOW_SPECIAL_RAMP_UP_TIME;
+        static const float TransformableFSMExecutor::GLOW_SPECIAL_RAMP_DOWN_TIME;
+        static const float TransformableFSMExecutor::GLOW_SPECIAL_FREQ;
+        static const float TransformableFSMExecutor::GLOW_SPECIAL_COS_DEVIATION;
+        static const float TransformableFSMExecutor::GLOW_SPECIAL_COS_MEAN;
+        
         static utils::Counter<float> glowTimer;
         static float currGlow;
         static float prevGlow;
         static bool  glowingDown;
+        
+        static utils::Counter<float> glowTimer_special;
+        static float currGlow_special;
+        static float prevGlow_special;
+        static bool  glowingDown_special;
 
 	private:
 		component::Handle meEntity;
+		component::Handle xtraMesh1;
+		component::Handle xtraMesh2;
         component::Handle instancedMeshNot_h;
         component::Handle instancedMeshYes_h;
 		utils::Counter<float> timer;
@@ -155,8 +172,14 @@ class TransformableFSMExecutor {
 		behavior::fsmState_t breathe(float elapsed);
 		behavior::fsmState_t breatheXZ(float elapsed);
 		behavior::fsmState_t spring(float elapsed);
+		behavior::fsmState_t hammerTransform(float elapsed);
 
 	public:
+        ~TransformableFSMExecutor() {
+            if (xtraMesh1.isValid()) {xtraMesh1.destroy();}
+            if (xtraMesh2.isValid()) {xtraMesh2.destroy();}
+        }
+
 		inline behavior::fsmState_t init() { return reset(); }
 		inline behavior::fsmState_t reset() {
 			timer.reset();
@@ -184,6 +207,7 @@ class CTransformable {
 	private:
 		behavior::TransformableFSM fsm;
 		bool inert = false;
+        bool selected = false;
 		XMVECTOR centerAim = utils::zero_v;
 		inline bool isNotTransformed() const {
             const auto& state = fsm.getState();
@@ -196,6 +220,8 @@ class CTransformable {
 			return state == TransformableFSMExecutor::STATE_changeMaterial
 			    || state == TransformableFSMExecutor::STATE_changeMeshOut
 			    || state == TransformableFSMExecutor::STATE_changeMeshIn
+			    || state == TransformableFSMExecutor::STATE_changeCreepOut
+			    || state == TransformableFSMExecutor::STATE_changeCreepIn
 			    || state == TransformableFSMExecutor::STATE_changeTint;
 		}
 
@@ -235,6 +261,20 @@ class CTransformable {
 		inline void update(float elapsed) {
 			if (!inert) {
                 fsm.update(elapsed);
+                auto& fsme = fsm.getExecutor();
+                if (fsme.type == TRANSFORMABLE_HAMMER) {
+                    if (!isTransformed()) {
+                        float currGlow = TransformableFSMExecutor::currGlow_special;
+                        float prevGlow = TransformableFSMExecutor::prevGlow_special;
+                        if (currGlow != prevGlow) {
+                            auto ma = currGlow*TransformableFSMExecutor::GLOW_FACTOR;
+                            auto mc = Color(fsme.glowColor).setAf(ma*fsme.glowColor.af());
+                            auto mm = fsme.glowMax*ma;
+                            mc.premultiplyAlpha();
+                            fsme.applySelfIllumination(mc, mm, false);
+                        }
+                    }
+                }
             } else {
                 auto& fsme = fsm.getExecutor();
                 fsme.update(elapsed);
@@ -242,14 +282,36 @@ class CTransformable {
                     auto ma = fsme.currMarkedGlow*TransformableFSMExecutor::GLOW_FACTOR;
                     auto mc = Color(fsme.glowMarkedColor).setAf(ma*fsme.glowMarkedColor.af());
                     auto mm = fsme.glowMarkedMax*ma;
-                    fsme.applySelfIllumination(mc, mm, false);
                     mc.premultiplyAlpha();
+                    fsme.applySelfIllumination(mc, mm, false);
                 }
+                if (fsme.type == TRANSFORMABLE_HAMMER) {
+                    if (!isTransformed() && selected) {
+                        fsme.damageDone = false;
+                        fsme.notTransformed(elapsed);
+                    }
+                } 
             }
+            if (fsm.getExecutor().type == TRANSFORMABLE_HAMMER) {
+                Entity* me = Handle(this).getOwner();
+                CAABB* aabb = me->get<CAABB>();
+                CTransform* t = me->get<CTransform>();
+                setCenterAim(DirectX::operator+(aabb->getCenter(), t->getPosition()));
+            } 
 		}
 
 		inline void setInert(bool b = true) { inert = b; }
 		inline bool getInert() const { return inert; }
+
+		inline void setSelected(bool b = true) { selected = b; }
+		inline bool getSelected() const { return selected; }
+
+		inline void removeGlow() {
+                auto& fsme = fsm.getExecutor();
+                fsme.currMarkedGlow = 0;
+                fsme.applySelfIllumination(0, 1, false);
+                fsme.applySelfIllumination(0, 1, true);
+        }
 
         void setInstanced(Handle nInstancedMeshNot_h, Handle nInstancedMeshYes_h,
             unsigned untransformatedIndex) {

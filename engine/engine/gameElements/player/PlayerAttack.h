@@ -72,7 +72,8 @@ namespace gameElements {
 				TRAMPOLINE,
 				CANNON,
 				LIANA,
-				CREEP
+				CREEP,
+				HAMMER,
 			} type = NONE;
 			Handle h;
 

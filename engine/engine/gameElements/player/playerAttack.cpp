@@ -22,8 +22,10 @@ using namespace component;
 #include "animation/animationPlugger.h"
 #include "animation/cArmPoint.h"
 #include "animation/cbonelookat.h"
-#include "gameElements/liana.h"
 using namespace animation;
+
+#include "gameElements/liana.h"
+#include "gameElements/boss/boss.h"
 
 #include "gameElements/props.h"
 #include "gameElements/pickup.h"
@@ -155,7 +157,9 @@ void PlayerAttackBtExecutor::testAimAndAdd(
 	target_t t, std::vector<target_t>& list, CDetection* d, const CTransform& transform, XMVECTOR mePos)
 {
 	assert(d != nullptr);
-	if (!t.isTransformed()) {
+    bool hammerNotTargetable = t.type == target_t::HAMMER && 
+        !((CTransformable*)(t.h.getSon<CTransformable>()))->getSelected();
+	if (!t.isTransformed() && !hammerNotTargetable) {
 		t.score = d->score(&transform, t.getPosition());
 		if (t.score != CDetection::NO_SCORE) {
 			if (t.type == t.ENEMY) t.score = t.score * 0.00001f;
@@ -206,6 +210,9 @@ void PlayerAttackBtExecutor::selectTargets()
 	}
 	for (auto& h : EntityListManager::get(CProp::TAG)) {
 		testAimAndAdd(target_t(target_t::PROP, h), v, meD, detectT, mePos);
+	}
+	for (auto& h : EntityListManager::get(CBoss::HAMMER_TAG)) {
+		testAimAndAdd(target_t(target_t::HAMMER, h), v, meD, detectT, mePos);
 	}
 
 	std::sort(v.begin(), v.end());
@@ -402,12 +409,12 @@ ret_e PlayerAttackBtExecutor::aim(float elapsed)
 		CTransform* t = e->get<CTransform>();
 		if (e->has<CEnemy>()){
 			return t->getPosition() + yAxis_v;
-		}
-		if (e->has<CTransformable>()){
+		} else if (e->has<CTransformable>()){
 			CTransformable* prop = e->get<CTransformable>();
 			return prop->getCenterAim();
-		}		
-		return t->getPosition();
+		} else {
+		    return t->getPosition();
+        }
 	}
 
 	bool PlayerAttackBtExecutor::target_t::isTransformed()

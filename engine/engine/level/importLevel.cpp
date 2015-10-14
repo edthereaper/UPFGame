@@ -275,8 +275,8 @@ void LevelImport::generateLava(const MKeyValue& atts, const wildcard_t& wc)
     }
 
     XMVECTOR size = wc.size == zero_v ? XMVectorSet(48,0,48,0): wc.size;
-    float x = XMVectorGetX(wc.size);
-    float z = XMVectorGetZ(wc.size);
+    float x = XMVectorGetX(size);
+    float z = XMVectorGetZ(size);
 
     CTransform* t = currentEntity->get<CTransform>();
     t->setPosition(wc.transform.getPosition());
@@ -751,6 +751,12 @@ void LevelImport::onStartElement(const std::string &elem, utils::MKeyValue &atts
 void LevelImport::setupHammer(Entity* e, const pieceData_t& p)
 {
     PrefabManager::get().prefabricateComponents("boss/hammer", e);
+    EntityListManager::get(CBoss::HAMMER_TAG).add(e);
+    CAABB* aabb = e->get<CAABB>();
+    aabb->init();
+    CTransform* t = e->get<CTransform>();
+    CTransformable* tr = e->get<CTransformable>();
+    tr->setCenterAim(aabb->getCenter() + t->getPosition());
 }
 
 void LevelImport::setupWeakSpot(Entity* e, const pieceData_t& p)

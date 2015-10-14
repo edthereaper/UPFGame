@@ -612,6 +612,7 @@ void App::loadlvl()
     auto entityMan = component::getManager<Entity>();
     entityMan->forall<void>([](Entity* e) {e->postMsg(MsgDeleteSelf());});
     MessageManager::dispatchPosts();
+    CSmokeTower::resetFX();
 
     Handle::setCleanup(false);
 	EntityListManager::get(CEnemy::TAG).clear();

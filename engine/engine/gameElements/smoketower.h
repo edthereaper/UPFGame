@@ -59,6 +59,7 @@ class CSmokeTower {
 	public:
 		friend SmokeTowerFSMExecutor;
         static inline bool isFXActive() {return fxActive;}
+        static inline void resetFX() {fxActive = false;}
 		static const EntityListManager::key_t TAG = 0x18273645;
 	private:
         static bool fxActive;

@@ -47,7 +47,7 @@ fsmState_t SmokeTowerFSMExecutor::waitingToInit(float elapsed)
 
 fsmState_t SmokeTowerFSMExecutor::smokeup(float elapsed)
 {	
-	CTransform* meT = meEntity.getSon<CTransform>();
+ 	CTransform* meT = meEntity.getSon<CTransform>();
     meT->setPosition(meT->getPosition() +
         XMVectorSet(0, speedUpSmokePhase * elapsed, 0, 0));
 	return STATE_smokeup;
@@ -72,7 +72,6 @@ fsmState_t SmokeTowerFSMExecutor::changePhase(float elapsed)
 
 void SmokeTowerFSMExecutor::update(float elapsed)
 {
-	if (!active) return;
 	Entity* player = playerEntity;
 	CTransform* meT = meEntity.getSon<CTransform>();
 	CTransform* playerT = player->get<CTransform>();
@@ -100,7 +99,7 @@ void SmokeTowerFSMExecutor::update(float elapsed)
 	}
 
 	float camDiff = XMVectorGetY(meT->getPosition()) - XMVectorGetY(camT->getPosition());
-    CSmokeTower::fxActive = camDiff >= FX_THRESHOLD;
+    CSmokeTower::fxActive = active && camDiff >= FX_THRESHOLD;
 }
 
 void CSmokeTower::updatePaused(float elapsed)

@@ -1,0 +1,9 @@
+<Entity init="true" >
+	<Name generate="raiz2-"/>
+    <Transform/>
+	<Tint color="brown" a="0" />
+	<SelfIllumination/>
+	
+	<prefab name="mesh/raiz_02" />
+	<Mesh visible="false" />
+</Entity>

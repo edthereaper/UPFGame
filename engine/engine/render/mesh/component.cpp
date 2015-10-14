@@ -64,6 +64,7 @@ void CMesh::loadFromProperties(const std::string& elem, utils::MKeyValue &atts)
         selfIlluminationClamp = atts.getFloat("selfIlluminationClamp", selfIlluminationClamp);
         diffuseAsSelfIllumination = atts.getFloat("diffuseAsSelfIllumination", diffuseAsSelfIllumination);
         paintableAmount = atts.getFloat("paintableAmount", paintableAmount);
+        visible = atts.getBool("visible", visible);
 	} else if (elem == "submesh") {
 
         Mesh::groupId_t group = atts.getInt("id", -1);

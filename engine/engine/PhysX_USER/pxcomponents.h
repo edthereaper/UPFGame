@@ -195,13 +195,15 @@ class CRigidBody : public Shape {
 
 		void fixedUpdate(float elapsed) {
 			Entity* e = Handle(this).getOwner();
-			CTransform * t = e->get<CTransform>();
-            if (t) {
-                if (rigidBody->getRigidBodyFlags() & PxRigidBodyFlag::eKINEMATIC) {
-                    rigidBody->setKinematicTarget(toPxTransform(t->getWorld()));
-                } else {
-			        t->setPosition(toXMVECTOR(rigidBody->getGlobalPose().p));
-			        t->setRotation(toXMQuaternion(rigidBody->getGlobalPose().q));
+            if (e) {
+			    CTransform * t = e->get<CTransform>();
+                if (t) {
+                    if (rigidBody->getRigidBodyFlags() & PxRigidBodyFlag::eKINEMATIC) {
+                        rigidBody->setKinematicTarget(toPxTransform(t->getWorld()));
+                    } else {
+			            t->setPosition(toXMVECTOR(rigidBody->getGlobalPose().p));
+			            t->setRotation(toXMQuaternion(rigidBody->getGlobalPose().q));
+                    }
                 }
             }
 		}

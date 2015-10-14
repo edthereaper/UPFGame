@@ -69,9 +69,9 @@ void BossBt::initType()
     BT_CREATECHILD_A (EARTHQUAKE,          SMOKE_WARNING,       LEAF,                        earthQuake        );
     BT_CREATECHILD_A (SMOKE_START,         ARM_DOWN,            CHAIN,                       setupSmokeDamage  );
     BT_CREATECHILD_A (SMOKE_DURING,        SMOKE_START,         LEAF,                        duringSmoke       );
+	BT_CREATECHILD_A (COOL_SMOKE,          ARM_DOWN,            LEAF,                        coolSmoke         );
     BT_CREATECHILD_A (SETUP_PUNCH_WAIT,    ARM_DOWN,            CHAIN,                       setupPunchWait    );
     BT_CREATECHILD_A (PUNCH_WAIT,          SETUP_PUNCH_WAIT,    LEAF,                        punchWait         );
-	BT_CREATECHILD_A (COOL_SMOKE,          PUNCH,               LEAF,                        coolSmoke         );
 	BT_CREATECHILD   (RAISE_ARM,           PUNCH,               PRIORITY                                       );
 	BT_CREATECHILD_C (RAISE_TRANSFORMATED, RAISE_ARM,           SEQUENCE,   hammerTransform                    );
     BT_CREATECHILD_A (DAMAGED_DELAY_SETUP, RAISE_TRANSFORMATED, CHAIN,                       setupDamagedDelay );
@@ -457,6 +457,9 @@ ret_e BossBtExecutor::setupPunchWarning(float elapsed)
     //TODO: start fx
     timer.set(-TIME_PUNCH_WARNING[stage]);
 
+    CTransformable* tr = hammer->get<CTransformable>();
+    tr->setSelected(true);
+
     return DONE;
 }
 
@@ -713,6 +716,11 @@ ret_e BossBtExecutor::raiseHealthyEndFx(float elapsed)
 {
     //TODO: start FX
     punchTimer.set(-COOLDOWN_PUNCH[stage]/2);
+    
+	Entity* hammer = hammers[currentHammer].hammer;
+    CTransformable* tr = hammer->get<CTransformable>();
+    tr->setSelected(false);
+
     return DONE;
 }
 
@@ -900,6 +908,8 @@ void CBoss::reset()
             system.cannon = Handle();
         }
         {
+            //Reset hammer
+
             Entity* e_prev = system.hammer;
             Entity* e = getManager<Entity>()->createObj();
             PrefabManager::get().prefabricateComponents("boss/hammer", e);
@@ -910,6 +920,13 @@ void CBoss::reset()
             
 			CMesh* m_prev = e_prev->get<CMesh>();
             CMesh* m = e->get<CMesh>();
+
+            
+            EntityListManager::get(CBoss::HAMMER_TAG).add(e);
+            CAABB* aabb = e->get<CAABB>();
+            aabb->init();
+            CTransformable* tr = e->get<CTransformable>();
+            tr->setCenterAim(aabb->getCenter() + t->getPosition());
             
 			CEmitter *emitter = e->get<CEmitter>();
 
@@ -919,7 +936,7 @@ void CBoss::reset()
 
 			ParticleUpdaterManager::get().sendInactive(smoke);
 			ParticleUpdaterManager::get().sendInactive(grava);
-			ParticleUpdaterManager::get().sendInactive(hoja);
+			//ParticleUpdaterManager::get().sendInactive(hoja);
 			
 			*m = *m_prev;
             system.hammer = e;
@@ -927,6 +944,7 @@ void CBoss::reset()
             e_prev->destroy();
         }
         {
+            //Reset Weak Spot
             Entity* e_prev(system.weakSpot);
             Entity* e = getManager<Entity>()->createObj();
             PrefabManager::get().prefabricateComponents("boss/weak-spot", e);
@@ -1016,9 +1034,10 @@ void CBoss::update(float elapsed)
 #endif
     CTransform* playerT = bt.getExecutor().playerEntity.getSon<CTransform>();
     CTransform* meT = me->get<CTransform>();
-    if ((bt.getCurrentAction() & BossBtExecutor::COD_DONT_ALIGN)==0) {
+    auto action = bt.getCurrentAction();
+    if ((action & BossBtExecutor::COD_DONT_ALIGN)==0) {
         float rotSpeed =
-            (bt.getCurrentAction() & BossBtExecutor::COD_ALIGN_FASTER)!=0 ?
+            (action & BossBtExecutor::COD_ALIGN_FASTER)!=0 ?
             deg2rad(35) : deg2rad(15);
         XMVECTOR q = alignXZ(meT, playerT->getPosition(), rotSpeed*elapsed);
         for (unsigned i=0; i<nSpinners; ++i) { 
@@ -1031,6 +1050,9 @@ void CBoss::update(float elapsed)
             t->applyRotation(XMQuaternionRotationAxis(t->getUp(), angle*spinners[i].spin));
         }
     }
+
+    TransformableFSMExecutor::updateSpecialHighlights(elapsed,
+        action & BossBtExecutor::COD_HIGHLIGHT);
 }
 
 inline void CBoss::receive(const MsgEarthquake& msg)
