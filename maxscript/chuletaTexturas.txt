@@ -1,0 +1,46 @@
+Todas las texturas son opcionales, incluído difuso y normales (por defecto sale blanco y plano)
+Propiedades:
+	- crear el fichero nombreDelMax.propierties en la carpeta del max
+		- el botón de props lo crea a partir de las user-defined properties, pero se puede crear a mano
+	- mtX_propiedad="valor" para asignarle propiedades al material de las caras con Material Id X
+	- Esto hace que al exportar el material se copien los valores al xml del material)
+	- por ejemplo mt2_shadows="false" para que el material 2 no arroje sombra (se copia shadows="false" al material)
+	- también se puede escribir a mano en el xml. están en data/materials, ¡pero exportar piezas machaca lo que hubiese antes!
+		-> puede servir para hacer pruebas
+	- Le he puesto que al exportar los materiales de un objeto, en el xml te diga a qué Material ID de max se refiere.
+		Así, puedes ver en el xml del material el id del material al que añadir la propiedad (sin necesidad de abrir el max)
+	- La propiedad se aplica a todos los material ID que usen el mismo material.
+		Si diferentes mallas usan materiales de distinto nombre unos sobreescriben a otros
+
+Difuso:
+	- textura diffuse en el max
+	- Propiedad tint="0xRRGGBBAA" (RRGGBBAA -> código html del color) tintado uniforme
+	- también podemos añadir otro tintado uniforme por código
+	
+Normal
+	- textura de normal en el max (bump->bitmap o bump->normal bump->bitmap)
+	- el opuesto del alfa se considera el especular
+
+SelfIllumination:
+	- textura selfIllumination en el max
+		El alpha divide al rgb (negro=0 blanco=1)
+	- Propiedad diffuse_selfIllumination="decimal" (por defecto 0) => se suma un factor del difuso como autoiluminación
+	- Propiedad siTint="0xRRGGBBAA" (RRGGBBAA -> código html del color) tintado uniforme
+	- también podemos añadir otro tintado uniforme por código
+	
+Specular:
+	- opuesto del alpha de la textura normales (en general todas las texturas tienen ya blanco => sin especular)
+		- más negro, más especular
+	- Propiedad alphaAsSpecular="decimal entre 0 y 1" (por defecto 0) => se le suma el alfa del difuso multiplicado por el factor (útil para cristales)
+	- Propiedad baseSpecular="decimal entre 0 y 1" (por defecto 0.20, sujeto a cambios) => se suma el número
+		también puede ser un número negativo (para contrarrestar el efecto de otros especulares)
+
+Cristal:
+	- Propiedad glass="true/false" (por defecto false)
+		Hace un translúcido raro (no puede llegar a ser opaco, aunque el alpha lo hace más transparente)
+		
+Sombras
+	- Propiedad shadows="true/false" (por defecto true) => controla si el material arroja sombra
+	
+Motion blur
+	- Propiedad motionBlur="decimal entre 0 y 1" (por defecto 1) cuánto le afecta el motion blur

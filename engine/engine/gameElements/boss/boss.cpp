@@ -397,7 +397,8 @@ ret_e BossBtExecutor::raiseDifficulty(float elapsed)
     stage = inRange<uint8_t>(0,stage,N_STAGES-1); // for safety
     punchTimer.set(-COOLDOWN_PUNCH[stage]);
     waitingForWeakSpot = false;
-
+    
+#if defined(_DEBUG) && defined(DEBUG_BOSS_TINTING)
     Entity* me(meEntity);
     CSelfIllumination* meSIll = me->get<CSelfIllumination>();
     meSIll->set(Color(Color::RED).setAf(0.2f*stage));
@@ -409,6 +410,7 @@ ret_e BossBtExecutor::raiseDifficulty(float elapsed)
         sIll->set(*meSIll);
         RenderManager::updateKeys(hammer);
     }
+#endif
 
     timer.set(-TIME_CRASH_WAIT);
     return DONE_QUICKSTEP;

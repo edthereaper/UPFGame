@@ -1,7 +1,7 @@
 <componentPrefab>
 	<Name generate="boss"/>
 
-	<Tint color="brown" />
+	<Tint/>
 	<SelfIllumination/>
 	
 	<AABB/>

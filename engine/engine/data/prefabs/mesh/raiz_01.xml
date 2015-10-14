@@ -1,0 +1,3 @@
+<Mesh name="raiz_01">
+	<submesh id="0" material="liana_diffuse"/>
+</Mesh>

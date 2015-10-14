@@ -7,7 +7,7 @@
 	<AABB/>
 	<CullingAABB/>
 	<Transformable inert="true" type="boss_hammer" /> 
-	<Tint color="brown"/>
+	<Tint/>
 	<RigidBody kinematic="yes">
 		<shape type="box" size="5.45 3.186 2.96" pos="0 1.593 0"
 			is		="boss|scene"
