@@ -139,7 +139,9 @@ bool fmodUserClass::updateAmbient3DSound(FMOD::Channel *channel, XMVECTOR posSou
 }
 
 void fmodUserClass::stopAmbient3DSound(FMOD::Channel *channel){
+	channel->setVolume(0.0f);
 	channel->stop();
+	channel = NULL;
 }
 
 bool fmodUserClass::play3DSingleSound(char fileName[64], XMVECTOR posSource, float volume, float pan, float radius){

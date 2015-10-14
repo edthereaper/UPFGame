@@ -20,9 +20,6 @@ namespace gameElements {
 		}
 	}
 
-	float animX = 0.0f;	
-	bool active = false;
-
 	void CTextHelper::renderHelper(float elapsed){
 		if(actualHint == "") return;
 		App &app = App::get();

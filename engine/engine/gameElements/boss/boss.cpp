@@ -115,6 +115,7 @@ void BossBt::initType()
 namespace gameElements {
 
 #define GRAVITY 3.5f*9.81f
+#define TIME_MSG_TUTO 5.0f
 const float BossBtExecutor::TIME_BEGIN = 3.f;
 const float BossBtExecutor::TIME_CRASH_WAIT = TIME_BEGIN;
 const float BossBtExecutor::TIME_SMOKING = 1.0f;
@@ -492,6 +493,11 @@ ret_e BossBtExecutor::setupDropArm(float elapsed)
 ret_e BossBtExecutor::hitGround(float elapsed)
 {
     //TODO: start FX
+	//Info for the first stage
+	if (stage == 0){
+		((Entity*)playerEntity)->sendMsg(MsgPlayerInTuto(11));
+		((Entity*)bichitoEntity)->sendMsg(MsgPlayerInTuto(11));
+	}
 
 	Entity* hammer = hammers[currentHammer].hammer;
 	CEmitter *emitter = hammer->get<CEmitter>();
@@ -580,7 +586,11 @@ ret_e BossBtExecutor::setupPunchWait(float elapsed)
 ret_e BossBtExecutor::coolSmoke(float elapsed)
 {
 	EntityListManager::get(CSmokePanel::TAG).broadcast(MsgDeactivateSmoke());
-
+	//Info for the first stage
+	if (stage == 0){
+		((Entity*)playerEntity)->sendMsg(MsgPlayerOutTuto());
+		((Entity*)bichitoEntity)->sendMsg(MsgPlayerOutTuto());
+	}
     return DONE_QUICKSTEP;
 }
 
@@ -634,7 +644,15 @@ ret_e BossBtExecutor::armResisting(float elapsed)
 
 ret_e BossBtExecutor::dropCannon(float elapsed)
 {
-    //TODO: export a travelling animation in MAX
+	//Info for the first stage
+	if (stage == 0 && !tutoCannon){
+		tutoCannon = true;
+		((Entity*)playerEntity)->sendMsg(MsgPlayerInTuto(12));
+		((Entity*)bichitoEntity)->sendMsg(MsgPlayerInTuto(12));
+		tutoAlertTimer.reset();
+	}
+	
+	//TODO: export a travelling animation in MAX
     Entity* cannon = hammers[currentHammer].cannon;
     CFlyingMobile* fm = cannon->get<CFlyingMobile>();
 	
@@ -1050,7 +1068,16 @@ void CBoss::update(float elapsed)
             t->applyRotation(XMQuaternionRotationAxis(t->getUp(), angle*spinners[i].spin));
         }
     }
-
+	//Info for the first stage
+	if (bt.getExecutor().tutoCannon){
+		if (bt.getExecutor().tutoAlertTimer.count(elapsed) >= TIME_MSG_TUTO){
+			if (bt.getExecutor().stage == 0){
+				((Entity*)bt.getExecutor().playerEntity)->sendMsg(MsgPlayerOutTuto());
+				((Entity*)bt.getExecutor().bichitoEntity)->sendMsg(MsgPlayerOutTuto());
+				bt.getExecutor().tutoCannon = false;
+			}
+		}
+	}
     TransformableFSMExecutor::updateSpecialHighlights(elapsed,
         action & BossBtExecutor::COD_HIGHLIGHT);
 }

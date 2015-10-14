@@ -1362,9 +1362,6 @@ bool App::update(float elapsed)
 		if (((CPlayerStats*)player->get<CPlayerStats>())->getHealth() > 0){
 			spawn();
 		}
-		else{
-			((CPlayerMov*)player->get<CPlayerMov>())->setDeathByHole();
-		}
 	}
 	if (XMVectorGetY(pos) >= 0){
 		didspawn = false;

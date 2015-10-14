@@ -170,8 +170,9 @@ class BossBtExecutor {
         Handle meEntity;
         Handle playerEntity;
 		Handle bichitoEntity;
-		utils::Counter<float> timer, punchTimer;
+		utils::Counter<float> timer, punchTimer, tutoAlertTimer;
 
+		bool tutoCannon = false;
         uint8_t stage = 0;
         uint8_t shotsFired = 0;
         float hammerY = 0;

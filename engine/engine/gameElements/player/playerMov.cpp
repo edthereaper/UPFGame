@@ -1758,6 +1758,12 @@ void CPlayerMov::update(float elapsed)
 			case 0x1594:	//Jumping in creep
 				animPlugger->plug(0xc594);
 				break;
+			case 0x2504:	//Begin
+				animPlugger->plug(0x2400);
+				break;
+			case 0x2231:	//Dash Bounce
+				animPlugger->plug(0x835c);
+				break;
 		}
 		if (bte.unplugJump){
 			animPlugger->plug(0x231c);
