@@ -141,7 +141,7 @@ void DeferredRender::generateLightBuffer()
     TraceScoped scope("light_buffer");
 
     activateRSConfig(RSCFG_REVERSE_CULLING);
-    activateZConfig(ZCFG_TEST_GT);
+    activateZConfig(ZCFG_TEST_GE);
     activateBlendConfig(BLEND_CFG_ADDITIVE);
 
     rt_lights->activate();

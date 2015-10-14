@@ -199,6 +199,9 @@ bool coplanar(XMVECTOR a, XMVECTOR b, XMVECTOR c);
 
 XMVECTOR deltaMovement(XMVECTOR a, XMVECTOR b, float speed);
 
+
+XMVECTOR scaleFromMatrix(XMMATRIX m);
+
 }
 
 

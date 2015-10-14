@@ -203,7 +203,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		hdc = BeginPaint(hWnd, &ps);
 		EndPaint(hWnd, &ps);
 		break;
+	case WM_CLOSE:
+        app.destroy();
+		PostQuitMessage(0);
+		break;
 	case WM_DESTROY:
+        app.destroy();
 		PostQuitMessage(0);
 		break;
         

@@ -111,6 +111,19 @@ struct VertexPUNTInstance {
                 tint(component::Color(tint).abgr()),
                 selfIllumination(component::Color(sill).abgr())
                 {}
+
+            inline bool operator==(const instance_t& b) const {
+                return world == b.world &&
+                    tint == b.tint &&
+                    selfIllumination == b.selfIllumination &&
+                    userDataB == b.userDataB;
+            }
+            inline bool operator==(const instance_t& b) {
+                return world == b.world &&
+                    tint == b.tint &&
+                    selfIllumination == b.selfIllumination &&
+                    userDataB == b.userDataB;
+            }
     };
 };
 

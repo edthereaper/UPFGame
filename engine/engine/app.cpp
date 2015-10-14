@@ -1197,11 +1197,8 @@ void App::fixedUpdate(float elapsed)
     PhysicsManager::get().fixedUpdate(elapsed);
 }
 
-bool App::updateCinematic(float elapsed){
-
-
-	CTransform* camT = getCamera().getSon<CTransform>();
-	cam1P.update(*camT, elapsed, true);
+void App::updateCameras(float elapsed)
+{
 
 	getManager<CCamera>()->update(elapsed);
 	CCulling::rewindCullers();
@@ -1220,6 +1217,14 @@ bool App::updateCinematic(float elapsed){
 
 	dirLights->update(elapsed);
 	ptLights->update(elapsed);
+}
+
+bool App::updateCinematic(float elapsed)
+{
+	CTransform* camT = getCamera().getSon<CTransform>();
+	cam1P.update(*camT, elapsed, true);
+
+    updateCameras(elapsed);
 
 	getManager<CSmokeTower>()->forall<void>(&CSmokeTower::updatePaused, elapsed);
 
@@ -1235,7 +1240,6 @@ bool App::updateCinematic(float elapsed){
 
 	updateGlobalConstants(elapsed);
 	return true;
-
 }
 
 bool App::updatePaused(float elapsed)
@@ -1248,24 +1252,8 @@ bool App::updatePaused(float elapsed)
 	if (CameraManager::get().isPlayerCam())
 		getManager<CPlayerMov>()->forall<void>(&CPlayerMov::updatePaused, elapsed);
 #endif
-
-    getManager<CCamera>()->update(elapsed);
-    CCulling::rewindCullers();
-    getManager<CCulling>()->update(elapsed);
-    getManager<CCullingCube>()->update(elapsed);
-    getManager<CCullingAABB>()->update(elapsed);
-
-    //Render-related components
-    auto dirLights = getManager<CDirLight>();
-    auto ptLights = getManager<CPtLight>();
-	auto volLights = getManager<CVolPtLight>();
-
-    dirLights->forall<void, Handle>(&CDirLight::cull, getCamera(), true);
-	ptLights->forall<void, Handle>(&CPtLight::cull, getCamera(), true);
-	volLights->forall<void, Handle>(&CVolPtLight::cull, getCamera(), true);
     
-	dirLights->update(elapsed);
-	ptLights->update(elapsed);
+    updateCameras(elapsed);
 
     getManager<CSmokeTower>()->forall<void>(&CSmokeTower::updatePaused, elapsed);
 

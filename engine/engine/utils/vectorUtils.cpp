@@ -334,4 +334,14 @@ XMVECTOR deltaMovement(XMVECTOR a, XMVECTOR b, float speed)
     return testIsBehind(diff, b-(a+delta)) ? diff : delta;
 }
 
+XMVECTOR scaleFromMatrix(XMMATRIX m)
+{
+    return XMVectorSet(
+        XMVectorGetX(XMVector3Length(m.r[0])),
+        XMVectorGetY(XMVector3Length(m.r[1])),
+        XMVectorGetZ(XMVector3Length(m.r[2])),
+        1
+    );
+}
+
 }

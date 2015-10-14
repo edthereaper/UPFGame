@@ -133,6 +133,7 @@ class App {
 		void fixedUpdate(float elapsed);
         bool pauseMenu();
 		bool updateCinematic(float elapsed);
+		void updateCameras(float elapsed);
         bool updatePaused(float elapsed);
         bool update(float elapsed);
         void render();

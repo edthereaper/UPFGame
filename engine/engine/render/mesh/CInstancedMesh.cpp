@@ -209,6 +209,8 @@ bool CInstancedMesh::replaceInstanceWorld(
 #define CULLING_METHOD_PARTITION
 #undef CULLING_SKIP
 
+//#define CHECK_CHANGEDVECTOR
+
 size_t CInstancedMesh::cull(const Culling::CullerDelegate& cullerDelegate)
 {
 #if defined(CULLING_SKIP)
@@ -235,11 +237,31 @@ size_t CInstancedMesh::cull(const Culling::CullerDelegate& cullerDelegate)
 #elif defined(CULLING_METHOD_PARTITION)
     Swapper swapper(this);
     auto begin = dataBuffer->begin();
+
+#if defined(_DEBUG) && defined(CHECK_CHANGEDVECTOR)
+    auto dataBufferCopy(*dataBuffer);
+#endif
+
+    auto prevNCulled = nCulled;
     bool changedVector = utils::partition_swap(begin, dataBuffer->end(), culler, swapper);
     nCulled = begin - dataBuffer->begin();
+    changedVector |= (prevNCulled != nCulled);
+
+#if defined(_DEBUG) && defined(CHECK_CHANGEDVECTOR)
+    if (!changedVector && prevNCulled != 0) {
+        assert(nCulled == prevNCulled);
+        for (auto i = 0; i < nCulled; ++i) {
+            auto a = (*dataBuffer)[i];
+            auto b = dataBufferCopy[i];
+            assert(a == b);
+        }
+    }
+#endif
+
     if (changedVector && nCulled > 0) {
         instanceData->updateFromCPU(dataBuffer->data(), sizeof(instance_t) * nCulled);
     }
+
 #elif !defined(CULLING_SKIP)
 #error No culling method!
 #endif

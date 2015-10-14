@@ -1,54 +1,308 @@
 <scene>
-		<Entity init="true">
-		<Name name="emitter-00"/>
-		<Transform pos="-3.147775 -10.474487 -6.792939" rot="0.000000 0.000000 0.000000 0.000000"/>
-		<Emitter name="lava_smok" position="-3.147775 -10.474487 -6.792939" rotation="0.000000 0.000000 0.000000 0.000000" count="1" particles0="emitter_0"/>
-		</Entity>
 	<Entity init="true">
-		<Name name="emitter-02"/>
-		<Transform pos="-0.437775 -10.444488 -6.792939" rot="0.000000 0.000000 0.000000 0.000000"/>
-		<Emitter name="lava_smok" position="-0.437775 -10.444488 -6.792939" rotation="0.000000 0.000000 0.000000 0.000000" count="1" particles0="emitter_0"/>
-		</Entity>
+		<Name name="ptLight-00"/>
+		<Transform pos="-13.408830 26.772442 -0.969999"/>
+		<PtLight radius="6.600000" decay="0" color="0xff9831ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" offset="0.000000 0.000000 0.000000" specularAmountModifier="0.05" specularPowerFactor="1" intensity="0.88" export="true" />
+		<CullingAABBSpecial type="ptLight"/>
+	</Entity>
 	<Entity init="true">
-		<Name name="emitter-03"/>
-		<Transform pos="-1.570323 -10.389903 -7.092942" rot="0.000000 0.000000 0.000000 0.000000"/>
-		<Emitter name="ceniza" position="-1.570323 -10.389903 -7.092942" rotation="0.000000 0.000000 0.000000 0.000000" count="2" particles0="emitter_0" particles1="emitter_1"/>
-		</Entity>
+		<Name name="ptLight-01"/>
+		<Transform pos="0.579266 3.575008 -19.566284"/>
+		<Camera fov="90" znear="0.300000" zfar="7.600000">
+			<viewport w="256" h="256"/>
+		</Camera>
+		<CullingCube/>
+		<CubeShadow resolution="256" enable="ff" />
+		<PtLight radius="7.600000" decay="0.4" color="0xc5c53dff" shadowIntensity="0.6" shadowFocus="0" shadowJittering="1" offset="0.000000 0.000000 0.000000" specularAmountModifier="-0.05" specularPowerFactor="1" intensity="1" export="true" />
+		<CullingAABBSpecial type="ptLight"/>
+	</Entity>
 	<Entity init="true">
-		<Name name="emitter-04"/>
-		<Transform pos="4.419724 -10.532158 1.696520" rot="0.000000 0.000000 0.000000 0.000000"/>
-		<Emitter name="lava_smok" position="4.419724 -10.532158 1.696520" rotation="0.000000 0.000000 0.000000 0.000000" count="1" particles0="emitter_0"/>
-		</Entity>
+		<Name name="ptLight-03"/>
+		<Transform pos="-14.579567 30.099260 14.892801"/>
+		<Camera fov="90" znear="0.300000" zfar="7.600000">
+			<viewport w="256" h="256"/>
+		</Camera>
+		<CullingCube/>
+		<CubeShadow resolution="256" enable="ff" />
+		<PtLight radius="7.600000" decay="0.4" color="0xc5c53dff" shadowIntensity="0.6" shadowFocus="0" shadowJittering="1" offset="0.000000 0.000000 0.000000" specularAmountModifier="-0.05" specularPowerFactor="1" intensity="1" export="true" />
+		<CullingAABBSpecial type="ptLight"/>
+	</Entity>
 	<Entity init="true">
-		<Name name="emitter-05"/>
-		<Transform pos="3.175307 -10.637136 4.003386" rot="0.000000 0.000000 0.000000 0.000000"/>
-		<Emitter name="" position="3.175307 -10.637136 4.003386" rotation="0.000000 0.000000 0.000000 0.000000" count="0"/>
-		</Entity>
+		<Name name="ptLight-04"/>
+		<Transform pos="-9.930999 38.056717 -18.247400"/>
+		<Camera fov="90" znear="0.300000" zfar="7.600000">
+			<viewport w="256" h="256"/>
+		</Camera>
+		<CullingCube/>
+		<CubeShadow resolution="256" enable="ff" />
+		<PtLight radius="7.600000" decay="0.4" color="0xc5c53dff" shadowIntensity="0.6" shadowFocus="0" shadowJittering="1" offset="0.000000 0.000000 0.000000" specularAmountModifier="-0.05" specularPowerFactor="1" intensity="1" export="true" />
+		<CullingAABBSpecial type="ptLight"/>
+	</Entity>
 	<Entity init="true">
-		<Name name="emitter-06"/>
-		<Transform pos="2.920260 -10.464851 4.353061" rot="0.000000 0.000000 0.000000 0.000000"/>
-		<Emitter name="lava_smok" position="2.920260 -10.464851 4.353061" rotation="0.000000 0.000000 0.000000 0.000000" count="1" particles0="emitter_0"/>
-		</Entity>
+		<Name name="ptLight-05"/>
+		<Transform pos="7.379176 62.695126 -17.708138"/>
+		<Camera fov="90" znear="0.300000" zfar="7.600000">
+			<viewport w="256" h="256"/>
+		</Camera>
+		<CullingCube/>
+		<CubeShadow resolution="256" enable="ff" />
+		<PtLight radius="7.600000" decay="0.4" color="0xc5c53dff" shadowIntensity="0.6" shadowFocus="0" shadowJittering="1" offset="0.000000 0.000000 0.000000" specularAmountModifier="-0.05" specularPowerFactor="1" intensity="1" export="true" />
+		<CullingAABBSpecial type="ptLight"/>
+	</Entity>
 	<Entity init="true">
-		<Name name="emitter-07"/>
-		<Transform pos="3.513269 -10.062618 3.171252" rot="0.000000 0.000000 0.000000 0.000000"/>
-		<Emitter name="ceniza" position="3.513269 -10.062618 3.171252" rotation="0.000000 0.000000 0.000000 0.000000" count="2" particles0="emitter_0" particles1="emitter_1"/>
-		</Entity>
+		<Name name="dirLight-00"/>
+		<Transform pos="3.603243 5.595190 19.998905" lookAt="3.613242 4.595389 20.058903"/>
+		<Shadow resolution="256"/>
+		<Camera fov="122.000015" znear="0.300000" zfar="6.000000">
+			<viewport w="256" h="256"/>
+		</Camera>
+		<Culling/>
+		<CullingAABBSpecial type="dirLight"/>
+		<DirLight spotlight="yes" spotDecay="0.7" decay="0" radius="12" color="0xffff67ff" shadowIntensity="0.7" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="1" export="true" />
+	</Entity>
 	<Entity init="true">
-		<Name name="emitter-08"/>
-		<Transform pos="-7.315405 -10.861646 4.382705" rot="0.000000 0.000000 0.000000 0.000000"/>
-		<Emitter name="lava_smok" position="-7.315405 -10.861646 4.382705" rotation="0.000000 0.000000 0.000000 0.000000" count="1" particles0="emitter_0"/>
-		</Entity>
+		<Name name="dirLight-03"/>
+		<Transform pos="18.528784 9.453604 7.652332" lookAt="18.478783 8.453803 7.652330"/>
+		<Camera fov="122.000015" znear="0.300000" zfar="6.000000">
+			<viewport w="512" h="512"/>
+		</Camera>
+		<Culling/>
+		<CullingAABBSpecial type="dirLight"/>
+		<DirLight spotlight="yes" spotDecay="0.7" decay="0" radius="12" color="0xffff67ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="1" export="true" />
+	</Entity>
 	<Entity init="true">
-		<Name name="emitter-09"/>
-		<Transform pos="-8.462751 -10.778660 1.946324" rot="0.000000 0.000000 0.000000 0.000000"/>
-		<Emitter name="lava_smok" position="-8.462751 -10.778660 1.946324" rotation="0.000000 0.000000 0.000000 0.000000" count="1" particles0="emitter_0"/>
-		</Entity>
+		<Name name="orthoLight-00"/>
+		<Transform pos="-7.645579 80.791870 3.005536" lookAt="-7.635579 79.791870 3.005536"/>
+		<Camera orthographic="true" w="16.000000" h="16.000000" znear="0.300000" zfar="92.800003">
+			<viewport w="512" h="512"/>
+		</Camera>
+		<Culling/>
+		<CullingAABBSpecial type="dirLight"/>
+		<DirLight spotlight="yes" spotDecay="0.7" decay="1" radius="147.99" color="0xff9101ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="1" export="true" />
+	</Entity>
 	<Entity init="true">
-		<Name name="emitter-0A"/>
-		<Transform pos="-7.478054 -10.530725 2.961931" rot="0.000000 0.000000 0.000000 0.000000"/>
-		<Emitter name="ceniza" position="-7.478054 -10.530725 2.961931" rotation="0.000000 0.000000 0.000000 0.000000" count="2" particles0="emitter_0" particles1="emitter_1"/>
-		</Entity>
+		<Name name="dirLight-04"/>
+		<Transform pos="11.028274 8.896834 15.825373" lookAt="11.038273 7.897033 15.885371"/>
+		<Shadow resolution="256"/>
+		<Camera fov="122.000015" znear="0.300000" zfar="6.000000">
+			<viewport w="256" h="256"/>
+		</Camera>
+		<Culling/>
+		<CullingAABBSpecial type="dirLight"/>
+		<DirLight spotlight="yes" spotDecay="0.7" decay="0" radius="12" color="0xffff67ff" shadowIntensity="0.75" shadowFocus="0.1" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="1" export="true" />
+	</Entity>
+	<Entity init="true">
+		<Name name="dirLight-05"/>
+		<Transform pos="18.528784 9.453604 -0.307668" lookAt="18.478783 8.453803 -0.307670"/>
+		<Camera fov="122.000015" znear="0.300000" zfar="6.000000">
+			<viewport w="512" h="512"/>
+		</Camera>
+		<Culling/>
+		<CullingAABBSpecial type="dirLight"/>
+		<DirLight spotlight="yes" spotDecay="0.7" decay="0" radius="12" color="0xffff67ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="1" export="true" />
+	</Entity>
+	<Entity init="true">
+		<Name name="dirLight-06"/>
+		<Transform pos="18.528784 9.453604 -8.317668" lookAt="18.478783 8.453803 -8.317670"/>
+		<Camera fov="122.000015" znear="0.300000" zfar="6.000000">
+			<viewport w="512" h="512"/>
+		</Camera>
+		<Culling/>
+		<CullingAABBSpecial type="dirLight"/>
+		<DirLight spotlight="yes" spotDecay="0.7" decay="0" radius="12" color="0xffff67ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="1" export="true" />
+	</Entity>
+	<Entity init="true">
+		<Name name="dirLight-07"/>
+		<Transform pos="-7.965040 37.523712 19.778532" lookAt="-8.015041 36.523911 19.778530"/>
+		<Shadow resolution="512"/>
+		<Camera fov="122.000015" znear="0.300000" zfar="6.000000">
+			<viewport w="512" h="512"/>
+		</Camera>
+		<Culling/>
+		<CullingAABBSpecial type="dirLight"/>
+		<DirLight spotlight="yes" spotDecay="0.7" decay="0" radius="12" color="0xffff67ff" shadowIntensity="0.75" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="1" export="true" />
+	</Entity>
+	<Entity init="true">
+		<Name name="dirLight-08"/>
+		<Transform pos="-21.953903 36.536579 -0.549888" lookAt="-22.003904 35.536777 -0.549890"/>
+		<Shadow resolution="512"/>
+		<Camera fov="122.000015" znear="0.300000" zfar="6.000000">
+			<viewport w="512" h="512"/>
+		</Camera>
+		<Culling/>
+		<CullingAABBSpecial type="dirLight"/>
+		<DirLight spotlight="yes" spotDecay="0.7" decay="0" radius="12" color="0xffff67ff" shadowIntensity="0.75" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="1" export="true" />
+	</Entity>
+	<Entity init="true">
+		<Name name="dirLight-09"/>
+		<Transform pos="-19.508963 36.550186 6.960753" lookAt="-19.558964 35.550385 6.960751"/>
+		<Camera fov="122.000015" znear="0.300000" zfar="6.000000">
+			<viewport w="512" h="512"/>
+		</Camera>
+		<Culling/>
+		<CullingAABBSpecial type="dirLight"/>
+		<DirLight spotlight="yes" spotDecay="0.7" decay="0" radius="12" color="0xffff67ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="1" export="true" />
+	</Entity>
+	<Entity init="true">
+		<Name name="dirLight-0A"/>
+		<Transform pos="-18.759565 41.876652 -14.051524" lookAt="-18.809566 40.876850 -14.051526"/>
+		<Shadow resolution="256"/>
+		<Camera fov="122.000015" znear="0.300000" zfar="6.000000">
+			<viewport w="256" h="256"/>
+		</Camera>
+		<Culling/>
+		<CullingAABBSpecial type="dirLight"/>
+		<DirLight spotlight="yes" spotDecay="0.7" decay="0" radius="12" color="0xffff67ff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="1" export="true" />
+	</Entity>
+	<Entity init="true">
+		<Name name="dirLight-0B"/>
+		<Transform pos="9.070010 40.563347 -17.590525" lookAt="9.020009 39.563545 -17.590527"/>
+		<Shadow resolution="256"/>
+		<Camera fov="122.000015" znear="0.300000" zfar="6.000000">
+			<viewport w="256" h="256"/>
+		</Camera>
+		<Culling/>
+		<CullingAABBSpecial type="dirLight"/>
+		<DirLight spotlight="yes" spotDecay="0.7" decay="0" radius="12" color="0xffff67ff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="1" export="true" />
+	</Entity>
+	<Entity init="true">
+		<Name name="dirLight-0C"/>
+		<Transform pos="13.130011 40.533348 -15.130525" lookAt="13.080009 39.533546 -15.130527"/>
+		<Shadow resolution="256"/>
+		<Camera fov="122.000015" znear="0.300000" zfar="6.000000">
+			<viewport w="256" h="256"/>
+		</Camera>
+		<Culling/>
+		<CullingAABBSpecial type="dirLight"/>
+		<DirLight spotlight="yes" spotDecay="0.7" decay="0" radius="12" color="0xffff67ff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="1" export="true" />
+	</Entity>
+	<Entity init="true">
+		<Name name="dirLight-0D"/>
+		<Transform pos="17.753731 48.009087 11.087420" lookAt="17.703730 47.009285 11.087419"/>
+		<Camera fov="122.000015" znear="0.300000" zfar="6.000000">
+			<viewport w="512" h="512"/>
+		</Camera>
+		<Culling/>
+		<CullingAABBSpecial type="dirLight"/>
+		<DirLight spotlight="yes" spotDecay="0.7" decay="0" radius="12" color="0xffff67ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="1" export="true" />
+	</Entity>
+	<Entity init="true">
+		<Name name="dirLight-0E"/>
+		<Transform pos="-21.547215 57.355644 -11.626414" lookAt="-21.597216 56.355843 -11.626416"/>
+		<Camera fov="122.000015" znear="0.300000" zfar="6.000000">
+			<viewport w="512" h="512"/>
+		</Camera>
+		<Culling/>
+		<CullingAABBSpecial type="dirLight"/>
+		<DirLight spotlight="yes" spotDecay="0.7" decay="0" radius="12" color="0xffff67ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="1" export="true" />
+	</Entity>
+	<Entity init="true">
+		<Name name="dirLight-0F"/>
+		<Transform pos="-4.279345 73.771202 -22.483343" lookAt="-4.329346 72.771400 -22.483345"/>
+		<Shadow resolution="256"/>
+		<Camera fov="122.000015" znear="0.300000" zfar="6.000000">
+			<viewport w="256" h="256"/>
+		</Camera>
+		<Culling/>
+		<CullingAABBSpecial type="dirLight"/>
+		<DirLight spotlight="yes" spotDecay="0.7" decay="0" radius="12" color="0xffff67ff" shadowIntensity="0.7" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="1" export="true" />
+	</Entity>
+	<Entity init="yes" >
+		<Name name="Smoke-00" />
+		<Transform pos="-1.90815 -18.8375 -0.295154" />
+		<Mist
+			chaotic="yes"
+			dX="1"
+			dZ="1"
+			darkenAlpha="0.4"
+			depthTolerance="200"
+			export="yes"
+			factor="1"
+			h="0.5"
+			intensity="1"
+			l="4"
+			layerDecay="0.05"
+			minimun="0"
+			sqSqrt="1"
+			unitWorldSize="25"
+			w="4"
+		>
+			<top color="9c0000cc" />
+			<bottom color="99990099" />
+		</Mist>
+	</Entity>
+	<Entity init="yes" >
+		<Name name="mist-00" />
+		<Transform pos="-1.7448 83.3548 0.134892" />
+		<Mist
+			chaotic="yes"
+			dX="8.5"
+			dZ="8.5"
+			darkenAlpha="0.829"
+			depthTolerance="194"
+			export="yes"
+			factor="1"
+			h="0.5"
+			intensity="0.596"
+			l="3000"
+			layerDecay="0.228"
+			minimun="0.251"
+			sqSqrt="0.998"
+			unitWorldSize="117.37"
+			w="3000"
+		>
+			<top color="6c5e53cc" />
+			<bottom color="392c20cc" />
+		</Mist>
+	</Entity>
+	<Entity init="yes" >
+		<Name name="mist-01" />
+		<Transform pos="-58.569 -26.2648 -0.290663" />
+		<Mist
+			chaotic="yes"
+			dX="3"
+			dZ="2"
+			darkenAlpha="0.066"
+			depthTolerance="820"
+			export="yes"
+			factor="1"
+			h="1"
+			intensity="1"
+			l="3000"
+			layerDecay="1"
+			minimun="0.339"
+			sqSqrt="1"
+			unitWorldSize="41.01"
+			w="3000"
+		>
+			<top color="1f1610cc" />
+			<bottom color="b0b0699" />
+		</Mist>
+	</Entity>
+	<Entity init="yes" >
+		<Name name="mist-03" />
+		<Transform pos="-58.569 -36.1648 -0.290663" />
+		<Mist
+			chaotic="yes"
+			dX="2"
+			dZ="3"
+			darkenAlpha="0.721"
+			depthTolerance="820"
+			export="yes"
+			factor="1"
+			h="1"
+			intensity="1"
+			l="3000"
+			layerDecay="0.51"
+			minimun="0.339"
+			sqSqrt="1"
+			unitWorldSize="41.01"
+			w="3000"
+		>
+			<top color="1e1010cc" />
+			<bottom color="99" />
+		</Mist>
+	</Entity>
 	<Entity init="true">
 		<Name name="emitter-0B"/>
 		<Transform pos="-5.430790 74.744637 1.787571" rot="0.000000 0.000000 0.000000 0.000000"/>
