@@ -35,6 +35,16 @@ class CPickup {
 		float lifeTime = 0.0f;
         bool notRemoved = false;
 
+
+		XMVECTOR currentPosition;
+		XMVECTOR currentRotation;
+		XMVECTOR currentVelocity;
+
+		bool created = false;
+		bool signalCreate = false;
+		float wait;
+		utils::Counter<float> counterShowit;
+
     public:
         ~CPickup() {
             if (notRemoved && !component::Handle::onCleanup()) {
@@ -45,11 +55,15 @@ class CPickup {
         inline void init() {notRemoved=true;}
         void update(float elapsed);
         void loadFromProperties(std::string elem, utils::MKeyValue atts);
+		void setup();
 		void setup(XMVECTOR origin, XMVECTOR velocity = utils::zero_v,
+				   XMVECTOR rotQ = DirectX::XMQuaternionIdentity());
+		void waitAndSetup(float timetoWait ,XMVECTOR origin, XMVECTOR velocity = utils::zero_v,
 				   XMVECTOR rotQ = DirectX::XMQuaternionIdentity());
         void setupStationary();
 		void removeFromScene();
 		void activate();
+
 
 		inline bool isStationaryandUsed() { return stationaryUsed; }
 		inline int getType(){ return type; }

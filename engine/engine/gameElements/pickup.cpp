@@ -63,6 +63,31 @@ void CPickup::setupStationary()
 	setupDone = true;
 }
 
+void CPickup::setup(){
+
+	notRemoved = true;
+	Entity* me = Handle(this).getOwner();
+	CTransform* meT = me->get<CTransform>();
+
+	//issue lag generated when the pickups are created at same point and tim
+	meT->setPosition(currentPosition);
+	meT->setRotation(currentRotation);
+
+	CRigidBody* rigid = me->get<CRigidBody>();
+	rigid->createRigidBody();
+
+	if (XMVector3Equal(currentVelocity, zero_v)) {
+		setupStationary();
+	} else {
+		stationary = false;
+		rigid->addVelocityObject(currentVelocity, currentRotation, currentPosition);
+		setupDone = true;
+	}
+
+	created = true;
+}
+
+
 void CPickup::setup(XMVECTOR position, XMVECTOR velocity, XMVECTOR rotQ)
 {
     notRemoved = true;
@@ -83,59 +108,79 @@ void CPickup::setup(XMVECTOR position, XMVECTOR velocity, XMVECTOR rotQ)
 		rigid->addVelocityObject(velocity, rotQ, position);
 		setupDone = true;
 	}
+
+	created = true;
+}
+
+void CPickup::waitAndSetup(float elapsed, XMVECTOR position, XMVECTOR velocity, XMVECTOR rotQ)
+{
+	currentPosition = position;
+	currentVelocity = velocity;
+	currentRotation = rotQ;
+	wait = elapsed; 
+	signalCreate = true;
 }
 
 void CPickup::update(float elapsed)
 {	
-    static const XMVECTOR farAway = one_v*100000;
 
-	lifeTime += elapsed;
+	if (signalCreate && !created)
+		if (counterShowit.count(elapsed) >= wait)
+			setup();
+	
 
-	if (!stationaryUsed)
-	{
-		CTransform* meT = Handle(this).getBrother<CTransform>();
-		Handle playerHandle = App::get().getPlayer();
-        XMVECTOR playerCenter;
-        if (playerHandle.isValid()) {
-		    CTransform* playerTransform = ((Entity*)playerHandle)->get<CTransform>();
-		    playerCenter = playerTransform == nullptr? farAway :
-                playerTransform->getPosition() +
-                XMVectorSet(0, XMVectorGetY(playerTransform->getScale()) / 2, 0, 0);
-        } else {
-            playerCenter = farAway;
-        }
-		Entity* me = Handle(this).getOwner();
-		CRigidBody* rigid = me->get<CRigidBody>();
-		float dist = sqEuclideanDistance(playerCenter, meT->getPosition());
-		if (dist < 50.0f) {
-			XMVECTOR ds = XMVectorSet(XMVectorGetX(playerCenter - meT->getPosition()), XMVectorGetY(playerCenter - meT->getPosition()), XMVectorGetZ(playerCenter - meT->getPosition()), 0);
-			ds = XMVector3Normalize(ds);
-			if (dist <= 2.0f){
-				activate();
+	if (created){
+
+		static const XMVECTOR farAway = one_v*100000;
+
+		lifeTime += elapsed;
+
+		if (!stationaryUsed)
+		{
+			CTransform* meT = Handle(this).getBrother<CTransform>();
+			Handle playerHandle = App::get().getPlayer();
+			XMVECTOR playerCenter;
+			if (playerHandle.isValid()) {
+				CTransform* playerTransform = ((Entity*)playerHandle)->get<CTransform>();
+				playerCenter = playerTransform == nullptr? farAway :
+					playerTransform->getPosition() +
+					XMVectorSet(0, XMVectorGetY(playerTransform->getScale()) / 2, 0, 0);
+			} else {
+				playerCenter = farAway;
 			}
-			else{
-				if (dist <= 10.0f){
-					ds = 25 * ds;
+			Entity* me = Handle(this).getOwner();
+			CRigidBody* rigid = me->get<CRigidBody>();
+			float dist = sqEuclideanDistance(playerCenter, meT->getPosition());
+			if (dist < 50.0f) {
+				XMVECTOR ds = XMVectorSet(XMVectorGetX(playerCenter - meT->getPosition()), XMVectorGetY(playerCenter - meT->getPosition()), XMVectorGetZ(playerCenter - meT->getPosition()), 0);
+				ds = XMVector3Normalize(ds);
+				if (dist <= 2.0f){
+					activate();
 				}
 				else{
-					ds = (50 / dist) * ds * 5;
+					if (dist <= 10.0f){
+						ds = 25 * ds;
+					}
+					else{
+						ds = (50 / dist) * ds * 5;
+					}
+				}
+				rigid->addVelocityObject(ds, meT->getRotation(), meT->getPosition());
+			} else{
+				if (stationary){
+					rigid->addVelocityObject(XMVectorSet(0, 0, 0, 0), XMQuaternionIdentity(), meT->getPosition());
 				}
 			}
-			rigid->addVelocityObject(ds, meT->getRotation(), meT->getPosition());
-		} else{
-			if (stationary){
-				rigid->addVelocityObject(XMVectorSet(0, 0, 0, 0), XMQuaternionIdentity(), meT->getPosition());
-			}
-		}
 
-		if (dies && ttlTimer.count(elapsed) >= 0) {
-			Entity* e = Handle(this).getOwner();
+			if (dies && ttlTimer.count(elapsed) >= 0) {
+				Entity* e = Handle(this).getOwner();
 			
-			CEmitter *emitter = e->get<CEmitter>();
-			auto k = emitter->getKey("emitter_0");
-			ParticleUpdaterManager::get().setDeleteSelf(k);
+				CEmitter *emitter = e->get<CEmitter>();
+				auto k = emitter->getKey("emitter_0");
+				ParticleUpdaterManager::get().setDeleteSelf(k);
 			
-			e->postMsg(MsgDeleteSelf());
+				e->postMsg(MsgDeleteSelf());
+			}
 		}
 	}
 }
@@ -240,8 +285,13 @@ void CThrowsPickups::activate()
 		velY = utils::rand_uniform(5.0f, 3.0f);	
 		velZ = utils::rand_uniform(3.0f, -3.0f);
 		pos += XMVectorSet(0, 0.2f, 0, 0);
-		((CPickup*)entity->get<CPickup>())->setup(
-            pos, XMVectorSet(velX, velY, velZ, 0), XMQuaternionIdentity());
+		/*((CPickup*)entity->get<CPickup>())->setup(
+            pos, XMVectorSet(velX, velY, velZ, 0), XMQuaternionIdentity());*/
+		((CPickup*)entity->get<CPickup>())->waitAndSetup(
+			utils::rand_uniform(0.5,0),
+            pos, XMVectorSet(velX, velY, velZ, 0),
+			XMQuaternionIdentity()
+			);
 		entity->init();
 	}
     if (!repeat) {
