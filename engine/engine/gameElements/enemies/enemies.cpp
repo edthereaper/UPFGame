@@ -134,7 +134,7 @@ namespace gameElements {
 	ret_e EnemyBtExecutor::initTransforming(float)
 	{
 		((Entity*)meEntity)->sendMsg(MsgTransform());
-		fmodUser::fmodUserClass::stopAmbient3DSound(stunChannel);
+		if (stunChannel != NULL)		fmodUser::fmodUserClass::stopAmbient3DSound(stunChannel);
 		return DONE;
 	}
 
@@ -205,12 +205,12 @@ namespace gameElements {
 		if (timer.count(elapsed) >= stunTime) {
 			stunTime = 0;
 			stun = false;
-			fmodUser::fmodUserClass::stopAmbient3DSound(stunChannel);
+			if (stunChannel != NULL)		fmodUser::fmodUserClass::stopAmbient3DSound(stunChannel);
 			return DONE;
 		}
 		else {
 			CTransform* meTransform = me->get<CTransform>();
-			fmodUser::fmodUserClass::updateAmbient3DSound(stunChannel, meTransform->getPosition());
+			if (stunChannel != NULL)		fmodUser::fmodUserClass::updateAmbient3DSound(stunChannel, meTransform->getPosition());
 			return STAY;
 		}
 	}
@@ -378,7 +378,13 @@ namespace gameElements {
 	ret_e EnemyBtExecutor::randomStunned(float)
 	{
 		stunTime = utils::rand_uniform(3.5f, 2.5f);
-		fmodUser::fmodUserClass::playAmbient3DSound(stunChannel, "enemy_stun");
+		if (stunChannel == NULL){
+			fmodUser::fmodUserClass::playAmbient3DSound(stunChannel, "enemy_stun");
+		}
+		else{
+			fmodUser::fmodUserClass::stopAmbient3DSound(stunChannel);
+			fmodUser::fmodUserClass::playAmbient3DSound(stunChannel, "enemy_stun");
+		}
 		return DONE;
 	}
 

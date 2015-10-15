@@ -223,8 +223,8 @@ Entity* LevelImport::createPiece(const pieceData_t& p)
 
 #ifdef _DEBUG
     if (transforms && !transformationExists) {
-        dbg("Mesh %s was supposed to transform into %s but mesh doesn't exist.\n",
-            p.meshName.c_str(), p.transformation.c_str());
+       /*dbg("Mesh %s was supposed to transform into %s but mesh doesn't exist.\n",
+            p.meshName.c_str(), p.transformation.c_str());*/
     }
 #endif
 
@@ -667,7 +667,6 @@ void LevelImport::onStartElement(const std::string &elem, utils::MKeyValue &atts
 
         CDestructible* destructible = currentEntity->get<CDestructible>();
         destructible->createBox(size);
-		destructible->setup();
 
     } else if (elem == "smoke") {
         float width = std::max(atts.getFloat("width"), 0.01f);

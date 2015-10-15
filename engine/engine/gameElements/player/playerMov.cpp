@@ -127,7 +127,7 @@ void PlayerMovBt::initType()
 #define TIME_LAND					0.1f
 #define TIME_LIANA_GRAB				0.0f
 #define TIME_LIANA_BACK_TO_IDLE		1.0f
-
+#define TIME_DASH_BOUNCE_ANIM		1.33f
 #define TIME_DASH_ANIM				0.82f	
 #define TIME_ANIM_MUSHROOM_GROUND	0.035f
 #define TIME_CANNON_ENTER			0.2f
@@ -1019,16 +1019,17 @@ ret_e PlayerMovBtExecutor::dashDuring(float elapsed)
     }
 }
 
-ret_e PlayerMovBtExecutor::dashBounce(float)
+ret_e PlayerMovBtExecutor::dashBounce(float elapsed)
 {
 	//dbg("dash Bounce\n");
-	static const auto bounceImpulse(calculateImpulse(DASH_BOUNCE_IMPULSE)*yAxis_v);
-	xzVelocity = XMVector3ClampLength(xzVelocity, 0, MAX_SPEED);
-	xzVelocity = -xzVelocity * 0.5f;
-    yVelocity = bounceImpulse;
-    inbox.impulse = true;
-	tackled = false;
-    return DONE_QUICKSTEP;
+	if (timer.count(elapsed) >= TIME_DASH_BOUNCE_ANIM) {
+		timer.reset();
+		tackled = false;
+		return DONE;
+	}
+	else {
+		return STAY;
+	}
 }
 
 ret_e PlayerMovBtExecutor::dashStop(float elapsed)
@@ -1757,6 +1758,12 @@ void CPlayerMov::update(float elapsed)
 				break;
 			case 0x1594:	//Jumping in creep
 				animPlugger->plug(0xc594);
+				break;
+			case 0x2504:	//Begin
+				animPlugger->plug(0x2400);
+				break;
+			case 0x2231:	//Dash Bounce
+				animPlugger->plug(0x835c);
 				break;
 		}
 		if (bte.unplugJump){

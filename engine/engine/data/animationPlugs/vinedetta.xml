@@ -5,7 +5,7 @@
 	</plug>	
 	<plug id="1" anim="dash" type="action" delay="0.2" delayOut="0.2" dummy="true" factor="1.3">
 		<on key="0x2221"/>
-	</plug>	
+	</plug>
 	<plug id="2" anim="vine_get_top" type="action" delay="0.2" delayOut="0.2" factor="1.0" dummy="true" creepControl="true">
 		<on key="0x1591"/> 
 	</plug>
@@ -108,6 +108,9 @@
 		<on key="0x14B4"/>	
 		<on key="0x14B5"/>	
 		<on key="0x14B6"/>			
+	</plug>	
+	<plug id="32" anim="dash_hit" type="action" delay="0.2" delayOut="0.2" dummy="true" factor="1.5">
+		<on key="0x2231"/>
 	</plug>	
 	<plug id="49" anim="earthquake_start_falling" type="action" delay="0.02" delayOut="0.1" factor="1.0">
 		<on key="0x1313"/>		<!-- Quake drop start -->	

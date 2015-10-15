@@ -40,7 +40,7 @@ using namespace gameElements;
 #define SPEED_CHASE				15.0f
 #define SPEED_TRANSFORM			10.0f
 #define SPEED_FOLLOW			7.5f
-#define CHASE_ROTATE_SPEED		deg2rad(600)
+#define CHASE_ROTATE_SPEED		deg2rad(840)
 #define BICHITO_HEIGHT			1.0f
 #define BICHITO_LATERAL			0.5f
 #define SPEED_SIN_HEIGHT		2

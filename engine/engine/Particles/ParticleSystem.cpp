@@ -180,8 +180,14 @@ namespace particles {
 
 					XMVECTOR random = t->getPosition();
 
-				random = t->getPosition() + emitter.localposition + (xAxis_v * utils::rand_uniform(emitter.rangeDistance, 0.f)) +
-					(zAxis_v * utils::rand_uniform(emitter.rangeDistance, 0.f));
+				if (!emitter.rangeYEnable)
+					random = t->getPosition() + emitter.localposition + (xAxis_v * utils::rand_uniform(emitter.rangeDistance, -emitter.rangeDistance)) +
+					(zAxis_v * utils::rand_uniform(emitter.rangeDistance, -emitter.rangeDistance));
+				else
+					random = t->getPosition() + emitter.localposition + 
+						(xAxis_v * utils::rand_uniform(emitter.rangeDistance, -emitter.rangeDistance)) +
+						(yAxis_v * utils::rand_uniform(emitter.rangeDistance, -emitter.rangeDistance)) +
+						(zAxis_v * utils::rand_uniform(emitter.rangeDistance, -emitter.rangeDistance));
 
 				p.pos = toXMFloat3(random);
 

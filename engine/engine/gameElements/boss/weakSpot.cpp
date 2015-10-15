@@ -40,11 +40,12 @@ behavior::fsmState_t WeakSpotFSMExecutor::waiting(float elapsed)
         mesh->switchMaterials();
         
 		CEmitter* emitter = me->get<CEmitter>();
+
         //Deactivate fire particles
 		auto key0 = emitter->getKey("emitter_0");
 		auto key1 = emitter->getKey("emitter_1");
-		ParticleUpdaterManager::get().setDeleteSelf(key0);
-		ParticleUpdaterManager::get().setDeleteSelf(key1);
+		ParticleUpdaterManager::get().sendActive(key0);
+		ParticleUpdaterManager::get().sendActive(key1);
 
         //Activate soft, "cooling down" smoke particless
 		//auto key2 = emitter->getKey("emitter_2");
@@ -60,20 +61,22 @@ behavior::fsmState_t WeakSpotFSMExecutor::waiting(float elapsed)
 behavior::fsmState_t WeakSpotFSMExecutor::active(float elapsed)
 {
     if(signaled) {
-        Entity* me = meEntity;
+        
+
+		Entity* me = meEntity;
+
+		CEmitter* emitter = me->get<CEmitter>();
+		auto key0 = emitter->getKey("emitter_0");
+		auto key1 = emitter->getKey("emitter_1");
+		auto key2 = emitter->getKey("emitter_2");
+		ParticleUpdaterManager::get().sendActive(key2);
+		ParticleUpdaterManager::get().setDeleteSelf(key0);
+		ParticleUpdaterManager::get().setDeleteSelf(key1);
+		
+
         Entity* cbE(callback);
         cbE->sendMsg(MsgWeakSpotBreak(me));
         signaled = false;
-
-
-		CEmitter* emitter = me->get<CEmitter>();
-        //Deactivate soft, "cooling down" smoke particles
-		//auto key2 = emitter->getKey("emitter_2");
-		//ParticleUpdaterManager::get().setDeleteSelf(key2);
-
-        //Activate heavy black smoke particless
-		//auto key3 = emitter->getKey("emitter_3");
-		//ParticleUpdaterManager::get().sendActive(key3);
 
 		return STATE_broken;
     } else {
@@ -84,10 +87,7 @@ behavior::fsmState_t WeakSpotFSMExecutor::active(float elapsed)
 behavior::fsmState_t WeakSpotFSMExecutor::broken(float elapsed)
 {
     if (signaled) {
-        //Deactivate heavy black smoke particless
-		//auto key3 = emitter->getKey("emitter_3");
-		//ParticleUpdaterManager::get().setDeleteSelf(key3);
-        return STATE_fightOver;
+		return STATE_fightOver;
     } else {
         return STATE_broken;
     }

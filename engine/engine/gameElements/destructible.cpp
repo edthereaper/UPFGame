@@ -28,8 +28,16 @@ namespace gameElements {
 void CDestructible::breakGlass()
 {
     Entity* me(Handle(this).getOwner());
-    me->get<CStaticBody>().destroy();
-    //create particles
+
+	CEmitter *emitter = me->get<CEmitter>();
+	auto k1 = emitter->getKey("emitter_0");
+
+	ParticleUpdaterManager::get().sendActive(k1);
+	ParticleUpdaterManager::get().setDeleteSelf(k1);
+	
+	me->get<CStaticBody>().destroy();
+
+	//create particles
 	fmodUser::fmodUserClass::playSound("Glass_break", 0.5f, 0.0f);
     CTransform* t = me->get<CTransform>();
     me->postMsg(MsgDeleteSelf());
@@ -77,15 +85,6 @@ CDestructible::~CDestructible()
     SAFE_DELETE(mesh);
 }
 
-void CDestructible::setup()
-{
-	Entity* me = Handle(this).getOwner();
-	if (me->has<CEmitter>()){
-		CEmitter *emitter = me->get<CEmitter>();
-		auto k = emitter->getKey("emitter_0");
-		ParticleUpdaterManager::get().sendActive(k);
-	}
-}
 
 void CDestructibleRestorer::revive(const MsgRevive&)
 {
@@ -100,7 +99,6 @@ void CDestructibleRestorer::revive(const MsgRevive&)
     
     CDestructible* destructible = e->get<CDestructible>();
     destructible->createBox(boxSize);
-    destructible->setup();
     e->init();
 
     Entity* me = Handle(this).getOwner();

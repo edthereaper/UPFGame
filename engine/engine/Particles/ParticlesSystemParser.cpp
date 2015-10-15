@@ -6,6 +6,46 @@ using namespace component;
 
 namespace particles{
 
+	//-------------------------------------------------------------------------------//
+	//-------------------------------------------------------------------------------//
+	//-------------------------------------------------------------------------------//
+	//-------------------------------------------------------------------------------//
+
+
+	ParticleFileParser ParticleFileParser::manager;
+
+	bool ParticleFileParser::loadLibrary(){
+		char full_name[100];
+		sprintf(full_name, "%s%s", PARTICLES_PATH, "files_list.xml");
+		return xmlParseFile(full_name);
+	}
+
+	void ParticleFileParser::onStartElement(const std::string &elem, utils::MKeyValue &atts){
+
+		if (elem == "texture"){
+			if (atts.has("name")){
+				files.push_back(atts.getString("name","INVALID"));
+			}
+		}
+	}
+
+    int ParticleFileParser::getIndexByFile(std::string str){
+	
+		int idx = 0;
+		for (auto texture : files){
+			if (texture.compare(str) == 0)
+				return idx;
+			idx++;
+		}
+		return -1;
+	}
+
+
+	//-------------------------------------------------------------------------------//
+	//-------------------------------------------------------------------------------//
+	//-------------------------------------------------------------------------------//
+	//-------------------------------------------------------------------------------//
+
 	ParticleSystemParser ParticleSystemParser::manager;
 
 	void ParticleSystemParser::saveComponents(){
@@ -256,6 +296,11 @@ namespace particles{
 			e.color_rate = atts.getFloat("color_rate", e.color_rate);
 			e.scale = atts.getFloat("scale", e.scale);
 			
+#if defined(_PARTICLES)
+		e.emitting = true;
+#else
+		if (atts.has("emitting")){ e.emitting = (atts.getInt("emitting") == 1) ? true : false; }
+#endif
 			if (atts.has("emitting")){ e.emitting = (atts.getInt("emitting") == 1) ? true : false; }
 			if (atts.has("physx")){
 				e.physXEnable = (atts.getInt("physx") == 1) ? true : false; 

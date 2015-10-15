@@ -38,6 +38,8 @@ namespace gameElements {
 		std::string actualHint = "";
 		float actualSize = 20.0f;
 		float actualTimeAnim = 2.0f;
+		float animX = 0.0f;
+		bool active = false;
 		bool hintIn = false;
 		bool hintOut = false;
 		std::vector<std::string> mS;

@@ -20,7 +20,6 @@ class CDestructible {
         inline void loadFromProperties(std::string, utils::MKeyValue) {}
         
         void createBox(XMVECTOR size);
-		void setup();
         void breakGlass();
 };
 

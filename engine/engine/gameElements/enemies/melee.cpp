@@ -33,7 +33,7 @@ using namespace gameElements;
 #define TIME_DASH_RECOVERY				.4f
 #define MINIMUM_IDLE_FIGHT				0.75f
 #define ANGER_TIME						1.f
-#define HEIGHT_DIST						0.3f
+#define HEIGHT_DIST						0.8f
 
 namespace behavior {
 MeleeBt::nodeId_t MeleeBt::rootNode = INVALID_NODE;

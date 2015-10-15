@@ -115,6 +115,7 @@ void BossBt::initType()
 namespace gameElements {
 
 #define GRAVITY 3.5f*9.81f
+#define TIME_MSG_TUTO 5.0f
 const float BossBtExecutor::TIME_BEGIN = 3.f;
 const float BossBtExecutor::TIME_CRASH_WAIT = TIME_BEGIN;
 const float BossBtExecutor::TIME_SMOKING = 1.0f;
@@ -284,6 +285,21 @@ bool BossBtExecutor::punchCond(float) const
 bool BossBtExecutor::hammerTransform(float) const
 {
     CTransformable* t = hammers[currentHammer].hammer.getSon<CTransformable>();
+	if (t->isTransformed()){
+		CEmitter* emitter = hammers[currentHammer].hammer.getSon<CEmitter>();
+		
+		auto smoke = emitter->getKey("emitter_0");
+		auto grava = emitter->getKey("emitter_1");
+		auto smoke_green = emitter->getKey("emitter_2");
+		auto leafs = emitter->getKey("emitter_3");
+
+		ParticleUpdaterManager::get().setDeleteSelf(smoke);
+		ParticleUpdaterManager::get().setDeleteSelf(grava);
+		ParticleUpdaterManager::get().sendActive(leafs);
+		ParticleUpdaterManager::get().sendActive(smoke_green);
+		
+
+	}
     return t != nullptr && t->isTransformed();
 }
 
@@ -492,6 +508,11 @@ ret_e BossBtExecutor::setupDropArm(float elapsed)
 ret_e BossBtExecutor::hitGround(float elapsed)
 {
     //TODO: start FX
+	//Info for the first stage
+	if (stage == 0){
+		((Entity*)playerEntity)->sendMsg(MsgPlayerInTuto(11));
+		((Entity*)bichitoEntity)->sendMsg(MsgPlayerInTuto(11));
+	}
 
 	Entity* hammer = hammers[currentHammer].hammer;
 	CEmitter *emitter = hammer->get<CEmitter>();
@@ -580,7 +601,21 @@ ret_e BossBtExecutor::setupPunchWait(float elapsed)
 ret_e BossBtExecutor::coolSmoke(float elapsed)
 {
 	EntityListManager::get(CSmokePanel::TAG).broadcast(MsgDeactivateSmoke());
+	//Info for the first stage
+	if (stage == 0){
+		((Entity*)playerEntity)->sendMsg(MsgPlayerOutTuto());
+		((Entity*)bichitoEntity)->sendMsg(MsgPlayerOutTuto());
+	}
+	
+	Entity* hammer = hammers[currentHammer].hammer;
 
+	CEmitter *emitter = hammer->get<CEmitter>();
+	auto smoke = emitter->getKey("emitter_0");
+	auto grava = emitter->getKey("emitter_1");
+
+	ParticleUpdaterManager::get().sendInactive(smoke);
+	ParticleUpdaterManager::get().sendInactive(grava);
+	
     return DONE_QUICKSTEP;
 }
 
@@ -633,6 +668,14 @@ ret_e BossBtExecutor::armResisting(float elapsed)
 
 ret_e BossBtExecutor::dropCannon(float elapsed)
 {
+	//Info for the first stage
+	if (stage == 0 && !tutoCannon){
+		tutoCannon = true;
+		((Entity*)playerEntity)->sendMsg(MsgPlayerInTuto(12));
+		((Entity*)bichitoEntity)->sendMsg(MsgPlayerInTuto(12));
+		tutoAlertTimer.reset();
+	}
+	
     Entity* hammer = hammers[currentHammer].hammer;
     CMobile* mob = hammer->get<CMobile>();
     mob->enslave(Handle());
@@ -666,6 +709,12 @@ ret_e BossBtExecutor::setupRaiseArmSudden(float elapsed)
 
     CTransformable* tr = hammer->get<CTransformable>();
     tr->removeGlow();
+	
+	CEmitter* emitter = hammers[currentHammer].hammer.getSon<CEmitter>();
+	auto smoke_green = emitter->getKey("emitter_2");
+	auto leafs = emitter->getKey("emitter_3");
+	ParticleUpdaterManager::get().setDeleteSelf(smoke_green);
+	ParticleUpdaterManager::get().setDeleteSelf(leafs);
 
     return DONE_QUICKSTEP;
 }
@@ -841,8 +890,11 @@ ret_e BossBtExecutor::endSmoking(float elapsed)
 	auto smoke = emitter->getKey("emitter_0");
 	auto grava = emitter->getKey("emitter_1");
 
-	ParticleUpdaterManager::get().sendInactive(smoke);
-	ParticleUpdaterManager::get().sendInactive(grava);
+	if (ParticleUpdaterManager::get().isExist(smoke))
+			ParticleUpdaterManager::get().sendInactive(smoke);
+
+	if (ParticleUpdaterManager::get().isExist(grava))
+			ParticleUpdaterManager::get().sendInactive(grava);
 
 
     return DONE;
@@ -926,23 +978,6 @@ void CBoss::reset()
             
 			CMesh* m_prev = e_prev->get<CMesh>();
             CMesh* m = e->get<CMesh>();
-
-            
-            EntityListManager::get(CBoss::HAMMER_TAG).add(e);
-            CAABB* aabb = e->get<CAABB>();
-            aabb->init();
-            CTransformable* tr = e->get<CTransformable>();
-            tr->setCenterAim(aabb->getCenter() + t->getPosition());
-            
-			CEmitter *emitter = e->get<CEmitter>();
-
-			auto smoke = emitter->getKey("emitter_0");
-			auto grava = emitter->getKey("emitter_1");
-			auto hoja = emitter->getKey("emitter_2");
-
-			ParticleUpdaterManager::get().sendInactive(smoke);
-			ParticleUpdaterManager::get().sendInactive(grava);
-			//ParticleUpdaterManager::get().sendInactive(hoja);
 			
 			*m = *m_prev;
             system.hammer = e;
@@ -1010,17 +1045,6 @@ void CBoss::setHammer(component::Handle h, unsigned index)
     assert(index < 3);
     auto& bte = bt.getExecutor();
     bte.hammers[index].hammer = h;
-    
-    Entity* hammer = h;
-    CEmitter *emitter = hammer->get<CEmitter>();
-    
-    auto smoke = emitter->getKey("emitter_0");
-    auto grava = emitter->getKey("emitter_1");
-    auto hojas = emitter->getKey("emitter_2");
-    
-    ParticleUpdaterManager::get().sendInactive(smoke);
-    ParticleUpdaterManager::get().sendInactive(grava);
-    //ParticleUpdaterManager::get().sendInactive(hojas);
 
     CMobile* mobile = hammer->get<CMobile>();
     mobile->enslave(bte.hammers[index].cannon);
@@ -1060,7 +1084,17 @@ void CBoss::update(float elapsed)
             t->applyRotation(XMQuaternionRotationAxis(t->getUp(), angle*spinners[i].spin));
         }
     }
-
+	
+	//Info for the first stage
+	if (bt.getExecutor().tutoCannon){
+		if (bt.getExecutor().tutoAlertTimer.count(elapsed) >= TIME_MSG_TUTO){
+			if (bt.getExecutor().stage == 0){
+				((Entity*)bt.getExecutor().playerEntity)->sendMsg(MsgPlayerOutTuto());
+				((Entity*)bt.getExecutor().bichitoEntity)->sendMsg(MsgPlayerOutTuto());
+				bt.getExecutor().tutoCannon = false;
+			}
+		}
+	}
     TransformableFSMExecutor::updateSpecialHighlights(elapsed,
         (action & BossBtExecutor::COD_HIGHLIGHT)!=0);
 }

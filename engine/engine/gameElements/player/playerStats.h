@@ -237,7 +237,7 @@ namespace gameElements {
 		inline bool isPlayerDead() const { return playerDead; }
 
 		inline void receive(const MsgMeleeHit& msg)  { damage(msg.damage); }
-		inline void receive(const MsgFlareHit& msg)  { damage(msg.damage); }
+		void receive(const MsgFlareHit& msg);
 
 		inline void receive(const MsgPickupHeal& msg) { heal(msg.heal); }
 		inline void receive(const MsgPickupEnergy& msg) { absorbEnergy(msg.absorbEnergy); }

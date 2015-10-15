@@ -786,6 +786,17 @@ namespace gameElements {
 			}
 		}
 	}
+	
+	void CPlayerStats::receive(const MsgFlareHit& msg)
+	{ 
+		CPlayerMov* playerMov = Handle(this).getBrother<CPlayerMov>();
+		if (playerMov->isOnCreep() || playerMov->isOnLiana()){
+			damage(msg.damage, true);
+		}
+		else{
+			damage(msg.damage);
+		}
+	}
 
 	void CPlayerStats::initType()
 	{

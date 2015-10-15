@@ -36,4 +36,8 @@
 	<textInfo sizefont="20" timeAnim="2.0" trigger="9"  xbox="true" 	sentence="DEAD END!|HOW DO WE GET OUT OF HERE?"/>
 	<textInfo sizefont="20" timeAnim="2.0" trigger="10" xbox="false" 	sentence="WATCH OUT!|LAVA WILL HURT YOU BAD!"/>
 	<textInfo sizefont="20" timeAnim="2.0" trigger="10" xbox="true"  	sentence="WATCH OUT!|LAVA WILL HURT YOU BAD!"/>
+	<textInfo sizefont="20" timeAnim="2.0" trigger="11" xbox="false" 	sentence="TEXTO|TEXTO|TEXTO"/>
+	<textInfo sizefont="20" timeAnim="2.0" trigger="11" xbox="true"  	sentence="TEXTO|TEXTO|TEXTO"/>
+	<textInfo sizefont="20" timeAnim="2.0" trigger="12" xbox="false" 	sentence="QWERTY|QWERTY|QWERTY"/>
+	<textInfo sizefont="20" timeAnim="2.0" trigger="12" xbox="true"  	sentence="QWERTY|QWERTY|QWERTY"/>
 </TextHelper>

@@ -479,6 +479,30 @@ namespace gameElements {
 			if (bt.getState() == PlayerMovBtExecutor::CANNON_AIM || bt.getState() == PlayerMovBtExecutor::CANNON_SHOOT) return true;
 			return false;
 		}
+		
+		inline bool isOnCreep(){
+			if (bt.getState() == PlayerMovBtExecutor::CREEP_CLIMB ||
+				bt.getState() == PlayerMovBtExecutor::CREEP_INPUT||
+				bt.getState() == PlayerMovBtExecutor::CANNON_SHOOT ||
+				bt.getState() == PlayerMovBtExecutor::CREEP_DROP ||
+				bt.getState() == PlayerMovBtExecutor::CREEP_FALL ||
+				bt.getState() == PlayerMovBtExecutor::CREEP_JUMP ||
+				bt.getState() == PlayerMovBtExecutor::CREEP_MOVE ||
+				bt.getState() == PlayerMovBtExecutor::CREEP_IDLE) return true;
+			return false;
+		}
+
+		inline bool isOnLiana(){
+			if (bt.getState() == PlayerMovBtExecutor::LIANA_GRAB ||
+				bt.getState() == PlayerMovBtExecutor::LIANA_INPUT ||
+				bt.getState() == PlayerMovBtExecutor::LIANA_JUMP ||
+				bt.getState() == PlayerMovBtExecutor::LIANA_DROP ||
+				bt.getState() == PlayerMovBtExecutor::LIANA_GRASP ||
+				bt.getState() == PlayerMovBtExecutor::LIANA_MOVE ||
+				bt.getState() == PlayerMovBtExecutor::LIANA_IDLE ||
+				bt.getState() == PlayerMovBtExecutor::LIANA_EXIT) return true;
+			return false;
+		}
 
 		inline int getCannonState() { return bt.getExecutor().cannonTimeState; }
 

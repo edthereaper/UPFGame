@@ -141,6 +141,9 @@ namespace particles{
             assert(emitterData != nullptr); 
             return emitterData->listKeys[idx];
         }
+
+		bool particlesExist(std::string key);
+
 		component::Handle get(std::string name);
 		component::Handle get(int index);
 
