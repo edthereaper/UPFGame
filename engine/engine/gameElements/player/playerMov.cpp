@@ -1024,9 +1024,9 @@ ret_e PlayerMovBtExecutor::dashBounce(float elapsed)
 	if (timer.count(elapsed) >= TIME_DASH_BOUNCE_ANIM) {
 		timer.reset();
 		tackled = false;
+        xzVelocity = zero_v;
 		return DONE;
-	}
-	else {
+	} else {
 		return STAY;
 	}
 }
