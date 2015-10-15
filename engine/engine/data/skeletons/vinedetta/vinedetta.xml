@@ -27,4 +27,6 @@
 	<anim name="dying" />
 	<anim name="liana" />
 	<anim name="dash_hit" />
+	<anim name="get_damage" />	
+	<anim name="shooting" />
 </skeleton>

@@ -184,6 +184,7 @@ fsmState_t AppFSMExecutor::mainmenu(float elapsed)
 		app.chapterSelectionState = 0;
 		app.mainMenuState = 0;
 		app.gamelvl = 1;
+		app.resetTotalStats();
 		return STATE_changelvl;
 		break;
 	case 1:
@@ -212,18 +213,22 @@ fsmState_t AppFSMExecutor::chapterselectionmenu(float elapsed)
 		break;
 	case 0:
 		app.gamelvl = 1;
+		app.resetTotalStats();
 		return STATE_changelvl;
 		break;
 	case 1:
 		app.gamelvl = 2;
+		app.resetTotalStats();
 		return STATE_changelvl;
 		break;
 	case 2:
 		app.gamelvl = 3;
+		app.resetTotalStats();
 		return STATE_changelvl;
 		break;
 	case 3:
 		app.gamelvl = 4;
+		app.resetTotalStats();
 		return STATE_changelvl;
 		break;
 	case 4:
@@ -593,7 +598,7 @@ void loadingThread()
 	while (app.loadingthreadVar){
 		Render::getContext()->ClearRenderTargetView(Render::getRenderTargetView(), utils::BLACK);
 		Render::getContext()->ClearDepthStencilView(Render::getDepthStencilView(), D3D11_CLEAR_DEPTH, 1.0f, 0);
-		drawTexture2D(pixelRect(app.config.xres, app.config.yres), pixelRect(app.config.xres, app.config.yres), Texture::getManager().getByName("vinedeta_logo"));
+		drawTexture2D(pixelRect(app.config.xres, app.config.yres), pixelRect(app.config.xres, app.config.yres), Texture::getManager().getByName("loading"));
 		drawTexture2DAnim(pixelRect(5, 5, 100, 100), pixelRect(app.config.xres, app.config.yres),
 			Texture::getManager().getByName("loadingSpin"), true, app.timerThreadAnim.count(app.countTime()));
 		Render::getSwapChain()->Present(0, 0);

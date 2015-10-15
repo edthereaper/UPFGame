@@ -27,7 +27,9 @@ void CScriptTrigger::onEnter(float)
 		if (strcmp(script, "tolevel2") == 0){
 			Entity* player = app.getPlayer();
 			CPlayerStats* playerS = player->get<CPlayerStats>();
-			app.setTotalPoints(playerS->getPoints());
+			app.setGlobalPoints(playerS->getPoints());
+			app.setGlobalHealth(playerS->getHealth());
+			app.setGlobalEnergy(playerS->getEnergy());
 			app.changelvl = true;
 			app.gamelvl = 2;
 		}
@@ -90,7 +92,9 @@ void CScriptTrigger::onEnter(float)
 		if (strcmp(script, "tolevel3") == 0){
 			Entity* player = app.getPlayer();
 			CPlayerStats* playerS = player->get<CPlayerStats>();
-			app.setTotalPoints(playerS->getPoints());
+			app.setGlobalPoints(playerS->getPoints());
+			app.setGlobalHealth(playerS->getHealth());
+			app.setGlobalEnergy(playerS->getEnergy());
 			app.changelvl = true;
 			app.gamelvl = 3;
 		}
@@ -99,7 +103,9 @@ void CScriptTrigger::onEnter(float)
 		if (strcmp(script, "tolevel4") == 0){
 			Entity* player = app.getPlayer();
 			CPlayerStats* playerS = player->get<CPlayerStats>();
-			app.setTotalPoints(playerS->getPoints());
+			app.setGlobalPoints(playerS->getPoints());
+			app.setGlobalHealth(playerS->getHealth());
+			app.setGlobalEnergy(playerS->getEnergy());
 			app.changelvl = true;
 			app.gamelvl = 4;
 		}

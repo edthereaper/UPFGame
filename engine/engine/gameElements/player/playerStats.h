@@ -191,15 +191,15 @@ namespace gameElements {
 			invencible.getExecutor().meEntity = meEntity;
 			megashot.init();
 			invencible.init();
-			health = MAX_LIFE;
-			energy = MAX_ENERGY;
 			pointsCollectible = 0;
 			playerDead = false;
 			alertLowHP = false;
 			elapsedDmg = 0;
 			pointsCollectibleCheckpoint = 0;
 			App &app = App::get();
-			points = app.getTotalPoints();
+			health = app.getGlobalHealth();
+			energy = app.getGlobalEnergy();
+			points = app.getGlobalPoints();
 			pointsCheckpoint = points;
 		}
 

@@ -337,6 +337,7 @@ namespace gameElements {
 					timeDeathAnim = TIME_ANIM_DEAD;
 				} else {
 					timeDeathAnim = TIME_ANIM_DEAD;
+					((CPlayerMov*)me->get<CPlayerMov>())->setDeathByHole();
 				}
 				timerPlayerDead.reset();
 			}

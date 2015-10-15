@@ -251,9 +251,16 @@ class App {
 		int gamelvl = 0;
 		bool isPlayerDead = false;
 		bool winGame = false;
-		int totalPoints = 0;
-		inline void setTotalPoints(int p){ totalPoints = p; }
-		inline int getTotalPoints(){ return totalPoints; }
+		int globalPoints = 0;
+		int globalHealth = 150;
+		int globalEnergy = 100;
+		inline void setGlobalPoints(int p){ globalPoints = p; }
+		inline int getGlobalPoints(){ return globalPoints; }
+		inline void setGlobalHealth(int p){ globalHealth = p; }
+		inline int getGlobalHealth(){ return globalHealth; }
+		inline void setGlobalEnergy(int p){ globalEnergy = p; }
+		inline int getGlobalEnergy(){ return globalEnergy; }
+		inline void resetTotalStats(){ globalPoints = 0; globalHealth = 150; globalEnergy = 100; }
 		
 		void changeLevel(){ fsm.changeState(AppFSMExecutor::states::STATE_changelvl); }
 		void loadlvl();

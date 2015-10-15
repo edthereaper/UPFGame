@@ -27,4 +27,6 @@
 	<animAudio anim="vine_get_top"       						sound="vine_fast_air_move" 		time="0.3" 	volume="1.0" numsounds="2"/>
 	<animAudio anim="vine_get_top"       						sound="vine_land" 				time="1.0" 	volume="1.0" numsounds="3"/>
 	<animAudio anim="dash_hit"       							sound="vine_dash_collision"		time="0.0"	volume="1.0"/>
+	<animAudio anim="shooting"       							sound="vine_shoot" 				time="0.0" 	volume="1.0" numsounds="3"/>
+	<animAudio anim="get_damage"       							sound="vine_damage" 			time="0.0" 	volume="1.0" numsounds="2"/>
 </AnimationSounds>
