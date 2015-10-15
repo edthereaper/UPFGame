@@ -1,8 +1,6 @@
 <Entity>
 	<Name name="bullet"/>
     <Transform/>
-	<prefab name="mesh/bala" default="mesh/default"/>
-    <Tint color="0xFF00007F" />
 	<AABB/>
 	<CullingAABB/>
 	

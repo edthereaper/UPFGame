@@ -25,10 +25,10 @@
 	<plug id="8" anim="vine_left" type="cycle" delay="0.2" delayOut="0.2" factor="1.2" dummy="true" creepControl="true" limitDummyCycle="1.1">
 		<on key="0xc003"/>
 	</plug>	
-	<plug id="9" anim="start_vine_down" type="action" delay="0.1" delayOut="0.1" factor="0.7" dummy="true" creepControl="true" fakeCycle="true" limitDummyCycle="0.2">
+	<plug id="9" anim="start_vine_down" type="action" delay="0.1" delayOut="0.1" factor="0.75" dummy="true" creepControl="true" fakeCycle="true" limitDummyCycle="0.2">
 		<on key="0xc0c2"/>
 	</plug>	
-	<plug id="10" anim="vine_down" type="cycle" delay="0.2" delayOut="0.2" factor="1.0" dummy="true" creepControl="true" limitDummyCycle="0.5">
+	<plug id="10" anim="vine_down" type="cycle" delay="0.2" delayOut="0.2" factor=".075" dummy="true" creepControl="true" limitDummyCycle="0.5">
 		<on key="0xc002"/>
 	</plug>	
 	<plug id="11" anim="creep_idle_nd" type="cycle" delay="0.2" delayOut="0.2" creepControl="true">
@@ -86,7 +86,7 @@
 		<on key="0xb0c3"/>
 	</plug>
 	<!-- UNPLUG CASE: stop down if stop pushing down button -->
-	<plug id="26" anim="start_vine_down" unplug="true" type="action" delayOut="0.1" dummy="true" creepControl="true">
+	<plug id="26" anim="start_vine_down" unplug="true" type="action" delayOut="0.2" dummy="true" creepControl="true">
 		<on key="0xb0c2"/>
 	</plug>
 	<plug id="27" anim="idle_nd" type="cycle" delay="0.3" delayOut="0.2" dummy="false">
@@ -109,8 +109,15 @@
 		<on key="0x14B5"/>	
 		<on key="0x14B6"/>			
 	</plug>	
-	<plug id="32" anim="dash_hit" type="action" delay="0.2" delayOut="0.2" dummy="true" factor="1.5">
+	<plug id="32" anim="dash_hit" type="action" delay="0.2" delayOut="0.3" dummy="false" factor="2.0">
 		<on key="0x2231"/>
+	</plug>	
+	<plug id="33" anim="get_damage" type="action" delay="0.1" delayOut="0.1" dummy="false" factor="1.0">
+		<on key="0xAAAAAAAA"/>
+	</plug>	
+	<plug id="34" anim="shooting" type="action" delay="0.1" delayOut="0.1" dummy="false" factor="1.0">
+		<on key="0x9004"/>
+		<on key="0x9009"/>
 	</plug>	
 	<plug id="49" anim="earthquake_start_falling" type="action" delay="0.02" delayOut="0.1" factor="1.0">
 		<on key="0x1313"/>		<!-- Quake drop start -->	
@@ -131,6 +138,7 @@
 	<!-- UNPLUG CASE: stop dash anim if we collide with mushroom -->
 	<plug id="55" anim="dash" unplug="true" type="action" delayOut="0.0">
 		<on key="0x835c"/>
+		<on key="0x1110"/>
 	</plug>
 	<!-- UNPLUG CASE: when revive we must quit the dead animation (that was on lock state) -->
 	<plug id="56" anim="dying" unplug="true" type="action" delayOut="0.0">

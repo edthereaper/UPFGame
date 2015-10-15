@@ -1,5 +1,4 @@
 <componentPrefab>
-	<prefab name="mesh/pickupgreen" default="mesh/pickup"/>
 	<Pickup type="health" strength="1"/>
 	<Emitter name="life" position="0.000000 0.000000 0.000000" rotation="0.018028 -0.021893 -0.014354 0.999495" count="1" particles0="emitter_0"/>
 </componentPrefab>

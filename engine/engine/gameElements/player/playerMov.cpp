@@ -119,7 +119,7 @@ void PlayerMovBt::initType()
 
 }
 
-#define TIME_DASH_COOLDOWN			1.5f
+#define TIME_DASH_COOLDOWN			2.5f
 #define TIME_QUAKE_PUNCH			0.57f
 #define TIME_QUAKE_START			0.7f
 #define TIME_QUAKE_DURING			2.67f
@@ -1021,14 +1021,19 @@ ret_e PlayerMovBtExecutor::dashDuring(float elapsed)
 ret_e PlayerMovBtExecutor::dashBounce(float elapsed)
 {
 	//dbg("dash Bounce\n");
-	if (timer.count(elapsed) >= TIME_DASH_BOUNCE_ANIM) {
-		timer.reset();
-		tackled = false;
-        xzVelocity = zero_v;
-		return DONE;
-	} else {
-		return STAY;
-	}
+	static const auto bounceImpulse(calculateImpulse(DASH_BOUNCE_IMPULSE)*yAxis_v);
+	yVelocity = bounceImpulse;
+	Entity* me = meEntity;
+	CTransform* meT = me->get<CTransform>();
+#ifdef _DEBUG
+	xzVelocity = -meT->getFront() * (MAX_SPEED / 3);
+#else
+	xzVelocity = -meT->getFront() * (MAX_SPEED / 1.42f);
+#endif	
+	inbox.impulse = true;
+	tackled = false;
+	dashBounceisOn = true;
+	return DONE_QUICKSTEP;
 }
 
 ret_e PlayerMovBtExecutor::dashStop(float elapsed)
@@ -1244,13 +1249,14 @@ ret_e PlayerMovBtExecutor::impulsedAirUp(float elapsed)
 	Entity* me = meEntity;
 	CCharacterController* charControl = me->get<CCharacterController>();
 	CTransform* t = me->get<CTransform>();
-    alignXZ(t, t->getPosition() + yVelocity + xzVelocity, IMPULSE_ALIGN_SPEED*elapsed);
+	if (!dashBounceisOn)	alignXZ(t, t->getPosition() + yVelocity + xzVelocity, IMPULSE_ALIGN_SPEED*elapsed);
 	onAir = true;
-	if (!fromCannon){
-		updateSpeed(elapsed, true, true, false);
+	bool typeMov = false;	
+	if (fromCannon || dashBounceisOn){
+		updateSpeed(elapsed, false, true, false);
 	}
 	else{
-		updateSpeed(elapsed, false, true, false);
+		updateSpeed(elapsed, true, true, false);
 	}
 	return velocityUp(elapsed) ? STAY : DONE;
 }
@@ -1282,7 +1288,12 @@ ret_e PlayerMovBtExecutor::impulsedAirDown(float elapsed)
 {
 	//dbg("impulsedAirDown\n");
 	onAir = true;
-	updateSpeed(elapsed, true, true, false);
+	if (!dashBounceisOn){
+		updateSpeed(elapsed, true, true, false);
+	}
+	else{
+		updateSpeed(elapsed, false, true, false);
+	}
 	if (isTrampolineUnder(0.0f)) return DONE;
 	CCharacterController* charControl = meEntity.getSon<CCharacterController>();
 	return charControl->onGround() ? DONE : STAY;
@@ -1331,6 +1342,7 @@ ret_e PlayerMovBtExecutor::land(float elapsed)
 		fromCannon = false;
 		onAir = false;
 		onCannonAir = false;
+		dashBounceisOn = false;
 		return DONE;
 	} else {
 		return STAY;

@@ -164,7 +164,7 @@ namespace gameElements {
 			DASH_SETUP = 0x2220 | COD_DISABLE_LOOKAT | COD_DASHING,
 			DASH_DURING = 0x2221 | COD_DISABLE_LOOKAT | COD_DASHING,
 			DASH_TACKLED = 0x2230 | COD_DISABLE_LOOKAT | COD_DASHING,
-			DASH_BOUNCE = 0x2231 | COD_CAN_QUAKE,
+			DASH_BOUNCE = 0x2231 | COD_DISABLE_LOOKAT | COD_CAN_QUAKE,
 			DASH_STOP = 0x2232 | COD_CAN_SHOOT | COD_CAN_QUAKE,
 			JUMP = 0x2300 | COD_CAN_SHOOT | COD_CAN_QUAKE,
 			JUMP_IMPULSE = 0x2310 | COD_TILT_ON_VELOCITY | COD_CAN_SHOOT | COD_ON_DASH_HOLD,		//can quake deleted
@@ -270,6 +270,7 @@ namespace gameElements {
 		int priorityRight = 0;
 		int priorityLeft = 0;
 		bool playedSoundDeadFall = false;
+		bool dashBounceisOn = false;
 
 		struct cannonCalc_t {
 			XMVECTOR yVel, xzVel, camPos, camFront;

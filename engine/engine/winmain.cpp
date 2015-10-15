@@ -157,7 +157,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
 
 	// Create the actual window
-	hWnd = CreateWindow("Vinedetta", "Vinedetta (Prototype)      ----      2015 MCV-UPF"
+	hWnd = CreateWindow("Vinedetta", "Vinedetta"
 		, WS_OVERLAPPEDWINDOW
 		, 0, 0//, CW_USEDEFAULT, CW_USEDEFAULT		// Position
 		, rc.right - rc.left					// Width

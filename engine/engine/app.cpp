@@ -802,7 +802,7 @@ void App::loadlvl()
     playerEntity->sendMsg(MsgSetCam(getCamera()));
     playerEntity->init();
 #ifndef _DEBUG
-	playerEntity->sendMsg(MsgPlayerSpawn());
+	if (gamelvl == 1)		playerEntity->sendMsg(MsgPlayerSpawn());
 #endif
     spawn();
 	Entity* bichitoEntity(bichitoEntity_h);

@@ -1,6 +1,4 @@
 <componentPrefab>
-	<prefab name="mesh/pickup" default="mesh/default"/>
-    <Tint color="0xFFFF00FF" />
 	<RigidBody gravity="true" damping="1.0">
 		<shape
 			supress="prop|tool|destructible|player|player-cannon|paint-sphere"
