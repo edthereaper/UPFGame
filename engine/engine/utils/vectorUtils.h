@@ -202,6 +202,14 @@ XMVECTOR deltaMovement(XMVECTOR a, XMVECTOR b, float speed);
 
 XMVECTOR scaleFromMatrix(XMMATRIX m);
 
+XMVECTOR calculateAimAngle(XMVECTOR target, XMVECTOR origin,
+    float offsetY, float speed, float gravity, bool min=true);
+
+inline XMVECTOR reflect(XMVECTOR v, XMVECTOR n) {
+    return DirectX::XMVector3Reflect(v, n);
+}
+
+
 }
 
 

@@ -1074,6 +1074,7 @@ behavior::fsmState_t TransformableFSMExecutor::hammerTransformed(float elapsed)
     CTransform* t1 = r1->get<CTransform>();
     CTransform* t2 = r2->get<CTransform>();
 
+
     //We want to maintain the distance between AABB tops constant
     //Stretch the roots to grab the hammer at its current position
 
@@ -1107,7 +1108,10 @@ behavior::fsmState_t TransformableFSMExecutor::hammerTransformed(float elapsed)
     t1->setScale(XMVectorSet(1,scaY_1,1,1));
     t2->setScale(XMVectorSet(1,scaY_2,1,1));
 
-    //if (scaY_1 != 1) {dbg("%.3f && %.3f \n", scaY_1, scaY_2);}
+    //if (scaY_1 != 1) {dbg("%.3f && %.3f \n", scaY_1, scaY_2);} // about 3
+    
+    t1->setPosition(XMVectorSetY(t->getPosition(), r1Y));
+    t2->setPosition(XMVectorSetY(t->getPosition(), r2Y));
 
     return STATE_hammerTransformed;
 }

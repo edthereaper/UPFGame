@@ -101,7 +101,9 @@ class Material : private utils::XMLParser {
         void onStartElement(const std::string &elem, utils::MKeyValue &atts);
 
     public:
-        ~Material() {utils::eraseAll(animatedMaterials, this);}
+        ~Material() {
+            utils::eraseAll(animatedMaterials, this);
+        }
 
         bool load(const char* name);
 

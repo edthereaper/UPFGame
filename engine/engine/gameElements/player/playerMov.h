@@ -213,6 +213,7 @@ namespace gameElements {
 		Handle sidekickEntity;
 		Handle cameraEntity;
 		Handle currentElement;
+		Handle previousElement;
 		btState_t previousAction = PLAYER_MOVEMENT;
 		bool cannonCam = false;
 		bool lockedRotation = false;
@@ -288,7 +289,7 @@ namespace gameElements {
 		CamCannonController camCannon;
 		Cam3PController cam3P;
 
-		float calculateImpulse(float amount) const { return sqrt(amount * 2 * GRAVITY); }
+		static inline float calculateImpulse(float amount) { return sqrt(amount * 2 * GRAVITY); }
 
 		//conditions
 		inline bool inboxIsNotEmpty(float) const { return !inbox.isEmpty(); }

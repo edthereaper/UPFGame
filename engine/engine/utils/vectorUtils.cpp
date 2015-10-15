@@ -348,4 +348,32 @@ XMVECTOR scaleFromMatrix(XMMATRIX m)
     );
 }
 
+XMVECTOR calculateAimAngle (
+	XMVECTOR target, XMVECTOR origin, float offsetY, float speed, float g, bool min)
+{
+	XMVECTOR d(target - origin);
+	const float vpow2 = sq(speed);
+	const float z = XMVectorGetZ(d);
+	const float x = XMVectorGetX(d);
+
+	const float dy = XMVectorGetY(d) + offsetY;
+	const float dz(sqrt(sq(z) + sq(x)));
+
+    const float vpow4(sq(vpow2));
+    const float ac4(g*(g*sq(dz) + 2 * dy*vpow2));
+	const float r(std::sqrt(std::abs(vpow4 - ac4)));
+	const float gdz = g*dz;
+
+    const float sol1 = std::atan2f(vpow2 + r, gdz);
+    const float sol2 = std::atan2f(vpow2 - r, gdz);
+	float angle = min ? std::min(sol1, sol2) : std::max(sol1, sol2);
+
+	XMFLOAT3 ret;
+	float yaw = getYawFromVector(d);
+	ret.y = speed * std::sinf(angle);
+	ret.x = speed * std::cosf(angle) * std::sinf(yaw);
+	ret.z = speed * std::cosf(angle) * std::cosf(yaw);
+	return XMVectorSet(ret.x, ret.y, ret.z, 0);
+}
+
 }

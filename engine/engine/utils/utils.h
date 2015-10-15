@@ -178,11 +178,8 @@ inline bool eraseAll(Container_T& c,const typename Container_T::value_type& val)
 {
     auto end(c.end());
     auto it(std::remove_if(c.begin(), c.end(),
-        [=](const typename Container_T::value_type& val) {
-                for (const auto& a : c) {
-                    if (a==val) {return true;}
-                }
-                return false;
+        [=](const typename Container_T::value_type& a) {
+                return a==val;
             }
         ));
     if (it != end) {

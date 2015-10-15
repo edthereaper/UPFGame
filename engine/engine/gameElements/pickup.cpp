@@ -288,7 +288,7 @@ void CThrowsPickups::activate()
 		/*((CPickup*)entity->get<CPickup>())->setup(
             pos, XMVectorSet(velX, velY, velZ, 0), XMQuaternionIdentity());*/
 		((CPickup*)entity->get<CPickup>())->waitAndSetup(
-			utils::rand_uniform(0.5,0),
+			utils::rand_uniform(0.5f,0.f),
             pos, XMVectorSet(velX, velY, velZ, 0),
 			XMQuaternionIdentity()
 			);

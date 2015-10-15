@@ -100,24 +100,8 @@ bool PlayerAttackBtExecutor::shootCondition(float) const
 XMVECTOR PlayerAttackBtExecutor::calculateAimAngle(
 	XMVECTOR target, XMVECTOR origin, float offsetY, float shotSpeed)
 {
-	XMVECTOR d(target - origin);
-	float sqv = sq(shotSpeed);
-	float z = XMVectorGetZ(d);
-	float x = XMVectorGetX(d);
-
-	float dy = XMVectorGetY(d) + offsetY;
-	float dz(sqrt(sq(z) + sq(x)));
-	const float& g(XMVectorGetX(XMVector3Length(physX_user::toXMVECTOR(Physics.getGravity()))));
-	const float r((std::sqrt(sq(sqv) - g*(g*sq(dz) + 2 * dy*sqv))));
-	const float gdz = g*dz;
-	float angle = std::min(std::atan2f(sqv + r, gdz), std::atan2f(sqv - r, gdz));
-
-	XMFLOAT3 ret;
-	float yaw = getYawFromVector(d);
-	ret.y = shotSpeed * std::sinf(angle);
-	ret.x = shotSpeed * std::cosf(angle) * std::sinf(yaw);
-	ret.z = shotSpeed * std::cosf(angle) * std::cosf(yaw);
-	return XMVectorSet(ret.x, ret.y, ret.z, 0);
+    return utils::calculateAimAngle(target, origin, offsetY, shotSpeed,
+        XMVectorGetX(XMVector3Length(toXMVECTOR(Physics.getGravity()))));
 }
 
 void PlayerAttackBtExecutor::shoot(bool isMega, bool aiming)

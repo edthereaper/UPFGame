@@ -38,7 +38,6 @@ using namespace gameElements;
 #include "Cinematic/camera_manager.h"
 using namespace cinematic;
 
-
 namespace behavior {
 PlayerMovBt::nodeId_t PlayerMovBt::rootNode = INVALID_NODE;
 PlayerMovBt::container_t PlayerMovBt::nodes;
@@ -1151,13 +1150,20 @@ ret_e PlayerMovBtExecutor::cannonShoot(float elapsed)
 	yVelocity = calcs.yVel;
 	xzVelocity = calcs.xzVel;
 
+    CTransform* meT = meEntity.getSon<CTransform>();
+    meT->lookAt(meT->getPosition() + xzVelocity);
+
 	component::getManager<CCannonPath>()->forall(&CCannonPath::removeFromScene);
 	Entity* cannon = currentElement;
 	((CMesh*)cannon->get<CMesh>())->setVisible(true);
 
 	setup3PCam();
 	//Setup the 3p cam params for the exit of the cannon
-	cam3P.setEye(XMVectorSet(-3.65f * XMVectorGetX(calcs.camFront), 1.85f, -3.65f * XMVectorGetZ(calcs.camFront), 0));
+	cam3P.setEye(XMVectorSet(
+        -3.65f * XMVectorGetX(calcs.camFront),
+        1.85f,
+        -3.65f * XMVectorGetZ(calcs.camFront),
+        0));
 	cam3P.setTarget(XMVectorSet(0, 1.5f, 0, 0));
 
 	currentElement = Handle();
@@ -1728,7 +1734,7 @@ void CPlayerMov::update(float elapsed)
 			case 0x1141:	//Out Cannon
 				animPlugger->plug(0x1720);
 				break;
-			case 0x2310:	//Jump
+			case 0x2310:	//jump
 				animPlugger->plug(0x1720);
 				break;
 			case 0x2221:	//Dash
@@ -1840,18 +1846,48 @@ void CPlayerMov::receive(const MsgHitEvent &msg)
 		setTackled(true);
 		e->sendMsg(MsgDashTackled());
 	}
-	else if ((msg.filter.is & filter_t::BOSS) != 0) {
-		//TODO: new nodes in the BT and a better algorithm!!!
-		CTransform* meT = Handle(this).getBrother<CTransform>();
-		CTransform* bossT = msg.entity.getSon<CTransform>();
-		lookAtXZ(meT, zero_v);
-		auto v = meT->getFront();
+	else if ((msg.filter.is & filter_t::BOSS) != 0
+        && ((bt.getCurrentAction() & PlayerMovBtExecutor::COD_CANNON_AIR) != 0)) {
 		auto& bte = bt.getExecutor();
-		bte.yVelocity *= 0.65f;
-		bte.xzVelocity = -bte.xzVelocity*0.35f;
-		auto n(projectPlane(msg.worldNormal, yAxis_v));
-		bte.xzVelocity = XMVector3Normalize(n) * XMVectorGetX(XMVector3Length(bte.xzVelocity));
-		bte.lockedRotation = true; //THIS BOOL MUST BE DELETED LATER ON
+        Entity* me = Handle(this).getOwner();
+        Entity* cannon = bte.previousElement;
+
+        dbg("Collided with Boss\n");
+
+        //Fake a bounce that end
+
+		CTransform* meT = me->get<CTransform>();
+		CTransform* cannonT = cannon->get<CTransform>();
+
+        XMVECTOR o = cannonT->getPosition();
+        XMVECTOR p = meT->getPosition();
+        XMVECTOR c = XMVectorSetY(p, XMVectorGetY(o));
+
+        float r = XMVectorGetX(XMVector3Length(o));
+        XMVECTOR reflected = reflect(c-o, msg.worldNormal); 
+        XMVECTOR target = c + r*XMVector3Normalize(projectPlane(reflected, yAxis_v));
+
+        CCharacterController* charCo = me->get<CCharacterController>();
+        charCo->teleport(target+yAxis_v, false);
+
+        auto bounce = calculateAimAngle(target, p, -4.f,
+            PlayerMovBtExecutor::calculateImpulse(PlayerMovBtExecutor::TRAMPOLINE_IMPULSE_V),
+            PlayerMovBtExecutor::GRAVITY
+            );
+
+		CTransform* bossT = msg.entity.getSon<CTransform>();
+		lookAtXZ(meT, bossT->getPosition());
+		bte.lockedRotation = true;
+
+		auto v = meT->getFront();
+		bte.yVelocity  = project(bounce, yAxis_v);
+        if (testIsBehind(bte.yVelocity, yAxis_v)) {
+            bte.yVelocity = -bte.yVelocity;
+        }
+		bte.xzVelocity = projectPlane(bounce, yAxis_v);
+        dbgXMVECTOR3(bte.yVelocity, false);
+        dbg("  +  ");
+        dbgXMVECTOR3(bte.xzVelocity, true);
 	}
 }
 
@@ -1895,6 +1931,7 @@ void CPlayerMov::receive(const MsgCollisionEvent &msg)
 					if (launchEvent) {
 						bt.reset();
 						bte.currentElement = msg.entity;
+						bte.previousElement = msg.entity;
 					}
 				}
 			}

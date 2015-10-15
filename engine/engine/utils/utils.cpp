@@ -35,7 +35,7 @@ bool dbg(const char* fmt, ...) {
   char buf[1024*4];
   size_t n = vsnprintf(buf, sizeof(buf) - 1, fmt, ap);
   ::OutputDebugString(buf);
-  log << "DEBUG: " << buf << std::flush;
+  log << buf << std::flush;
   va_end(ap);
 #endif
 return false;

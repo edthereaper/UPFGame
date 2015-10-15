@@ -32,6 +32,9 @@ using namespace animation;
 #include "Particles/ParticlesManager.h"
 using namespace particles;
 
+//DEBUG
+//#define ONLY_PUNCHES
+
 namespace behavior {
 
 BossBt::nodeId_t BossBt::rootNode = INVALID_NODE;
@@ -65,11 +68,13 @@ void BossBt::initType()
     BT_CREATECHILD_A (ARM_DROP,            PREPARE_ARM_DROP,    LEAF,                        waitForHammer     );
     BT_CREATECHILD   (ARM_DOWN,            PUNCH,               SEQUENCE                                       );
     BT_CREATECHILD_A (HIT_GROUND,          ARM_DOWN,            LEAF,                        hitGround         );
+#if !defined(ONLY_PUNCHES) || defined(ENABLE_SMOKE)
     BT_CREATECHILD_A (SMOKE_WARNING,       ARM_DOWN,            CHAIN,                       setupSmokeWarning );
     BT_CREATECHILD_A (EARTHQUAKE,          SMOKE_WARNING,       LEAF,                        earthQuake        );
     BT_CREATECHILD_A (SMOKE_START,         ARM_DOWN,            CHAIN,                       setupSmokeDamage  );
     BT_CREATECHILD_A (SMOKE_DURING,        SMOKE_START,         LEAF,                        duringSmoke       );
 	BT_CREATECHILD_A (COOL_SMOKE,          ARM_DOWN,            LEAF,                        coolSmoke         );
+#endif
     BT_CREATECHILD_A (SETUP_PUNCH_WAIT,    ARM_DOWN,            CHAIN,                       setupPunchWait    );
     BT_CREATECHILD_A (PUNCH_WAIT,          SETUP_PUNCH_WAIT,    LEAF,                        punchWait         );
 	BT_CREATECHILD   (RAISE_ARM,           PUNCH,               PRIORITY                                       );
@@ -87,6 +92,7 @@ void BossBt::initType()
 	BT_CREATECHILD_A (PREPARE_SLOW_RAISE,  RAISE_UNTOUCHED,     CHAIN,                       setupRaiseArmSlow  );
 	BT_CREATECHILD_A (RAISE_ARM_SLOWLY,    PREPARE_SLOW_RAISE,  LEAF,                        waitForHammer     );
 	BT_CREATECHILD_A (RAISE_HEALTHY_END_FX,RAISE_UNTOUCHED,     LEAF,                        raiseHealthyEndFx  );
+#ifndef ONLY_PUNCHES
 	BT_CREATECHILD   (REGULAR_ATTACK,      ATTACK,              RANDOM                                         );
 	BT_CREATECHILD   (FLAMES,              REGULAR_ATTACK,      SEQUENCE                                       );
 	BT_CREATECHILD_A (SETUP_HEAT,          FLAMES,              CHAIN,                       setupHeat         );
@@ -107,8 +113,10 @@ void BossBt::initType()
 	BT_CREATECHILD_A (WAIT_FOR_SMOKE,      SPAWN_ENEMIES,       LEAF,                        wait              );
     BT_CREATECHILD_A (END_WALL_OF_SMOKE,   SPAWN_ENEMIES,       LEAF,                        endWallOfSmoke    );
 
+
     BT_SET_WEIGHT(FLAMES, 7);
     BT_SET_WEIGHT(SPAWN_ENEMIES, 5);
+#endif
 }
 
 }
@@ -275,10 +283,14 @@ bool BossBtExecutor::punchCond(float) const
     if (waitingForWeakSpot) {
         return false;
     } else {
+#ifdef ONLY_PUNCHES
+        return true;
+#else
         bool allDestroyed = true;
         for(const auto& h : hammers) {allDestroyed &= (h.state == hammer_t::DESTROYED);}
         return (punchTimer.get() >= 0 && CHANCE_PUNCH[stage]())
             || punchTimer.get() >= COOLDOWN_PUNCH[stage];
+#endif
     }
 }
 
@@ -442,7 +454,11 @@ ret_e BossBtExecutor::setupIdle(float elapsed)
     RenderManager::updateKeys(me);
 #endif
 
+#ifdef ONLY_PUNCHES
+    timer.reset();
+#else
     timer.set(-TIME_IDLE[stage]());
+#endif
     return DONE;
 }
 
@@ -1046,6 +1062,7 @@ void CBoss::setHammer(component::Handle h, unsigned index)
     auto& bte = bt.getExecutor();
     bte.hammers[index].hammer = h;
 
+    Entity* hammer = h;
     CMobile* mobile = hammer->get<CMobile>();
     mobile->enslave(bte.hammers[index].cannon);
 }
