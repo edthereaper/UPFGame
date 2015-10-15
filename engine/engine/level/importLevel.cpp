@@ -769,9 +769,6 @@ void LevelImport::setupWeakSpot(Entity* e, const pieceData_t& p)
 
 gameElements::CBoss* LevelImport::setupBoss(Entity* e, const pieceData_t& p)
 {
-    CLevelData* level = currentLevel_h.getSon<CLevelData>();
-    level->setBossLevel();
-
     bossEntity_h = e;
     PrefabManager::get().prefabricateComponents("boss/boss", bossEntity_h);
     CTransform* bossT = e->get<CTransform>();
@@ -984,6 +981,10 @@ component::Handle LevelImport::load(const char* name, Handle player_h)
     CLevelData* ld = previousLevel_h.getSon<CLevelData>();
     assert(ld != nullptr);
     CLevelData::currentLevel = ld;
+
+    ss.str("");
+    ss << "data/levels/" << name << "_data.xml";
+    CLevelData::DataReader(ld).xmlParseFile(ss.str());
 
     return previousLevel_h;
 }

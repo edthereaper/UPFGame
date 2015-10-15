@@ -96,7 +96,6 @@ Font fontScreen;
 Font fontDBG;
 
 //TEMP {
-Handle skeleton_h;
 Handle skyboxTint_h;
 Entity* levelE;
 
@@ -279,6 +278,10 @@ fsmState_t AppFSMExecutor::gameover(float elapsed)
 fsmState_t AppFSMExecutor::changelvl(float elapsed)
 {
 	App &app = App::get();
+    if (levelE != nullptr) {
+        CLevelData* lvl (levelE->get<CLevelData>());
+        lvl->stopSong();
+    }
 	app.loadlvl();
 	return STATE_game;
 }
@@ -755,13 +758,14 @@ void App::loadlvl()
 	}
 
 #endif
+    lvlT->playSong();
     assert(lvlT != nullptr);
     if (lvlT->isBossLevel()) {
         PaintManager::abort();
     }
     if (lvlT->isHighZFarLevel()) {
         CCamera* cam = getCamera().getSon<CCamera>();
-        cam->setZFar(500);
+        cam->setZFar(lvlT->getZFar());
     }
 
 

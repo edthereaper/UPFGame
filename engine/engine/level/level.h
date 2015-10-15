@@ -13,6 +13,8 @@ using namespace component;
 
 #include "logic/trigger.h"
 
+#include "fmod_User/fmodStudio.h"
+
 namespace level {
 
 struct MsgSetLevel {
@@ -56,9 +58,20 @@ class CCheckPoint : public logic::Trigger_AABB<CCheckPoint>
 class CLevelData : public SpatiallyIndexed {
     public:
         static component::Handle currentLevel;
+        static const float DEFAULT_ZFAR;
+
+        struct DataReader : public utils::XMLParser {
+            private:
+                CLevelData* lvl;
+            public:
+                DataReader(CLevelData* lvl) : lvl(lvl) {}
+                void onStartElement(const std::string& elem, utils::MKeyValue &atts);
+        };
     private:
         component::Handle spawnCheckPoint;
         component::Handle currentCheckPoint;
+
+        fmodUser::FmodStudio::EventInstance song = nullptr;
 
         //Not the most efficient thing out there...
         //but there would be only one (or a handful, tops) and it's move-friendly
@@ -69,9 +82,10 @@ class CLevelData : public SpatiallyIndexed {
         tagged_t tagged;
         bool bossLevel = false;
         bool highZFar = false;
+        float zFar = DEFAULT_ZFAR;
 
     public:
-        void loadFromProperties(const std::string& elem, utils::MKeyValue &atts) {}
+        void loadFromProperties(const std::string& elem, utils::MKeyValue &atts);
         inline void update(float elapsed) {}
         inline void init() {}
 
@@ -98,11 +112,21 @@ class CLevelData : public SpatiallyIndexed {
             }
         }
 
-        inline void setBossLevel(bool b=true) {bossLevel = b;}
-        inline void setHighZFar(bool b=true) {highZFar = b;}
         inline bool isBossLevel() const {return bossLevel;}
-        inline bool isHighZFarLevel() const {return highZFar;}
+        inline bool isHighZFarLevel() const {return zFar != DEFAULT_ZFAR;}
+        
+        inline float getZFar() const {return zFar;}
 
+        inline void playSong() const {
+            if (song != nullptr) {
+                fmodUser::FmodStudio::playEvent(song);
+            }
+        }
+        inline void stopSong() const {
+            if (song != nullptr) {
+                fmodUser::FmodStudio::stopEvent(song);
+            }
+        }
 };
 
 }

@@ -48,4 +48,23 @@ void CCheckPoint::initType()
     SUBSCRIBE_MSG_TO_MEMBER(CCheckPoint, gameElements::MsgSetPlayer, receive);
 }
 
+void CLevelData::DataReader::onStartElement(
+    const std::string &elem, utils::MKeyValue &atts)
+{
+    assert(lvl != nullptr);
+    lvl->loadFromProperties(elem, atts);
+}
+void CLevelData::loadFromProperties(
+    const std::string &elem, utils::MKeyValue &atts)
+{
+    if (atts.has("song")) {
+        fmodUser::FmodStudio::loadBank("Music");
+        std::string songName = atts.getString("song", "brote");
+        song = fmodUser::FmodStudio::getEventInstance("Music/"+songName);
+    }
+    bossLevel = atts.getBool("boss", bossLevel);
+    zFar = atts.getFloat("zFar", zFar);
+}
+const float CLevelData::DEFAULT_ZFAR = 200.f;
+
 }

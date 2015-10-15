@@ -14,7 +14,7 @@ std::map<std::string, FMOD::Studio::EventDescription*> FmodStudio::events;
 inline void CHECKED(FMOD_RESULT result)
 {
     if (result != FMOD_OK) {
-        fatal("FMOD error! (%d) %s\n", result, FMOD_ErrorString(result));
+        dbg("FMOD error! (%d) %s\n", result, FMOD_ErrorString(result));
     }
 }
 
@@ -58,6 +58,13 @@ FMOD::Studio::EventInstance* FmodStudio::playEvent(FMOD::Studio::EventInstance* 
 {
     assert(in != nullptr);
     CHECKED(in->start());
+    return in;
+}
+
+FMOD::Studio::EventInstance* FmodStudio::stopEvent(FMOD::Studio::EventInstance* in)
+{
+    assert(in != nullptr);
+    CHECKED(in->stop(FMOD_STUDIO_STOP_ALLOWFADEOUT));
     return in;
 }
 
