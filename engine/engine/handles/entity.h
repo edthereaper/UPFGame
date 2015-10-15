@@ -237,6 +237,11 @@ class EntityListManager {
         /* The class owns the keygen and will delete it on cleanup() */
         static inline void setKeyGen(KeyGen* k) {keyGen = k;}
         static inline void cleanup() {SAFE_DELETE(keyGen);}
+        static inline void cleanupLists() {
+            for (auto& i : lists) {
+                i.second.forall([](const Handle&){});
+            }
+        }
 
 };
 

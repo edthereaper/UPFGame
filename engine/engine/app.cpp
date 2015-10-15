@@ -931,6 +931,7 @@ void App::retry()
 	getManager<CFlareShot>()->forall(&CFlareShot::removeFromScene);
     component::getManager<Entity>()->forall<void>(sendRevive);
 
+
     EntityList(EntityListManager::get(CEnemy::TAG)).forall(
         [levelData] (Handle h) {resetEnemy(h, levelData);}
     );
@@ -947,6 +948,8 @@ void App::retry()
 	spawn();
     PaintManager::reset();
     MessageManager::dispatchPosts();
+
+    EntityListManager::cleanupLists();
 }
 
 bool App::doGameOver()

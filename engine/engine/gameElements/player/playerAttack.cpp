@@ -141,6 +141,7 @@ void PlayerAttackBtExecutor::testAimAndAdd(
 	target_t t, std::vector<target_t>& list, CDetection* d, const CTransform& transform, XMVECTOR mePos)
 {
 	assert(d != nullptr);
+    if (!t.h.isValid()) {return;}
     bool hammerNotTargetable = t.type == target_t::HAMMER && 
         !((CTransformable*)(t.h.getSon<CTransformable>()))->getSelected();
 	if (!t.isTransformed() && !hammerNotTargetable) {
