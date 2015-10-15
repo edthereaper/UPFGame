@@ -21,6 +21,8 @@ using namespace DirectX;
 
 namespace particles{
 
+	typedef std::vector<std::string> ParticlesFileList;
+
 	typedef std::map<std::string, CEmitter::EmitterData> EmitterManagerMap;
 	typedef std::pair<std::string, CEmitter::EmitterData> EmitterManagerPair;
 
@@ -57,6 +59,33 @@ namespace particles{
 			static inline ParticleSystemParser& get() { return manager; }
 			void saveComponents();
 			void saveComponents(CEmitter::EmitterData emitter){}
+	};
+
+
+	//----------------------------------------------------------------------------------//
+	//----------------------------------------------------------------------------------//
+	//-------------------------------PARTICLES PARSER I/O--------------------------------//
+	//----------------------------------------------------------------------------------//
+	//----------------------------------------------------------------------------------//
+
+	class CEmitter;
+	class ParticleFileParser : private XMLParser{
+
+	private:
+		static ParticleFileParser manager;
+		ParticlesFileList files;
+	private:
+		ParticleFileParser(){}
+		virtual ~ParticleFileParser(){}
+		void onStartElement(const std::string &elem, utils::MKeyValue &atts);
+		void onEndElement(const std::string &elem){}
+
+	public:
+		bool loadLibrary();
+		ParticlesFileList getFiles(){ return files; }
+		std::string getFileByIndex(int index){ return files[index]; }
+		int getIndexByFile(std::string str);
+		static inline ParticleFileParser& get() { return manager; }
 	};
 
 

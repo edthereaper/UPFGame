@@ -285,6 +285,21 @@ bool BossBtExecutor::punchCond(float) const
 bool BossBtExecutor::hammerTransform(float) const
 {
     CTransformable* t = hammers[currentHammer].hammer.getSon<CTransformable>();
+	if (t->isTransformed()){
+		CEmitter* emitter = hammers[currentHammer].hammer.getSon<CEmitter>();
+		
+		auto smoke = emitter->getKey("emitter_0");
+		auto grava = emitter->getKey("emitter_1");
+		auto smoke_green = emitter->getKey("emitter_2");
+		auto leafs = emitter->getKey("emitter_3");
+
+		ParticleUpdaterManager::get().setDeleteSelf(smoke);
+		ParticleUpdaterManager::get().setDeleteSelf(grava);
+		ParticleUpdaterManager::get().sendActive(leafs);
+		ParticleUpdaterManager::get().sendActive(smoke_green);
+		
+
+	}
     return t != nullptr && t->isTransformed();
 }
 
@@ -591,6 +606,16 @@ ret_e BossBtExecutor::coolSmoke(float elapsed)
 		((Entity*)playerEntity)->sendMsg(MsgPlayerOutTuto());
 		((Entity*)bichitoEntity)->sendMsg(MsgPlayerOutTuto());
 	}
+	
+	Entity* hammer = hammers[currentHammer].hammer;
+
+	CEmitter *emitter = hammer->get<CEmitter>();
+	auto smoke = emitter->getKey("emitter_0");
+	auto grava = emitter->getKey("emitter_1");
+
+	ParticleUpdaterManager::get().sendInactive(smoke);
+	ParticleUpdaterManager::get().sendInactive(grava);
+	
     return DONE_QUICKSTEP;
 }
 
@@ -679,6 +704,16 @@ ret_e BossBtExecutor::setupRaiseArmSudden(float elapsed)
         CMobile::MOVE_ACCELERATE,
         HAMMER_SUDDEN_RAISE_ACCEL,
         (currentHammerY-hammerY)/HAMMER_SUDDEN_RAISE_TIME );
+
+
+	CEmitter* emitter = hammers[currentHammer].hammer.getSon<CEmitter>();
+
+	auto smoke_green = emitter->getKey("emitter_2");
+	auto leafs = emitter->getKey("emitter_3");
+
+	ParticleUpdaterManager::get().setDeleteSelf(smoke_green);
+	ParticleUpdaterManager::get().setDeleteSelf(leafs);
+
     return DONE_QUICKSTEP;
 }
 
@@ -853,8 +888,11 @@ ret_e BossBtExecutor::endSmoking(float elapsed)
 	auto smoke = emitter->getKey("emitter_0");
 	auto grava = emitter->getKey("emitter_1");
 
-	ParticleUpdaterManager::get().sendInactive(smoke);
-	ParticleUpdaterManager::get().sendInactive(grava);
+	if (ParticleUpdaterManager::get().isExist(smoke))
+			ParticleUpdaterManager::get().sendInactive(smoke);
+
+	if (ParticleUpdaterManager::get().isExist(grava))
+			ParticleUpdaterManager::get().sendInactive(grava);
 
 
     return DONE;
@@ -938,23 +976,6 @@ void CBoss::reset()
             
 			CMesh* m_prev = e_prev->get<CMesh>();
             CMesh* m = e->get<CMesh>();
-
-            
-            EntityListManager::get(CBoss::HAMMER_TAG).add(e);
-            CAABB* aabb = e->get<CAABB>();
-            aabb->init();
-            CTransformable* tr = e->get<CTransformable>();
-            tr->setCenterAim(aabb->getCenter() + t->getPosition());
-            
-			CEmitter *emitter = e->get<CEmitter>();
-
-			auto smoke = emitter->getKey("emitter_0");
-			auto grava = emitter->getKey("emitter_1");
-			auto hoja = emitter->getKey("emitter_2");
-
-			ParticleUpdaterManager::get().sendInactive(smoke);
-			ParticleUpdaterManager::get().sendInactive(grava);
-			//ParticleUpdaterManager::get().sendInactive(hoja);
 			
 			*m = *m_prev;
             system.hammer = e;
@@ -1021,17 +1042,6 @@ void CBoss::setHammer(component::Handle h, unsigned index)
 {
     assert(index < 3);
     bt.getExecutor().hammers[index].hammer = h;
-    
-    Entity* hammer = h;
-    CEmitter *emitter = hammer->get<CEmitter>();
-    
-    auto smoke = emitter->getKey("emitter_0");
-    auto grava = emitter->getKey("emitter_1");
-    auto hojas = emitter->getKey("emitter_2");
-    
-    ParticleUpdaterManager::get().sendInactive(smoke);
-    ParticleUpdaterManager::get().sendInactive(grava);
-    //ParticleUpdaterManager::get().sendInactive(hojas);
 }
 
 void CBoss::setWeakSpot(component::Handle h, unsigned index)

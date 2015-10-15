@@ -254,6 +254,21 @@ namespace particles{
 		return Handle();
 	}
 
+	bool CEmitter::particlesExist(std::string key){
+	
+		if (emitterData != nullptr && emitterData->keys.size() > 0){
+
+			for (int i = 0; i < emitterData->listKeys.size(); i++){
+
+				std::string key_ = emitterData->listKeys[i];
+				if (key.compare(key_) == 0)
+					return true;
+			}
+		}
+
+		return false;
+	}
+
 	CEmitter::EmitterData::key_t CEmitter::getKey(std::string key){
 #if defined(_PARTICLES)
 		return CEmitter::EmitterData::key_t();

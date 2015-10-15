@@ -68,6 +68,8 @@ void CPickup::setup(XMVECTOR position, XMVECTOR velocity, XMVECTOR rotQ)
     notRemoved = true;
 	Entity* me = Handle(this).getOwner();
 	CTransform* meT = me->get<CTransform>();
+
+	//issue lag generated when the pickups are created at same point and tim
 	meT->setPosition(position);
 	meT->setRotation(rotQ);
 

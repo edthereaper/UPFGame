@@ -73,7 +73,7 @@ using DirectX::XMFLOAT4;
 #pragma comment(lib, "PhysXVisualDebuggerSDKDEBUG.lib") 
 #pragma comment(lib, "PhysX3CharacterKinematicDEBUG_x64") 
 #pragma comment(lib, "PhysX3CookingDEBUG_x64.lib")
-#pragma comment(lib, "PxToolkitDEBUG.lib")
+//#pragma comment(lib, "PxToolkitDEBUG.lib")
 #pragma comment(lib, "PxTaskDEBUG.lib")
 #pragma comment(lib, "PhysXProfileSDKDEBUG.lib")
 #else
