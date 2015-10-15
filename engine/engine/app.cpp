@@ -540,6 +540,7 @@ bool App::create()
     
 	PhysicsManager &physicsManager = PhysicsManager::get();
 #if defined(_PARTICLES)
+	ParticleFileParser::get().loadLibrary();
 	EmitterParser::get().loadLibrary();
 #endif
 	ParticleSystemParser::get().loadLibrary();

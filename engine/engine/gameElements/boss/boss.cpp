@@ -211,43 +211,89 @@ const std::vector<uint32_t> BossBtExecutor::smokePatterns[N_STAGES] = {
      }
     };
 
-void BossBtExecutor::spawnMinions()
+void BossBtExecutor::spawnMinions(float elapsed)
 {
-    unsigned nSpawn = 0;
-    unsigned failed = 0;
-    while (nSpawn < MIN_SPAWN[stage] && failed < ARRAYSIZE(minions)) {
-        failed = 0;
-        for (auto& m : minions) {
-            if ((!m.entity.isValid() || !m.entity.hasSon<CTransformable>() ||
-                ((CTransformable*)m.entity.getSon<CTransformable>())->isTransformed())) {
-                if (MINION_CHANCE[stage]()) {
-                    if(m.entity.isValid()) {
-                        Entity* e = m.entity;
-                        e->postMsg(MsgDeleteSelf());
-                    }
-                    m.entity = getManager<Entity>()->createObj();
-                    Entity* e = m.entity;
-                    if (FLARE_CHANCE[stage]()) {
-                        PrefabManager::get().prefabricateComponents("components/flare", m.entity);
-                    } else {
-                        PrefabManager::get().prefabricateComponents("components/melee", m.entity);
-                    }
+ //   unsigned nSpawn = 0;
+ //   unsigned failed = 0;
+ //   while (nSpawn < MIN_SPAWN[stage] && failed < ARRAYSIZE(minions)) {
+ //       failed = 0;
+ //       for (auto& m : minions) {
+ //           if ((!m.entity.isValid() || !m.entity.hasSon<CTransformable>() ||
+ //               ((CTransformable*)m.entity.getSon<CTransformable>())->isTransformed())) {
+ //               if (MINION_CHANCE[stage]()) {
+ //                   if(m.entity.isValid()) {
+ //                       Entity* e = m.entity;
+ //                       e->postMsg(MsgDeleteSelf());
+ //                   }
+ //                   m.entity = getManager<Entity>()->createObj();
+ //                   Entity* e = m.entity;
+ //                   if (FLARE_CHANCE[stage]()) {
+ //                       PrefabManager::get().prefabricateComponents("components/flare", m.entity);
+ //                   } else {
+ //                       PrefabManager::get().prefabricateComponents("components/melee", m.entity);
+ //                   }
 
-		            //We up the enemy to avoid collisions with the ground
-		            CTransform* transform = e->get<CTransform>();
-                    transform->set(m.point);
-		            transform->setPosition(transform->getPosition() + XMVectorSet(0, 3, 0, 0));
-                    EntityListManager::get(CEnemy::TAG).add(e);
-                    e->init();
-                    nSpawn++;
-                }
-            } else {
-                failed++;
-            }
-        }
-    }
-    EntityListManager::get(CEnemy::TAG).broadcast(MsgSetPlayer(playerEntity));
-	EntityListManager::get(CEnemy::TAG).broadcast(MsgSetBichito(bichitoEntity));
+	//	            //We up the enemy to avoid collisions with the ground
+	//	            CTransform* transform = e->get<CTransform>();
+ //                   transform->set(m.point);
+	//	            transform->setPosition(transform->getPosition() + XMVectorSet(0, 3, 0, 0));
+ //                   EntityListManager::get(CEnemy::TAG).add(e);
+ //                   e->init();
+ //                   nSpawn++;
+ //               }
+ //           } else {
+ //               failed++;
+ //           }
+ //       }
+ //   }
+ //   EntityListManager::get(CEnemy::TAG).broadcast(MsgSetPlayer(playerEntity));
+	//EntityListManager::get(CEnemy::TAG).broadcast(MsgSetBichito(bichitoEntity));
+
+	if (elapseCreadedEnemy.count(elapsed) >= timeToCreateEnemy){
+
+		if (nSpawn < MIN_SPAWN[stage] && failed < ARRAYSIZE(minions)) {
+		
+			elapseCreadedEnemy.reset();
+
+			failed = 0;
+			auto &m = minions[currentEnemyCreated];
+
+			if ((!m.entity.isValid() || !m.entity.hasSon<CTransformable>() ||
+				((CTransformable*)m.entity.getSon<CTransformable>())->isTransformed())) {
+
+					if (MINION_CHANCE[stage]()) {
+						if(m.entity.isValid()) {
+							Entity* e = m.entity;
+							e->postMsg(MsgDeleteSelf());
+						}
+
+						m.entity = getManager<Entity>()->createObj();
+						Entity* e = m.entity;
+						if (FLARE_CHANCE[stage]()) {
+							PrefabManager::get().prefabricateComponents("components/flare", m.entity);
+						} else {
+							PrefabManager::get().prefabricateComponents("components/melee", m.entity);
+						}
+
+						 //We up the enemy to avoid collisions with the ground
+						 CTransform* transform = e->get<CTransform>();
+							transform->set(m.point);
+						 transform->setPosition(transform->getPosition() + XMVectorSet(0, 3, 0, 0));
+						EntityListManager::get(CEnemy::TAG).add(e);
+						e->init();
+						nSpawn++;
+					}
+
+			} else {
+				failed++;
+			}
+
+			currentEnemyCreated++;
+			
+			EntityListManager::get(CEnemy::TAG).broadcast(MsgSetPlayer(playerEntity));
+			EntityListManager::get(CEnemy::TAG).broadcast(MsgSetBichito(bichitoEntity));
+		}
+	}
 }
 
 bool BossBtExecutor::firstTime(float) const
@@ -927,9 +973,16 @@ ret_e BossBtExecutor::sendMinions(float elapsed)
     RenderManager::updateKeys(me);
 #endif
 
-    spawnMinions();
-    timer.set(-TIME_SEND_MINIONS_BEFORE);
-    return DONE;
+	if (currentEnemyCreated == ARRAYSIZE(minions)-1){
+		timer.set(-TIME_SEND_MINIONS_BEFORE);
+		nSpawn = 0;
+		failed = 0;
+		currentEnemyCreated = 0;
+		return DONE;
+
+	}
+	spawnMinions(elapsed);
+	return STAY;
 }
 
 ret_e BossBtExecutor::endWallOfSmoke(float elapsed)
@@ -1045,8 +1098,9 @@ void CBoss::setHammer(component::Handle h, unsigned index)
     assert(index < 3);
     auto& bte = bt.getExecutor();
     bte.hammers[index].hammer = h;
-
-    CMobile* mobile = hammer->get<CMobile>();
+	
+	Entity *hammer(h);
+	CMobile* mobile = hammer->get<CMobile>();
     mobile->enslave(bte.hammers[index].cannon);
 }
 

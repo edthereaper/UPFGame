@@ -177,6 +177,12 @@ class BossBtExecutor {
         uint8_t shotsFired = 0;
         float hammerY = 0;
         float currentHammerY = 0;
+		
+		int currentEnemyCreated = 0;
+		Counter<float> elapseCreadedEnemy;
+		float timeToCreateEnemy = 0.25;
+		unsigned nSpawn = 0;
+		unsigned failed = 0;
 
         bool waitingForWeakSpot = false;
 
@@ -196,7 +202,7 @@ class BossBtExecutor {
         spawn_t minions[12];
 
     private:
-        void spawnMinions();
+        void spawnMinions(float elapsed);
         void shootFlare();
 
         //conditions

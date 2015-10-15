@@ -255,6 +255,8 @@ namespace particles{
 	}
 
 	bool CEmitter::particlesExist(std::string key){
+
+#if !defined(_PARTICLES)
 	
 		if (emitterData != nullptr && emitterData->keys.size() > 0){
 
@@ -265,6 +267,8 @@ namespace particles{
 					return true;
 			}
 		}
+
+#endif
 
 		return false;
 	}
