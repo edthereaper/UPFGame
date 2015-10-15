@@ -118,6 +118,8 @@
 	<plug id="34" anim="shooting" type="action" delay="0.1" delayOut="0.1" dummy="false" factor="1.0">
 		<on key="0x9004"/>
 		<on key="0x9009"/>
+		<on key="0x5B22"/>
+		<on key="0x5B12"/>
 	</plug>	
 	<plug id="49" anim="earthquake_start_falling" type="action" delay="0.02" delayOut="0.1" factor="1.0">
 		<on key="0x1313"/>		<!-- Quake drop start -->	
