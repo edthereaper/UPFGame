@@ -1,7 +1,9 @@
 <Entity init="true" >
 	<Name generate="raiz2-"/>
-    <Transform/>
-	<Tint color="brown" a="0" />
+    <Transform rotateAngle="45" />
+	<AABB/>
+    <Restore />
+	<Tint color="brown" />
 	<SelfIllumination/>
 	
 	<prefab name="mesh/raiz_02" />

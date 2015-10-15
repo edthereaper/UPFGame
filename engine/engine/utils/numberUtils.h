@@ -36,6 +36,8 @@ inline float accumulativeQ1Sin(float f)
     return floorf(f/M_PI_2f)+std::sin(fmodf(f, M_PI_2f));
 }
 
+inline float sinc(float x) {return x==0?1:std::sin(x)/x;}
+
 }
 
 #endif

@@ -881,6 +881,7 @@ void LevelImport::onEndElement (const std::string &elem)
                 }
             } else if (p.special.getString("special") == "boss") {
                 CBoss* boss = setupBoss(e, p);
+                e->init();
                 for(int i=0; i<3; ++i) {
                     if (weak_spots[i].isValid()) {boss->setWeakSpot(weak_spots[i], i);}
 
@@ -891,7 +892,6 @@ void LevelImport::onEndElement (const std::string &elem)
                 for (const auto& s : bossSpinners) {
                     boss->addSpinner(s.h, s.spin);
                 }
-                e->init();
             } else if (p.special.has("spin")) {
                 float spin = p.special.getFloat("spin");
                 bossSpinners.push_back(bossSpinnerData_t(e,spin));

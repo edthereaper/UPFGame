@@ -628,13 +628,15 @@ ret_e BossBtExecutor::setupArmResisting(float elapsed)
 
 ret_e BossBtExecutor::armResisting(float elapsed)
 {
-    //TODO: manage fx?
     return wait(elapsed);
 }
 
 ret_e BossBtExecutor::dropCannon(float elapsed)
 {
-    //TODO: export a travelling animation in MAX
+    Entity* hammer = hammers[currentHammer].hammer;
+    CMobile* mob = hammer->get<CMobile>();
+    mob->enslave(Handle());
+
     Entity* cannon = hammers[currentHammer].cannon;
     CFlyingMobile* fm = cannon->get<CFlyingMobile>();
 	
@@ -661,6 +663,10 @@ ret_e BossBtExecutor::setupRaiseArmSudden(float elapsed)
         CMobile::MOVE_ACCELERATE,
         HAMMER_SUDDEN_RAISE_ACCEL,
         (currentHammerY-hammerY)/HAMMER_SUDDEN_RAISE_TIME );
+
+    CTransformable* tr = hammer->get<CTransformable>();
+    tr->removeGlow();
+
     return DONE_QUICKSTEP;
 }
 
@@ -1002,7 +1008,8 @@ void CBoss::init()
 void CBoss::setHammer(component::Handle h, unsigned index)
 {
     assert(index < 3);
-    bt.getExecutor().hammers[index].hammer = h;
+    auto& bte = bt.getExecutor();
+    bte.hammers[index].hammer = h;
     
     Entity* hammer = h;
     CEmitter *emitter = hammer->get<CEmitter>();
@@ -1014,6 +1021,9 @@ void CBoss::setHammer(component::Handle h, unsigned index)
     ParticleUpdaterManager::get().sendInactive(smoke);
     ParticleUpdaterManager::get().sendInactive(grava);
     //ParticleUpdaterManager::get().sendInactive(hojas);
+
+    CMobile* mobile = hammer->get<CMobile>();
+    mobile->enslave(bte.hammers[index].cannon);
 }
 
 void CBoss::setWeakSpot(component::Handle h, unsigned index)
@@ -1052,7 +1062,7 @@ void CBoss::update(float elapsed)
     }
 
     TransformableFSMExecutor::updateSpecialHighlights(elapsed,
-        action & BossBtExecutor::COD_HIGHLIGHT);
+        (action & BossBtExecutor::COD_HIGHLIGHT)!=0);
 }
 
 inline void CBoss::receive(const MsgEarthquake& msg)

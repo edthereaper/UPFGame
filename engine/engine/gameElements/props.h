@@ -50,6 +50,7 @@ class TransformableFSMExecutor {
 			STATE_breatheXZ,
 			STATE_spring,
             STATE_hammerTransform,
+            STATE_hammerTransformed,
 		};
         
         static void updateHighlights(float elapsed, bool increase);
@@ -117,6 +118,7 @@ class TransformableFSMExecutor {
 		component::Handle meEntity;
 		component::Handle xtraMesh1;
 		component::Handle xtraMesh2;
+		XMVECTOR savedPosition;
         component::Handle instancedMeshNot_h;
         component::Handle instancedMeshYes_h;
 		utils::Counter<float> timer;
@@ -173,6 +175,7 @@ class TransformableFSMExecutor {
 		behavior::fsmState_t breatheXZ(float elapsed);
 		behavior::fsmState_t spring(float elapsed);
 		behavior::fsmState_t hammerTransform(float elapsed);
+		behavior::fsmState_t hammerTransformed(float elapsed);
 
 	public:
         ~TransformableFSMExecutor() {
@@ -258,6 +261,7 @@ class CTransformable {
 		void init();
 
 		void loadFromProperties(const std::string& elem, utils::MKeyValue &atts);
+
 		inline void update(float elapsed) {
 			if (!inert) {
                 fsm.update(elapsed);

@@ -125,12 +125,16 @@ void moveDirection(Transform* t, const XMVECTOR & direction, float elapsed, floa
 	moveDirection(t->refPosition(), direction, speed, elapsed);
 }
 
-void moveToTarget(Transform* t, const XMVECTOR & target, float elapsed, float speed)
+XMVECTOR moveToTarget(Transform* t, const XMVECTOR & target, float elapsed, float speed)
 {
-    auto delta = target - t->getPosition();
+    auto prevPosition = t->getPosition();
+    auto delta = target - prevPosition;
     moveDirection(t, XMVector3Normalize(delta), elapsed, speed);
     auto nDelta = target - t->getPosition();
-    if (testIsBehind(delta, nDelta)) {t->setPosition(target);}
+    if (testIsBehind(delta, nDelta)) {
+        t->setPosition(target);
+    }
+    return t->getPosition() - prevPosition;
 }
 
 bool coneDetection(const Transform* t, const XMVECTOR& target,

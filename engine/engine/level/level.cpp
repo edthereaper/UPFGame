@@ -18,7 +18,7 @@ void CCheckPoint::onEnter(float)
     CLevelData* level(level_E->get<CLevelData>());
 	//Check if the new checkpoint follows the logic of the game, if -1 is ok
 	CCheckPoint* currentCheckPoint = level->getCurrentCheckPoint();
-	if (order > currentCheckPoint->order || order == -1){
+	if (level->isBossLevel() || order > currentCheckPoint->order || order == -1){
 		level->setCurrentCheckPoint(this);
 		level_E->sendMsg(MsgPlayerAchievedCheckpoint());
 	}

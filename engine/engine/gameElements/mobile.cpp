@@ -38,6 +38,7 @@ void CMobile::stop()
         default: break;
     }
     currentAction = NOTHING;
+    slaveRenew = true;
     v = utils::zero_v;
 }
 
@@ -56,6 +57,7 @@ void CMobile::startShaking(float nAmplitude, float nFrequency,
         case REF_RELATIVE: v = XMVector3Rotate(direction, t->getRotation());
     }
     v = XMVector3Normalize(v);
+    slaveRenew = true;
 }
 
 void CMobile::startMoving(XMVECTOR target, refType_e refType,
@@ -85,11 +87,16 @@ void CMobile::update(float elapsed)
             switch (moveType) {
                 case MOVE_ACCELERATE:
                     speed += accel*elapsed;
-                    moveToTarget(t, v, elapsed, speed);
+                    auto delta = moveToTarget(t, v, elapsed, speed);
+                    if (slave.isValid()) {
+                        CTransform* st = slave.getSon<CTransform>();
+                        st->refPosition() += delta;
+                    }
                     break;
             }
         } break;
         case SHAKING: {
+            float prevTimer = timer;
             float f = timer.count(elapsed)*frequency;
             switch (shakeType) {
                 case SHAKE_LINEAR:
@@ -104,6 +111,27 @@ void CMobile::update(float elapsed)
                 default: break;
             }
             t->setPosition(origin+v*f*amplitude);
+            
+            if (slave.isValid()) {
+                CTransform* st = slave.getSon<CTransform>();
+                float prevF = prevTimer*frequency;
+                switch (shakeType) {
+                    case SHAKE_LINEAR:
+                        prevF = prevF-std::floor(prevF)*2.f-1.f;
+                        break;
+                    case SHAKE_COS:
+                        prevF = std::cos(prevF);
+                        break;
+                    case SHAKE_SIN:
+                        prevF = std::sin(prevF);
+                        break;
+                    default: break;
+                }
+                XMVECTOR prevOff = slaveRenew ? zero_v : v*prevF*amplitude;
+                st->refPosition() -= prevOff;
+                st->refPosition() += v*f*amplitude;
+                slaveRenew = false;
+            }
             } break;
         default: break;
         case NOTHING:

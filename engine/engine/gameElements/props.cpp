@@ -52,6 +52,7 @@ void TransformableFSM::initType()
     SET_FSM_STATE(breatheXZ);
 	SET_FSM_STATE(spring);
 	SET_FSM_STATE(hammerTransform);
+    SET_FSM_STATE(hammerTransformed);
 }
 
 namespace gameElements {
@@ -261,9 +262,6 @@ fsmState_t TransformableFSMExecutor::hit(float elapsed)
     }
 }
 
-#define TIME_TRANSF_HAMMER 2.8f
-#define TRANSFORM_ROTATE_HAMMER deg2rad(120)
-
 fsmState_t TransformableFSMExecutor::transforming(float elapsed)
 {
     Entity* me = meEntity;
@@ -303,9 +301,21 @@ fsmState_t TransformableFSMExecutor::transforming(float elapsed)
                 CMesh* m2 = xtraMesh2.getSon<CMesh>();
                 m1->setVisible(true);
                 m2->setVisible(true);
+                
+                CTransform* t1 = xtraMesh1.getSon<CTransform>();
+                CTransform* t2 = xtraMesh2.getSon<CTransform>();
+                t1->setPosition(t->getPosition());
+                t2->setPosition(t->getPosition());
+                CRestore* r1 = xtraMesh1.getSon<CRestore>();
+                CRestore* r2 = xtraMesh2.getSon<CRestore>();
+                r1->set(*t1);
+                r2->set(*t2);
+                t1->setScale(zero_v);
+                t2->setScale(zero_v);
+                applySelfIllumination(0,1,true,true);
 
                 return STATE_hammerTransform;
-            }break;
+            } break;
         default: case TRANSFORMABLE_NONE: {
                 setupTransforming();
                 setupTransformed();
@@ -619,6 +629,7 @@ fsmState_t TransformableFSMExecutor::transformed(float elapsed)
     switch (type) {
 	    case TRANSFORMABLE_MESH: return STATE_breathe; break;
         case TRANSFORMABLE_LIANA: return STATE_breatheXZ; break;
+        case TRANSFORMABLE_HAMMER: return STATE_hammerTransformed; break;
         default: return STATE_transformed;
     }
 }
@@ -724,6 +735,13 @@ void CTransformable::init()
     if (fsme.type == TRANSFORMABLE_HAMMER) {
         fsme.xtraMesh1 = PrefabManager::get().prefabricate("boss/raiz_01");
         fsme.xtraMesh2 = PrefabManager::get().prefabricate("boss/raiz_02");
+
+        CTransform* t  = fsme.meEntity.getSon<CTransform>();
+        CTransform* t1 = fsme.xtraMesh1.getSon<CTransform>();
+        CTransform* t2 = fsme.xtraMesh2.getSon<CTransform>();
+
+        t1->applyRotation(t->getRotation());
+        t2->applyRotation(t->getRotation());
     }
 }
 
@@ -909,7 +927,9 @@ void CCannon::revive(const MsgRevive&)
         CRigidBody* s = me->get<CRigidBody>();
         s->removeFilters(filter_t::NONE, filter_t::PLAYER, filter_t::NONE);
     }
-    lookAtTarget();
+    if(lookAt != zero_v) {
+        lookAtTarget();
+    }
 }
 
 void CCreep::revive(const MsgRevive&)
@@ -982,6 +1002,9 @@ void CCreep::generateCreepPlane()
 }
 
 
+#define TIME_TRANSF_HAMMER 2.5f
+#define TRANSFORM_ROTATE_HAMMER deg2rad(360)*4
+
 fsmState_t TransformableFSMExecutor::hammerTransform(float elapsed)
 {
 	if (timer.count(elapsed) >= TIME_TRANSF_HAMMER) {
@@ -990,10 +1013,14 @@ fsmState_t TransformableFSMExecutor::hammerTransform(float elapsed)
         Entity* r2 = xtraMesh2;
         CTransform* t1 = r1->get<CTransform>();
         CTransform* t2 = r2->get<CTransform>();
-        t1->setScale(originalScale);
-        t1->setRotation(originalRotation);
-        t2->setScale(originalScale);
-        t2->setRotation(originalRotation);
+        CRestore* t1_or = r1->get<CRestore>();
+        CRestore* t2_or = r2->get<CRestore>();
+        t1->set(*t1_or);
+        t2->set(*t2_or);
+        
+        CTransform* t = meEntity.getSon<CTransform>();
+        savedPosition = t->getPosition();
+
 		return STATE_transformed;
 	} else {
         Entity* r1 = xtraMesh1;
@@ -1001,29 +1028,88 @@ fsmState_t TransformableFSMExecutor::hammerTransform(float elapsed)
 
         CTransform* t1 = r1->get<CTransform>();
         CTransform* t2 = r2->get<CTransform>();
+        CRestore* t1_or = r1->get<CRestore>();
+        CRestore* t2_or = r2->get<CRestore>();
 
-		float s = 1-M_PI_2f*(timer.get() / TIME_TRANSF_HAMMER);
-        auto xz = xzTransf(s);
-		float angle(angleTransf(s)*TRANSFORM_ROTATE_HAMMER);
+        float f = timer.get() / TIME_TRANSF_HAMMER;
 
-        Transform originalRotTransform;
-        originalRotTransform.setRotation(originalRotation);
+        float finv = 1-f;
+        float sca_xz = std::pow(1-finv*finv, 1.f/6.f);
+		float sca_y_1 = std::pow(1-sinc(std::pow(f, 0.75f)*M_PI_2f*24), 1.95f);
+		float sca_y_2 = std::pow(1-sinc(std::pow(f, 0.85f)*M_PI_2f*26), 2.15f);
+        float tint = 1-std::pow(1-finv*finv, 1.f/1.35f);
 
-		t1->setScale(originalScale * XMVectorSet(xz, yTransfIn(s), xz, 0));
-		t2->setScale(originalScale * XMVectorSet(xz, yTransfIn(s), xz, 0));
-		t1->setRotation(XMQuaternionMultiply(
-			originalRotation, XMQuaternionRotationAxis(originalRotTransform.getUp(), angle)));
-		t2->setRotation(XMQuaternionMultiply(
-			originalRotation, XMQuaternionRotationAxis(originalRotTransform.getUp(), angle)));
-
-        
+		t1->setScale(t1_or->getScale() * XMVectorSet(sca_xz, sca_y_1, sca_xz, 0));
+		t2->setScale(t2_or->getScale() * XMVectorSet(sca_xz, sca_y_2, sca_xz, 0));
+		float rot_1(std::pow(std::sin(M_PI_2f*f), 1/9.253f)*TRANSFORM_ROTATE_HAMMER);
+		float rot_2(std::pow(std::sin(M_PI_2f*f), 1/9.257f)*TRANSFORM_ROTATE_HAMMER);
+		//t1->setRotation(XMQuaternionMultiply( t1_or->getRotation(),
+        //    XMQuaternionRotationAxis(t1_or->getUp(), rot_1)));
+		//t2->setRotation(XMQuaternionMultiply( t2_or->getRotation(),
+        //    XMQuaternionRotationAxis(t2_or->getUp(), rot_2)));
 
         CTint* tint1 = r1->get<CTint>();
         CTint* tint2 = r2->get<CTint>();
-        tint1->setAf(1-yTransfIn(s));
-        tint2->setAf(1-yTransfIn(s));
+        //When there¡s a texture...
+        //tint1->setAf(tint);
+        //tint2->setAf(tint);
+
+        tint1->set(Color::BROWN.factor(tint) + Color::MOUNTAIN_GREEN.factor(1-tint));
+        tint2->set(Color::BROWN.factor(tint) + Color::MOUNTAIN_GREEN.factor(1-tint));
+
+        RenderManager::updateKeys(r1);
+        RenderManager::updateKeys(r2);
 
 		return STATE_hammerTransform;
 	}
 }
+
+behavior::fsmState_t TransformableFSMExecutor::hammerTransformed(float elapsed)
+{
+    Entity* me = meEntity;
+    Entity* r1 = xtraMesh1;
+    Entity* r2 = xtraMesh2;
+
+    CTransform* t  = me->get<CTransform>();
+    CTransform* t1 = r1->get<CTransform>();
+    CTransform* t2 = r2->get<CTransform>();
+
+    //We want to maintain the distance between AABB tops constant
+    //Stretch the roots to grab the hammer at its current position
+
+    // Problem data... {
+    float meY0 = XMVectorGetY(savedPosition);
+    float meYt = XMVectorGetY(t->getPosition());
+    float r1Y = XMVectorGetY(t1->getPosition());
+    float r2Y = XMVectorGetY(t2->getPosition());
+
+    CAABB* meAABB = me->get<CAABB>();
+    float meAABBtop_rel = XMVectorGetY(meAABB->getHSize());
+    float meAABBtop0 = meAABBtop_rel + meY0;
+    float meAABBtopt = meAABBtop_rel + meYt;
+    
+    CAABB* r1AABB = r1->get<CAABB>();
+    float r1AABBtop_rel = XMVectorGetY(r1AABB->getHSize());
+
+    CAABB* r2AABB = r2->get<CAABB>();
+    float r2AABBtop_rel = XMVectorGetY(r2AABB->getHSize());
+    // }
+
+    //Distances between AABB tops
+    float k1 = meAABBtop0 - r1AABBtop_rel;
+    float k2 = meAABBtop0 - r2AABBtop_rel;
+
+    float ht_1 = meAABBtopt - k1;
+    float ht_2 = meAABBtopt - k2;
+
+    float scaY_1 = ht_1 / r1AABBtop_rel;
+    float scaY_2 = ht_2 / r2AABBtop_rel;
+    t1->setScale(XMVectorSet(1,scaY_1,1,1));
+    t2->setScale(XMVectorSet(1,scaY_2,1,1));
+
+    //if (scaY_1 != 1) {dbg("%.3f && %.3f \n", scaY_1, scaY_2);}
+
+    return STATE_hammerTransformed;
+}
+
 }

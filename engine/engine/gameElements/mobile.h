@@ -30,6 +30,8 @@ class CMobile {
             struct {float amplitude, frequency;};
         };
         utils::Counter<float> timer;
+        component::Handle slave;
+        bool slaveRenew = true;
 
     public:
         void init();
@@ -46,6 +48,10 @@ class CMobile {
 
         bool isComplete();
 
+        inline void enslave(component::Handle nSlave) {
+            slave = nSlave;
+            slaveRenew = true;
+        }
 };
 
 }

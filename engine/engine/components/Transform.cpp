@@ -18,6 +18,11 @@ void CTransform::loadFromProperties(const std::string& elem, utils::MKeyValue &a
     if (atts.has("lookAt")) {
         lookAt(atts.getPoint("lookAt", position+getFront()));
     }
+    if (atts.has("rotateAngle")) {
+        float angle = atts.getFloat("rotateAngle", 0);
+        XMVECTOR axis = atts.getPoint("rotateAxis", getUp());
+        applyRotation(XMQuaternionRotationAxis(axis, angle));
+    }
 }
 
 XMMATRIX Transform::getWorld() const

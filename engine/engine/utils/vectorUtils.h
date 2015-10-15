@@ -98,7 +98,7 @@ void moveDirection(component::Transform* who, const XMVECTOR & direction, float 
 void moveDirection(XMVECTOR& v, const XMVECTOR & direction, float elapsed, float speed);
 
 /* Move an entity towards a target */
-void moveToTarget(component::Transform* who, const XMVECTOR & target, float elapsed, float speed);
+XMVECTOR moveToTarget(component::Transform* who, const XMVECTOR & target, float elapsed, float speed);
 
 
 /* move rotation towards a target */
