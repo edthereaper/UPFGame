@@ -179,8 +179,6 @@ class BossBtExecutor {
         float currentHammerY = 0;
 		
 		int currentEnemyCreated = 0;
-		Counter<float> elapseCreadedEnemy;
-		float timeToCreateEnemy = 0.25;
 		unsigned nSpawn = 0;
 		unsigned failed = 0;
 
