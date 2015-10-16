@@ -1135,7 +1135,7 @@ namespace antTw_user {
 		TwAddSeparator(barParticle1, "name_separated", NULL);
 
 		files.clear();
-		GetFilesInDirectory(files, PARTICLES_TEXTURE_PATH);
+		ParticlesFileList files = ParticleFileParser::get().getFiles();
 
 		int idx = 0;
 		int idxTexture = -1;

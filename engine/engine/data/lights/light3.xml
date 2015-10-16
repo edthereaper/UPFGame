@@ -220,6 +220,30 @@
 			factor="1"
 			h="0.5"
 			intensity="1"
+			l="48"
+			layerDecay="0.05"
+			minimun="0"
+			sqSqrt="1"
+			unitWorldSize="25"
+			w="48"
+		>
+			<top color="9c0000cc" />
+			<bottom color="99990099" />
+		</Mist>
+	</Entity>
+	<Entity init="yes" >
+		<Name name="Smoke-00" />
+		<Transform pos="-1.90815 -18.8375 -0.295154" />
+		<Mist
+			chaotic="yes"
+			dX="1"
+			dZ="1"
+			darkenAlpha="0.4"
+			depthTolerance="200"
+			export="yes"
+			factor="1"
+			h="0.5"
+			intensity="1"
 			l="4"
 			layerDecay="0.05"
 			minimun="0"
@@ -227,8 +251,8 @@
 			unitWorldSize="25"
 			w="4"
 		>
-			<top color="9c0000cc" />
-			<bottom color="99990099" />
+			<top color="7c0000cc" />
+			<bottom color="5b5b0099" />
 		</Mist>
 	</Entity>
 	<Entity init="yes" >
@@ -251,8 +275,8 @@
 			unitWorldSize="117.37"
 			w="3000"
 		>
-			<top color="6c5e53cc" />
-			<bottom color="392c20cc" />
+			<top color="564b42cc" />
+			<bottom color="2d2319cc" />
 		</Mist>
 	</Entity>
 	<Entity init="yes" >
@@ -275,8 +299,8 @@
 			unitWorldSize="41.01"
 			w="3000"
 		>
-			<top color="1f1610cc" />
-			<bottom color="b0b0699" />
+			<top color="18110ccc" />
+			<bottom color="6060399" />
 		</Mist>
 	</Entity>
 	<Entity init="yes" >
@@ -299,7 +323,7 @@
 			unitWorldSize="41.01"
 			w="3000"
 		>
-			<top color="1e1010cc" />
+			<top color="180c0ccc" />
 			<bottom color="99" />
 		</Mist>
 	</Entity>
@@ -354,33 +378,39 @@
 		<Emitter name="ceniza" position="-7.478054 -10.530725 2.961931" rotation="0.000000 0.000000 0.000000 0.000000" count="2" particles0="emitter_0" particles1="emitter_1"/>
 		</Entity>
 	<Entity init="true">
+	<Entity init="true">
 		<Name name="emitter-0B"/>
-		<Transform pos="-5.430790 74.744637 1.787571" rot="0.000000 0.000000 0.000000 0.000000"/>
-		<Emitter name="lava_ceniza_waterfall" position="-5.430790 74.744637 1.787571" rotation="0.000000 0.000000 0.000000 0.000000" count="2" export="true"  particles0="emitter_0" particles1="emitter_1"/>
+		<Transform pos="-5.430790 71.074638 1.787571" rot="0.000000 0.000000 0.000000 0.000000"/>
+		<Emitter name="lava_ceniza_waterfall" position="-5.430790 71.074638 1.787571" rotation="0.000000 0.000000 0.000000 0.000000" count="2" export="true"  particles0="emitter_0" particles1="emitter_1"/>
 	</Entity>
 	<Entity init="true">
 		<Name name="emitter-0C"/>
-		<Transform pos="1.100233 75.006989 1.625561" rot="0.000000 0.000000 0.000000 0.000000"/>
-		<Emitter name="lava_ceniza_waterfall" position="1.100233 75.006989 1.625561" rotation="0.000000 0.000000 0.000000 0.000000" count="2" export="true"  particles0="emitter_0" particles1="emitter_1"/>
+		<Transform pos="1.100233 71.226990 1.625561" rot="0.000000 0.000000 0.000000 0.000000"/>
+		<Emitter name="lava_ceniza_waterfall" position="1.100233 71.226990 1.625561" rotation="0.000000 0.000000 0.000000 0.000000" count="2" export="true"  particles0="emitter_0" particles1="emitter_1"/>
 	</Entity>
 	<Entity init="true">
 		<Name name="emitter-0D"/>
-		<Transform pos="-1.912912 74.945740 -4.279224" rot="0.000000 0.000000 0.000000 0.000000"/>
-		<Emitter name="lava_ceniza_waterfall" position="-1.912912 74.945740 -4.279224" rotation="0.000000 0.000000 0.000000 0.000000" count="2" export="true"  particles0="emitter_0" particles1="emitter_1"/>
+		<Transform pos="-1.912912 71.305740 -4.279224" rot="0.000000 0.000000 0.000000 0.000000"/>
+		<Emitter name="lava_ceniza_waterfall" position="-1.912912 71.305740 -4.279224" rotation="0.000000 0.000000 0.000000 0.000000" count="2" export="true"  particles0="emitter_0" particles1="emitter_1"/>
 	</Entity>
 	<Entity init="true">
 		<Name name="emitter-0E"/>
-		<Transform pos="-5.866299 80.212013 -1.932106" rot="0.000000 0.000000 0.000000 0.000000"/>
-		<Emitter name="lava_ceniza_waterfall" position="-5.866299 80.212013 -1.932106" rotation="0.000000 0.000000 0.000000 0.000000" count="2" export="true"  particles0="emitter_0" particles1="emitter_1"/>
+		<Transform pos="-5.866299 76.282021 -1.932106" rot="0.000000 0.000000 0.000000 0.000000"/>
+		<Emitter name="lava_ceniza_waterfall" position="-5.866299 76.282021 -1.932106" rotation="0.000000 0.000000 0.000000 0.000000" count="2" export="true"  particles0="emitter_0" particles1="emitter_1"/>
 	</Entity>
 	<Entity init="true">
 		<Name name="emitter-0F"/>
-		<Transform pos="-1.909728 79.920357 4.564344" rot="0.000000 0.000000 0.000000 0.000000"/>
-		<Emitter name="lava_ceniza_waterfall" position="-1.909728 79.920357 4.564344" rotation="0.000000 0.000000 0.000000 0.000000" count="2" export="true"  particles0="emitter_0" particles1="emitter_1"/>
+		<Transform pos="-1.909728 76.120354 4.564344" rot="0.000000 0.000000 0.000000 0.000000"/>
+		<Emitter name="lava_ceniza_waterfall" position="-1.909728 76.120354 4.564344" rotation="0.000000 0.000000 0.000000 0.000000" count="2" export="true"  particles0="emitter_0" particles1="emitter_1"/>
 	</Entity>
 	<Entity init="true">
 		<Name name="emitter-10"/>
-		<Transform pos="2.919826 79.316483 -1.767089" rot="0.000000 0.000000 0.000000 0.000000"/>
-		<Emitter name="lava_ceniza_waterfall" position="2.919826 79.316483 -1.767089" rotation="0.000000 0.000000 0.000000 0.000000" count="2" export="true"  particles0="emitter_0" particles1="emitter_1"/>
+		<Transform pos="2.919826 76.066483 -1.767089" rot="0.000000 0.000000 0.000000 0.000000"/>
+		<Emitter name="lava_ceniza_waterfall" position="2.919826 76.066483 -1.767089" rotation="0.000000 0.000000 0.000000 0.000000" count="2" export="true"  particles0="emitter_0" particles1="emitter_1"/>
+	</Entity>
+	<Entity init="true">
+		<Name name="emitter-28"/>
+		<Transform pos="-1.924403 38.203339 -20.388243" rot="0.000000 0.000000 0.000000 0.000000"/>
+		<Emitter name="mini_flama" position="-1.924403 38.203339 -20.388243" rotation="0.000000 0.000000 0.000000 0.000000" count="1" export="true"  particles0="emitter_0"/>
 	</Entity>
 </scene>
