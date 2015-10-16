@@ -1075,7 +1075,10 @@ bool App::doFrame()
     if (exit || pad.getState(APP_QUIT).isHit()) {return false;}
 
 	if (xboxController.is_connected()){
-		if (xboxPad.getState(APP_PAUSE).isHit()) { paused = true; }
+		if (xboxPad.getState(APP_PAUSE).isHit()) { 
+			paused = true; 
+			pauseSong();
+		}
 		xboxControllerKeys();
 		xboxController.update();
 		xboxPad.update();
@@ -1083,7 +1086,10 @@ bool App::doFrame()
 	Mouse::update();
 	pad.update();
 
-	if (pad.getState(APP_PAUSE).isHit()) { paused = true; }
+	if (pad.getState(APP_PAUSE).isHit()) { 
+		paused = true; 
+		pauseSong();
+	}
     if (pad.getState(APP_TOGGLE_MOUSE_CAPTURE).isHit()) {
         Mouse::toggleCapture();
     }
@@ -1395,8 +1401,18 @@ void App::renderPaused()
 {
 	Render::getContext()->ClearRenderTargetView(Render::getRenderTargetView(), utils::BLACK);
 	Render::getContext()->ClearDepthStencilView(Render::getDepthStencilView(), D3D11_CLEAR_DEPTH, 1.0f, 0);
-	drawTexture2D(pixelRect(config.xres, config.yres), pixelRect(config.xres, config.yres),
-		Texture::getManager().getByName("GameOver"));
+	if(timerGameOver.count(countTime()) > 0.5f){
+		timerGameOver.reset();
+		gameOverImg = !gameOverImg;
+	}
+	if (!gameOverImg){
+		drawTexture2D(pixelRect(config.xres, config.yres), pixelRect(config.xres, config.yres),
+			Texture::getManager().getByName("pause"));
+	}
+	else{
+		drawTexture2D(pixelRect(config.xres, config.yres), pixelRect(config.xres, config.yres),
+			Texture::getManager().getByName("pauseon"));
+	}
 	switch (pauseState) {
 	case 0:
 		drawTexture2D(pixelRect(config.xres, config.yres), pixelRect(config.xres, config.yres),
