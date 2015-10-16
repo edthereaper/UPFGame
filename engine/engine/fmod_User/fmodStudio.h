@@ -47,6 +47,8 @@ class FmodStudio {
         }
         static FMOD::Studio::EventInstance* playEvent(FMOD::Studio::EventInstance* ei);
         static FMOD::Studio::EventInstance* stopEvent(FMOD::Studio::EventInstance* ei);
+		static FMOD::Studio::EventInstance* pauseEvent(FMOD::Studio::EventInstance* ei);
+		static FMOD::Studio::EventInstance* resumeEvent(FMOD::Studio::EventInstance* ei);
         static inline FMOD::Studio::EventInstance* playEvent(const std::string& name) {
             return playEvent(getEventInstance(name));
         }
