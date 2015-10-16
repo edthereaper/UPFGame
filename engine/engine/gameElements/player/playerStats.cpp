@@ -261,6 +261,7 @@ namespace gameElements {
 				app.isPlayerDead = true;
 				getManager<CAmbientSound>()->forall(&CAmbientSound::stopSound);
 				fmodUser::fmodUserClass::stopSounds();
+				app.stopSong();
 			}else{
 				fadeoutTim = tim;
 			}

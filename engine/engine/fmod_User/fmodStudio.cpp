@@ -68,6 +68,20 @@ FMOD::Studio::EventInstance* FmodStudio::stopEvent(FMOD::Studio::EventInstance* 
     return in;
 }
 
+FMOD::Studio::EventInstance* FmodStudio::pauseEvent(FMOD::Studio::EventInstance* in)
+{
+	assert(in != nullptr);
+	CHECKED(in->setPaused(true));
+	return in;
+}
+
+FMOD::Studio::EventInstance* FmodStudio::resumeEvent(FMOD::Studio::EventInstance* in)
+{
+	assert(in != nullptr);
+	CHECKED(in->setPaused(false));
+	return in;
+}
+
 FMOD::Studio::Bank* FmodStudio::loadBank(const std::string& name,
     bool loadSampleData, bool nonblocking, bool decompress)
 {

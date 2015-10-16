@@ -204,11 +204,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		EndPaint(hWnd, &ps);
 		break;
 	case WM_CLOSE:
-        app.destroy();
+        app.setExit();
 		PostQuitMessage(0);
 		break;
 	case WM_DESTROY:
-        app.destroy();
+        app.setExit();
+		PostQuitMessage(0);
+		break;
+	case WM_QUIT:
+        app.setExit();
 		PostQuitMessage(0);
 		break;
         

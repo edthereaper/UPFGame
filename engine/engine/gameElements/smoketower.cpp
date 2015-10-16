@@ -6,7 +6,7 @@
 #include "particles/ParticlesManager.h"
 #include "paintManager.h"
 
-#define DISTANCE_CHECKPOINT_SMOKE       7.5f
+#define DISTANCE_CHECKPOINT_SMOKE       5.0f
 #define DISTANCE_DMG_SMOKE				0.5f
 #define FX_THRESHOLD                    0.75f
 #define TIME_BETWEEN_PHASE				5.0f
@@ -67,7 +67,7 @@ fsmState_t SmokeTowerFSMExecutor::changePhase(float elapsed)
 	return STATE_changePhase;
 }
 
-#define TIME_BOTTOM 3.f
+#define TIME_BOTTOM 1.f
 
 void SmokeTowerFSMExecutor::update(float elapsed)
 {
@@ -94,7 +94,7 @@ void SmokeTowerFSMExecutor::update(float elapsed)
 		}
 		playerS->damage(30, true);
 	} else if (diff > FX_THRESHOLD){
-        ((CPlayerStats*)player->get<CPlayerStats>())->damage(10);
+        ((CPlayerStats*)player->get<CPlayerStats>())->damage(5);
 	}
 
 	float camDiff = XMVectorGetY(meT->getPosition()) - XMVectorGetY(camT->getPosition());

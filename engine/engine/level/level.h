@@ -130,6 +130,16 @@ class CLevelData : public SpatiallyIndexed {
                 fmodUser::FmodStudio::stopEvent(song);
             }
         }
+		inline void pauseSong() const {
+			if (song != nullptr) {
+				fmodUser::FmodStudio::pauseEvent(song);
+			}
+		}
+		inline void resumeSong() const {
+			if (song != nullptr) {
+				fmodUser::FmodStudio::resumeEvent(song);
+			}
+		}
 
         inline float getSkyboxBright() const { return skyboxBright;}
         inline float getSkyboxBlend() const { return skyboxBlend;}
