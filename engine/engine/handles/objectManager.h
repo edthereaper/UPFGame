@@ -200,11 +200,10 @@ class ObjectManager : public HandleManager {
         
 	    void clear() {
 		    object_t* obj = objects;
-		    uint32_t num = size;
-		    for (; num--; obj++) {
-                obj->~object_t();
+		    for (int i=size-1; i >= 0; --i) {
+                objects[i].~object_t();
             }
-            size = 0;
+            initTable();
 	    }
 
         template <class R_TYPE>

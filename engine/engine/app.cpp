@@ -898,6 +898,14 @@ void App::loadlvl()
 		thread_1.join();
 		break;
 	}
+#if defined(_LIGHTTOOL) || defined(_PARTICLES)
+    Entity* cam = camera_h;
+    cam->add(getManager<CAABB>()->createObj());
+    CAABB* camAABB = cam->get<CAABB>();
+    camAABB->setCorners(-0.1f*one_v,0.1f*one_v);
+	getManager<logic::CSpatialIndex>()->forall<void, Handle>(
+        &logic::CSpatialIndex::setPlayer, camera_h, false);
+#endif
 }
 
 void resetLiana(Entity* l, CLevelData* level)
@@ -1482,6 +1490,7 @@ bool App::update(float elapsed)
     getManager<level::CCheckPoint>()->update(elapsed);
 
 #else
+    getManager<logic::CSpatialIndex>()->update(elapsed);
     TransformableFSMExecutor::updateHighlights(elapsed, highlightTransformables);
     CTransform* camT(getCamera().getSon<CTransform>());
 	cam1P.update(*camT, elapsed);

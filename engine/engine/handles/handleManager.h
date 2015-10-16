@@ -50,7 +50,10 @@ class HandleManager {
 
 		    entries = new entry_t[capacity];
 		    i2e = new eIndex_t[capacity];
+            initTable();
+        }
 
+        void initTable() {
 		    // init table contents
 		    for (eIndex_t e = 0; e < capacity; ++e) {
 			    entry_t& entry(entries[e]);
