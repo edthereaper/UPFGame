@@ -294,6 +294,11 @@ class App {
 		bool doGameOver();
 	    void destroy();
         float countTime();
+		
+		void playSong();
+		void stopSong();
+		void pauseSong();
+		void resumeSong();
 
 		inline const utils::Pad& getPad() const { return pad; }
 		inline utils::Pad& getPad() { return pad; }

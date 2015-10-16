@@ -157,6 +157,7 @@ fsmState_t AppFSMExecutor::playvideo(float elapsed)
 {
 	App &app = App::get();
 	if (app.updateVideo())		return STATE_playvideo;
+	//if (app.renderVideo())		return STATE_playvideo;
 	switch (app.videoEndsTo) {
 	case 0:
 		return STATE_mainmenu;
@@ -602,17 +603,20 @@ bool App::create()
 void loadingThread()
 {
 	App &app = App::get();
-	while (app.loadingthreadVar){
-		Render::getContext()->ClearRenderTargetView(Render::getRenderTargetView(), utils::BLACK);
-		Render::getContext()->ClearDepthStencilView(Render::getDepthStencilView(), D3D11_CLEAR_DEPTH, 1.0f, 0);
-		drawTexture2D(pixelRect(app.config.xres, app.config.yres), pixelRect(app.config.xres, app.config.yres), Texture::getManager().getByName("loading"));
-		drawTexture2DAnim(pixelRect(5, 5, 100, 100), pixelRect(app.config.xres, app.config.yres),
-			Texture::getManager().getByName("loadingSpin"), true, app.timerThreadAnim.count(app.countTime()));
-		Render::getSwapChain()->Present(0, 0);
+	/*if (app.gamelvl == 1){
+		//When video ready
+		while (app.renderVideo());
 	}
-	//When video ready
-	//App &app = App::get();
-	//while (app.renderVideo());
+	else{*/
+		while (app.loadingthreadVar){
+			Render::getContext()->ClearRenderTargetView(Render::getRenderTargetView(), utils::BLACK);
+			Render::getContext()->ClearDepthStencilView(Render::getDepthStencilView(), D3D11_CLEAR_DEPTH, 1.0f, 0);
+			drawTexture2D(pixelRect(app.config.xres, app.config.yres), pixelRect(app.config.xres, app.config.yres), Texture::getManager().getByName("loading"));
+			drawTexture2DAnim(pixelRect(5, 5, 100, 100), pixelRect(app.config.xres, app.config.yres),
+				Texture::getManager().getByName("loadingSpin"), true, app.timerThreadAnim.count(app.countTime()));
+			Render::getSwapChain()->Present(0, 0);
+		}
+	//}
 }
 
 void App::loadlvl()
@@ -656,25 +660,25 @@ void App::loadlvl()
 	activateCamera(*camera);
 	activateObjectConstants();
 
-	//When video ready
-	/*switch (gamelvl) {
+	switch (gamelvl) {
 		case 1:
-			loadVideo("bunny.ogg");
+			//loadVideo("bunny.ogg", "");
+			loadingthreadVar = true;
+			timerThreadAnim.reset();
 		break;
 		case 2:
-			loadVideo("bunny.ogg");
+			loadingthreadVar = true;
+			timerThreadAnim.reset();
 		break;
 		case 3:
-			loadVideo("bunny.ogg");
+			loadingthreadVar = true;
+			timerThreadAnim.reset();
 		break;
 		case 4:
-			loadVideo("bunny.ogg");
+			loadingthreadVar = true;
+			timerThreadAnim.reset();
 		break;
 	}
-	std::thread thread_1 = std::thread(loadingThread);*/
-
-	loadingthreadVar = true;
-	timerThreadAnim.reset();
 	std::thread thread_1 = std::thread(loadingThread);
 
 
@@ -869,14 +873,27 @@ void App::loadlvl()
 	getManager<CCubeShadow>()->forall(&CCubeShadow::findSpatialIndex);
 	getManager<CAmbientSound>()->forall(&CAmbientSound::playSound);
 
-	//When video ready enable this
-	//while (!thread_1.joinable());
-	//thread_1.join();
+	dbg("Load complete.\n");
 
-	loadingthreadVar = false;
-	thread_1.join();
-	
-    dbg("Load complete.\n");
+	switch (gamelvl) {
+	case 1:
+		//while (!thread_1.joinable());
+		loadingthreadVar = false;
+		thread_1.join();
+		break;
+	case 2:
+		loadingthreadVar = false;
+		thread_1.join();
+		break;
+	case 3:
+		loadingthreadVar = false;
+		thread_1.join();
+		break;
+	case 4:
+		loadingthreadVar = false;
+		thread_1.join();
+		break;
+	}
 }
 
 void resetLiana(Entity* l, CLevelData* level)
@@ -989,6 +1006,7 @@ void App::retry()
     MessageManager::dispatchPosts();
 
     EntityListManager::cleanupLists();
+	playSong();
 }
 
 bool App::doGameOver()
@@ -1332,6 +1350,10 @@ bool App::pauseMenu()
 		if (pad.getState(CONTROLS_JUMP).isPressed()){
 			if (pauseState == 1){
 				returnToMenu = true;
+				stopSong();
+			}
+			else{
+				resumeSong();
 			}
 			fmodUser::fmodUserClass::playSound("Menu_enter", 1.5f, 0.0f);
 			pauseState = 0;
@@ -1352,6 +1374,10 @@ bool App::pauseMenu()
 	if (pad.getState(APP_ENTER).isPressed()){
 		if (pauseState == 1){
 			returnToMenu = true;
+			stopSong();
+		}
+		else{
+			resumeSong();
 		}
 		fmodUser::fmodUserClass::playSound("Menu_enter", 1.5f, 0.0f);
 		pauseState = 0;
@@ -2066,6 +2092,7 @@ bool App::renderVideo()
 		if (frame->getFrameNumber() >= (endframe - 1)){
 			clip->stop();
 			mgr->destroyVideoClip(clip);
+			fmodUser::fmodUserClass::stopSounds();
 			clip = nullptr;
 			mgr = nullptr;
 			return false;
@@ -2219,4 +2246,32 @@ void App::renderChapterSelectionMenu()
 		break;
 	}
 	Render::getSwapChain()->Present(0, 0);
+}
+
+void App::playSong(){
+	if (levelE != nullptr) {
+		CLevelData* lvl(levelE->get<CLevelData>());
+		lvl->playSong();
+	}
+}
+
+void App::stopSong(){
+	if (levelE != nullptr) {
+		CLevelData* lvl(levelE->get<CLevelData>());
+		lvl->stopSong();
+	}
+}
+
+void App::pauseSong(){
+	if (levelE != nullptr) {
+		CLevelData* lvl(levelE->get<CLevelData>());
+		lvl->pauseSong();
+	}
+}
+
+void App::resumeSong(){
+	if (levelE != nullptr) {
+		CLevelData* lvl(levelE->get<CLevelData>());
+		lvl->resumeSong();
+	}
 }
