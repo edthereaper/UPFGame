@@ -52,14 +52,17 @@ AABB culling_t::bakeCulling(const AABB& aabb, const XMMATRIX& world)
     XMStoreFloat3(&wy, world.r[1]);
     XMStoreFloat3(&wz, world.r[2]);
 
-    XMFLOAT4 newHSize;
+    XMFLOAT3 newHSize;
     newHSize.x = baseHSize.x * fabsf(wx.x) + baseHSize.y * fabsf(wy.x) + baseHSize.z * fabsf(wz.x);
     newHSize.y = baseHSize.x * fabsf(wx.y) + baseHSize.y * fabsf(wy.y) + baseHSize.z * fabsf(wz.y);
     newHSize.z = baseHSize.x * fabsf(wx.z) + baseHSize.y * fabsf(wy.z) + baseHSize.z * fabsf(wz.z);
-    newHSize.w = 1.0;
-
     ret.setCenter(XMVector3TransformCoord( aabb.getCenter(), world));
-    ret.setHSize(XMLoadFloat4(&newHSize));
+    ret.setHSize(XMVectorAbs(XMLoadFloat3(&newHSize)));
+    
+#if defined(_DEBUG) && defined(SPECIAL_AABB_CHECKS)
+    assert(!ret.isInvalid());
+#endif
+
     return ret;
 }
 

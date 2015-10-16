@@ -24,6 +24,10 @@ class CInstancedMesh {
             using CullingAABB::dirty;
         };
 
+        CullingAABB aabb;
+        bool doRecalculateAABB = false;
+        void recalculateAABB();
+
         class Culler {
             private:
                 CInstancedMesh* self;
