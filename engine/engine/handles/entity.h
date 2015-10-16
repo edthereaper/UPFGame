@@ -242,6 +242,12 @@ class EntityListManager {
                 i.second.forall([](const Handle&){});
             }
         }
+        static inline void clearLists() {
+            for (auto& i : lists) {
+                i.second.clear();
+            }
+            lists.clear();
+        }
 
 };
 

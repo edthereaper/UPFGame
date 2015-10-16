@@ -8,6 +8,8 @@
 #include "handles/entity.h"
 using namespace component;
 
+#include "render/render_utils.h"
+
 using namespace DirectX;
 using namespace utils;
 
@@ -51,6 +53,18 @@ uint32_t CInstancedMesh::getFreshDataIndex(unsigned index)
     return (uint32_t)instanceExtraData->size()-1;
 }
 
+
+void CInstancedMesh::recalculateAABB()
+{
+    CAABB* baseAABB = Handle(this).getBrother<CAABB>();
+    auto& i = dataBuffer->begin();
+    aabb = culling_t::bakeCulling(*baseAABB, i->world);
+    for(++i; i != dataBuffer->end(); ++i) {
+        auto newAABB = culling_t::bakeCulling(*baseAABB, i->world);
+        aabb.expand(newAABB.getMin(), newAABB.getMax());
+    }
+    doRecalculateAABB = false;
+}
 unsigned CInstancedMesh::addInstance(instance_t&& instance)
 {
     assert(dataBuffer != nullptr);
@@ -63,6 +77,21 @@ unsigned CInstancedMesh::addInstance(instance_t&& instance)
     dataBuffer->push_back(instance);
     dirty = true;
     changed = true;
+
+    CAABB* baseAABB = Handle(this).getBrother<CAABB>();
+    auto newAABB = culling_t::bakeCulling(*baseAABB, instance.world);
+
+    if (baseAABB->isInvalid()) {
+        doRecalculateAABB = true;
+    } else if (!doRecalculateAABB) {
+        if (aabb.isInvalid()) {
+            aabb = newAABB;
+        } else {
+            aabb.expand(newAABB.getMin(), newAABB.getMax());
+        }
+    }
+
+    doRecalculateAABB = true;
     return instance.userDataB;
 }
 
@@ -129,6 +158,7 @@ bool CInstancedMesh::removeInstance(unsigned i)
     //remove duplicated back
     dataBuffer->pop_back();
 
+    doRecalculateAABB = true;
     dirty = true;
     changed = true;
     return true;
@@ -187,7 +217,10 @@ bool CInstancedMesh::replaceInstance(
             next.userDataB = i->userDataB;
             *i = next;
             dirty = true;
-            if (substantialChange) {changed = true;}
+            if (substantialChange) {
+                doRecalculateAABB = true;
+                changed = true;
+            }
             return true;
         }
     }
@@ -201,7 +234,10 @@ bool CInstancedMesh::replaceInstanceWorld(
     assert(index < nInstances);
     getInstance(index).world = next;
     dirty = true;
-    if (substantialChange) {changed = true;}
+    if (substantialChange) {
+        doRecalculateAABB = true;
+        changed = true;
+    }
     return true;
 }
 
@@ -213,6 +249,16 @@ bool CInstancedMesh::replaceInstanceWorld(
 
 size_t CInstancedMesh::cull(const Culling::CullerDelegate& cullerDelegate)
 {
+    if (doRecalculateAABB) {
+        recalculateAABB();
+    }
+    AABB xaabb(aabb);
+    xaabb.skinAABB(aabbSkin);
+    xaabb.scaleAABB(aabbScale);
+    if (!cullerDelegate.cull(xaabb)) {
+        return 0;
+    }
+
 #if defined(CULLING_SKIP)
     return dataBuffer->size();
 #endif
@@ -284,14 +330,22 @@ void CInstancedMesh::drawAABBs(const Color& c)
 void CInstancedMesh::drawAABBs()
 {
     if (dataBuffer == nullptr) {return;}
-    for (const auto& i : *dataBuffer) {
-        instanceExtraData->at(i.userDataB).draw(
+
 #if defined(ALL_INSTANCES_SAME_AABB_COLOR) && defined(_DEBUG)
-            dbgColor
+    const auto color = dbgColor;
 #else
-            Color::MAGENTA
+    const auto color = Color::MAGENTA;
 #endif
-            );
+
+    CullingAABB aabbCopy(aabb);
+    aabb.draw(XMVECTOR(color) + one_v*0.25f);
+    aabbCopy.skinAABB(0.01f);
+    aabbCopy.draw(XMVECTOR(color) + one_v*0.45f);
+    aabbCopy.skinAABB(0.01f);
+    aabbCopy.draw(XMVECTOR(color) + one_v*0.50f);
+
+    for (const auto& i : *dataBuffer) {
+        instanceExtraData->at(i.userDataB).draw(color);
     }
 }
 

@@ -1,7 +1,6 @@
 #include "mcv_platform.h"
 #include "app.h"
 
-#define PRINT_FPS_FONT          //print fps on screen (comment out in actual release versions)
 #ifdef _DEBUG
 #define PRINT_FPS_FONT          //print fps on screen
 #undef PRINT_FPS                //print fps using dbg()
@@ -625,24 +624,13 @@ void App::loadlvl()
     dbg("Loading level %d...\n", gamelvl);
 
     Handle::setCleanup(true);
-
-    auto entityMan = component::getManager<Entity>();
-    entityMan->forall<void>([](Entity* e) {e->postMsg(MsgDeleteSelf());});
-    MessageManager::dispatchPosts();
+    PaintManager::clear();
     CSmokeTower::resetFX();
 
-    Handle::setCleanup(false);
-	EntityListManager::get(CEnemy::TAG).clear();
-	EntityListManager::get(CTrampoline::TAG).clear();
-	EntityListManager::get(CCannon::TAG).clear();
-	EntityListManager::get(CLiana::TAG).clear();
-	EntityListManager::get(CCreep::TAG).clear();
-	EntityListManager::get(CProp::TAG).clear();
-	EntityListManager::get(CBoss::TAG).clear();
-	EntityListManager::get(CSmokePanel::TAG).clear();
-	EntityListManager::get(logic::Trigger_AABB_TAG).clear();
+	EntityListManager::clearLists();
     
-    PaintManager::clear();
+    component::getManager<Entity>()->clear();
+    Handle::setCleanup(false);
     PaintManager::load();
 
 	char level[20];

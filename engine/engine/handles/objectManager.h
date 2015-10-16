@@ -197,6 +197,15 @@ class ObjectManager : public HandleManager {
                 obj->init();
             }
 	    }
+        
+	    void clear() {
+		    object_t* obj = objects;
+		    uint32_t num = size;
+		    for (; num--; obj++) {
+                obj->~object_t();
+            }
+            size = 0;
+	    }
 
         template <class R_TYPE>
         void forall(std::function<R_TYPE(TObj*)> fn, bool isUpdating = false) {
