@@ -134,6 +134,12 @@ void PlayerAttackBtExecutor::shoot(bool isMega, bool aiming)
 	//The front value varies from the begining of the func shot looking at the back
 	bullet->setup(armPoint->getPosHand(), vel,
         XMQuaternionRotationAxis(yAxis_v, getYawFromVector(target - armPoint->getPosHand())));
+	char cstr[32] = "vine_shoot";
+	int randomV = rand_uniform(3, 1);
+	char randomC[32] = "";
+	sprintf(randomC, "%d", randomV);
+	strcat(cstr, randomC);
+	fmodUser::fmodUserClass::playSound(cstr, 1.0f, 0.0f);
 	((Entity*)meEntity)->sendMsg(MsgPlayerHasShot());
 }
 

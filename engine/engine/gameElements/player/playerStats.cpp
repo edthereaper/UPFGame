@@ -318,7 +318,15 @@ namespace gameElements {
 			health -= amount;
 			playerDamaged = true;
 			if (health > 0){
-				animPlugger->plug(PLUG_DAMAGE);
+				if (!dmgFromFalling){
+					char cstr[32] = "vine_damage";
+					int randomV = rand_uniform(2, 1);
+					char randomC[32] = "";
+					sprintf(randomC, "%d", randomV);
+					strcat(cstr, randomC);
+					fmodUser::fmodUserClass::playSound(cstr, 1.5f, 0.0f);
+					animPlugger->plug(PLUG_DAMAGE);
+				}
 				if (health > HP_ALERT){
 					alertLowHP = true;
 				}

@@ -287,6 +287,14 @@ namespace gameElements {
 				else{
 					CAnimationPlugger* aniP = ((Entity*)meEntity)->get<CAnimationPlugger>();
 					aniP->plug(0xB036);
+					char cstr[32] = "enemy_damage";
+					int randomV = rand_uniform(3, 1);
+					char randomC[32] = "";
+					sprintf(randomC, "%d", randomV);
+					strcat(cstr, randomC);
+					Entity* me = meEntity;
+					CTransform* ctransf = me->get<CTransform>();
+					fmodUser::fmodUserClass::play3DSingleSound(cstr, ctransf->getPosition(), 0.8f);
 					lastEvent = E_SHOT;
 				}
 			}
