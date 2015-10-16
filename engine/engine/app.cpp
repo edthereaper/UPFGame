@@ -355,6 +355,7 @@ void App::loadConfig()
 	config.yres = GetPrivateProfileInt("display", "y", defConfig.yres, ".\\config.ini");
 	GetPrivateProfileString("display", "windowed", "true", buffer, ARRAYSIZE(buffer) - 1, ".\\config.ini");
 #endif
+	xboxPadSensiblity = GetPrivateProfileInt("sensibility", "xbox", 5, ".\\config.ini");
 	//Check the desktop resolution, if its lower than the resolution set in config. Set the resolution same as desktop.
 	RECT desktop;
 	const HWND hDesktop = GetDesktopWindow();
@@ -362,7 +363,6 @@ void App::loadConfig()
 	if (config.xres > desktop.right)	config.xres = desktop.right - desktop.left;
 	if (config.yres > desktop.bottom)	config.yres = desktop.bottom - desktop.top;
 	config.windowed = !strcmp(buffer, "true");
-
 }
 
 CamCannonController cam1P;
@@ -447,14 +447,8 @@ void App::xboxControllerKeys()
 	if (xboxController.State._buttons[GamePadXBOXController::GamePad_Button_X].isRelease())					App::get().getPad().onKey(XINPUT_GAMEPAD_X, false);
 	if (xboxController.State._buttons[GamePadXBOXController::GamePad_Button_Y].isHit())						App::get().getPad().onKey(XINPUT_GAMEPAD_Y, true);
 	if (xboxController.State._buttons[GamePadXBOXController::GamePad_Button_Y].isRelease())					App::get().getPad().onKey(XINPUT_GAMEPAD_Y, false);
-	//if (xboxController.State._buttons[GamePadXBOXController::GamePad_Button_BACK].isHit())					App::get().getPad().onKey(XINPUT_GAMEPAD_BACK, true);
-	//if (xboxController.State._buttons[GamePadXBOXController::GamePad_Button_BACK].isRelease())				App::get().getPad().onKey(XINPUT_GAMEPAD_BACK, false);
 	if (xboxController.State._buttons[GamePadXBOXController::GamePad_Button_START].isHit())					App::get().getXboxPad().onKey(XINPUT_GAMEPAD_START, true);
 	if (xboxController.State._buttons[GamePadXBOXController::GamePad_Button_START].isRelease())				App::get().getXboxPad().onKey(XINPUT_GAMEPAD_START, false);
-	//if (xboxController.State._buttons[GamePadXBOXController::GamePad_Button_LEFT_SHOULDER].isHit())			App::get().getPad().onKey(XINPUT_GAMEPAD_LEFT_SHOULDER, true);
-	//if (xboxController.State._buttons[GamePadXBOXController::GamePad_Button_LEFT_SHOULDER].isRelease())		App::get().getPad().onKey(XINPUT_GAMEPAD_LEFT_SHOULDER, false);
-	//if (xboxController.State._buttons[GamePadXBOXController::GamePad_Button_RIGHT_SHOULDER].isHit())		App::get().getPad().onKey(XINPUT_GAMEPAD_RIGHT_SHOULDER, true);
-	//if (xboxController.State._buttons[GamePadXBOXController::GamePad_Button_RIGHT_SHOULDER].isRelease())	App::get().getPad().onKey(XINPUT_GAMEPAD_RIGHT_SHOULDER, false);	
 	if (xboxController.State._buttons[GamePadXBOXController::GamePad_Button_DPAD_DOWN].isHit())				App::get().getXboxPad().onKey(XINPUT_GAMEPAD_DPAD_DOWN, true);
 	if (xboxController.State._buttons[GamePadXBOXController::GamePad_Button_DPAD_DOWN].isRelease())			App::get().getXboxPad().onKey(XINPUT_GAMEPAD_DPAD_DOWN, false);
 	if (xboxController.State._buttons[GamePadXBOXController::GamePad_Button_DPAD_UP].isHit())				App::get().getXboxPad().onKey(XINPUT_GAMEPAD_DPAD_UP, true);
@@ -501,7 +495,8 @@ void App::xboxControllerKeys()
 	else{
 	App::get().getPad().onKey(VK_LBUTTON, false);
 	}*/
-	Mouse::setSysXboxController(int(xboxController.State._right_thumbstickX * 50), int(-xboxController.State._right_thumbstickY * 30));
+	Mouse::setSysXboxController(int(xboxController.State._right_thumbstickX * 400 * elapsed * xboxPadSensiblity),
+								int(-xboxController.State._right_thumbstickY * 200 * elapsed * xboxPadSensiblity));
 }
 
 void App::addMappings()
@@ -1014,13 +1009,13 @@ bool App::doGameOver()
 		xboxControllerKeys();
 		xboxController.update();
 		xboxPad.update();
-		if ((xboxPad.getState(CONTROLS_MENU_UP).isPressed() ||
-			xboxPad.getState(CONTROLS_MENU_LEFT).isPressed()) && pauseState == 1){
+		if ((pad.getState(CONTROLS_UP).isPressed() ||
+			pad.getState(CONTROLS_LEFT).isPressed()) && pauseState == 1){
 			fmodUser::fmodUserClass::playSound("Menu_move", 1.0f, 0.0f);
 			pauseState = 0;
 		}
-		if ((xboxPad.getState(CONTROLS_MENU_DOWN).isPressed() ||
-			xboxPad.getState(CONTROLS_MENU_RIGHT).isPressed()) && pauseState == 0){
+		if ((pad.getState(CONTROLS_DOWN).isPressed() ||
+			pad.getState(CONTROLS_RIGHT).isPressed()) && pauseState == 0){
 			fmodUser::fmodUserClass::playSound("Menu_move", 1.0f, 0.0f);
 			pauseState = 1;
 		}
@@ -1336,11 +1331,13 @@ bool App::pauseMenu()
 		xboxControllerKeys();
 		xboxController.update();
 		xboxPad.update();
-		if (xboxPad.getState(CONTROLS_MENU_UP).isPressed() && pauseState == 1){
+		if ((pad.getState(CONTROLS_UP).isPressed() ||
+			pad.getState(CONTROLS_LEFT).isPressed()) && pauseState == 1){
 			fmodUser::fmodUserClass::playSound("Menu_move", 1.0f, 0.0f);
 			pauseState = 0;
 		}
-		if (xboxPad.getState(CONTROLS_MENU_DOWN).isPressed() && pauseState == 0){
+		if ((pad.getState(CONTROLS_DOWN).isPressed() ||
+			pad.getState(CONTROLS_RIGHT).isPressed()) && pauseState == 0){
 			fmodUser::fmodUserClass::playSound("Menu_move", 1.0f, 0.0f);
 			pauseState = 1;
 		}
@@ -1354,11 +1351,13 @@ bool App::pauseMenu()
 			return true;
 		}
 	}
-	if (pad.getState(CONTROLS_MENU_UP).isPressed() && pauseState == 1){
+	if ((pad.getState(CONTROLS_MENU_UP).isPressed() ||
+		pad.getState(CONTROLS_MENU_LEFT).isPressed()) && pauseState == 1){
 		fmodUser::fmodUserClass::playSound("Menu_move", 1.0f, 0.0f);
 		pauseState = 0;
 	}
-	if (pad.getState(CONTROLS_MENU_DOWN).isPressed() && pauseState == 0){
+	if ((pad.getState(CONTROLS_MENU_DOWN).isPressed() ||
+		pad.getState(CONTROLS_MENU_RIGHT).isPressed()) && pauseState == 0){
 		fmodUser::fmodUserClass::playSound("Menu_move", 1.0f, 0.0f);
 		pauseState = 1;
 	}
@@ -2098,15 +2097,15 @@ bool App::renderVideo()
 
 int App::updateMainMenu(){
 	pad.update();
-	if (xboxController.is_connected()){
+	if (xboxController.is_connected()){	
 		xboxControllerKeys();
 		xboxController.update();
 		xboxPad.update();
-		if (xboxPad.getState(CONTROLS_MENU_UP).isHit() && mainMenuState > 0){
+		if (pad.getState(CONTROLS_UP).isHit() && mainMenuState > 0){
 			fmodUser::fmodUserClass::playSound("Menu_move", 1.0f, 0.0f);
 			mainMenuState--;
 		}
-		if (xboxPad.getState(CONTROLS_MENU_DOWN).isHit() && mainMenuState < 3){
+		if (pad.getState(CONTROLS_DOWN).isHit() && mainMenuState < 3){
 			fmodUser::fmodUserClass::playSound("Menu_move", 1.0f, 0.0f);
 			mainMenuState++;
 		}
@@ -2168,11 +2167,11 @@ int App::updateChapterSelectionMenu(){
 		xboxControllerKeys();
 		xboxController.update();
 		xboxPad.update();
-		if (xboxPad.getState(CONTROLS_MENU_UP).isHit() && chapterSelectionState > 0){
+		if (pad.getState(CONTROLS_UP).isHit() && chapterSelectionState > 0){
 			fmodUser::fmodUserClass::playSound("Menu_move", 1.0f, 0.0f);
 			chapterSelectionState--;
 		}
-		if (xboxPad.getState(CONTROLS_MENU_DOWN).isHit() && chapterSelectionState < 4){
+		if (pad.getState(CONTROLS_DOWN).isHit() && chapterSelectionState < 4){
 			fmodUser::fmodUserClass::playSound("Menu_move", 1.0f, 0.0f);
 			chapterSelectionState++;
 		}

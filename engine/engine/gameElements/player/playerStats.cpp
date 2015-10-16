@@ -325,7 +325,7 @@ namespace gameElements {
 					sprintf(randomC, "%d", randomV);
 					strcat(cstr, randomC);
 					fmodUser::fmodUserClass::playSound(cstr, 1.5f, 0.0f);
-					animPlugger->plug(PLUG_DAMAGE);
+					if (((CPlayerMov*)me->get<CPlayerMov>())->canPlayPartialAnimation())		animPlugger->plug(PLUG_DAMAGE);
 				}
 				if (health > HP_ALERT){
 					alertLowHP = true;

@@ -269,6 +269,7 @@ class App {
 		bool loadingthreadVar = true;
 		utils::Counter<float> timerThreadAnim, timerGameOver;
 
+		int xboxPadSensiblity;
 		bool gameOverImg = false;
 		bool paused = false;
 		int pauseState = 0;

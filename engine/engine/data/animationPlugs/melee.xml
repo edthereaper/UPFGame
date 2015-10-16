@@ -48,7 +48,7 @@
 	<plug id="14" anim="run" type="cycle" delay="0.3" delayOut="0.3">
 		<on key="0xB019"/> <!--chase-->
 	</plug>
-	<plug id="15" anim="get_damage" type="action" delay="0.1" delayOut="0.1">
+	<plug id="15" anim="get_damage" type="action" delay="0.1" delayOut="0.1" repeat="true">
 		<on key="0xB036"/>
 	</plug>
 	<!-- UNPLUG CASE: if player dead stop combo -->
