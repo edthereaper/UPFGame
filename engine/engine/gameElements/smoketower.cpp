@@ -134,7 +134,7 @@ void CSmokeTower::reset()
 {
     auto& fsme(fsm.getExecutor());
 	fsme.active = false;
-	fsme.phase = 0;
+	fsme.phase = -1;
 	fsm.changeState(SmokeTowerFSMExecutor::states::STATE_waitingToInit);
 	CTransform* meT = Handle(this).getBrother<CTransform>();
     meT->setPosition(XMVectorSetY(meT->getPosition(), initH));

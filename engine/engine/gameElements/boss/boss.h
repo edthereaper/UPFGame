@@ -54,6 +54,10 @@ class BossBtExecutor {
         static const float HAMMER_EARTHQUAKE_SHAKE_FREQUENCY;
         static const float CAM_SHAKE_AMOUNT;
         static const float CAM_SHAKE_FREQ;
+        static const float CAM_SHAKE_SMOKE_AMOUNT;
+        static const float CAM_SHAKE_SMOKE_FREQ;
+        static const float CAM_SHAKE_SMOKE_AFTER_AMOUNT;
+        static const float CAM_SHAKE_SMOKE_AFTER_FREQ;
         static const float HAMMER_RESISTING_SHAKE_AMPLITUDE;
         static const float HAMMER_RESISTING_SHAKE_FREQUENCY;
         static const float FLARE_SPEED;
@@ -181,9 +185,9 @@ class BossBtExecutor {
         uint8_t shotsFired = 0;
         float hammerY = 0;
         float currentHammerY = 0;
-		
-		int currentEnemyCreated = 0;
+
 		unsigned nSpawn = 0;
+		unsigned iSpawn = 0;
 		unsigned failed = 0;
 
         bool waitingForWeakSpot = false;
@@ -204,7 +208,7 @@ class BossBtExecutor {
         spawn_t minions[12];
 
     private:
-        void spawnMinions(float elapsed);
+        void spawnMinion(float elapsed);
         void shootFlare();
 
         //conditions
@@ -261,6 +265,7 @@ class BossBtExecutor {
         ret_e endSmoking(float);
         ret_e startWallOfSmoke(float);
         ret_e sendMinions(float);
+        ret_e waitForSmoke(float);
         ret_e endWallOfSmoke(float);
         
     public:

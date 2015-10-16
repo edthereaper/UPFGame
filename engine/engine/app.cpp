@@ -703,8 +703,8 @@ void App::loadlvl()
     Handle skybox_h = getManager<CSkyBox>()->createObj();
     camera_e->add(skybox_h);
     CSkyBox* skybox = skybox_h;
-    skybox->setTextureA("SkyBox");
-    skybox->setTextureB("Sunset");
+    skybox->setTextureB("skybox_dirty");
+    skybox->setTextureA("skybox_clean");
     skybox->init();
     skyboxTint_h = getManager<CTint>()->createObj();
 
