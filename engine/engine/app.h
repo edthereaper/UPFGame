@@ -120,7 +120,8 @@ class App {
 		render::Texture* videoTexture;
 		ID3D11ShaderResourceView* m_shaderResourceView;
 		unsigned long endframe = 0;
-
+        
+		bool exit = false;
 		bool playAgain = false;
 		bool gameisPaused = false;
         utils::Pad pad;
@@ -324,6 +325,8 @@ class App {
 #endif
 
 		void mistEffect(bool enable);
+
+        inline void setExit(bool b=true) {exit=b;}
 };
 
 #endif

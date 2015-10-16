@@ -1062,7 +1062,7 @@ bool App::doGameOver()
 bool App::doFrame()
 {
 	static bool debugPause = false;
-    if (pad.getState(APP_QUIT).isHit()) {return false;}
+    if (exit || pad.getState(APP_QUIT).isHit()) {return false;}
 
 	if (xboxController.is_connected()){
 		if (xboxPad.getState(APP_PAUSE).isHit()) { paused = true; }
