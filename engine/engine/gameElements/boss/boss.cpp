@@ -35,7 +35,8 @@ using namespace animation;
 using namespace particles;
 
 //DEBUG
-//#define ONLY_PUNCHES
+#define ONLY_PUNCHES
+//#define ONLY_MINIONS
 
 namespace behavior {
 
@@ -64,6 +65,7 @@ void BossBt::initType()
 	BT_CREATECHILD_A (SETUP_IDLE,          BOSS,                CHAIN,                       setupIdle         );
 	BT_CREATECHILD_A (IDLE,                SETUP_IDLE,          LEAF,                        wait              );
 	BT_CREATECHILD   (ATTACK,              BOSS,                PRIORITY                                       );
+#if !defined(ONLY_MINIONS)
 	BT_CREATECHILD_C (PUNCH,               ATTACK,              SEQUENCE,   punchCond                          );
 	BT_CREATECHILD_A (PREPARE_WARNING,     PUNCH,               CHAIN,                       setupPunchWarning );
 	BT_CREATECHILD_A (WARNING,             PREPARE_WARNING,     LEAF,                        punchWarning      );
@@ -95,8 +97,10 @@ void BossBt::initType()
 	BT_CREATECHILD_A (PREPARE_SLOW_RAISE,  RAISE_UNTOUCHED,     CHAIN,                       setupRaiseArmSlow  );
 	BT_CREATECHILD_A (RAISE_ARM_SLOWLY,    PREPARE_SLOW_RAISE,  LEAF,                        waitForHammer     );
 	BT_CREATECHILD_A (RAISE_HEALTHY_END_FX,RAISE_UNTOUCHED,     LEAF,                        raiseHealthyEndFx  );
+#endif
 #ifndef ONLY_PUNCHES
 	BT_CREATECHILD   (REGULAR_ATTACK,      ATTACK,              RANDOM                                         );
+#if !defined(ONLY_MINIONS)
 	BT_CREATECHILD   (FLAMES,              REGULAR_ATTACK,      SEQUENCE                                       );
 	BT_CREATECHILD_A (SETUP_HEAT,          FLAMES,              CHAIN,                       setupHeat         );
 	BT_CREATECHILD_A (HEAT,                SETUP_HEAT,          LEAF,                        heat              );
@@ -109,15 +113,18 @@ void BossBt::initType()
 	BT_CREATECHILD_A (SETUP_SMOKING,       FLAMES,              CHAIN,                       setupSmoking      );
 	BT_CREATECHILD_A (SMOKING,             SETUP_SMOKING,       LEAF,                        smoking           );
     BT_CREATECHILD_A (SMOKING_END,         FLAMES,              LEAF,                        endSmoking        );
+#endif
 	BT_CREATECHILD   (SPAWN_ENEMIES,       REGULAR_ATTACK,      SEQUENCE                                       );
 	BT_CREATECHILD_A (WALL_OF_SMOKE,       SPAWN_ENEMIES,       LEAF,                        startWallOfSmoke  );
 	BT_CREATECHILD_A (WAIT_FOR_MINIONS,    SPAWN_ENEMIES,       LEAF,                        wait              );
 	BT_CREATECHILD_A (SEND_MINIONS,        SPAWN_ENEMIES,       LEAF,                        sendMinions       );
-	BT_CREATECHILD_A (WAIT_FOR_SMOKE,      SPAWN_ENEMIES,       LEAF,                        wait              );
+	BT_CREATECHILD_A (WAIT_FOR_SMOKE,      SPAWN_ENEMIES,       LEAF,                        waitForSmoke      );
     BT_CREATECHILD_A (END_WALL_OF_SMOKE,   SPAWN_ENEMIES,       LEAF,                        endWallOfSmoke    );
 
-
+    
+#if !defined(ONLY_MINIONS)
     BT_SET_WEIGHT(FLAMES, 7);
+#endif
     BT_SET_WEIGHT(SPAWN_ENEMIES, 5);
 #endif
 }
@@ -133,7 +140,7 @@ const float BossBtExecutor::TIME_SMOKING = 1.0f;
 const float BossBtExecutor::TIME_ARM_RESIST_DELAY = 1.0f;
 const float BossBtExecutor::TIME_ARM_RESISTING = 1.5f;
 const float BossBtExecutor::TIME_SEND_MINIONS_BEFORE = 2.f;
-const float BossBtExecutor::TIME_SEND_MINIONS_AFTER = 3.0f;
+const float BossBtExecutor::TIME_SEND_MINIONS_AFTER = 3.5f;
 const float BossBtExecutor::HAMMER_DROP_ACCEL = GRAVITY+3.5f;
 const float BossBtExecutor::HAMMER_DROP_SPEED = GRAVITY;
 const float BossBtExecutor::HAMMER_SUDDEN_RAISE_TIME = 0.25f;
@@ -146,6 +153,10 @@ const float BossBtExecutor::HAMMER_EARTHQUAKE_SHAKE_AMPLITUDE = 0.075f;
 const float BossBtExecutor::HAMMER_EARTHQUAKE_SHAKE_FREQUENCY = 9.f;
 const float BossBtExecutor::CAM_SHAKE_AMOUNT = 0.04f;
 const float BossBtExecutor::CAM_SHAKE_FREQ = 13.f;
+const float BossBtExecutor::CAM_SHAKE_SMOKE_AMOUNT = 0.01f;
+const float BossBtExecutor::CAM_SHAKE_SMOKE_FREQ = 16.f;
+const float BossBtExecutor::CAM_SHAKE_SMOKE_AFTER_AMOUNT = 0.02f;
+const float BossBtExecutor::CAM_SHAKE_SMOKE_AFTER_FREQ = 16.f;
 
 const float BossBtExecutor::HAMMER_RESISTING_SHAKE_AMPLITUDE = 0.2f;
 const float BossBtExecutor::HAMMER_RESISTING_SHAKE_FREQUENCY = 100.f;
@@ -163,7 +174,7 @@ const float BossBtExecutor::TIME_DAMAGE_SMOKE[N_STAGES] = {2.5f, 2.5f, 2.5f};
 const float BossBtExecutor::TIME_EARTHQUAKE[N_STAGES] = {2.5f, 2.0f, 1.5f};
 
 const float BossBtExecutor::SKYBOX_BLEND[N_STAGES] = {0.75f, 0.85f, 1.0f};
-const float BossBtExecutor::SKYBOX_BRIGHT[N_STAGES] = {0.30f, 0.45f, 0.60f};
+const float BossBtExecutor::SKYBOX_BRIGHT[N_STAGES] = {0.30f, 0.37f, 0.45f};
 const float BossBtExecutor::BOSS_LIGHT[N_STAGES] = {0.00f, 0.25f, 0.50f};
 
 
@@ -227,108 +238,44 @@ const std::vector<uint32_t> BossBtExecutor::smokePatterns[N_STAGES] = {
      }
     };
 
-void BossBtExecutor::spawnMinions(float elapsed)
+void BossBtExecutor::spawnMinion(float elapsed)
 {
- //   unsigned nSpawn = 0;
- //   unsigned failed = 0;
-
- //   while (nSpawn < MIN_SPAWN[stage] && failed < ARRAYSIZE(minions)) {
-
- //       failed = 0;
-
- //       for (auto& m : minions) {
- //           
-	//		if ((!m.entity.isValid() || !m.entity.hasSon<CTransformable>() ||
- //               ((CTransformable*)m.entity.getSon<CTransformable>())->isTransformed())) {
- //              
-	//			if (MINION_CHANCE[stage]()) {
- //                   if(m.entity.isValid()) {
- //                       Entity* e = m.entity;
- //                       e->postMsg(MsgDeleteSelf());
- //                   }
- //                 
-	//				m.entity = getManager<Entity>()->createObj();
- //                   Entity* e = m.entity;
- //                   if (FLARE_CHANCE[stage]()) {
- //                       PrefabManager::get().prefabricateComponents("components/flare", m.entity);
- //                   } else {
- //                       PrefabManager::get().prefabricateComponents("components/melee", m.entity);
- //                   }
-
-	//	            //We up the enemy to avoid collisions with the ground
-	//	            CTransform* transform = e->get<CTransform>();
- //                   transform->set(m.point);
-	//	            transform->setPosition(transform->getPosition() + XMVectorSet(0, 3, 0, 0));
- //                   EntityListManager::get(CEnemy::TAG).add(e);
- //                   e->init();
- //                   nSpawn++;
- //              
-	//			}
- //           } else 
- //               failed++;
- //           
- //       }
- //   }
- //   EntityListManager::get(CEnemy::TAG).broadcast(MsgSetPlayer(playerEntity));
-	//EntityListManager::get(CEnemy::TAG).broadcast(MsgSetBichito(bichitoEntity));
-
-
-	if (currentEnemyCreated < ARRAYSIZE(minions)){
-
-		auto& m = minions[currentEnemyCreated];
-           
-		if ((!m.entity.isValid() || !m.entity.hasSon<CTransformable>() ||
-			((CTransformable*)m.entity.getSon<CTransformable>())->isTransformed())) {
-             
-			if (MINION_CHANCE[stage]()) {
-
-				if(m.entity.isValid()) {
-					Entity* e = m.entity;
-					e->postMsg(MsgDeleteSelf());
-				}
-                
-				m.entity = getManager<Entity>()->createObj();
-				Entity* e = m.entity;
-				if (FLARE_CHANCE[stage]()) {
-					PrefabManager::get().prefabricateComponents("components/flare", m.entity);
-				} else {
-					PrefabManager::get().prefabricateComponents("components/melee", m.entity);
-				}
-
-				//We up the enemy to avoid collisions with the ground
-				CTransform* transform = e->get<CTransform>();
-				transform->set(m.point);
-				transform->setPosition(transform->getPosition() + XMVectorSet(0, 3, 0, 0));
-				
-				CEnemy *enemy = e->get<CEnemy>();
-				enemy->receive(MsgSetPlayer(playerEntity));
-				enemy->receive(MsgSetBichito(bichitoEntity));
-			
-				if (e->has<CMelee>()){
-
-					CMelee *melee = e->get<CMelee>();
-					melee->receive(MsgSetPlayer(playerEntity));
-				}else if (e->has<CFlare>()){
-					
-					CFlare *flare = e->get<CFlare>();
-					flare->receive(MsgSetPlayer(playerEntity));
-				}
-				
-				EntityListManager::get(CEnemy::TAG).add(e);
-				e->init();
-
-				nSpawn++;
-				currentEnemyCreated++;
-
-				/*
-				EntityListManager::get(CEnemy::TAG).broadcast(MsgSetPlayer(playerEntity));
-				EntityListManager::get(CEnemy::TAG).broadcast(MsgSetBichito(bichitoEntity));*/
-			}else
-				failed++;
-		} else 
-			failed++;
-
+    auto& m = minions[iSpawn];
+        
+    if ((!m.entity.isValid() || !m.entity.hasSon<CTransformable>() ||
+    	((CTransformable*)m.entity.getSon<CTransformable>())->isTransformed())) {
+          
+    	if (MINION_CHANCE[stage]()) {
+    		if(m.entity.isValid()) {
+    			Entity* e = m.entity;
+    			e->postMsg(MsgDeleteSelf());
+    		}
+    		m.entity = getManager<Entity>()->createObj();
+    		Entity* e = m.entity;
+    		if (FLARE_CHANCE[stage]()) {
+    			PrefabManager::get().prefabricateComponents("components/flare", m.entity);
+    		} else {
+    			PrefabManager::get().prefabricateComponents("components/melee", m.entity);
+    		}
+    
+    		//We up the enemy to avoid collisions with the ground
+    		CTransform* transform = e->get<CTransform>();
+    		transform->set(m.point);
+    		transform->setPosition(transform->getPosition() + XMVectorSet(0, 0.45f, 0, 0));
+    		
+    		e->sendMsg(MsgSetPlayer(playerEntity));
+    		e->sendMsg(MsgSetBichito(bichitoEntity));
+    		
+    		EntityListManager::get(CEnemy::TAG).add(e);
+    		e->init();
+    
+    		nSpawn++;
+    	}
+    } else {
+    	failed++;
 	}
+    iSpawn++;
+    iSpawn %= ARRAYSIZE(minions);
 }
 
 bool BossBtExecutor::firstTime(float) const
@@ -807,11 +754,14 @@ ret_e BossBtExecutor::dropCannon(float elapsed)
 	
 	//TODO: export a travelling animation in MAX
     Entity* cannon = hammers[currentHammer].cannon;
-    CFlyingMobile* fm = cannon->get<CFlyingMobile>();
+    /*CFlyingMobile* fm = cannon->get<CFlyingMobile>();
 	
     assert(fm != nullptr);
     
-	fm->setParameters(hammers[currentHammer].cannonMark, 15.f, deg2rad(60), true);
+	fm->setParameters(hammers[currentHammer].cannonMark, 15.f, deg2rad(60), true);*/
+	CMaxAnim *anim = cannon->get<CMaxAnim>();
+//	anim->setTiming(1.0);
+	anim->setPlay(true);
 	fmodUser::fmodUserClass::playSound("boss_cannonout", 1.0f, 0.0f);
     return DONE_QUICKSTEP;
 }
@@ -1039,41 +989,49 @@ ret_e BossBtExecutor::startWallOfSmoke(float elapsed)
 
     timer.set(-TIME_SEND_MINIONS_BEFORE);
 	//fmodUser::fmodUserClass::playSound("boss_invokeenemies", 1.0f, 0.0f);
+
+    nSpawn = 0;
+    failed = 0;
+    iSpawn = 0;
+    
+    CCamera* cam = App::get().getCamera().getSon<CCamera>();
+    cam->setShake(CAM_SHAKE_SMOKE_AMOUNT, CAM_SHAKE_SMOKE_FREQ);
+
     return DONE;
 }
 
 ret_e BossBtExecutor::sendMinions(float elapsed)
 {
-//    //TODO: start fx
-//    Entity* me(meEntity);
-//
-//#if defined(_DEBUG) && defined(DEBUG_BOSS_TINTING)
-//    CTint* meTint = me->get<CTint>();
-//    meTint->set(Color::CERULEAN);
-//    RenderManager::updateKeys(me);
-//#endif
-//
-//    spawnMinions(elapsed);
-//    timer.set(-TIME_SEND_MINIONS_BEFORE);
-//    return DONE;
-/*
-		EntityListManager::get(CEnemy::TAG).broadcast(MsgSetPlayer(playerEntity));
-	EntityListManager::get(CEnemy::TAG).broadcast(MsgSetBichito(bichitoEntity));*/
+	if (nSpawn < MIN_SPAWN[stage] && failed < ARRAYSIZE(minions)) {
 
-	int size = ARRAYSIZE(minions);
+        #if defined(_DEBUG) && defined(DEBUG_BOSS_TINTING)
+            CTint* meTint = me->get<CTint>();
+            meTint->set(Color::CERULEAN);
+            RenderManager::updateKeys(me);
+        #endif
+            
+        CCamera* cam = App::get().getCamera().getSon<CCamera>();
+        cam->setShake(CAM_SHAKE_SMOKE_AFTER_AMOUNT, CAM_SHAKE_SMOKE_AFTER_FREQ);
+		spawnMinion(elapsed);
+		return STAY;
+	} else {
+		timer.set(-TIME_SEND_MINIONS_AFTER);
+        EntityListManager::get(CEnemy::TAG).broadcast(MsgSetPlayer(playerEntity));
+	    EntityListManager::get(CEnemy::TAG).broadcast(MsgSetBichito(bichitoEntity));
+        return DONE;
+    }
+}
 
-	if (currentEnemyCreated >= size || failed >= size){
 
-		nSpawn = 0;
-		failed = 0;
-		currentEnemyCreated = 0;
-		timer.set(-TIME_SEND_MINIONS_BEFORE);
-		return DONE;
-	}
+ret_e BossBtExecutor::waitForSmoke(float elapsed)
+{
+    CCamera* cam = App::get().getCamera().getSon<CCamera>();
+    float f = std::cos(1 - M_PI_2f * -timer/TIME_SEND_MINIONS_AFTER);
+    float shakeAmount = CAM_SHAKE_SMOKE_AFTER_AMOUNT*f*f*f;
+    float shakeFreq = CAM_SHAKE_SMOKE_AFTER_FREQ*f*f*f;
+    cam->setShake(shakeAmount, shakeFreq);
 
-	spawnMinions(elapsed);
-	return STAY;
-	
+    return wait(elapsed);
 }
 
 ret_e BossBtExecutor::endWallOfSmoke(float elapsed)
@@ -1086,6 +1044,9 @@ ret_e BossBtExecutor::endWallOfSmoke(float elapsed)
     meTint->set(Color::BROWN);
     RenderManager::updateKeys(me);
 #endif
+    
+    CCamera* cam = App::get().getCamera().getSon<CCamera>();
+    cam->setShake(0, 0);
 
     return DONE;
 }
@@ -1175,8 +1136,10 @@ void CBoss::init()
         {
             Entity* cannon = system.cannon;
             CTransform* cannonT = cannon->get<CTransform>();
-            cannonT->set(marks.cannonTop[i]);
-            system.cannonMark = marks.cannonBottom[i];
+            /*cannonT->set(marks.cannonTop[i]);
+            system.cannonMark = marks.cannonBottom[i];*/
+			CMaxAnim *max = cannon->get<CMaxAnim>();
+			max->loadCannon(i+1);
 
             cannon->init(); 
         }
@@ -1240,7 +1203,7 @@ void CBoss::update(float elapsed)
 		}
 	}
     TransformableFSMExecutor::updateSpecialHighlights(elapsed,
-        action & BossBtExecutor::COD_HIGHLIGHT);
+        (action & BossBtExecutor::COD_HIGHLIGHT) != 0);
 }
 
 inline void CBoss::receive(const MsgEarthquake& msg)

@@ -644,17 +644,18 @@ void CLiana::revive(const MsgRevive&)
 {
     filter_t filter1(filter_t::NONE, filter_t::PLAYER|filter_t::PLAYERCANNON, filter_t::NONE);
     filter_t filter2(filter_t::NONE, filter_t::BULLET, filter_t::NONE);
-    removeFilters(filter2,true ,false);
-    setFilters   (filter1,false,true );
+    removeFilters(filter1 | filter2, true ,false);
+    setFilters   (filter1          , false,true );
     createFixedJoints();
 }
 
 void CLiana::reset()
 {
-	filter_t filter(filter_t::NONE, filter_t::PLAYER | filter_t::PLAYERCANNON, filter_t::NONE);
+	filter_t filter1(filter_t::NONE, filter_t::PLAYER | filter_t::PLAYERCANNON, filter_t::NONE);
 	filter_t filter2(filter_t::NONE, filter_t::BULLET, filter_t::NONE);
-	setFilters(filter | filter2, true, false);
-	removeFilters(filter2, false, true);
+	setFilters   (filter1 | filter2, true, false);
+	removeFilters(filter2          , false, true);
+    createFixedJoints();
 }
 
 }

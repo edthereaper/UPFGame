@@ -7,6 +7,14 @@
 using namespace gameElements;
 using namespace component;
 
+#include "app.h"
+#include "gameElements/props.h"
+#include "gameElements/gameMsgs.h"
+#include "fmod_User/fmodUser.h"
+using namespace fmodUser;
+using namespace DirectX;
+using namespace utils;
+
 namespace animation{
 
 	void CMaxAnim::init(){
@@ -34,7 +42,11 @@ namespace animation{
 		if (elem == "MaxAnim"){
 		
 			std::string name = atts.getString("name", "INVALID");
-			max = atts.getInt("max");
+			
+			std::string maxString = atts.getString("max","INVALID");
+			maxString = maxString.substr(0, maxString.size()-1);
+			max = atoi(maxString.c_str());
+
 			play = atts.getInt("isOn") ? true : false;
 			std::string type_ = atts.getString("type");
 
@@ -45,6 +57,16 @@ namespace animation{
 			else
 				type = MaxAnim::PROP_POS_ROT;
 
+			if (atts.has("tag1"))
+				tag1 = atts.getString("tag1","INVALID");
+
+			if (atts.has("tag2"))
+				tag2 = atts.getString("tag2","INVALID");
+
+			if (atts.has("tag3"))
+				tag3 = atts.getString("tag3","INVALID");
+			
+
 			load(name.c_str());
 		}
 
@@ -54,6 +76,16 @@ namespace animation{
 
 		char full_name[MAX_PATH];
 		sprintf(full_name, "%s/%s.anim", "data/animmax", name);
+
+		FileDataProvider fdp(full_name);
+		assert(fdp.isValid());
+		return load(fdp);
+	}
+
+	bool CMaxAnim::loadCannon(int tag) {
+
+		char full_name[MAX_PATH];
+		sprintf(full_name, "%s/Cannon%i.anim", "data/animmax", tag);
 
 		FileDataProvider fdp(full_name);
 		assert(fdp.isValid());
@@ -71,6 +103,16 @@ namespace animation{
 		keys.resize(size);
 		dp.read(&keys[0], keys.size() * sizeof(Key));
 		return true;
+	}
+
+	void CMaxAnim::enableCannon(){
+
+		Entity *me = Handle(this).getOwner();
+
+		fmodUser::fmodUserClass::playSound("boss_canonland", 1.0f, 0.0f);
+		CMaxAnim* maxAnim = me->get<CMaxAnim>();
+		maxAnim->setPostFinish(true);
+        me->sendMsg(MsgFlyingMobileEnded());
 	}
 
 	// Return true if the we went beyond the animation duration
@@ -120,7 +162,7 @@ namespace animation{
 			Key k;
 			k.trans = prev_key->trans + time_in_next * (next_key->trans - prev_key->trans);
 			
-			XMVECTOR lerpRotation = XMQuaternionSlerp(prev_key->rotation,next_key->rotation,0.01);
+			XMVECTOR lerpRotation = XMQuaternionSlerp(prev_key->rotation,next_key->rotation,0.01f);
 			k.rotation = prev_key->rotation + time_in_next * lerpRotation;
 
 
@@ -150,8 +192,16 @@ namespace animation{
 			if (!finish) 
 				finish = getTransform(curr_time);
 			else{
+				if (!postfinish) 
+				
+					play = false;
 
-				if (postfinish) play = false;
+					Entity *me = Handle(this).getOwner();
+					App &app = App::get();
+
+					if (me->has<CCannon>() && app.gamelvl == 4)
+						enableCannon();
+					
 				else{ 
 					finish = false; 
 					curr_time = 0;

@@ -25,7 +25,7 @@
 	<plug id="6" anim="reload" type="action" delay="0.2" delayOut="0.2">
 		<on key="0xC025"/>  <!--Reload-->
 	</plug>
-	<plug id="7" anim="get_damage" type="action" delay="0.1" delayOut="0.1">
+	<plug id="7" anim="get_damage" type="action" delay="0.1" delayOut="0.1" repeat="true">
 		<on key="0xB036"/>
 	</plug>
 </archetype>

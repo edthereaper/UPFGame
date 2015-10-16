@@ -505,6 +505,13 @@ namespace gameElements {
 				bt.getState() == PlayerMovBtExecutor::LIANA_EXIT) return true;
 			return false;
 		}
+		
+		inline bool canPlayPartialAnimation(){
+			if (bt.getState() == PlayerMovBtExecutor::CREEP_MOVE ||
+				bt.getState() == PlayerMovBtExecutor::CREEP_CLIMB ||
+				bt.getState() == PlayerMovBtExecutor::DASH_DURING) return false;
+			return true;
+		}
 
 		inline int getCannonState() { return bt.getExecutor().cannonTimeState; }
 

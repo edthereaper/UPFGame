@@ -33,15 +33,6 @@ namespace gameElements {
 bool FlyingMobileFSMExecutor::isComplete()
 {
     CTransform* t = meEntity.getSon<CTransform>();
-
-	/*dbg("position\n");
-	dbgXMVECTOR3(t->getPosition());
-	dbgXMVECTOR3(target.getPosition());
-	dbg("end_position\n");
-	dbg("rotation_rate\n");
-	dbg("%f",angleBetweenVectors(t->getFront(), target.getFront()));
-	dbg("end_rotation\n");
-*/
     return 
         (XMVectorSetY(t->getPosition(),0) == XMVectorSetY(target.getPosition(),0) &&
         angleBetweenVectors(t->getFront(), target.getFront()) < 5.f);

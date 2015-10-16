@@ -62,8 +62,13 @@ namespace animation{
 		float			  timing = 1;
 		MaxAnim			  type;
 
+		std::string tag1;
+		std::string tag2;
+		std::string tag3;
+
 		bool load(DataProvider& fdp);
 		bool load(const char* name);
+		
 
 	public:
 
@@ -78,6 +83,10 @@ namespace animation{
 		inline void setPostFinish(bool finish_){ postfinish = finish_; }
 		void setPivot(XMVECTOR pivot);
 		XMVECTOR getPivot();
+		void setTiming(float timing_){timing = timing_;}
+
+		bool loadCannon(int tag);
+		void enableCannon();
 
 		bool getTransform(float t) const;
 

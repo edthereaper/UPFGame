@@ -10,16 +10,15 @@
 #define DISTANCE_DMG_SMOKE				0.5f
 #define FX_THRESHOLD                    0.75f
 #define TIME_BETWEEN_PHASE				5.0f
-#define HEIGHT_INIT_PHASE0				66.0f
-#define HEIGHT_INIT_PHASE1				16.0f
-#define HEIGHT_INIT_PHASE2				31.8f
-#define HEIGHT_INIT_PHASE3				49.3f
-#define HEIGHT_INIT_PHASE4				53.6f
-#define SPEED_UP_SMOKE_PHASE0			(26.f/66.f)
-#define SPEED_UP_SMOKE_PHASE1			(16.f/50.f)
-#define SPEED_UP_SMOKE_PHASE2			(18.f/98.f)
-#define SPEED_UP_SMOKE_PHASE3			( 3.f/33.f)
-#define SPEED_UP_SMOKE_PHASE4			(19.f/57.f)
+#define HEIGHT_INIT_PHASE1				14.0f
+#define HEIGHT_INIT_PHASE2				29.8f
+#define HEIGHT_INIT_PHASE3				40.6f
+#define HEIGHT_INIT_PHASE4				51.6f
+#define SPEED_UP_SMOKE_PHASE0			(27.f/100.f)
+#define SPEED_UP_SMOKE_PHASE1			(16.f/70.f)
+#define SPEED_UP_SMOKE_PHASE2			(11.f/100.f)
+#define SPEED_UP_SMOKE_PHASE3			(11.f/45.f)
+#define SPEED_UP_SMOKE_PHASE4			(19.f/90.f)
 
 using namespace behavior;
 using namespace particles;
@@ -133,12 +132,13 @@ void CSmokeTower::init()
 
 void CSmokeTower::reset()
 {
-	fsm.getExecutor().active = false;
-	fsm.getExecutor().phase = 0;
+    auto& fsme(fsm.getExecutor());
+	fsme.active = false;
+	fsme.phase = -1;
 	fsm.changeState(SmokeTowerFSMExecutor::states::STATE_waitingToInit);
-	CTransform* meT = ((Entity*)fsm.getExecutor().meEntity)->get<CTransform>();
+	CTransform* meT = Handle(this).getBrother<CTransform>();
     meT->setPosition(XMVectorSetY(meT->getPosition(), initH));
-	fsm.getExecutor().heightTrigger = initH;
+	fsme.heightTrigger = initH;
 }
 
 void CSmokeTower::initType()

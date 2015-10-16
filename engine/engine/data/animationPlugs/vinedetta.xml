@@ -28,7 +28,7 @@
 	<plug id="9" anim="start_vine_down" type="action" delay="0.1" delayOut="0.1" factor="0.75" dummy="true" creepControl="true" fakeCycle="true" limitDummyCycle="0.2">
 		<on key="0xc0c2"/>
 	</plug>	
-	<plug id="10" anim="vine_down" type="cycle" delay="0.2" delayOut="0.2" factor=".75" dummy="true" creepControl="true" limitDummyCycle="0.5">
+	<plug id="10" anim="vine_down" type="cycle" delay="0.2" delayOut="0.2" factor="0.75" dummy="true" creepControl="true" limitDummyCycle="0.5">
 		<on key="0xc002"/>
 	</plug>	
 	<plug id="11" anim="creep_idle_nd" type="cycle" delay="0.2" delayOut="0.2" creepControl="true">
@@ -112,10 +112,10 @@
 	<plug id="32" anim="dash_hit" type="action" delay="0.2" delayOut="0.3" dummy="false" factor="2.0">
 		<on key="0x2231"/>
 	</plug>	
-	<plug id="33" anim="get_damage" type="action" delay="0.1" delayOut="0.1" dummy="false" factor="1.0">
+	<plug id="33" anim="get_damage" type="action" delay="0.1" delayOut="0.1" dummy="false" repeat="true" factor="1.0">
 		<on key="0xAAAAAAAA"/>
 	</plug>	
-	<plug id="34" anim="shooting" type="action" delay="0.1" delayOut="0.1" dummy="false" factor="1.0">
+	<plug id="34" anim="shooting" type="action" delay="0.1" delayOut="0.1" dummy="false" repeat="true" factor="1.0">
 		<on key="0x9004"/>
 		<on key="0x9009"/>
 		<on key="0x5B22"/>

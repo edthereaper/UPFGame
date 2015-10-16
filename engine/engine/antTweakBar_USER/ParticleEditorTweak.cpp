@@ -53,7 +53,6 @@ namespace antTw_user {
 	std::string file_name = "";
 	std::string file_particules_name = "";
 	std::ofstream myfileParticle;
-	std::vector<std::string> files;
 	std::vector<std::string> emitterFiles;
 
 	Handle element_h_cam_particle;
@@ -497,6 +496,7 @@ namespace antTw_user {
 	static void TW_CALL read_texture(void *value, void *clientData)
 	{
 		std::string txt_tmp = static_cast<const CParticleSystem *>(clientData)->getNameFile();
+		ParticlesFileList files = ParticleFileParser::get().getFiles();
 
 		if (txt_tmp.compare("") != 0){
 
@@ -513,6 +513,9 @@ namespace antTw_user {
 
 	static void TW_CALL update_texture(const void *value, void *clientData)
 	{
+
+		ParticlesFileList files = ParticleFileParser::get().getFiles();
+
 		int index = *static_cast<const int *>(value);
 		std::string fil_name_tmp = files[index];
 		file_name = fil_name_tmp;
@@ -709,6 +712,8 @@ namespace antTw_user {
 
 	bool AntTWManager::validNameTexture(std::string name){
 
+		ParticlesFileList files = ParticleFileParser::get().getFiles();
+
 		for (auto& texture : files)
 			if (!name.compare(texture))
 				return true;
@@ -797,6 +802,8 @@ namespace antTw_user {
 
 			std::string defineEnum = "";
 			TwType emitterType;
+
+			ParticlesFileList files = ParticleFileParser::get().getFiles();
 
 			for (int i = emitt->size() - 1; i >= 0; --i){
 				CEmitter::EmitterData emitData = emitt->getEmitterData();
@@ -1134,7 +1141,6 @@ namespace antTw_user {
 
 		TwAddSeparator(barParticle1, "name_separated", NULL);
 
-		files.clear();
 		ParticlesFileList files = ParticleFileParser::get().getFiles();
 
 		int idx = 0;
@@ -1337,6 +1343,8 @@ namespace antTw_user {
 
 		std::string defineEnum = "";
 		TwType emitterType;
+
+		ParticlesFileList files = ParticleFileParser::get().getFiles();
 
 		for (int i = emitt->size() - 1; i >= 0; --i){
 			CEmitter::EmitterData emitData = emitt->getEmitterData();

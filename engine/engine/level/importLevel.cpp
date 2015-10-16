@@ -824,7 +824,9 @@ gameElements::CBoss* LevelImport::setupBoss(Entity* e, const pieceData_t& p)
     Transform cannonBottomT[3] = { cannonBottom[0].transform,
         cannonBottom[1].transform, cannonBottom[2].transform};
     boss->setMarks(cannonTopT, cannonBottomT);
+
     EntityListManager::get(CBoss::TAG).add(e);
+
 
 	
 

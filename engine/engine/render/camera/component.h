@@ -77,8 +77,8 @@ class CCamera : public render::Camera {
             component::CTransform* transform(
                 component::Handle(this).getBrother<component::CTransform>());
 
-            timer += elapsed;
-            float shakeValue = shakeAmount * std::sin(timer * shakeFrequency);
+            timer += elapsed * shakeFrequency;
+            float shakeValue = shakeAmount * std::sin(timer);
 
             XMVECTOR tPos = transform->getPosition();
             DirectX::operator+=(tPos, offset);
