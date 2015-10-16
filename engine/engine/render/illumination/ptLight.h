@@ -20,6 +20,7 @@ class CPtLight : public level::SpatiallyIndexed{
         float specularAmountModifier = 0;
         float specularPowerFactor = 1;
         XMVECTOR offset = utils::zero_v;
+        bool offsetRelative = false;
         bool lockSpatialIndex = false;
         bool culled = true;
         bool enabled = true;
@@ -29,29 +30,11 @@ class CPtLight : public level::SpatiallyIndexed{
 #endif
 
     public:    
-        void loadFromProperties(const std::string& elem, utils::MKeyValue &atts) {
-            radius = atts.getFloat("radius", radius);
-            decayFactor = atts.getFloat("decay", decayFactor);
-            intensity = atts.getFloat("intensity", intensity);
-            color = atts.getHex("color", color);
-            shadowIntensity = atts.getFloat("shadowIntensity", shadowIntensity);
-            shadowFocus = atts.getFloat("shadowFocus", shadowFocus);
-            setOffset(atts.getPoint("offset", offset));
-            lockSpatialIndex = atts.getBool("lockSpatialIndex", lockSpatialIndex);
-            shadowJittering = atts.getFloat("shadowJittering", shadowJittering);
-            specularAmountModifier = atts.getFloat("specularAmountModifier", specularAmountModifier);
-            specularPowerFactor = atts.getFloat("specularPowerFactor", specularPowerFactor);
-            enabled = atts.getBool("enabled", enabled);
-            intensity *= color.af();
-            color.setAf(1.f);
-#ifdef _LIGHTTOOL
-            exportLight = atts.getBool("export", exportLight);
-#endif
-        }
+        void loadFromProperties(const std::string& elem, utils::MKeyValue &atts);
     
         void draw();
 
-        inline void init() {}
+        void init();
         void update(float);
 
         inline float getIntensity() const {return intensity;}

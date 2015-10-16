@@ -84,6 +84,9 @@ class CLevelData : public SpatiallyIndexed {
         bool highZFar = false;
         float zFar = DEFAULT_ZFAR;
 
+        float skyboxBright;
+        float skyboxBlend;
+
     public:
         void loadFromProperties(const std::string& elem, utils::MKeyValue &atts);
         inline void update(float elapsed) {}
@@ -127,6 +130,9 @@ class CLevelData : public SpatiallyIndexed {
                 fmodUser::FmodStudio::stopEvent(song);
             }
         }
+
+        inline float getSkyboxBright() const { return skyboxBright;}
+        inline float getSkyboxBlend() const { return skyboxBlend;}
 };
 
 }

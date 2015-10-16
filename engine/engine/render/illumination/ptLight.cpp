@@ -181,4 +181,38 @@ void CPtLight::update(float)
     }
 }
 
+
+void CPtLight::loadFromProperties(const std::string& elem, utils::MKeyValue &atts)
+{
+    radius = atts.getFloat("radius", radius);
+    decayFactor = atts.getFloat("decay", decayFactor);
+    intensity = atts.getFloat("intensity", intensity);
+    color = atts.getHex("color", color);
+    shadowIntensity = atts.getFloat("shadowIntensity", shadowIntensity);
+    shadowFocus = atts.getFloat("shadowFocus", shadowFocus);
+
+    offsetRelative = atts.getBool("offsetRelative", offsetRelative);
+    offset = atts.getPoint("offset", offset);
+    
+    lockSpatialIndex = atts.getBool("lockSpatialIndex", lockSpatialIndex);
+    shadowJittering = atts.getFloat("shadowJittering", shadowJittering);
+    specularAmountModifier = atts.getFloat("specularAmountModifier", specularAmountModifier);
+    specularPowerFactor = atts.getFloat("specularPowerFactor", specularPowerFactor);
+    enabled = atts.getBool("enabled", enabled);
+    intensity *= color.af();
+    color.setAf(1.f);
+#ifdef _LIGHTTOOL
+    exportLight = atts.getBool("export", exportLight);
+#endif
+}
+
+void CPtLight::init()
+{
+    if (offsetRelative) {
+        CTransform* t = Handle(this).getBrother<CTransform>();
+        offset = XMVector3Rotate(offset, t->getRotation());
+    }
+    setOffset(offset);
+}
+
 }

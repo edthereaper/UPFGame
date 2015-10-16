@@ -28,7 +28,7 @@
 	<plug id="9" anim="start_vine_down" type="action" delay="0.1" delayOut="0.1" factor="0.75" dummy="true" creepControl="true" fakeCycle="true" limitDummyCycle="0.2">
 		<on key="0xc0c2"/>
 	</plug>	
-	<plug id="10" anim="vine_down" type="cycle" delay="0.2" delayOut="0.2" factor=".075" dummy="true" creepControl="true" limitDummyCycle="0.5">
+	<plug id="10" anim="vine_down" type="cycle" delay="0.2" delayOut="0.2" factor=".75" dummy="true" creepControl="true" limitDummyCycle="0.5">
 		<on key="0xc002"/>
 	</plug>	
 	<plug id="11" anim="creep_idle_nd" type="cycle" delay="0.2" delayOut="0.2" creepControl="true">

@@ -16,4 +16,10 @@
 			report	="player-cannon"
 		/>
 	</StaticBody>	
+	
+	<PtLight radius="50" decay="0.6" color="0xBA1F00ff"
+		offset="0 3  0"
+		specularAmountModifier="-1" specularPowerFactor="0.75"
+		intensity="0" export="false" />
+	<CullingAABBSpecial type="ptLight"/>
 </componentPrefab>

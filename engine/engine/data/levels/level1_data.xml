@@ -1,3 +1,5 @@
 <LevelData
 	song="brote"
+	skyboxBlendInit="0"
+	skyboxBrightInit="0.15"
 />

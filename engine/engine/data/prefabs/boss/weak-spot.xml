@@ -16,5 +16,10 @@
 			report	="player-cannon"
 		/>
 	</StaticBody>
+	<PtLight radius="8.200000" decay="0.1" color="0xff3801ff"
+		offset="0 2 4.41" offsetRelative="true"
+		intensity="1" export="false" />
+	<CullingAABBSpecial type="ptLight"/>
+		
 	<Emitter name="weak-spot" position="0.000000 0.000000 0.000000" rotation="0.018028 -0.021893 -0.014354 0.999495" count="3" particles0="emitter_0" particles1="emitter_1" particles2="emitter_2"/>
 </components>

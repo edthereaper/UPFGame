@@ -1,1 +1,1 @@
-<std_material name="herramientas_mesa_torre" diffuse="herramientas_mesa_torre_diffuse" normal="herramientas_mesa_torre_normals"  />
+<std_material name="herramientas_mesa_torre" diffuse="herramientas_mesa_torre_diffuse" normal="herramientas_mesa_torre_normals" selfIllumination="herramientas_mesa_torre_self" />

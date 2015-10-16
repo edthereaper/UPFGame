@@ -2,4 +2,6 @@
 	song="sambastico"
 	zFar="1000"
 	boss="true"
+	skyboxBlendInit="0.5"
+	skyboxBrightInit="0.30"
 />

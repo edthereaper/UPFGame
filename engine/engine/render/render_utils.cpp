@@ -306,6 +306,7 @@ void activateRSConfig(enum RSConfig cfg) {
 }
 
 ID3D11BlendState *blend_states[BLEND_CFG_COUNT];
+float blendFactor[BLEND_CFG_COUNT][4] = {};
 
 bool createBlendStates()
 {
@@ -465,7 +466,7 @@ bool createBlendStates()
     desc.RenderTarget[2].SrcBlend = D3D11_BLEND_SRC_ALPHA;
     desc.RenderTarget[2].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
     desc.RenderTarget[2].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-    desc.RenderTarget[2].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+    desc.RenderTarget[2].BlendOpAlpha = D3D11_BLEND_OP_REV_SUBTRACT;
     desc.RenderTarget[2].SrcBlendAlpha = D3D11_BLEND_ZERO;
     desc.RenderTarget[2].DestBlendAlpha = D3D11_BLEND_ONE;
 
@@ -481,10 +482,11 @@ void destroyBlendStates() {
     SAFE_RELEASE(blend_states[i]);
 }
 
-void activateBlendConfig(enum BlendConfig cfg) {
-    float blendFactor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+void activateBlendConfig(enum BlendConfig cfg)
+{
     UINT sampleMask = 0xffffffff;
-    Render::getContext()->OMSetBlendState(blend_states[cfg], blendFactor, sampleMask );
+    Render::getContext()->OMSetBlendState(
+        blend_states[cfg], blendFactor[cfg], sampleMask );
 }
 
 bool createLine(Mesh& mesh)

@@ -63,6 +63,8 @@ void CLevelData::loadFromProperties(
         song = fmodUser::FmodStudio::getEventInstance("Music/"+songName);
     }
     bossLevel = atts.getBool("boss", bossLevel);
+    skyboxBright = atts.getFloat("skyboxBrightInit", skyboxBright);
+    skyboxBlend = atts.getFloat("skyboxBlendInit", skyboxBlend);
     zFar = atts.getFloat("zFar", zFar);
 }
 const float CLevelData::DEFAULT_ZFAR = 200.f;

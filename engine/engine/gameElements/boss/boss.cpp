@@ -22,6 +22,7 @@ using namespace component;
 #include "render/render_utils.h"
 #include "render/renderManager.h"
 #include "render/camera/component.h"
+#include "render/illumination/ptLight.h"
 using namespace render;
 
 #include "weakSpot.h"
@@ -58,6 +59,7 @@ void BossBt::initType()
 	BT_CREATECHILD_A (WEAK_SPOT_CRASH_FX,  WEAK_SPOT_CRASH,     LEAF,                        weakSpotCrashFx   );
 	BT_CREATECHILD_A (WEAK_SPOT_CRASH_WAIT,WEAK_SPOT_CRASH,     LEAF,                        wait              );
 	BT_CREATECHILD_A (RAISE_DIFFICULTY,    WEAK_SPOT_CRASH,     LEAF,                        raiseDifficulty   );
+	BT_CREATECHILD_A (UPDATE_SKYBOX,       WEAK_SPOT_CRASH,     LEAF,                        updateSkybox      );
 	BT_CREATECHILD_A (SETUP_IDLE,          BOSS,                CHAIN,                       setupIdle         );
 	BT_CREATECHILD_A (IDLE,                SETUP_IDLE,          LEAF,                        wait              );
 	BT_CREATECHILD   (ATTACK,              BOSS,                PRIORITY                                       );
@@ -158,6 +160,11 @@ const float BossBtExecutor::COOLDOWN_SHOOT[N_STAGES] = {1.5f, 1.2f, 0.9f};
 const float BossBtExecutor::TIME_PUNCH_WARNING[N_STAGES] = {3.5f, 3.5f, 3.5f};
 const float BossBtExecutor::TIME_DAMAGE_SMOKE[N_STAGES] = {2.5f, 2.5f, 2.5f};
 const float BossBtExecutor::TIME_EARTHQUAKE[N_STAGES] = {2.5f, 2.0f, 1.5f};
+
+const float BossBtExecutor::SKYBOX_BLEND[N_STAGES] = {0.75f, 0.85f, 1.0f};
+const float BossBtExecutor::SKYBOX_BRIGHT[N_STAGES] = {0.30f, 0.45f, 0.60f};
+const float BossBtExecutor::BOSS_LIGHT[N_STAGES] = {0.00f, 0.25f, 0.50f};
+
 
 const std::function<float()> BossBtExecutor::TIME_PUNCH_WAIT[BossBtExecutor::N_STAGES] = {
     [=](){return inRange(3.00f,rand_normal(4.00f, 2.00f),5.50f);},
@@ -416,6 +423,7 @@ ret_e BossBtExecutor::weakSpotCrashFx(float elapsed)
 
     timer.set(-TIME_CRASH_WAIT);
 	EntityListManager::get(CSmokePanel::TAG).broadcast(MsgDeactivateSmoke());
+
     return DONE_QUICKSTEP;
 }
 
@@ -425,6 +433,7 @@ ret_e BossBtExecutor::raiseDifficulty(float elapsed)
     stage = inRange<uint8_t>(0,stage,N_STAGES-1); // for safety
     punchTimer.set(-COOLDOWN_PUNCH[stage]);
     waitingForWeakSpot = false;
+
     
 #if defined(_DEBUG) && defined(DEBUG_BOSS_TINTING)
     Entity* me(meEntity);
@@ -439,9 +448,46 @@ ret_e BossBtExecutor::raiseDifficulty(float elapsed)
         RenderManager::updateKeys(hammer);
     }
 #endif
-
     timer.set(-TIME_CRASH_WAIT);
     return DONE_QUICKSTEP;
+}
+
+#define SKY_BLEND_DELTA 0.2f
+#define SKY_BRIGHT_DELTA 0.2f
+#define LIGHT_DELTA 0.1f
+
+ret_e BossBtExecutor::updateSkybox(float elapsed)
+{
+    CPtLight* ptLight = meEntity.getSon<CPtLight>();
+
+    float blend = SKYBOX_BLEND[stage];
+    float bright = SKYBOX_BRIGHT[stage];
+    float light = BOSS_LIGHT[stage];
+    float& cblend = RenderConstsMirror::SkyBoxBlend;
+    float& cbright = RenderConstsMirror::SkyBoxBright;
+    float clight = ptLight->getIntensity();
+
+    if (cblend < blend) {
+        cblend += std::min(blend - cblend, elapsed*SKY_BLEND_DELTA);
+    } else {
+        cblend = blend;
+    }
+    
+    if (cbright < bright) {
+        cbright += std::min(bright - cbright, elapsed*SKY_BRIGHT_DELTA);
+    } else {
+        cbright = bright;
+    }
+    
+    if (clight < light) {
+        clight += std::min(light - clight, elapsed*LIGHT_DELTA);
+    } else {
+        clight = light;
+    }
+    ptLight->setIntensity(clight);
+
+    RenderConstsMirror::update();
+    return (cbright == bright && cblend == blend && light == clight) ? DONE : STAY;
 }
 
 ret_e BossBtExecutor::setupIdle(float elapsed)

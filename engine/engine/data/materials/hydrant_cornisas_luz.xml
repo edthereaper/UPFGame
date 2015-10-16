@@ -1,1 +1,1 @@
-<std_material name="hydrant_cornisas_luz" diffuse="hydrant_cornisas_luz_diffuse" normal="hydrant_cornisas_luz_normal"  />
+<std_material name="hydrant_cornisas_luz" diffuse="hydrant_cornisas_luz_diffuse" normal="hydrant_cornisas_luz_normal" selfIllumination="hydrant_cornisas_luz_self"  />

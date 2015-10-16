@@ -1,4 +1,6 @@
 <LevelData
 	song="sambastico"
 	zFar="400"
+	skyboxBlendInit="0.5"
+	skyboxBrightInit="0.25"
 />

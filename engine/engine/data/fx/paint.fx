@@ -50,5 +50,5 @@ void PSPaint(PROJECTED_DATA i,
 		float3(0.9, 0.2, 0) * burnedArea;
 	paint = float4(paintColor* paintAmount * PaintSIIntensity, normalSample.a);
 	data2 = float4(1,1, paintAmount * PaintIntensity, paintAmount*PaintIntensity);
-	normal = float4(normalSample.xyz, paintAmount);
+	normal = float4(normalSample.xyz, paintAmount*.25);
 }

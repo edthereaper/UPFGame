@@ -12,6 +12,7 @@ using namespace component;
 
 #include "render/render_utils.h"
 #include "render/renderManager.h"
+#include "render/illumination/ptLight.h"
 using namespace render;
 
 #include "../player/playerMov.h"
@@ -50,6 +51,11 @@ behavior::fsmState_t WeakSpotFSMExecutor::waiting(float elapsed)
         //Activate soft, "cooling down" smoke particless
 		//auto key2 = emitter->getKey("emitter_2");
 		//ParticleUpdaterManager::get().sendActive(key2);
+        
+        CPtLight* light = me->get<CPtLight>();
+        if (light != nullptr) {
+            light->setIntensity(0);
+        }
 
         signaled = false;
         return STATE_active;
@@ -72,7 +78,6 @@ behavior::fsmState_t WeakSpotFSMExecutor::active(float elapsed)
 		ParticleUpdaterManager::get().sendActive(key2);
 		ParticleUpdaterManager::get().setDeleteSelf(key0);
 		ParticleUpdaterManager::get().setDeleteSelf(key1);
-		
 
         Entity* cbE(callback);
         cbE->sendMsg(MsgWeakSpotBreak(me));

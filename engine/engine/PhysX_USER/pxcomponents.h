@@ -479,14 +479,17 @@ class CExtraShapes {
         CExtraShapes(){for(auto& a:shapes){a=nullptr;}}
 
         ~CExtraShapes() {
-            for(auto& s:shapes){
-                if(s!=nullptr) {
-                    auto shape = s->getShape();
-                    if (shape != nullptr) {
-                        auto actor = shape->getActor();
-                        if (actor != nullptr) {
-                            shape->getActor()->detachShape(*shape);
+            if (!Handle::onCleanup()) {
+                for(auto& s:shapes){
+                    if(s!=nullptr) {
+                        auto shape = s->getShape();
+                        if (shape != nullptr) {
+                            auto actor = shape->getActor();
+                            if (actor != nullptr) {
+                                shape->getActor()->detachShape(*shape);
+                            }
                         }
+                        s = nullptr;
                     }
                 }
             }

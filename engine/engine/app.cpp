@@ -282,6 +282,8 @@ fsmState_t AppFSMExecutor::changelvl(float elapsed)
         CLevelData* lvl (levelE->get<CLevelData>());
         lvl->stopSong();
     }
+
+
 	app.loadlvl();
 	return STATE_game;
 }
@@ -298,6 +300,13 @@ fsmState_t AppFSMExecutor::credits(float elapsed)
 	App &app = App::get();
 	app.videoEndsTo = 0;
 	app.loadVideo("bunny.ogg", "");
+    
+    Handle::setCleanup(true);
+    auto entityMan = component::getManager<Entity>();
+    entityMan->forall<void>([](Entity* e) {e->postMsg(MsgDeleteSelf());});
+    MessageManager::dispatchPosts();
+    Handle::setCleanup(false);
+
 	return STATE_playvideo;
 }
 
@@ -767,6 +776,9 @@ void App::loadlvl()
         CCamera* cam = getCamera().getSon<CCamera>();
         cam->setZFar(lvlT->getZFar());
     }
+    RenderConstsMirror::SkyBoxBlend = lvlT->getSkyboxBlend();
+    RenderConstsMirror::SkyBoxBright = lvlT->getSkyboxBright();
+    RenderConstsMirror::update();
 
 
 #ifdef LOOKAT_TOOL

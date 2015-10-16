@@ -39,6 +39,9 @@ class BossBtExecutor {
         static const float TIME_DAMAGE_SMOKE[N_STAGES];
         static const float TIME_SEND_MINIONS_BEFORE;
         static const float TIME_SEND_MINIONS_AFTER;
+        static const float SKYBOX_BLEND[N_STAGES];
+        static const float SKYBOX_BRIGHT[N_STAGES];
+        static const float BOSS_LIGHT[N_STAGES];
         static const float HAMMER_DROP_ACCEL;
         static const float HAMMER_DROP_SPEED;
         static const float HAMMER_SUDDEN_RAISE_ACCEL;
@@ -88,6 +91,7 @@ class BossBtExecutor {
             WEAK_SPOT_CRASH_FX      = 0x1310|COD_DONT_ALIGN,
             WEAK_SPOT_CRASH_WAIT    = 0x1320|COD_DONT_ALIGN,
             RAISE_DIFFICULTY        = 0x1330|COD_DONT_ALIGN,
+            UPDATE_SKYBOX           = 0x1340,
             SETUP_IDLE              = 0x2000,     
             IDLE                    = 0x2100,           
             ATTACK                  = 0x3000,         
@@ -221,6 +225,7 @@ class BossBtExecutor {
         ret_e gameOver(float);  
         ret_e weakSpotCrashFx(float);
         ret_e raiseDifficulty(float);
+        ret_e updateSkybox(float);
         ret_e setupIdle(float);
         ret_e setupPunchWarning(float);
         ret_e punchWarning(float);
@@ -279,7 +284,7 @@ class CBoss {
             component::Transform cannonBottom[3];
         } marks;
 
-        static const unsigned MAX_SPINNERS = 4;
+        static const unsigned MAX_SPINNERS = 64;
         static const unsigned MAX_SPAWNERS = 12;
 
         struct spinner_t {
