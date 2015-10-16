@@ -35,7 +35,7 @@ using namespace animation;
 using namespace particles;
 
 //DEBUG
-#define ONLY_PUNCHES
+//#define ONLY_PUNCHES
 //#define ONLY_MINIONS
 
 namespace behavior {
