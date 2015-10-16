@@ -19,6 +19,7 @@ struct Vinedetta_Installation (
 		"batchExportMesh.ms",
 		"export_mesh.ms",
 		"export_camera.ms"
+		"export_anim.ms"
 	),
 	iconFiles = #(
 		"exportMesh_24i.bmp",
@@ -58,7 +59,10 @@ struct Vinedetta_Installation (
 		"toggleSpatial_16i.bmp",
 		"toggleSpatial_16i.bmp",
 		"cam_icon_16i.bmp",
-		"cam_icon_24i.bmp"
+		"cam_icon_24i.bmp",
+		"export_animation_16i.bmp",
+		"export_animation_24i.bmp"
+		
 
 	),                 
 	

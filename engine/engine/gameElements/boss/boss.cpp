@@ -305,11 +305,11 @@ void BossBtExecutor::spawnMinions(float elapsed)
 				enemy->receive(MsgSetBichito(bichitoEntity));
 			
 				if (e->has<CMelee>()){
+
 					CMelee *melee = e->get<CMelee>();
 					melee->receive(MsgSetPlayer(playerEntity));
-				}
-
-				if (e->has<CFlare>()){
+				}else if (e->has<CFlare>()){
+					
 					CFlare *flare = e->get<CFlare>();
 					flare->receive(MsgSetPlayer(playerEntity));
 				}
@@ -323,8 +323,8 @@ void BossBtExecutor::spawnMinions(float elapsed)
 				/*
 				EntityListManager::get(CEnemy::TAG).broadcast(MsgSetPlayer(playerEntity));
 				EntityListManager::get(CEnemy::TAG).broadcast(MsgSetBichito(bichitoEntity));*/
-
-			}
+			}else
+				failed++;
 		} else 
 			failed++;
 
@@ -1060,7 +1060,9 @@ ret_e BossBtExecutor::sendMinions(float elapsed)
 		EntityListManager::get(CEnemy::TAG).broadcast(MsgSetPlayer(playerEntity));
 	EntityListManager::get(CEnemy::TAG).broadcast(MsgSetBichito(bichitoEntity));*/
 
-	if (currentEnemyCreated == ARRAYSIZE(minions) || (nSpawn > MIN_SPAWN[stage] && failed > ARRAYSIZE(minions))){
+	int size = ARRAYSIZE(minions);
+
+	if (currentEnemyCreated >= size || failed >= size){
 
 		nSpawn = 0;
 		failed = 0;
