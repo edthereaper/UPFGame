@@ -64,11 +64,7 @@ namespace gameElements {
 
 	inline void initXboxGameInput(utils::Pad& xboxPad)
 	{
-		xboxPad.addMapping(XINPUT_GAMEPAD_START, APP_QUIT);
-		xboxPad.addMapping(XINPUT_GAMEPAD_DPAD_DOWN, CONTROLS_MENU_DOWN);
-		xboxPad.addMapping(XINPUT_GAMEPAD_DPAD_UP, CONTROLS_MENU_UP);
-		xboxPad.addMapping(XINPUT_GAMEPAD_DPAD_LEFT, CONTROLS_MENU_LEFT);
-		xboxPad.addMapping(XINPUT_GAMEPAD_DPAD_RIGHT, CONTROLS_MENU_RIGHT);
+		xboxPad.addMapping(XINPUT_GAMEPAD_START, APP_PAUSE);
 	}
 
 }
