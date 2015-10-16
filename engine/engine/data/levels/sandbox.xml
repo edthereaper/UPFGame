@@ -20,6 +20,9 @@
 		<object pos="0.0 4.0 -1.74846e-007" rot="0.0 0.0 0.0 1.0" spatialIndex="-1" transformed="false">
 			<checkPoint isSpawn="true" trigger="no" />
 		</object>
+		<object pos="0.0 20.0 -1.74846e-007" rot="0.0 0.0 0.0 1.0" spatialIndex="-1" transformed="false">
+			<liana nLinks="17" limitX="60.0" limitZ="60.0" />
+		</object>
 	</objects>
 	<triggers count="0">
 	</triggers>

@@ -896,6 +896,37 @@ void App::loadlvl()
     dbg("Load complete.\n");
 }
 
+void resetLiana(Entity* l, CLevelData* level)
+{
+    CLiana* old_liana = l->get<CLiana>(); 
+    int nLinks = old_liana->getNLinks();
+    float limitX = old_liana->getXLimit();
+    float limitZ = old_liana->getZLimit();
+
+    Entity* replacement = getManager<Entity>()->createObj();
+    PrefabManager::get().prefabricateComponents("components/liana", replacement);
+
+    CLiana* liana = replacement->get<CLiana>();
+    liana->setNLinks(nLinks);
+    liana->setLimits(limitX, limitZ);
+    
+    CRestore* r = replacement->get<CRestore>();
+    CRestore* r_prev = l->get<CRestore>();
+    r->set(*r_prev);
+
+    CTransform* tran = replacement->get<CTransform>();
+    tran->set(*r_prev);
+    CTransformable* transformable = replacement->get<CTransformable>();
+    transformable->setCenterAim(tran->getPosition() - yAxis_v * 0.5f * (nLinks / 2.f));
+    
+    
+    level->replaceTaggedEntity(l, replacement);
+
+    replacement->init();
+    EntityListManager::get(CLiana::TAG).add(replacement);
+    l->postMsg(MsgDeleteSelf());
+}
+
 void resetEnemy(Entity* enemy, CLevelData* level)
 {
     CRestore* restore = enemy->get<CRestore>();
@@ -956,6 +987,9 @@ void App::retry()
 
     EntityList(EntityListManager::get(CEnemy::TAG)).forall(
         [levelData] (Handle h) {resetEnemy(h, levelData);}
+    );
+    EntityList(EntityListManager::get(CLiana::TAG)).forall(
+        [levelData] (Handle h) {resetLiana(h, levelData);}
     );
 
 	if (levelData != nullptr) {

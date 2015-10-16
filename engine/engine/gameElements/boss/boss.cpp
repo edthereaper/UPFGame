@@ -1238,7 +1238,7 @@ void CBoss::update(float elapsed)
 		}
 	}
     TransformableFSMExecutor::updateSpecialHighlights(elapsed,
-        action & BossBtExecutor::COD_HIGHLIGHT);
+        (action & BossBtExecutor::COD_HIGHLIGHT) != 0);
 }
 
 inline void CBoss::receive(const MsgEarthquake& msg)

@@ -133,12 +133,13 @@ void CSmokeTower::init()
 
 void CSmokeTower::reset()
 {
-	fsm.getExecutor().active = false;
-	fsm.getExecutor().phase = 0;
+    auto& fsme(fsm.getExecutor());
+	fsme.active = false;
+	fsme.phase = 0;
 	fsm.changeState(SmokeTowerFSMExecutor::states::STATE_waitingToInit);
-	CTransform* meT = ((Entity*)fsm.getExecutor().meEntity)->get<CTransform>();
+	CTransform* meT = Handle(this).getBrother<CTransform>();
     meT->setPosition(XMVectorSetY(meT->getPosition(), initH));
-	fsm.getExecutor().heightTrigger = initH;
+	fsme.heightTrigger = initH;
 }
 
 void CSmokeTower::initType()
