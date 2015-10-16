@@ -119,7 +119,9 @@ namespace animation{
 
 			Key k;
 			k.trans = prev_key->trans + time_in_next * (next_key->trans - prev_key->trans);
-			k.rotation = prev_key->rotation + time_in_next * (next_key->rotation - prev_key->rotation);
+			
+			XMVECTOR lerpRotation = XMQuaternionSlerp(prev_key->rotation,next_key->rotation,0.01);
+			k.rotation = prev_key->rotation + time_in_next * lerpRotation;
 
 
 			Handle h = component::Handle(this).getOwner();
