@@ -509,7 +509,19 @@ namespace gameElements {
 		inline bool canPlayPartialAnimation(){
 			if (bt.getState() == PlayerMovBtExecutor::CREEP_MOVE ||
 				bt.getState() == PlayerMovBtExecutor::CREEP_CLIMB ||
-				bt.getState() == PlayerMovBtExecutor::DASH_DURING) return false;
+				bt.getState() == PlayerMovBtExecutor::CREEP ||
+				bt.getState() == PlayerMovBtExecutor::CREEP_STAY ||
+				bt.getState() == PlayerMovBtExecutor::CREEP_INPUT ||
+				bt.getState() == PlayerMovBtExecutor::CREEP_FALL ||
+				bt.getState() == PlayerMovBtExecutor::CREEP_JUMP ||
+				bt.getState() == PlayerMovBtExecutor::CREEP_IDLE ||
+				bt.getState() == PlayerMovBtExecutor::DASH ||
+				bt.getState() == PlayerMovBtExecutor::DASH_HOLD ||
+				bt.getState() == PlayerMovBtExecutor::DASH_SETUP ||
+				bt.getState() == PlayerMovBtExecutor::DASH_DURING ||
+				bt.getState() == PlayerMovBtExecutor::DASH_TACKLED ||
+				bt.getState() == PlayerMovBtExecutor::DASH_BOUNCE ||
+				bt.getState() == PlayerMovBtExecutor::DASH_STOP) return false;
 			return true;
 		}
 

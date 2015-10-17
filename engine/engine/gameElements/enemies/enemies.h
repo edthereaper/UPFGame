@@ -305,7 +305,11 @@ class CEnemy {
 		inline int getAction() const {return bt.getCurrentAction();}
 
         inline bool isDead() const { return (getAction() & EnemyBtExecutor::COD_DEAD) != 0;}
-		inline bool isPassive() const { return (getAction() == EnemyBtExecutor::TRANSFORMED || getAction() == EnemyBtExecutor::IDLE); }
+		inline bool isPassive() const { 
+			return (getAction() == EnemyBtExecutor::TRANSFORMED || getAction() == EnemyBtExecutor::IDLE ||
+					getAction() == EnemyBtExecutor::TRANSFORMING || getAction() == EnemyBtExecutor::INIT_TRANSFORMING ||
+					getAction() == EnemyBtExecutor::TRANSFORM);
+		}
 
 		bool transform(float elapsed);
 };
