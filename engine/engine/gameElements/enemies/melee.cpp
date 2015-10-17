@@ -587,6 +587,7 @@ void CMelee::update(float elapsed)
 		auto currentAction = bt.getCurrentAction();
 		uint32_t action = currentAction & 0xFFFF;
 		if (action == 0xB064)	animPlugger->plug(0xB028);		//Intro attack ends to idle_fight, not run.
+		if (action == 0xB005 || action == 0xB006 || action == 0xB008)	animPlugger->plug(0xB01D);		//When stunned we must unplug lost anim.
 		animPlugger->plug(action);
 	}
 }

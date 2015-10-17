@@ -36,7 +36,7 @@ using namespace particles;
 
 //DEBUG
 //#define ONLY_PUNCHES
-//#define ONLY_MINIONS
+#define ONLY_MINIONS
 
 namespace behavior {
 
@@ -990,6 +990,10 @@ ret_e BossBtExecutor::startWallOfSmoke(float elapsed)
     timer.set(-TIME_SEND_MINIONS_BEFORE);
 	//fmodUser::fmodUserClass::playSound("boss_invokeenemies", 1.0f, 0.0f);
 
+	CEmitter *emitter = me->get<CEmitter>();
+	auto smokeWallParticles = emitter->getKey("emitter_0");
+	ParticleUpdaterManager::get().sendActive(smokeWallParticles);
+
     nSpawn = 0;
     failed = 0;
     iSpawn = 0;
@@ -1047,6 +1051,10 @@ ret_e BossBtExecutor::endWallOfSmoke(float elapsed)
     
     CCamera* cam = App::get().getCamera().getSon<CCamera>();
     cam->setShake(0, 0);
+
+	CEmitter *emitter = me->get<CEmitter>();
+	auto smokeWallParticles = emitter->getKey("emitter_0");
+	ParticleUpdaterManager::get().sendInactive(smokeWallParticles);
 
     return DONE;
 }
