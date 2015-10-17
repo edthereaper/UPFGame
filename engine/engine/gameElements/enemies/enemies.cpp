@@ -73,6 +73,7 @@ namespace behavior {
 		BT_CREATECHILD_A (PROTECT			, WAS_SHOT2			, LEAF						, protect			);
 		BT_CREATECHILD_CA(OFFENSIVE			, ENEMY				, LEAF		, isAlerted		, doOffensive		);
 		BT_CREATECHILD_A (IDLE				, ENEMY				, LEAF						, doIdle			);
+		//BT_CREATECHILD_A (IDLE				, ENEMY			    , LEAF,		, appearFromBoss, appearBoss        );
 	}
 
 }

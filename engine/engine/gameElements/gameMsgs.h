@@ -171,6 +171,16 @@ struct MsgStun {
 	DECLARE_MSG_ID();
 };
 
+/* Entity appear from Boss */
+struct MsgAppearFromBoss {
+	DECLARE_MSG_ID();
+};
+
+/* Entity appear from Boss */
+struct MsgFinishMovementFromBoss {
+	DECLARE_MSG_ID();
+};
+
 /* Entity is defending because Vinedetta is not recheable*/
 struct MsgProtect {
 	DECLARE_MSG_ID();

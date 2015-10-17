@@ -371,6 +371,13 @@ class CCharacterController : public Shape {
 	        pos = controller->getFootPosition();
         }
 
+		inline void jumpParabolic(XMVECTOR up, XMVECTOR front, float elapsed, float impulse){
+		
+			controllerFilters.mFilterData = &(Shape::filter);
+			collisionFlags = controller->move(toPxVec3(up * impulse + front * impulse), 0.01f, elapsed, controllerFilters);
+			pos = controller->getFootPosition();
+		}
+
 		inline XMVECTOR getDisplacement(){
 			return toXMVECTOR(moved);
 		}

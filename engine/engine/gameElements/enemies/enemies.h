@@ -61,8 +61,10 @@ class EnemyBtExecutor {
 			ALERT2				=	0xB031,
 			WAS_SHOT2			=	0xB032,
 			DEFEND				=	0xB033,
+			
 
-			NUM_ENUMS			=	0xB055
+			NUM_ENUMS			=	0xB055,
+			APPEAR_FROM_BOSS    =   0XB034
         };
 
         /* What happened to the enemy? */
@@ -92,6 +94,7 @@ class EnemyBtExecutor {
 					bool alerted	:1;
 					bool protect	:1;
 					bool stopdef	:1;
+					bool appear     :1;
                 };
                 uint8_t raw;
             };
@@ -125,7 +128,10 @@ class EnemyBtExecutor {
 			} 
 			inline void receive(const MsgTransform& msg) {
 				megashot = true;
-			}     
+			}  
+			inline void receive(const MsgAppearFromBoss& msg) {
+				appear = true;
+			}
         } inbox;
 
         Handle idleAi;

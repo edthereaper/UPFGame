@@ -265,9 +265,14 @@ void BossBtExecutor::spawnMinion(float elapsed)
     		
     		e->sendMsg(MsgSetPlayer(playerEntity));
     		e->sendMsg(MsgSetBichito(bichitoEntity));
+
+			
     		
     		EntityListManager::get(CEnemy::TAG).add(e);
     		e->init();
+
+			CCharacterController *character = e->get<CCharacterController>();
+			character->jumpParabolic(transform->getUp(), transform->getFront(), elapsed, 2);
     
     		nSpawn++;
     	}
@@ -419,7 +424,7 @@ ret_e BossBtExecutor::gameOver(float elapsed)
 {
     //TODO: YOU WIN!
 	App &app = App::get();
-	app.setWinGame();
+	app.setWinGame(true);
     return STAY;
 }
 
