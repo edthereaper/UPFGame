@@ -1866,7 +1866,7 @@ void CPlayerMov::receive(const MsgHitEvent &msg)
 
         dbg("Collided with Boss\n");
 
-        //Fake a bounce that end
+        //Fake a bounce that ends in the platforms
 
 		CTransform* meT = me->get<CTransform>();
 		CTransform* cannonT = cannon->get<CTransform>();
@@ -1882,8 +1882,9 @@ void CPlayerMov::receive(const MsgHitEvent &msg)
         CCharacterController* charCo = me->get<CCharacterController>();
         charCo->teleport(target+yAxis_v, false);
 
-        auto bounce = calculateAimAngle(target, p, -4.f,
-            PlayerMovBtExecutor::calculateImpulse(PlayerMovBtExecutor::TRAMPOLINE_IMPULSE_V),
+        auto bounce = calculateAimAngle(target, p, 0.5f,
+            PlayerMovBtExecutor::calculateImpulse(
+                PlayerMovBtExecutor::TRAMPOLINE_IMPULSE_V*PlayerMovBtExecutor::TRAMPOLINE_IMPULSE_CANNON_FACTOR),
             PlayerMovBtExecutor::GRAVITY
             );
 

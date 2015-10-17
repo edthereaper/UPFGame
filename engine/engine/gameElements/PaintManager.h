@@ -173,6 +173,7 @@ class PaintManager : private utils::XMLParser {
 
         static void reset() {
             fireLevel = -1000000;
+            aborted = false;
             for (auto& i : brushes) {
                 CPaintGroup* pg(i.second.getSon<CPaintGroup>());
                 pg->reset();

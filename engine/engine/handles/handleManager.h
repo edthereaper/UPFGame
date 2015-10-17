@@ -52,6 +52,11 @@ class HandleManager {
 		    i2e = new eIndex_t[capacity];
             initTable();
         }
+        
+	    void deleteMem() {
+            delete[] entries;
+            delete[] i2e;
+        }
 
         void initTable() {
 		    // init table contents

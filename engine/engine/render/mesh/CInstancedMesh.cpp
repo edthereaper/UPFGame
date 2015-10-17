@@ -83,7 +83,7 @@ unsigned CInstancedMesh::addInstance(instance_t&& instance)
     changed = true;
 
     CAABB* baseAABB = Handle(this).getBrother<CAABB>();
-    if (baseAABB->isInvalid()) {
+    if (!usesGlobalAABB || baseAABB->isInvalid()) {
         doRecalculateAABB = true;
     } else if (!doRecalculateAABB) {
         auto newAABB = culling_t::bakeCulling(*baseAABB, instance.world);
@@ -121,6 +121,7 @@ void CInstancedMesh::loadFromProperties(std::string elem, utils::MKeyValue& atts
         }
         createBuffer();
         assert(dataBuffer != nullptr);
+        usesGlobalAABB = atts.getBool("usesGlobalAABB", usesGlobalAABB);
     } else if (elem == "instance") {
         assert(dataBuffer != nullptr);
         Transform t;
@@ -252,14 +253,16 @@ bool CInstancedMesh::replaceInstanceWorld(
 
 size_t CInstancedMesh::cull(const Culling::CullerDelegate& cullerDelegate)
 {
-    if (doRecalculateAABB) {
-        recalculateAABB();
-    }
-    AABB xaabb(aabb);
-    xaabb.skinAABB(aabbSkin);
-    xaabb.scaleAABB(aabbScale);
-    if (!cullerDelegate.cull(xaabb)) {
-        return 0;
+    if (usesGlobalAABB) {
+        if (doRecalculateAABB) {
+            recalculateAABB();
+        }
+        AABB xaabb(aabb);
+        xaabb.skinAABB(aabbSkin);
+        xaabb.scaleAABB(aabbScale);
+        if (!cullerDelegate.cull(xaabb)) {
+            return 0;
+        }
     }
 
 #if defined(CULLING_SKIP)
@@ -340,12 +343,10 @@ void CInstancedMesh::drawAABBs()
     const auto color = Color::MAGENTA;
 #endif
 
-    CullingAABB aabbCopy(aabb);
-    aabb.draw(XMVECTOR(color) + one_v*0.25f);
-    aabbCopy.skinAABB(0.01f);
-    aabbCopy.draw(XMVECTOR(color) + one_v*0.45f);
-    aabbCopy.skinAABB(0.01f);
-    aabbCopy.draw(XMVECTOR(color) + one_v*0.50f);
+    if (usesGlobalAABB) {
+        CullingAABB aabbCopy(aabb);
+        aabbCopy.draw(XMVECTOR(color) + one_v*0.45f);
+    }
 
     for (const auto& i : *dataBuffer) {
         instanceExtraData->at(i.userDataB).draw(color);

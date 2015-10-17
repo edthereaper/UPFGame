@@ -1,3 +1,4 @@
 <camera>
-	<cinematic name="Camera001" level="3" max="100" idx="0" />
+	<cinematic name="Camera3_01" level="3" max="135" idx="0" />
+	<cinematic name="Camera3_02" level="3" max="100" idx="1" />
 </camera>
