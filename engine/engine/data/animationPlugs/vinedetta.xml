@@ -146,4 +146,20 @@
 	<plug id="56" anim="dying" unplug="true" type="action" delayOut="0.0">
 		<on key="0xAADDDEAD"/>	
 	</plug>
+	<!-- UNPLUG CASE:  stop get_damage when dash -->
+	<plug id="56" anim="get_damage" unplug="true" type="action" delayOut="0.0">
+		<on key="0xd0c1"/>	
+	</plug>
+	<!-- UNPLUG CASE:  stop shooting when dash -->
+	<plug id="57" anim="shooting" unplug="true" type="action" delayOut="0.0">
+		<on key="0xd0c2"/>	
+	</plug>
+	<!-- UNPLUG CASE:  stop get_damage when creep movement -->
+	<plug id="58" anim="get_damage" unplug="true" type="action" delayOut="0.0">
+		<on key="0xd0c3"/>	
+	</plug>
+	<!-- UNPLUG CASE:  stop shooting when creep movement -->
+	<plug id="59" anim="shooting" unplug="true" type="action" delayOut="0.0">
+		<on key="0xd0c4"/>	
+	</plug>
 </archetype>

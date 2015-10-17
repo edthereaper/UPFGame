@@ -187,6 +187,25 @@ namespace gameElements {
 		inline bool isAutoAimingEnemy() const { return bt.getExecutor().isAutoAimingEnemy; }
 		inline XMVECTOR autoAimingPosition() const { return bt.getExecutor().aimed.getPosition(); }
 		inline bool wantsToUseArmpoint() const { return bt.getExecutor().activateArmpoint; }
+		
+		inline bool canDash() const {
+			uint32_t action = bt.getState() & 0xFFFF;
+			if (bt.getState() == PlayerAttackBtExecutor::MSHOT_FIRE ||
+				bt.getState() == PlayerAttackBtExecutor::NSHOT_FIRE ||
+				bt.getState() == PlayerAttackBtExecutor::NSHOT_FIRE2 ||
+				bt.getState() == PlayerAttackBtExecutor::MSHOT_FIRE2 ||
+				bt.getState() == PlayerAttackBtExecutor::NORMAL_SHOT ||
+				bt.getState() == PlayerAttackBtExecutor::NORMAL_SHOT2 ||
+				bt.getState() == PlayerAttackBtExecutor::MSHOT_RECOIL ||
+				bt.getState() == PlayerAttackBtExecutor::NSHOT_RECOIL ||
+				bt.getState() == PlayerAttackBtExecutor::NSHOT_RECOIL2 ||
+				bt.getState() == PlayerAttackBtExecutor::MSHOT_RECOIL2 ||
+				bt.getState() == PlayerAttackBtExecutor::MSHOT_CHARGE ||
+				bt.getState() == PlayerAttackBtExecutor::NSHOT_CHARGE ||
+				bt.getState() == PlayerAttackBtExecutor::NSHOT_CHARGE2 ||
+				bt.getState() == PlayerAttackBtExecutor::MSHOT_CHARGE2) return false;
+			return true;
+		}
 	};
 
 }
