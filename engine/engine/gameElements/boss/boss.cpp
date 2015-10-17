@@ -419,7 +419,7 @@ ret_e BossBtExecutor::gameOver(float elapsed)
 {
     //TODO: YOU WIN!
 	App &app = App::get();
-	app.winGame = true;
+	app.setWinGame();
     return STAY;
 }
 

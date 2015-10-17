@@ -199,7 +199,7 @@ namespace animation{
 					Entity *me = Handle(this).getOwner();
 					App &app = App::get();
 
-					if (me->has<CCannon>() && app.gamelvl == 4)
+					if (me->has<CCannon>() && app.getLvl() == 4)
 						enableCannon();
 					
 				else{ 

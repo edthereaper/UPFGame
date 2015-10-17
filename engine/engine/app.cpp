@@ -306,6 +306,7 @@ fsmState_t AppFSMExecutor::credits(float elapsed)
     entityMan->forall<void>([](Entity* e) {e->postMsg(MsgDeleteSelf());});
     MessageManager::dispatchPosts();
     Handle::setCleanup(false);
+    app.setWinGame(false);
 
 	return STATE_playvideo;
 }
@@ -344,16 +345,24 @@ void App::update()
 
 void App::loadConfig()
 {
-	char buffer[32] = { 0 };
+	char windowedStr[32] {};
+	char shadowsStr[32] {};
 #ifdef _DEBUG
 	config.xres = GetPrivateProfileInt("display_debug", "x", defConfig.xres, ".\\config.ini");
 	config.yres = GetPrivateProfileInt("display_debug", "y", defConfig.yres, ".\\config.ini");
-	GetPrivateProfileString("display_debug", "windowed", "true", buffer, ARRAYSIZE(buffer)-1, ".\\config.ini");
+	GetPrivateProfileString("display_debug", "windowed", "true", windowedStr, ARRAYSIZE(windowedStr)-1, ".\\config.ini");
     gamelvl = GetPrivateProfileInt("debug", "level", 1, ".\\config.ini");
+    GetPrivateProfileString("display_debug", "windowed", "true",
+        windowedStr, ARRAYSIZE(windowedStr)-1, ".\\config.ini");
+    GetPrivateProfileString("debug", "shadows", "true",
+        shadowsStr, ARRAYSIZE(shadowsStr)-1, ".\\config.ini");
 #else	
 	config.xres = GetPrivateProfileInt("display", "x", defConfig.xres, ".\\config.ini");
 	config.yres = GetPrivateProfileInt("display", "y", defConfig.yres, ".\\config.ini");
-	GetPrivateProfileString("display", "windowed", "true", buffer, ARRAYSIZE(buffer) - 1, ".\\config.ini");
+	GetPrivateProfileString("display", "windowed", "true",
+        windowedStr, ARRAYSIZE(windowedStr)-1, ".\\config.ini");
+    GetPrivateProfileString("display", "shadows", "true",
+        shadowsStr, ARRAYSIZE(shadowsStr)-1, ".\\config.ini");
 #endif
 	xboxPadSensiblity = GetPrivateProfileInt("sensibility", "xbox", 5, ".\\config.ini");
 	//Check the desktop resolution, if its lower than the resolution set in config. Set the resolution same as desktop.
@@ -362,11 +371,11 @@ void App::loadConfig()
 	GetWindowRect(hDesktop, &desktop);
 	if (config.xres > desktop.right)	config.xres = desktop.right - desktop.left;
 	if (config.yres > desktop.bottom)	config.yres = desktop.bottom - desktop.top;
-	config.windowed = !strcmp(buffer, "true");
+	config.windowed = !strcmp(windowedStr, "true");
+    enableShadows = !strcmp(shadowsStr, "true");
 }
 
 CamCannonController cam1P;
-
 
 #if defined(_OBJECTTOOL) || defined(_LIGHTTOOL) || defined(_PARTICLES)
 
@@ -756,7 +765,7 @@ void App::loadlvl()
 
 #endif
 
-#if !defined(_PARTICLES) 
+#if !defined(_PARTICLES) && !defined(_LIGHTTOOL) 
     lvlT->playSong();
 #endif
 
@@ -1499,6 +1508,7 @@ bool App::update(float elapsed)
     getManager<CCamera>()->update(elapsed);
 	getManager<CCameraAnim>()->update(elapsed);
     getManager<CCubeShadow>()->update(elapsed);
+    getManager<CShadow>()->update(elapsed);
     CCulling::rewindCullers(); 
     getManager<CCulling>()->update(elapsed);
     getManager<CCullingCube>()->update(elapsed);

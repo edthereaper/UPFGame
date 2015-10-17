@@ -22,7 +22,7 @@ void CScriptTrigger::onEnter(float)
     //Todo hardcodeado??? Lua está para algo...
 	App &app = App::get();
 
-	if (app.gamelvl == 1){
+	if (app.getLvl() == 1){
 	
 		if (strcmp(script, "tolevel2") == 0){
 			Entity* player = app.getPlayer();
@@ -30,8 +30,7 @@ void CScriptTrigger::onEnter(float)
 			app.setGlobalPoints(playerS->getPoints());
 			app.setGlobalHealth(playerS->getHealth());
 			app.setGlobalEnergy(playerS->getEnergy());
-			app.changelvl = true;
-			app.gamelvl = 2;
+			app.setLvl(2);
 		}
 		if (strcmp(script, "tutorial1") == 0){
 			Entity* levi = app.getBichito();
@@ -88,26 +87,24 @@ void CScriptTrigger::onEnter(float)
 			levi->sendMsg(MsgPlayerInTuto(9));
 		}
 	}
-	if (app.gamelvl == 2){
+	if (app.getLvl() == 2){
 		if (strcmp(script, "tolevel3") == 0){
 			Entity* player = app.getPlayer();
 			CPlayerStats* playerS = player->get<CPlayerStats>();
 			app.setGlobalPoints(playerS->getPoints());
 			app.setGlobalHealth(playerS->getHealth());
 			app.setGlobalEnergy(playerS->getEnergy());
-			app.changelvl = true;
-			app.gamelvl = 3;
+			app.setLvl(3);
 		}
 	}
-	if (app.gamelvl == 3){
+	if (app.getLvl() == 3){
 		if (strcmp(script, "tolevel4") == 0){
 			Entity* player = app.getPlayer();
 			CPlayerStats* playerS = player->get<CPlayerStats>();
 			app.setGlobalPoints(playerS->getPoints());
 			app.setGlobalHealth(playerS->getHealth());
 			app.setGlobalEnergy(playerS->getEnergy());
-			app.changelvl = true;
-			app.gamelvl = 4;
+			app.setLvl(4);
 		}
 		if (strcmp(script, "initsmoke") == 0){
 			Entity* levi = app.getBichito();
@@ -153,7 +150,7 @@ void CScriptTrigger::onExit(float)
     scriptName += script;
     //utils::dbg("EXITED %s\n", script);
 	App &app = App::get();
-	if (app.gamelvl == 1){
+	if (app.getLvl() == 1){
 		if (strcmp(script, "tutorial1") == 0 || strcmp(script, "tutorial2") == 0 || strcmp(script, "tutorial3") == 0 ||
 			strcmp(script, "tutorial4") == 0 || strcmp(script, "tutorial5") == 0 || strcmp(script, "tutorial6") == 0 ||
 			strcmp(script, "tutorial7") == 0 || strcmp(script, "tutorial8") == 0 || strcmp(script, "tutorial9") == 0){
@@ -161,7 +158,7 @@ void CScriptTrigger::onExit(float)
 			player->sendMsg(MsgPlayerOutTuto());
 		}
 	}
-	if (app.gamelvl == 3){
+	if (app.getLvl() == 3){
 		if (strcmp(script, "initsmoke") == 0){
 			Entity* player = app.getPlayer();
 			player->sendMsg(MsgPlayerOutTuto());

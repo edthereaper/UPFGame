@@ -236,19 +236,19 @@ ret_e MeleeBtExecutor::idleFight(float elapsed)
 
 ret_e MeleeBtExecutor::combo1(float elapsed) {
 	App &app = App::get();
-	if (app.isPlayerDead) return DONE;
+	if (app.getPlayerDead()) return DONE;
 	CAnimationPlugger* aniP = meEntity.getSon<CAnimationPlugger>();
 	return doCombo(elapsed, aniP->getActualPlugDurationWithDelay());
 }
 ret_e MeleeBtExecutor::combo2(float elapsed) {
 	App &app = App::get();
-	if (app.isPlayerDead) return DONE;
+	if (app.getPlayerDead()) return DONE;
 	CAnimationPlugger* aniP = meEntity.getSon<CAnimationPlugger>();
 	return doCombo(elapsed, aniP->getActualPlugDurationWithDelay());
 }
 ret_e MeleeBtExecutor::combo3(float elapsed) {
 	App &app = App::get();
-	if (app.isPlayerDead) return DONE;
+	if (app.getPlayerDead()) return DONE;
 	CAnimationPlugger* aniP = meEntity.getSon<CAnimationPlugger>();
 	return doCombo(elapsed, aniP->getActualPlugDurationWithDelay());
 }

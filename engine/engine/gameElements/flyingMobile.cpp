@@ -62,7 +62,7 @@ behavior::fsmState_t FlyingMobileFSMExecutor::running(float elapsed)
     if (isComplete()) {
 
 
-		if (me->has<CCannon>() && app.gamelvl == 4){
+		if (me->has<CCannon>() && app.getLvl() == 4){
 
 			fmodUser::fmodUserClass::playSound("boss_canonland", 1.0f, 0.0f);
 			CMaxAnim* maxAnim = me->get<CMaxAnim>();
@@ -75,7 +75,7 @@ behavior::fsmState_t FlyingMobileFSMExecutor::running(float elapsed)
         return STATE_done;
     } else {
 
-		if (me->has<CCannon>() && app.gamelvl == 4){
+		if (me->has<CCannon>() && app.getLvl() == 4){
 			CMaxAnim* maxAnim = me->get<CMaxAnim>();
 			maxAnim->setPlay(true);
 		}

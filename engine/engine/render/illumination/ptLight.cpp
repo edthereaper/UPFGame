@@ -133,7 +133,7 @@ void CPtLight::drawVolume()
 
 void CPtLight::draw()
 {
-    if (!(isSpatiallyGood() && enabled && culled)) {return;}
+    if (!(isSpatiallyGood(2) && enabled && culled)) {return;}
     static const Technique*const techRegular = Technique::getManager().getByName("deferred_point_light");
     static const Technique*const techShadows = Technique::getManager().getByName("deferred_point_light_shadow");
 
@@ -147,12 +147,11 @@ void CPtLight::draw()
     setObjectConstants(scale * trans);
     activatePtLight(this, pos, shadow);
 
-    if (shadowIntensity > 0.f && shadow!=nullptr) {
+    if (shadowIntensity > 0.f && shadow!=nullptr && shadow->hasPassedSpatial()) {
         // Activate the camera
         CCamera* camera = me->get<CCamera>();
         activateLight(*camera);
         // Activate the previously generated shadow map
-        CCubeShadow* shadow = me->get<CCubeShadow>();
         shadow->getFxShadowBuffer()->activate(6);
         techShadows->activate();
     } else {

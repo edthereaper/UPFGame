@@ -124,7 +124,7 @@ static void TW_CALL killPlayer(void*)
     if (stats != nullptr) {
         auto prevGodMode = app.godMode;
         app.godMode = false;
-        stats->damage(666+666+666+666+666+666);
+        stats->damage(666+666+666+666+666+666, true);
         app.godMode = prevGodMode;
     }
 }
@@ -171,7 +171,7 @@ void AntTWManager::createRenderTweak()
 
 static void TW_CALL readlevel(void *value, void *clientData)
 {
-	*static_cast<int *>(value) = App::get().gamelvl;
+	*static_cast<int *>(value) = App::get().getLvl();
 }
 
 static void TW_CALL updatelevel(const void *value, void *clientData)
@@ -179,9 +179,7 @@ static void TW_CALL updatelevel(const void *value, void *clientData)
 	int level = *static_cast<const int *>(value);
 
 	if (0 < level && level <= 5){
-		App &app = App::get();
-		app.changelvl = true;
-		app.gamelvl = level;
+		App::get().setLvl(level);
 	}
 
 #ifdef _LIGHTTOOL
@@ -245,6 +243,8 @@ void AntTWManager::createDebugTweak()
         "label=`Instance culling` group='Performance'");
     TwAddVarRW(bar, "paint", TW_TYPE_BOOLCPP, &app.drawPaint,
         "label=`Paint scenery` group='Performance'");
+    TwAddVarRW(bar, "shadows", TW_TYPE_BOOLCPP, &app.enableShadows,
+        "label=`Shadows` group='Performance'");
     TwAddSeparator(bar, nullptr, "");
         
     TwAddVarRW(bar, "HighlightTransformables", TW_TYPE_BOOLCPP, &app.highlightTransformables,

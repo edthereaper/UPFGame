@@ -208,7 +208,6 @@ class App {
         bool infiniteEnergy = false;
         bool drawPaintVolume = false;
         bool drawPaint = true;
-		bool mistMode = false;
 
 		component::Handle playerModelEntity_h;
 
@@ -236,6 +235,7 @@ class App {
         unsigned shadowToRender = 0;
         unsigned cubeShadowToRender = 0;
 #endif
+    private:
 		enum camera_switch{
 
 			CAMERA_PLAYER,
@@ -245,9 +245,6 @@ class App {
 		}selected_camera = CAMERA_PLAYER;
 
 		bool didspawn = false;
-		void initFSM();
-		void update();
-		inline int getGameState(){ return fsm.getState(); }
 		bool changelvl = false;
 		int gamelvl = 0;
 		bool isPlayerDead = false;
@@ -255,20 +252,7 @@ class App {
 		int globalPoints = 0;
 		int globalHealth = 150;
 		int globalEnergy = 100;
-		inline void setGlobalPoints(int p){ globalPoints = p; }
-		inline int getGlobalPoints(){ return globalPoints; }
-		inline void setGlobalHealth(int p){ globalHealth = p; }
-		inline int getGlobalHealth(){ return globalHealth; }
-		inline void setGlobalEnergy(int p){ globalEnergy = p; }
-		inline int getGlobalEnergy(){ return globalEnergy; }
-		inline void resetTotalStats(){ globalPoints = 0; globalHealth = 150; globalEnergy = 100; }
-		
-		void changeLevel(){ fsm.changeState(AppFSMExecutor::states::STATE_changelvl); }
-		void loadlvl();
-		void spawn();
-
-		bool loadingthreadVar = true;
-		utils::Counter<float> timerThreadAnim, timerGameOver;
+		utils::Counter<float> timerGameOver;
 
 		int xboxPadSensiblity;
 		bool gameOverImg = false;
@@ -277,6 +261,34 @@ class App {
 		bool returnToMenu = false;
 		int videoEndsTo = 0;		// 0 -> Menu, 1 -> Game
 		int mainMenuState = 0;
+
+#ifdef _DEBUG
+    public:
+#endif
+		bool enableShadows = true;
+
+	public:
+		bool loadingthreadVar = true;
+        utils::Counter<float> timerThreadAnim;
+
+		void initFSM();
+		void update();
+		inline int getGameState(){ return fsm.getState(); }
+		inline void setGlobalPoints(int p){ globalPoints = p; }
+		inline int getGlobalPoints(){ return globalPoints; }
+		inline void setGlobalHealth(int p){ globalHealth = p; }
+		inline int getGlobalHealth(){ return globalHealth; }
+		inline void setGlobalEnergy(int p){ globalEnergy = p; }
+		inline int getGlobalEnergy(){ return globalEnergy; }
+		inline void resetTotalStats(){ globalPoints = 0; globalHealth = 150; globalEnergy = 100; }
+		
+		void changeLevel(){ 
+            changelvl = false;
+            fsm.changeState(AppFSMExecutor::states::STATE_changelvl);
+        }
+		void loadlvl();
+		void spawn();
+
 		int updateMainMenu();
 		void renderMainMenu();
 		int chapterSelectionState = 0;
@@ -320,7 +332,6 @@ class App {
             camera_h = camera;
         }
 
-
         inline void setFocus(bool b) {focus=b;}
         inline bool hasFocus() const {return focus;}
 
@@ -328,10 +339,21 @@ class App {
         //for anttw purposes
         inline render::DeferredRender* getDeferredRender() {return &deferred;}
 #endif
-
-		void mistEffect(bool enable);
-
+        inline bool shadowsEnabled() const {return enableShadows;}
         inline void setExit(bool b=true) {exit=b;}
+
+        inline unsigned getLvl() const {return gamelvl;}
+        inline void setLvl(unsigned l) {
+            gamelvl = l;
+            changelvl = true;
+        }
+
+        inline bool getPlayerDead() const {return isPlayerDead;}
+        inline void setPlayerDead(bool b=true) {isPlayerDead = b;}
+
+        inline void setWinGame(bool b=true) {winGame = b;} 
+
+        inline bool getChangeLvl() const {return changelvl;}
 };
 
 #endif

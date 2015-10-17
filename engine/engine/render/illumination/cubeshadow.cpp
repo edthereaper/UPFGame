@@ -61,7 +61,7 @@ void CCubeShadow::init()
 
 void CCubeShadow::processShadowBuffer(const Texture* space)
 {
-    if (!(enabled && isSpatiallyGood())) {return;}
+    if (!(enabled && passedSpatial)) {return;}
     fxPipeline->setResource("space", space);
     (*fxPipeline)(&shadowBuffer);
 }
@@ -69,7 +69,7 @@ void CCubeShadow::processShadowBuffer(const Texture* space)
 void CCubeShadow::generateShadowBuffer(const Texture* space)
 {
     static const Technique*const tech = Technique::getManager().getByName("deferred_point_shadowBuffer");
-    if (!(enabled && isSpatiallyGood())) {return;}
+    if (!(enabled && passedSpatial)) {return;}
 
     #ifdef _DEBUG
         std::stringstream ss;
@@ -106,6 +106,9 @@ void CCubeShadow::generateShadowBuffer(const Texture* space)
 
 void CCubeShadow::update(float)
 {
+    passedSpatial = isSpatiallyGood() && App::get().shadowsEnabled();
+    if(!passedSpatial) {return;}
+
     CCamera* light = Handle(this).getBrother<CCamera>();
     assert(light || !"CCubeShadow requires a CCamera");
     auto pos(light->getPosition());
@@ -132,7 +135,7 @@ void CCubeShadow::update(float)
 
 void CCubeShadow::generate()
 {
-    if (!(enabled && isSpatiallyGood())) {return;}
+    if (!(enabled && passedSpatial)) {return;}
     static Technique*const normalTech =
         Technique::getManager().getByName("gen_cubeshadows");
     static Technique*const skinnedTech =

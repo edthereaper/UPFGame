@@ -22,6 +22,7 @@ class CShadow : public level::SpatiallyIndexed {
         void createShadowMap();
         void createShadowMap(std::string name);
         bool valid = false;
+        bool passedSpatial = true;
 
     public:
         CShadow()=default;
@@ -43,7 +44,8 @@ class CShadow : public level::SpatiallyIndexed {
 
         void init();
         inline void resetShadow() {shadowMap.destroy(); createShadowMap();}
-        inline void update(float){}
+        void update(float);
+
         void generate();
         void generateShadowBuffer(const Texture* space);
         void processShadowBuffer(const Texture* space);
@@ -61,6 +63,8 @@ class CShadow : public level::SpatiallyIndexed {
         void setEnabled(bool b=true) {enabled = b;}
         
         inline void findSpatialIndex(){if (!lockSpatialIndex) {SpatiallyIndexed::findSpatialIndex(this);}}
+        
+        inline bool hasPassedSpatial() const {return passedSpatial;}
 };
 
 }

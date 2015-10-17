@@ -34,6 +34,7 @@ class CCubeShadow : public level::SpatiallyIndexed {
         uint8_t enableMask  = ~0; //mask: +x-x+y-y-z+z (lowest to highest bit)
         uint8_t cullingMask = ~0; //mask: +x-x+y-y-z+z (lowest to highest bit)
         bool valid = false;
+        bool passedSpatial = true;
 
     private:
         void createShadowMap(std::string name);
@@ -88,6 +89,8 @@ class CCubeShadow : public level::SpatiallyIndexed {
         inline uint8_t getCullingMask() const {return cullingMask;}
         inline void setEnableMask(uint8_t mask) {enableMask = mask;}
         inline uint8_t getEnableMask() const {return enableMask;}
+
+        inline bool hasPassedSpatial() const {return passedSpatial;}
 };
 
 }

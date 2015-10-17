@@ -89,11 +89,9 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance,
 		Mouse::refresh();
 		app.getPad().reset();
 		treatMsgs(msg);
-		if (!app.changelvl){
+		if (!app.getChangeLvl()){
 			app.update();
-		}
-		else{
-			app.changelvl = false;
+		} else {
 			app.changeLevel();
 		}
 		if (app.getGameState() == AppFSMExecutor::states::STATE_quit) break;

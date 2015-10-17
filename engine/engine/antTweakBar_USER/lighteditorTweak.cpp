@@ -676,7 +676,7 @@ void TW_CALL MovePlayer(void* clientData)
 
 static void TW_CALL readlevelLE(void *value, void *clientData)
 {
-	*static_cast<int *>(value) = App::get().gamelvl;
+	*static_cast<int *>(value) = App::get().getLvl();
 }
 
 static void TW_CALL updatelevelLE(const void *value, void *clientData)
@@ -684,9 +684,7 @@ static void TW_CALL updatelevelLE(const void *value, void *clientData)
 	int level = *static_cast<const int *>(value);
 
 	if (0 < level && level <= 5){
-		App &app = App::get();
-		app.changelvl = true;
-		app.gamelvl = level;
+		App::get().setLvl(level);
         AntTWManager::deleteLightBars();
 	}
 }
@@ -722,7 +720,8 @@ void AntTWManager::createLightEditorTweak(Entity* mainCam)
 	};
 	static const TwType levelType =
 		TwDefineEnum("LevelsLE", level_e, ARRAYSIZE(level_e));
-
+    
+    TwAddVarRW(bar, "shadows", TW_TYPE_BOOLCPP, &App::get().enableShadows, "label=`Render shadows`");
 	TwAddVarCB(bar, "Level:", levelType, updatelevelLE, readlevelLE, NULL, "");
 
 	TwAddButton(bar, "New point Light", CallbackCreatePointLight, NULL, "key=CTRL+1");

@@ -51,7 +51,7 @@ namespace cinematic{
 		streams.clear();
 		char full_name[MAX_PATH];
 
-		int level = App::get().gamelvl;
+		int level = App::get().getLvl();
 
 		sprintf(full_name, "%s/%s.xml", "data/camera", name);
 		return xmlParseFile(full_name);

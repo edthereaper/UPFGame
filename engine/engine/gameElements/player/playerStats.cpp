@@ -258,7 +258,7 @@ namespace gameElements {
 				timerPlayerDead.reset();
 				playerDead = false;
 				App &app = App::get();
-				app.isPlayerDead = true;
+				app.setPlayerDead(true);
 				getManager<CAmbientSound>()->forall(&CAmbientSound::stopSound);
 				fmodUser::fmodUserClass::stopSounds();
 				app.stopSong();

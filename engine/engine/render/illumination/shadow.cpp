@@ -58,7 +58,7 @@ void CShadow::init()
 
 void CShadow::processShadowBuffer(const Texture* space)
 {
-    if (!(enabled && isSpatiallyGood())) {return;}
+    if (!(enabled && passedSpatial)) {return;}
     fxPipeline->setResource("space", space);
     (*fxPipeline)(&shadowBuffer);
 }
@@ -67,7 +67,7 @@ void CShadow::generateShadowBuffer(const Texture* space)
 {
     static const Technique*const tech = Technique::getManager().getByName("deferred_dir_shadowBuffer");
 
-    if (!(enabled && isSpatiallyGood())) {return;}
+    if (!(enabled && passedSpatial)) {return;}
     
     #ifdef _DEBUG
         std::stringstream ss;
@@ -100,7 +100,7 @@ void CShadow::generateShadowBuffer(const Texture* space)
 
 void CShadow::generate()
 {
-    if (!(enabled && isSpatiallyGood())) {return;}
+    if (!(enabled && passedSpatial)) {return;}
 #ifdef _DEBUG
     std::stringstream ss;
     ss << "SPOTSM:" << ((Entity*)Handle(this).getOwner())->getName();
@@ -114,6 +114,11 @@ void CShadow::generate()
     shadowMap.activate();
 
     RenderManager::renderShadows(Handle(this).getOwner());
+}
+
+void CShadow::update(float)
+{
+    passedSpatial = isSpatiallyGood() && App::get().shadowsEnabled();
 }
 
 }

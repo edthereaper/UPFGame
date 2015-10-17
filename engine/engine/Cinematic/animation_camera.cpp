@@ -25,7 +25,7 @@ namespace cinematic{
 
 	bool CCameraAnim::load(const char*name) {
 
-		int level = App::get().gamelvl;
+		int level = App::get().getLvl();
 
 		char full_name[MAX_PATH];
 		sprintf(full_name, "%s/level%i/%s.anim", "data/camera",level, name);

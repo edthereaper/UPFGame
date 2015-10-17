@@ -128,7 +128,7 @@ class TransformableFSMExecutor {
 		transformType_e type = TRANSFORMABLE_NONE;
         int hits = 0;
 		int damageDone = 0;
-        component::Color glowColor = Color(Color::SPRING_GREEN).setAf(0.8f);
+        component::Color glowColor = Color(Color::SPRING_GREEN).setAf(0.90f);
         component::Color glowMarkedColor = Color::MAGENTA;
         float glowMax = 0.075f;
         float glowMarkedMax = 0.075f;

@@ -1,0 +1,3 @@
+<std_material name="ascensor_checkpoint_flor"
+	diffuse="ascensor_checkpoint_flor_diffuse_rand" random="true"
+	normal="ascensor_checkpoint_flor_normals"  />

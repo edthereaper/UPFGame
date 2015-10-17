@@ -114,7 +114,7 @@ void CDirLight::draw()
     activateLight(*light);
     activateDirLight(this, light, shadow);
 
-    if (shadowIntensity > 0.f && shadow!=nullptr) {
+    if (shadowIntensity > 0.f && shadow!=nullptr && shadow->hasPassedSpatial()) {
         // Activate the previously generated shadow map
         shadow->getFxShadowBuffer()->activate(6);
         techShadows->activate();
