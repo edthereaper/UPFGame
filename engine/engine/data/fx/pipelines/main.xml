@@ -21,11 +21,11 @@
 	<Blur amplitude="1.7000" factor="0.50" file="blur.fx" name="Blur-C" ps="PSBlur5" toleranceX="10" toleranceY="10" >
 		<activate resource="space" />
 	</Blur>
-	<Mix baseFactor="0.500" factor="0.17" file="mix.fx" mask="0.00 0.00 0.00 1.00" name="Vignette" ps="MixNegSqVignette" rangeMax="1.211" rangeMin="0.681" >
+	<Mix baseFactor="0.500" factor="0.17" file="mix.fx" mask="0.00 0.00 0.00 1.00" name="Vignette" ps="MixNegSqVignette" rangeMax="1.211" rangeMin="0.766" >
 		<source stage="CROSSFADE" />
 		<weight resource="space" />
 	</Mix>
-	<MotionBlur amplitude="1.200" file="motionblur.fx" nSamples="15" name="s0" ps="PSMotionBlur" >
+	<MotionBlur amplitude="0.400" file="motionblur.fx" nSamples="15" name="s0" ps="PSMotionBlur" >
 		<space resource="space" />
 		<data resource="data" />
 	</MotionBlur>

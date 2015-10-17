@@ -63,8 +63,4 @@
 	<plug id="22" anim="combo3" unplug="true" type="action" delayOut="0.2">
 		<on key="0xB01C"/>			
 	</plug>	
-	<!-- UNPLUG CASE: if player dead stop combo -->
-	<plug id="23" anim="lost" unplug="true" type="action" delayOut="0.1">
-		<on key="0xB01D"/>			
-	</plug>	
 </archetype>
