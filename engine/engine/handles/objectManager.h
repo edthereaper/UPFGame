@@ -199,11 +199,14 @@ class ObjectManager : public HandleManager {
 	    }
         
 	    void clear() {
-		    object_t* obj = objects;
-		    for (int i=size-1; i >= 0; --i) {
-                objects[i].~object_t();
+		    uint32_t num = size;
+            std::vector<Handle> handles;
+		    for (object_t* obj = objects; num--; obj++) {
+			    handles.push_back(obj);
             }
-            initTable();
+            for (const auto& h : handles) {
+			    destroyObj(h);
+            }
 	    }
 
         template <class R_TYPE>

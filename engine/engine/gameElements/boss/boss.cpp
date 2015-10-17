@@ -34,9 +34,10 @@ using namespace animation;
 #include "Particles/ParticlesManager.h"
 using namespace particles;
 
-//DEBUG
+#ifdef DEBUG //Prevent these debuggers to slip in into release...
 //#define ONLY_PUNCHES
-#define ONLY_MINIONS
+//#define ONLY_MINIONS
+#endif
 
 namespace behavior {
 

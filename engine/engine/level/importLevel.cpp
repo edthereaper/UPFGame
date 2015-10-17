@@ -288,7 +288,7 @@ void LevelImport::generateLava(const MKeyValue& atts, const wildcard_t& wc)
     cmesh->setMesh(mesh);
     assert(ok);
     CMesh::key_t k;
-    k.material = Material::getManager().getByName("lava_torre_sube");
+    k.material = Material::getManager().getByName("lava_torre");
     k.group0=0;
     k.groupf=0;
     k.selfIllumination = 0xFFA50000;

@@ -638,7 +638,10 @@ void App::loadlvl()
 
 	EntityListManager::clearLists();
     
-    component::getManager<Entity>()->clear();
+    auto entityMan = component::getManager<Entity>();
+    entityMan->clear();
+    assert(entityMan->getSize() == 0);
+
     Handle::setCleanup(false);
     PaintManager::load();
 

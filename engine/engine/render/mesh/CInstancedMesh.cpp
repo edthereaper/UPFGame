@@ -56,14 +56,18 @@ uint32_t CInstancedMesh::getFreshDataIndex(unsigned index)
 
 void CInstancedMesh::recalculateAABB()
 {
-    CAABB* baseAABB = Handle(this).getBrother<CAABB>();
-    auto& i = dataBuffer->begin();
-    aabb = culling_t::bakeCulling(*baseAABB, i->world);
-    for(++i; i != dataBuffer->end(); ++i) {
-        auto newAABB = culling_t::bakeCulling(*baseAABB, i->world);
-        aabb.expand(newAABB.getMin(), newAABB.getMax());
+    if (dataBuffer->size() > 0) {
+        CAABB* baseAABB = Handle(this).getBrother<CAABB>();
+        auto& i = dataBuffer->begin();
+        aabb = culling_t::bakeCulling(*baseAABB, i->world);
+        for(++i; i != dataBuffer->end(); ++i) {
+            auto newAABB = culling_t::bakeCulling(*baseAABB, i->world);
+            aabb.expand(newAABB.getMin(), newAABB.getMax());
+        }
+        doRecalculateAABB = false;
+    } else {
+        aabb = CullingAABB();
     }
-    doRecalculateAABB = false;
 }
 unsigned CInstancedMesh::addInstance(instance_t&& instance)
 {
@@ -79,11 +83,10 @@ unsigned CInstancedMesh::addInstance(instance_t&& instance)
     changed = true;
 
     CAABB* baseAABB = Handle(this).getBrother<CAABB>();
-    auto newAABB = culling_t::bakeCulling(*baseAABB, instance.world);
-
     if (baseAABB->isInvalid()) {
         doRecalculateAABB = true;
     } else if (!doRecalculateAABB) {
+        auto newAABB = culling_t::bakeCulling(*baseAABB, instance.world);
         if (aabb.isInvalid()) {
             aabb = newAABB;
         } else {

@@ -160,7 +160,11 @@ namespace gameElements {
 				meTransform->setPosition(XMVectorSet(XMVectorGetX(meTransform->getPosition()), XMVectorGetY(meTransform->getPosition()) - hit.block.distance + 1.0f, XMVectorGetZ(meTransform->getPosition()), XMVectorGetW(meTransform->getPosition())));
 			}
 			me->get<CCharacterController>().destroy();
-			CMesh::load("planta_enemigo", Handle(me));
+            static const char* transformMesh[] {
+                "enemies_flor"
+            };
+
+			CMesh::load(transformMesh[utils::die(ARRAYSIZE(transformMesh))], Handle(me));
 			CMesh* cmesh = me->get<CMesh>();
 			CTint* self = me->get<CTint>();
 			*self = 0xFFFFFFFF;

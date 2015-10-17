@@ -57,7 +57,7 @@ AABB culling_t::bakeCulling(const AABB& aabb, const XMMATRIX& world)
     newHSize.y = baseHSize.x * fabsf(wx.y) + baseHSize.y * fabsf(wy.y) + baseHSize.z * fabsf(wz.y);
     newHSize.z = baseHSize.x * fabsf(wx.z) + baseHSize.y * fabsf(wy.z) + baseHSize.z * fabsf(wz.z);
     ret.setCenter(XMVector3TransformCoord( aabb.getCenter(), world));
-    ret.setHSize(XMVectorAbs(XMLoadFloat3(&newHSize)));
+    ret.setHSize(XMLoadFloat3(&newHSize));
     
 #if defined(_DEBUG) && defined(SPECIAL_AABB_CHECKS)
     assert(!ret.isInvalid());

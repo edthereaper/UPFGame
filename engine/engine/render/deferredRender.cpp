@@ -289,7 +289,7 @@ void DeferredRender::screenEffects()
 {
     if(CSmokeTower::isFXActive()) {
         pixelRect screen(rt_out->getXRes(), rt_out->getYRes());
-        auto tex = Material::getManager().getByName("lava_torre_sube")->getDiffuse();
+        auto tex = Material::getManager().getByName("lava_torre")->getDiffuse();
         static const auto tech = Technique::getManager().getByName("multiply");
         drawTexture2D(screen, screen, tex, tech, true, 0xFFFFFFA0);
     }
