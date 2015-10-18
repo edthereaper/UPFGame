@@ -126,28 +126,31 @@ namespace animation {
 					}
 				}
 				//dbg("action: %s\n", plug.name.c_str());
-				if (lastPlugisCycle){
-					previousPlug = currentCycle;
-					//dbg("new previousPlug cycle: %s\n", previousPlug.name.c_str());
+				if (!plug.repeat){
+					if (lastPlugisCycle){
+						previousPlug = currentCycle;
+						//dbg("new previousPlug cycle: %s\n", previousPlug.name.c_str());
+					}
+					else{
+						previousPlug = currentAction;
+						//dbg("new previousPlug action: %s\n", previousPlug.name.c_str());
+					}
+					previousPlugDuration = plugDuration;
+					lastPlugisCycle = false;
 				}
-				else{
-					previousPlug = currentAction;
-					//dbg("new previousPlug action: %s\n", previousPlug.name.c_str());
-				}
-				previousPlugDuration = plugDuration;
-				lastPlugisCycle = false;
-
 				model->getMixer()->executeAction(plug.calAnimId, plug.delay, plug.delayOut, plug.weight, plug.actionLock);
 				CalAnimationAction* anim = findAction(model->getCoreModel(), model->getMixer(), plug.calAnimId);
-				plugDuration = anim->getCoreAnimation()->getDuration();
-				elapsedPlug = 0.0f;
-				fromAction = true;
-				actiondelayOut = plug.delayOut;
-				lastPlug = plug.plugId;
-				actualPlug = plug;
-				if (anim != nullptr) {
-					anim->setTimeFactor(plug.factor);
-					anim->setUserData((void*)plug.plugId);
+				if (!plug.repeat){
+					plugDuration = anim->getCoreAnimation()->getDuration();
+					elapsedPlug = 0.0f;
+					fromAction = true;
+					actiondelayOut = plug.delayOut;
+					lastPlug = plug.plugId;
+					actualPlug = plug;
+					if (anim != nullptr) {
+						anim->setTimeFactor(plug.factor);
+						anim->setUserData((void*)plug.plugId);
+					}
 				}
 			}
 			else {

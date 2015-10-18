@@ -3,7 +3,8 @@
 		<on key="0xB016"/> <!--idle--> 
 	</plug>
 	<plug id="1" anim="idle_fight" type="cycle" delay="0.3" delayOut="0.3">
-		<on key="0xB028"/> <!--idle fight-->	
+		<on key="0xB028"/> <!--idle fight-->
+		<on key="0xB01C"/> <!--taunt-->			
 	</plug>
 	<plug id="2" anim="stun" type="cycle" delay="0.3" delayOut="0.3">
 		<on key="0xB005"/> <!--stun tackle-->
@@ -53,14 +54,14 @@
 	</plug>
 	<!-- UNPLUG CASE: if player dead stop combo -->
 	<plug id="20" anim="combo1" unplug="true" type="action" delayOut="0.2">
-		<on key="0xB01A"/>			
+		<on key="0xD01A"/>			
 	</plug>	
 	<!-- UNPLUG CASE: if player dead stop combo -->
 	<plug id="21" anim="combo2" unplug="true" type="action" delayOut="0.2">
-		<on key="0xB01B"/>			
+		<on key="0xD01B"/>			
 	</plug>	
 	<!-- UNPLUG CASE: if player dead stop combo -->
 	<plug id="22" anim="combo3" unplug="true" type="action" delayOut="0.2">
-		<on key="0xB01C"/>			
+		<on key="0xD01C"/>			
 	</plug>	
 </archetype>

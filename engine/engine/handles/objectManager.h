@@ -132,8 +132,7 @@ class ObjectManager : public HandleManager {
             if (!isValid(h)) {return false;}
 		    assert(h.getType() == getType());
 		    assert(size > 0);
-            assert(!updating
-                || utils::fatal("Can't delete during update!"));
+            assert(!updating || utils::fatal("Can't delete during update!"));
 
 		    eIndex_t eIndex = h.getIndex();
             if (eIndex >= capacity) {return false;}
@@ -199,11 +198,23 @@ class ObjectManager : public HandleManager {
 	    }
         
 	    void clear() {
-		    object_t* obj = objects;
-		    for (int i=size-1; i >= 0; --i) {
-                objects[i].~object_t();
-            }
-            initTable();
+            if (size == 0) {return;}
+            delete[] objects;
+		    objects = new object_t[capacity];
+		    // init table contents
+		    for (eIndex_t e = 0; e < capacity; ++e) {
+			    entry_t& entry(entries[e]);
+			    entry.age++;
+			    entry.index = INVALID_INDEX;
+			    entry.next = e + 1;     // Each handle is linked to the next...
+			    i2e[e] = INVALID_INDEX;
+		    }
+            // ... except the last one
+            entries[capacity-1].next = INVALID_INDEX;
+
+		    nextFree = 0;
+		    lastFree = capacity - 1;
+            size = 0;
 	    }
 
         template <class R_TYPE>

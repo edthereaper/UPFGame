@@ -57,8 +57,10 @@ class Entity {
     public:
 
 	    ~Entity() {
-		    for (uint32_t i = 0; i < Handle::MAX_TYPES; i++)
+		    for (uint32_t i = 0; i < Handle::MAX_TYPES; i++) {
 			    components[i].destroy();
+                components[i] = Handle();
+            }
 	    }
 
 	    Entity() { }

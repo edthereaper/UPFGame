@@ -288,7 +288,10 @@ bool PlayerMovBtExecutor::velocityUp(float) const
 
 bool PlayerMovBtExecutor::canDash(float) const
 {
-    return dashCooldown.get() >= TIME_DASH_COOLDOWN
+	Entity* me = meEntity;
+	CPlayerAttack* mePA(me->get<CPlayerAttack>());
+	if (!mePA->canDash()) return false;
+	return dashCooldown.get() >= TIME_DASH_COOLDOWN
         && App::get().getPad().getState(CONTROLS_DASH).isHit();
 }
 
@@ -1682,6 +1685,8 @@ void CPlayerMov::update(float elapsed)
 		if (bt.getExecutor().priorityUp > bt.getExecutor().priorityRight &&
 			bt.getExecutor().priorityUp > bt.getExecutor().priorityDown &&
 			bt.getExecutor().priorityUp > bt.getExecutor().priorityLeft && !bte.startCreepUp){
+			animPlugger->plug(0xd0c3);
+			animPlugger->plug(0xd0c4);
 			animPlugger->plug(0xc001);
 			bte.startCreepUp = true;
 			bte.startCreepRight = false;
@@ -1691,6 +1696,8 @@ void CPlayerMov::update(float elapsed)
 		if (bt.getExecutor().priorityDown > bt.getExecutor().priorityLeft &&
 			bt.getExecutor().priorityDown > bt.getExecutor().priorityRight &&
 			bt.getExecutor().priorityDown > bt.getExecutor().priorityUp && !bte.startCreepDown){
+			animPlugger->plug(0xd0c3);
+			animPlugger->plug(0xd0c4);
 			animPlugger->plug(0xc002);
 			animPlugger->plug(0xc0c2);
 			bte.startCreepDown = true;
@@ -1701,6 +1708,8 @@ void CPlayerMov::update(float elapsed)
 		if (bt.getExecutor().priorityLeft > bt.getExecutor().priorityRight &&
 			bt.getExecutor().priorityLeft > bt.getExecutor().priorityDown &&
 			bt.getExecutor().priorityLeft > bt.getExecutor().priorityUp && !bte.startCreepLeft){
+			animPlugger->plug(0xd0c3);
+			animPlugger->plug(0xd0c4);
 			animPlugger->plug(0xc003);
 			animPlugger->plug(0xc0c3);
 			bte.startCreepLeft = true;
@@ -1711,6 +1720,8 @@ void CPlayerMov::update(float elapsed)
 		if (bt.getExecutor().priorityRight > bt.getExecutor().priorityLeft &&
 			bt.getExecutor().priorityRight > bt.getExecutor().priorityDown &&
 			bt.getExecutor().priorityRight > bt.getExecutor().priorityUp && !bte.startCreepRight){
+			animPlugger->plug(0xd0c3);
+			animPlugger->plug(0xd0c4);
 			animPlugger->plug(0xc004);
 			animPlugger->plug(0xc0c4);
 			bte.startCreepRight = true;
@@ -1751,6 +1762,8 @@ void CPlayerMov::update(float elapsed)
 				break;
 			case 0x2221:	//Dash
 				animPlugger->plug(0x2400);
+				animPlugger->plug(0xd0c1);
+				animPlugger->plug(0xd0c2);
 				break;
 			case 0x1596:	//Unplug creep transition if button is not pressed
 				animPlugger->plug(0xb0c4);
@@ -1782,6 +1795,8 @@ void CPlayerMov::update(float elapsed)
 				break;
 			case 0x2231:	//Dash Bounce
 				animPlugger->plug(0x835c);
+				animPlugger->plug(0xd0c1);
+				animPlugger->plug(0xd0c2);
 				break;
 		}
 		if (bte.unplugJump){
@@ -1866,7 +1881,7 @@ void CPlayerMov::receive(const MsgHitEvent &msg)
 
         dbg("Collided with Boss\n");
 
-        //Fake a bounce that end
+        //Fake a bounce that ends in the platforms
 
 		CTransform* meT = me->get<CTransform>();
 		CTransform* cannonT = cannon->get<CTransform>();
@@ -1882,8 +1897,9 @@ void CPlayerMov::receive(const MsgHitEvent &msg)
         CCharacterController* charCo = me->get<CCharacterController>();
         charCo->teleport(target+yAxis_v, false);
 
-        auto bounce = calculateAimAngle(target, p, -4.f,
-            PlayerMovBtExecutor::calculateImpulse(PlayerMovBtExecutor::TRAMPOLINE_IMPULSE_V),
+        auto bounce = calculateAimAngle(target, p, 0.5f,
+            PlayerMovBtExecutor::calculateImpulse(
+                PlayerMovBtExecutor::TRAMPOLINE_IMPULSE_V*PlayerMovBtExecutor::TRAMPOLINE_IMPULSE_CANNON_FACTOR),
             PlayerMovBtExecutor::GRAVITY
             );
 

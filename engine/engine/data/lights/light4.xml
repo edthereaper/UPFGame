@@ -272,25 +272,25 @@
 		<Name name="emitter-00"/>
 		<Transform pos="-4.845406 52.047649 -5.035100" rot="0.000000 0.000000 0.000000 0.000000"/>
 		<Emitter name="big_smoke_buss" position="-4.845406 52.047649 -5.035100" rotation="0.000000 0.000000 0.000000 0.000000" count="2" export="true"  particles0="emitter_0" particles1="emitter_1"/>
-		</Entity>
+	</Entity>
 	<Entity init="true">
 		<Name name="emitter-01"/>
 		<Transform pos="-10.878189 43.861515 -14.906805" rot="0.000000 0.000000 0.000000 0.000000"/>
 		<Emitter name="chimenea_1" position="-10.878189 43.861515 -14.906805" rotation="0.000000 0.000000 0.000000 0.000000" count="1" export="true"  particles0="emitter_0"/>
-		</Entity>
+	</Entity>
 	<Entity init="true">
 		<Name name="emitter-02"/>
 		<Transform pos="-7.179661 45.337559 11.711911" rot="0.000000 0.000000 0.000000 0.000000"/>
 		<Emitter name="chimenea_2" position="-7.179661 45.337559 11.711911" rotation="0.000000 0.000000 0.000000 0.000000" count="1" export="true"  particles0="emitter_0"/>
-		</Entity>
+	</Entity>
 	<Entity init="true">
 		<Name name="emitter-03"/>
 		<Transform pos="12.742279 46.612473 -0.069787" rot="0.000000 0.000000 0.000000 0.000000"/>
 		<Emitter name="smoke" position="12.742279 46.612473 -0.069787" rotation="0.000000 0.000000 0.000000 0.000000" count="1" export="true"  particles0="emitter_0"/>
-		</Entity>
+	</Entity>
 	<Entity init="true">
 		<Name name="emitter-04"/>
 		<Transform pos="-0.121934 1.269434 -1.113817" rot="0.000000 0.000000 0.000000 0.000000"/>
 		<Emitter name="polution" position="-0.121934 1.269434 -1.113817" rotation="0.000000 0.000000 0.000000 0.000000" count="1" export="true"  particles0="emitter_0"/>
-		</Entity>
+	</Entity>
 </scene>

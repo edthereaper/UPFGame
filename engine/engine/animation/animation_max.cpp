@@ -127,9 +127,16 @@ namespace animation{
 
 		if (t > float(max)) {
 			t = float(max);
+            auto k = keys.back();
+			CTransform *transform = component::Handle(this).getBrother<CTransform>();
+			if (type == MaxAnim::PROP_POS)		 transform->setPosition(k.trans);
+			else if (type == MaxAnim::PROP_ROT)  transform->setRotation(k.rotation);
+			else{
+				transform->setPosition(k.trans);
+				transform->setRotation(k.rotation);
+			}
 			return true;
-		}
-		else{
+		} else {
 
 			// Convert t to frame key
 			// 1.1s => 2.22f

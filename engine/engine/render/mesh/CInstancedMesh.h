@@ -26,6 +26,7 @@ class CInstancedMesh {
 
         CullingAABB aabb;
         bool doRecalculateAABB = false;
+        bool usesGlobalAABB = true;
         void recalculateAABB();
 
         class Culler {
