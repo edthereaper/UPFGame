@@ -1,8 +1,6 @@
 #ifndef INC_DOOM_CONTROLLER_H_
 #define INC_DOOM_CONTROLLER_H_
 
-#include "whiteboxes.h"
-
 #include "handles/entity.h"
 
 #include "components\Transform.h"

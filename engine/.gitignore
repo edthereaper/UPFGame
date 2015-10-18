@@ -7,3 +7,5 @@ engine-particles.exe
 *.tlog
 x64\
 Debug/
+.psess
+.vsp

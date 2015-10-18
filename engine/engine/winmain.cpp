@@ -62,8 +62,10 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance,
 
 #ifndef _TEST
 	// If the app can't start, exit
-	if (!app.create())
+	if (!app.create()) {
+        app.destroy();
 		return FALSE;
+    }
 #endif
 
 #ifdef _TEST

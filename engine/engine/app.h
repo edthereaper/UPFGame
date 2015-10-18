@@ -230,6 +230,7 @@ class App {
             PAINT,
             PAINT_AMOUNT,
             DATA,
+            UVPAINT,
             channel_e_MAX
         } selectedChannel = INIT_SELECTEDCHANNEL;
         unsigned shadowToRender = 0;
@@ -296,7 +297,7 @@ class App {
 		void renderChapterSelectionMenu();
 		void renderPaused();
 		void loadVideo(const char* name, const char* audio);
-		bool updateVideo();
+		bool updateVideo(bool canSkipVideo);
 		bool renderVideo();
 		
 		void getImgValues(float& posX, float& posY, float& imgW, float& imgH, float originX, float originY, float originW, float originH);

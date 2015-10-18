@@ -87,7 +87,7 @@ Entity* LevelImport::createNonInstancedTransformablePiece(const pieceData_t& p)
     PrefabManager::get().prefabricateComponents("components/prop", currentEntity_h);
     
 	CStaticBody* s = currentEntity->get<CStaticBody>();
-    s->setTriangleMesh(CollisionMeshLoader::load(p.collision.c_str()));
+    s->setTriangleMesh(CollisionMeshLoader::load(p.collision));
 
     CTransformable* transformable = currentEntity->get<CTransformable>();
     transformable->setResourceName(p.transformation);
@@ -241,7 +241,7 @@ Entity* LevelImport::createPiece(const pieceData_t& p)
             e = createNonInstancedNonTransformablePiece(p);
         }
         if (e != nullptr && p.collision != "") {
-            auto col = CollisionMeshLoader::load(p.collision.c_str());
+            auto col = CollisionMeshLoader::load(p.collision);
             if (col != nullptr) {
 	            CStaticBody* s = e->get<CStaticBody>();
                 if (s == nullptr && transforms) {
@@ -324,7 +324,7 @@ void LevelImport::onStartElement(const std::string &elem, utils::MKeyValue &atts
                 Handle h = getManager<CStaticBody>()->createObj();
                 CStaticBody* s(h);
                 currentLevel->add(h);
-                s->setTriangleMesh(CollisionMeshLoader::load(atts["mesh"].c_str()));
+                s->setTriangleMesh(CollisionMeshLoader::load(atts["mesh"]));
                 s->setFilters(
                     filter_t::SCENE,
                     filter_t::id_t(filter_t::SCENE|filter_t::PROP|
@@ -763,7 +763,7 @@ void LevelImport::setupWeakSpot(Entity* e, const pieceData_t& p)
     PrefabManager::get().prefabricateComponents("boss/weak-spot", e);
     CStaticBody* body = e->get<CStaticBody>();
     assert(body != nullptr);
-    body->setTriangleMesh(CollisionMeshLoader::load(p.collision.c_str()));
+    body->setTriangleMesh(CollisionMeshLoader::load(p.collision));
     EntityListManager::get(CWeakSpot::TAG).add(e);
 }
 
@@ -789,7 +789,7 @@ gameElements::CBoss* LevelImport::setupBoss(Entity* e, const pieceData_t& p)
         colName =  p.collision;
     }
 
-    body->setTriangleMesh(CollisionMeshLoader::load(colName.c_str()));
+    body->setTriangleMesh(CollisionMeshLoader::load(colName));
 
     Transform colT;
     colT.setPosition(colPos);

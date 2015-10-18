@@ -5,6 +5,13 @@
 Texture2D txWhiteNoise 					: register(t64);
 Texture2D txNormalNoise 				: register(t65);
 
+#define RANDOM_SAMPLE 1
+#define RANDOM_HASH	  2
+#define PLAIN_PCF	  3
+#define NO_SMOOTH	  4
+#define SMOOTH_METHOD_PT  NO_SMOOTH
+#define SMOOTH_METHOD_DIR NO_SMOOTH
+
 #define BLINNPHONG 1
 #define PHONG 2
 #define TESTINPUT 3
@@ -69,8 +76,7 @@ float getShadowAt(float4 pPos, float2 uv, float resolution, float focusF, float 
 	//penumbra size: zF=0 -> texel. zF=1 -> focusF*texel
 	float amp = 2*((focusF - 1)*texel) * zF * zF + texel;
 	
-//#define RANDOM_SAMPLE_DIR	
-#ifdef RANDOM_SAMPLE_DIR
+#if SMOOTH_METHOD_DIR == RANDOM_SAMPLE
 	//Apply the jittering factor to all sampling.
 	//If jittering=0, it'll sample the same texel every time => less cache misses
 	float4 j0 = (1-jittering) + jittering * txWhiteNoise.Sample(samWrapLinear, normalize(center));
@@ -96,7 +102,7 @@ float getShadowAt(float4 pPos, float2 uv, float resolution, float focusF, float 
 	amount += tapAt(center + amp * jd.zw * (jai.wz + float2(-1, -1)) , depth);
 	amount /= 8;
 	return amount;
-#else
+#elif SMOOTH_METHOD_DIR == RANDOM_HASH
 	
 #if HASH_METHOD == FRAC_SIN_DOT
 	float r = (1-jittering) + jittering * 2 * frac(sin(dot(uv, float2(12.98, 78.23))) * 43758.54535);
@@ -111,7 +117,7 @@ float getShadowAt(float4 pPos, float2 uv, float resolution, float focusF, float 
 	amount += tapAt(center + amp * r * (ri + float2(+1, -1)) , depth);
 	amount += tapAt(center + amp * r * (ri + float2(-1, +1)) , depth);
 	amount += tapAt(center + amp * r * (ri + float2(-1, -1)) , depth);
-	amount /= 8;
+	return amount / 8;
 #elif HASH_METHOD == BOBJENKINS
 	const uint2 h = hash(uv).xy;
 	const float4 r = (1-jittering) + jittering * 2 * (float4(extractUnorm_16(h.x), extractUnorm_16(h.y)));
@@ -127,11 +133,23 @@ float getShadowAt(float4 pPos, float2 uv, float resolution, float focusF, float 
 	amount += tapAt(center + amp * r.xw * ( ri.zy + float2(+1, -1)) , depth);
 	amount += tapAt(center + amp * r.yx * ( ri.zw + float2(-1, +1)) , depth);
 	amount += tapAt(center + amp * r.wy * ( ri.zx + float2(-1, -1)) , depth);
-	amount /= 8;
+	return amount / 8;
+#endif // HASH_METHOD
 
-#endif
-	return amount;
-#endif
+#elif SMOOTH_METHOD_DIR == PLAIN_PCF
+	float amount = tapAt(center, depth);
+	amount += tapAt(center + amp * float2(+1,  0) , depth);
+	amount += tapAt(center + amp * float2( 0, +1) , depth);
+	amount += tapAt(center + amp * float2(-1,  0) , depth);
+	amount += tapAt(center + amp * float2( 0, -1) , depth);
+	amount += tapAt(center + amp * float2(+1, +1) , depth);
+	amount += tapAt(center + amp * float2(+1, -1) , depth);
+	amount += tapAt(center + amp * float2(-1, +1) , depth);
+	amount += tapAt(center + amp * float2(-1, -1) , depth);
+	return amount / 9;
+#else
+	return tapAt(center, depth);
+#endif //SMOOTH_METHOD_DIR 
 }
 
 struct DIRLIGHT_DATA {
@@ -290,8 +308,7 @@ float getCubeShadowAt(float3 wPos, float2 uv, float resolution, float blurF, flo
 	float3 b = xFace ? float3(0,0,1) : yFace ? float3(0,1,0) : float3(0,0,1);
 	float2 rsampleUV = xFace ? float2(d.y,d.z) : yFace ? float2(d.x,d.y) : float2(d.x,d.z);
 
-//#define RANDOM_SAMPLE_PT	
-#ifdef RANDOM_SAMPLE_PT
+#if SMOOTH_METHOD_PT == RANDOM_SAMPLE
 	//Apply the jittering factor to all sampling.
 	//If jittering=0, it'll sample the same texel every time => less cache misses
 	float4 j0 = (1-jittering) + jittering * txWhiteNoise.Sample(samWrapLinear, normalize(rsampleUV));
@@ -315,7 +332,8 @@ float getCubeShadowAt(float3 wPos, float2 uv, float resolution, float blurF, flo
 	amount += tapCubeAt(d + amp * jc.zwx * ( jbi.zwx + (  +b)) , z);
 	amount += tapCubeAt(d + amp * jd.xyz * ( jai.xyz + (-a  )) , z);
 	amount += tapCubeAt(d + amp * jd.zwx * ( jai.zwx + (  -b)) , z);
-#else
+	return amount / 8;
+#elif SMOOTH_METHOD_PT == RANDOM_HASH
 	
 #if HASH_METHOD == FRAC_SIN_DOT
 	float r = (1-jittering) + jittering * 2 * frac(sin(dot(uv, float2(12.98, 78.23))) * 43758.54535);
@@ -331,6 +349,7 @@ float getCubeShadowAt(float3 wPos, float2 uv, float resolution, float blurF, flo
 	amount += tapCubeAt(d + amp * r * ( ri + (  +b)) , z);
 	amount += tapCubeAt(d + amp * r * ( ri + (-a  )) , z);
 	amount += tapCubeAt(d + amp * r * ( ri + (  -b)) , z);
+	return amount / 8;
 #elif HASH_METHOD == BOBJENKINS
 	const uint2 h = hash(uv).xy;
 	const float4 r = (1-jittering) + jittering * 2 * (float4(extractUnorm_16(h.x), extractUnorm_16(h.y)));
@@ -346,14 +365,24 @@ float getCubeShadowAt(float3 wPos, float2 uv, float resolution, float blurF, flo
 	amount += tapCubeAt(d + amp * r.xwy * ( ri.yzx + (  +b)) , z);
 	amount += tapCubeAt(d + amp * r.yxw * ( ri.zxy + (-a  )) , z);
 	amount += tapCubeAt(d + amp * r.wyx * ( ri.wzy + (  -b)) , z);
+	return amount / 8;
 
-#endif
+#endif //HASH_METHOD
 
-#endif
-	
-	amount /= 8;
-
-	return amount;
+#elif SMOOTH_METHOD_PT == PLAIN_PCF
+	float amount = tapCubeAt(d, z);
+	amount += tapCubeAt(d + amp * ( +a+b) , z);
+	amount += tapCubeAt(d + amp * ( -a+b) , z);
+	amount += tapCubeAt(d + amp * ( +a-b) , z);
+	amount += tapCubeAt(d + amp * ( -a-b) , z);
+	amount += tapCubeAt(d + amp * ( +a  ) , z);
+	amount += tapCubeAt(d + amp * (   +b) , z);
+	amount += tapCubeAt(d + amp * ( -a  ) , z);
+	amount += tapCubeAt(d + amp * (   -b) , z);
+	return amount / 9;
+#else
+	return tapCubeAt(d, z);
+#endif //SMOOTH_METHOD_PT
 }
 
 

@@ -6,6 +6,7 @@
 #undef PRINT_FPS                //print fps using dbg()
 #undef DEBUG_LIGHTS             //Draw fustrums and icosaedrons
 #undef PAUSE_ON_FOCUS_LOSE      //Helpful to disable on debug
+#undef ANALIZE_LOAD_TIME       //load level then close
 #endif
 
 #if defined(NDEBUG) && !defined(_ANITOOL) && !defined(LOOKAT_TOOL) && !defined(_LIGHTTOOL) && !defined(_OBJECTTOOL) && !defined(_PARTICLES)
@@ -156,8 +157,7 @@ fsmState_t AppFSMExecutor::loadvideo(float elapsed)
 fsmState_t AppFSMExecutor::playvideo(float elapsed)
 {
 	App &app = App::get();
-	if (app.updateVideo())		return STATE_playvideo;
-	//if (app.renderVideo())		return STATE_playvideo;
+	if (app.updateVideo(true))		return STATE_playvideo;
 	switch (app.videoEndsTo) {
 	case 0:
 		return STATE_mainmenu;
@@ -356,6 +356,32 @@ void App::loadConfig()
         windowedStr, ARRAYSIZE(windowedStr)-1, ".\\config.ini");
     GetPrivateProfileString("debug", "shadows", "true",
         shadowsStr, ARRAYSIZE(shadowsStr)-1, ".\\config.ini");
+	char channelStr[32] {};
+    GetPrivateProfileString("debug", "initChannel", "FX_FINAL",
+        channelStr, ARRAYSIZE(channelStr)-1, ".\\config.ini");
+
+#define IF_CASE_CONFIG_CHANNEL(name) if (!strcmp(channelStr, #name)) {selectedChannel = name;}
+#define ELIF_CASE_CONFIG_CHANNEL(name) else if (!strcmp(channelStr, #name)) {selectedChannel = name;}
+    IF_CASE_CONFIG_CHANNEL(ALBEDO)
+    ELIF_CASE_CONFIG_CHANNEL(FX_FINAL)
+    ELIF_CASE_CONFIG_CHANNEL(FINAL)
+    ELIF_CASE_CONFIG_CHANNEL(POSITION)
+    ELIF_CASE_CONFIG_CHANNEL(DEPTH)
+    ELIF_CASE_CONFIG_CHANNEL(SELFILL)
+    ELIF_CASE_CONFIG_CHANNEL(FXSELFILL)
+    ELIF_CASE_CONFIG_CHANNEL(LIGHTS)
+    ELIF_CASE_CONFIG_CHANNEL(PAINT)
+    ELIF_CASE_CONFIG_CHANNEL(PAINT_AMOUNT)
+    ELIF_CASE_CONFIG_CHANNEL(NORMALS)
+    ELIF_CASE_CONFIG_CHANNEL(DATA)
+    ELIF_CASE_CONFIG_CHANNEL(AMBIENT)
+    ELIF_CASE_CONFIG_CHANNEL(SHADOW)
+    ELIF_CASE_CONFIG_CHANNEL(FXSHADOW)
+    ELIF_CASE_CONFIG_CHANNEL(CUBESHADOW)
+    ELIF_CASE_CONFIG_CHANNEL(FXCUBESHADOW)
+    ELIF_CASE_CONFIG_CHANNEL(UVPAINT)
+    ELIF_CASE_CONFIG_CHANNEL(SPECULAR)
+
 #else	
 	config.xres = GetPrivateProfileInt("display", "x", defConfig.xres, ".\\config.ini");
 	config.yres = GetPrivateProfileInt("display", "y", defConfig.yres, ".\\config.ini");
@@ -577,6 +603,10 @@ bool App::create()
 
 #ifndef DISPLAY_VIDEO_AND_MENUS
 	loadlvl();
+    #ifdef ANALIZE_LOAD_TIME
+        dbg("Flag ANALIZE_LOAD_TIME was on. Closing App...\n");
+        return false;
+    #endif
 #else
 	//Necessary to display a video
 	camera_h = PrefabManager::get().prefabricate("camera");
@@ -609,14 +639,18 @@ bool App::create()
     return true;
 }
 
+bool isLoadingThreadActve = false;
+bool loadingLevelComplete = false;
+
 void loadingThread()
 {
 	App &app = App::get();
-	/*if (app.gamelvl == 1){
-		//When video ready
-		while (app.renderVideo());
+	if (app.getLvl() == 1){
+		isLoadingThreadActve = true;
+		while (app.updateVideo(loadingLevelComplete));
+		isLoadingThreadActve = false;
 	}
-	else{*/
+	else{
 		while (app.loadingthreadVar){
 			Render::getContext()->ClearRenderTargetView(Render::getRenderTargetView(), utils::BLACK);
 			Render::getContext()->ClearDepthStencilView(Render::getDepthStencilView(), D3D11_CLEAR_DEPTH, 1.0f, 0);
@@ -625,7 +659,7 @@ void loadingThread()
 				Texture::getManager().getByName("loadingSpin"), true, app.timerThreadAnim.count(app.countTime()));
 			Render::getSwapChain()->Present(0, 0);
 		}
-	//}
+	}
 }
 
 void App::loadlvl()
@@ -674,9 +708,7 @@ void App::loadlvl()
 
 	switch (gamelvl) {
 		case 1:
-			//loadVideo("bunny.ogg", "");
-			loadingthreadVar = true;
-			timerThreadAnim.reset();
+			loadVideo("level1.ogv", "video_level1");
 		break;
 		case 2:
 			loadingthreadVar = true;
@@ -890,12 +922,12 @@ void App::loadlvl()
 	getManager<CAmbientSound>()->forall(&CAmbientSound::playSound);
 
 	dbg("Load complete.\n");
-
 	switch (gamelvl) {
 	case 1:
-		//while (!thread_1.joinable());
-		loadingthreadVar = false;
+		loadingLevelComplete = true;
+		while (isLoadingThreadActve);
 		thread_1.join();
+		loadingLevelComplete = false;
 		break;
 	case 2:
 		loadingthreadVar = false;
@@ -1744,6 +1776,8 @@ void App::renderGameOver()
 #if defined(_DEBUG) || defined(_OBJECTTOOL)
 void App::renderSelectedChannel()
 {
+    activateRSConfig(RSCFG_DEFAULT);
+    activateZConfig(ZCFG_DEFAULT);
     activateBlendConfig(BLEND_CFG_DEFAULT);
     static const Technique*const alphaTech = Technique::getManager().getByName("FX_alpha");
     static const Technique*const invAlphaTech = Technique::getManager().getByName("FX_invalpha");
@@ -1765,6 +1799,7 @@ void App::renderSelectedChannel()
         case POSITION: channel = deferred.getSpace(); break;
         case AMBIENT: channel = deferred.getAmbient(); break;
         case DATA: channel = deferred.getData1(); break;
+        case UVPAINT: channel = deferred.getData2(); break;
         case PAINT: channel = deferred.getPaint(); break;
         case CUBESHADOW:
             if(cubeShadowMan->getSize() > cubeShadowToRender) {
@@ -1785,7 +1820,7 @@ void App::renderSelectedChannel()
 
         case SPECULAR: channel = deferred.getLights(); tech = alphaTech; break;
         case DEPTH: channel = deferred.getSpace(); tech = alphaTech; break;
-        case PAINT_AMOUNT: channel = deferred.getPaint(); tech = alphaTech; break;
+        case PAINT_AMOUNT: channel = deferred.getData2(); tech = alphaTech; break;
 
         default: channel = deferred.getFxOut(); break;
     }
@@ -1811,14 +1846,47 @@ void App::printSelectedChannelName()
         _CASE_NAME(DEPTH, txt)
         _CASE_NAME(NORMALS, txt)
         _CASE_NAME(POSITION, txt)
-        _CASE_NAME(CUBESHADOW, txt)
-        _CASE_NAME(FXCUBESHADOW, txt)
-        _CASE_NAME(SHADOW, txt)
-        _CASE_NAME(FXSHADOW, txt)
         _CASE_NAME(DATA, txt)
         _CASE_NAME(PAINT, txt)
         _CASE_NAME(PAINT_AMOUNT, txt)
         _CASE_NAME(AMBIENT, txt)
+        _CASE_NAME(UVPAINT, txt)
+        case SHADOW: {
+            auto shadowMan = getManager<CShadow>();
+            if(shadowMan->getSize() > shadowToRender) {
+                Entity* e = Handle(*shadowMan->begin() + shadowToRender).getOwner();
+                txt = "SHADOW: " + e->getName();
+            } else {
+                txt = "SHADOW (invalid selected)";
+            }
+        } break;
+        case FXSHADOW: {
+            auto shadowMan = getManager<CShadow>();
+            if(shadowMan->getSize() > shadowToRender) {
+                Entity* e = Handle(*shadowMan->begin() + shadowToRender).getOwner();
+                txt = "FXSHADOW: " + e->getName();
+            } else {
+                txt = "FXSHADOW (invalid selected)";
+            }
+        } break;
+        case CUBESHADOW: {
+            auto shadowMan = getManager<CCubeShadow>();
+            if(shadowMan->getSize() > cubeShadowToRender) {
+                Entity* e = Handle(*shadowMan->begin() + cubeShadowToRender).getOwner();
+                txt = "CUBESHADOW: " + e->getName();
+            } else {
+                txt = "CUBESHADOW (invalid selected)";
+            }
+        } break;
+        case FXCUBESHADOW: {
+            auto shadowMan = getManager<CCubeShadow>();
+            if(shadowMan->getSize() > cubeShadowToRender) {
+                Entity* e = Handle(*shadowMan->begin() + cubeShadowToRender).getOwner();
+                txt = "FXCUBESHADOW: " + e->getName();
+            } else {
+                txt = "FXCUBESHADOW (invalid selected)";
+            }
+        } break;
         default: break;
     }
     fontDBG.color = (Color::PALE_PINK).abgr();
@@ -2024,6 +2092,7 @@ void App::render()
 
 void App::destroy()
 {
+    dbg("Destroying app.\n");
     try {
 #ifdef LOOKAT_TOOL
         for (auto& tw : lookAtTw) {SAFE_DELETE(tw);}
@@ -2092,18 +2161,19 @@ void App::loadVideo(const char* name, const char* audio)
 #endif
 		}
 
-bool App::updateVideo(){
+bool App::updateVideo(bool canSkipVideo){
 	pad.update();
 	if (xboxController.is_connected()){
 		xboxControllerKeys();
 		xboxController.update();
 		xboxPad.update();
-		if (pad.getState(CONTROLS_JUMP).isHit()){
+		if (pad.getState(CONTROLS_JUMP).isHit() && canSkipVideo){
 			fmodUser::fmodUserClass::stopSounds();
 			return false;
 		}
 	}
-	if (pad.getState(APP_ENTER).isHit()){
+	if (pad.getState(APP_ENTER).isHit() && canSkipVideo){
+		dbg("SKIP VIDEO\n");
 		fmodUser::fmodUserClass::stopSounds();
 		return false;
 	}
