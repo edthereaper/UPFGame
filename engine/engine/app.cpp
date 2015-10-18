@@ -156,8 +156,7 @@ fsmState_t AppFSMExecutor::loadvideo(float elapsed)
 fsmState_t AppFSMExecutor::playvideo(float elapsed)
 {
 	App &app = App::get();
-	if (app.updateVideo())		return STATE_playvideo;
-	//if (app.renderVideo())		return STATE_playvideo;
+	if (app.updateVideo(true))		return STATE_playvideo;
 	switch (app.videoEndsTo) {
 	case 0:
 		return STATE_mainmenu;
@@ -635,14 +634,18 @@ bool App::create()
     return true;
 }
 
+bool isLoadingThreadActve = false;
+bool loadingLevelComplete = false;
+
 void loadingThread()
 {
 	App &app = App::get();
-	/*if (app.gamelvl == 1){
-		//When video ready
-		while (app.renderVideo());
+	if (app.getLvl() == 1){
+		isLoadingThreadActve = true;
+		while (app.updateVideo(loadingLevelComplete));
+		isLoadingThreadActve = false;
 	}
-	else{*/
+	else{
 		while (app.loadingthreadVar){
 			Render::getContext()->ClearRenderTargetView(Render::getRenderTargetView(), utils::BLACK);
 			Render::getContext()->ClearDepthStencilView(Render::getDepthStencilView(), D3D11_CLEAR_DEPTH, 1.0f, 0);
@@ -651,7 +654,7 @@ void loadingThread()
 				Texture::getManager().getByName("loadingSpin"), true, app.timerThreadAnim.count(app.countTime()));
 			Render::getSwapChain()->Present(0, 0);
 		}
-	//}
+	}
 }
 
 void App::loadlvl()
@@ -700,9 +703,7 @@ void App::loadlvl()
 
 	switch (gamelvl) {
 		case 1:
-			//loadVideo("bunny.ogg", "");
-			loadingthreadVar = true;
-			timerThreadAnim.reset();
+			loadVideo("level1.ogv", "video_level1");
 		break;
 		case 2:
 			loadingthreadVar = true;
@@ -916,12 +917,12 @@ void App::loadlvl()
 	getManager<CAmbientSound>()->forall(&CAmbientSound::playSound);
 
 	dbg("Load complete.\n");
-
 	switch (gamelvl) {
 	case 1:
-		//while (!thread_1.joinable());
-		loadingthreadVar = false;
+		loadingLevelComplete = true;
+		while (isLoadingThreadActve);
 		thread_1.join();
+		loadingLevelComplete = false;
 		break;
 	case 2:
 		loadingthreadVar = false;
@@ -2154,18 +2155,19 @@ void App::loadVideo(const char* name, const char* audio)
 #endif
 		}
 
-bool App::updateVideo(){
+bool App::updateVideo(bool canSkipVideo){
 	pad.update();
 	if (xboxController.is_connected()){
 		xboxControllerKeys();
 		xboxController.update();
 		xboxPad.update();
-		if (pad.getState(CONTROLS_JUMP).isHit()){
+		if (pad.getState(CONTROLS_JUMP).isHit() && canSkipVideo){
 			fmodUser::fmodUserClass::stopSounds();
 			return false;
 		}
 	}
-	if (pad.getState(APP_ENTER).isHit()){
+	if (pad.getState(APP_ENTER).isHit() && canSkipVideo){
+		dbg("SKIP VIDEO\n");
 		fmodUser::fmodUserClass::stopSounds();
 		return false;
 	}
