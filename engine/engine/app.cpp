@@ -2189,8 +2189,7 @@ bool App::updateVideo(bool canSkipVideo){
 			return false;
 		}
 	}
-	if (pad.getState(APP_ENTER).isHit() && canSkipVideo){
-		dbg("SKIP VIDEO\n");
+	if (isKeyPressed(VK_RETURN) && canSkipVideo){
 		fmodUser::fmodUserClass::stopSounds();
 		return false;
 	}
