@@ -363,6 +363,7 @@ void App::loadConfig()
 #define IF_CASE_CONFIG_CHANNEL(name) if (!strcmp(channelStr, #name)) {selectedChannel = name;}
 #define ELIF_CASE_CONFIG_CHANNEL(name) else if (!strcmp(channelStr, #name)) {selectedChannel = name;}
     IF_CASE_CONFIG_CHANNEL(ALBEDO)
+    ELIF_CASE_CONFIG_CHANNEL(ALBEDO_PLUS_PARTICLES)
     ELIF_CASE_CONFIG_CHANNEL(FX_FINAL)
     ELIF_CASE_CONFIG_CHANNEL(FINAL)
     ELIF_CASE_CONFIG_CHANNEL(POSITION)
@@ -1791,6 +1792,7 @@ void App::renderSelectedChannel()
     switch (selectedChannel) {
         case FINAL: channel = deferred.getOut(); break;
         case FX_FINAL: channel = deferred.getFxOut(); break;
+        case ALBEDO_PLUS_PARTICLES:
         case ALBEDO: channel = deferred.getAlbedo(); break;
         case LIGHTS: channel = deferred.getLights(); break;
         case SELFILL: channel = deferred.getSelfIllumination(); break;
@@ -1839,6 +1841,7 @@ void App::printSelectedChannelName()
         _CASE_NAME(FINAL, txt)
         _CASE_NAME(FX_FINAL, txt)
         _CASE_NAME(ALBEDO, txt)
+        _CASE_NAME(ALBEDO_PLUS_PARTICLES, txt)
         _CASE_NAME(LIGHTS, txt)
         _CASE_NAME(SPECULAR, txt)
         _CASE_NAME(SELFILL, txt)

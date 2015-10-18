@@ -7,7 +7,9 @@
 	<AABB/>
 	<CullingAABB/>
 	
-	<Boss/>
+	<Boss
+		spinFactor="1.75"
+	/>
 	<StaticBody >
 		<shape
 			is		="boss|scene"

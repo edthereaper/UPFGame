@@ -1197,7 +1197,8 @@ void CBoss::update(float elapsed)
             angle *= testIsBehind(axis, meT->getUp()) ? -1.f : 1.f;
             Entity* e = spinners[i].e;
             CTransform* t = e->get<CTransform>();
-            t->applyRotation(XMQuaternionRotationAxis(t->getUp(), angle*spinners[i].spin));
+            t->applyRotation(XMQuaternionRotationAxis(t->getUp(),
+                angle*spinners[i].spin * spinFactor));
         }
     }
 	//Info for the first stage

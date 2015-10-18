@@ -313,6 +313,11 @@ void DeferredRender::operator()(component::Handle camera_h)
     drawMists();
 #ifdef _DEBUG
     if (b && (c == App::ALBEDO || c == App::SELFILL || c == App::DATA)) {return;}
+    if (b && (c == App::ALBEDO_PLUS_PARTICLES)) {
+        initGBuffer(ALBEDO);
+        renderParticles();
+        return;
+    }
 #endif
     drawPaint();
 #ifdef _DEBUG
