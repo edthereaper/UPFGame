@@ -191,7 +191,7 @@ namespace particles{
 		void sendMsgInactiveByTimer(key_t k, float time = -0.01);
         void setDeleteSelf(key_t k);
 		void sendMsgEffect(key_t k, bool enable_, float time = -0.01);
-		
+		void deleteAll();
 
 		//make magic
 		void update(float elpased);

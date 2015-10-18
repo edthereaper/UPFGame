@@ -1088,6 +1088,10 @@ void CBoss::reset()
             //Reset hammer
 
             Entity* e_prev = system.hammer;
+			if (e_prev->has<CEmitter>()){
+				CEmitter *prevEmitter = e_prev->get <CEmitter>();
+				prevEmitter->removeAll();
+			}
             Entity* e = getManager<Entity>()->createObj();
             PrefabManager::get().prefabricateComponents("boss/hammer", e);
             
@@ -1106,6 +1110,12 @@ void CBoss::reset()
         {
             //Reset Weak Spot
             Entity* e_prev(system.weakSpot);
+			if (e_prev->has<CEmitter>()){
+				CEmitter *prevEmitter = e_prev->get <CEmitter>();
+				prevEmitter->removeAll();
+			}
+
+
             Entity* e = getManager<Entity>()->createObj();
             PrefabManager::get().prefabricateComponents("boss/weak-spot", e);
             CTransform* t_prev = e_prev->get<CTransform>();

@@ -571,6 +571,8 @@ bool App::create()
 {
 	seedRand();
 
+	
+
 	//mistEffect(true);
 
 	if (!Render::createDevice()) { return false; }
@@ -670,9 +672,11 @@ void App::loadlvl()
 {
     dbg("Loading level %d...\n", gamelvl);
 
+
     Handle::setCleanup(true);
     PaintManager::clear();
-    CSmokeTower::resetFX();
+	ParticleUpdaterManager::get().deleteAll();
+	CSmokeTower::resetFX();
 
 	EntityListManager::clearLists();
     
