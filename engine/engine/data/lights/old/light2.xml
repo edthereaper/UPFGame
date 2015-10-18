@@ -120,6 +120,12 @@
 		<CullingAABBSpecial type="ptLight"/>
 	</Entity>
 	<Entity init="true">
+		<Name name="ptLight-00"/>
+		<Transform pos="52.473415 0.000000 75.014542"/>
+		<PtLight radius="134.150009" decay="1" color="0x903434ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" offset="0.000000 0.000000 0.000000" specularAmountModifier="0" specularPowerFactor="1" intensity="0.25" export="true" />
+		<CullingAABBSpecial type="ptLight"/>
+	</Entity>
+	<Entity init="true">
 		<Name name="farola"/>
 		<Transform pos="11.369833 3.870000 80.655403" lookAt="11.370000 1.970000 80.660004"/>
 		<Shadow resolution="256"/>
@@ -514,16 +520,6 @@
 		<Culling/>
 		<CullingAABBSpecial type="dirLight"/>
 		<DirLight spotlight="yes" spotDecay="0.7" decay="0.2" radius="8.2" color="0xfafa00ff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.7" export="true" />
-	</Entity>
-	<Entity init="true">
-		<Name name="Luz General"/>
-		<Transform pos="55.185928 50.000000 90.510002" lookAt="61.250004 -58.140003 69.098503"/>
-		<Camera orthographic="true" w="193.199997" h="184.099991" znear="0.000500" zfar="72.999992">
-			<viewport w="512" h="512"/>
-		</Camera>
-		<Culling/>
-		<CullingAABBSpecial type="dirLight"/>
-		<DirLight spotlight="yes" spotDecay="0.7" decay="0.05" radius="257.359" color="0x923232ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.7" export="true" />
 	</Entity>
 	<Entity init="yes" >
 		<Name name="mist_lianas" />

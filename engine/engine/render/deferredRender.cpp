@@ -316,6 +316,9 @@ void DeferredRender::operator()(component::Handle camera_h)
     if (b && (c == App::ALBEDO_PLUS_PARTICLES)) {
         initGBuffer(ALBEDO);
         renderParticles();
+        if (debugLayer) {
+            renderDebug();
+        }
         return;
     }
 #endif

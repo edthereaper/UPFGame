@@ -367,8 +367,7 @@ bool CCullingCube::cull(const AABB& aabb, Culling::cullDirection_e dir) const
         // Distance from box center to the plane
         float c = XMVectorGetX(XMPlaneDotCoord(plane, aabb.getCenter()));
 
-        if (fabsf(c) < r) {continue;}
-        if (c < r) {return false;}
+        if (c < r && fabsf(c) >= r) {return false;}
     }
     return true;
 }

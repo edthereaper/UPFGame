@@ -134,9 +134,6 @@ class EnemyBtExecutor {
 			} 
 			inline void receive(const MsgTransform& msg) {
 				megashot = true;
-			}  
-			inline void receive(const MsgAppearFromBoss& msg) {
-				appear = true;
 			}
         } inbox;
 

@@ -85,7 +85,13 @@
 	<Entity init="true">
 		<Name name="ptLight-01"/>
 		<Transform pos="-0.947559 3.618472 -0.855910"/>
-		<PtLight radius="50.000000" decay="0.5" color="0xffa601ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" offset="0.000000 0.000000 0.000000" specularAmountModifier="0" specularPowerFactor="1" intensity="0.6" export="true" />
+		<PtLight radius="50.000000" decay="0.5" color="0xffaa01ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" offset="0.000000 0.000000 0.000000" specularAmountModifier="0" specularPowerFactor="1" intensity="1" export="true" />
+		<CullingAABBSpecial type="ptLight"/>
+	</Entity>
+	<Entity init="true">
+		<Name name="weakPoint"/>
+		<Transform pos="-10.713416 33.482048 1.210511"/>
+		<PtLight radius="8.200000" decay="0.1" color="0xff3801ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" offset="0.000000 0.000000 0.000000" specularAmountModifier="0" specularPowerFactor="1" intensity="1" export="true" />
 		<CullingAABBSpecial type="ptLight"/>
 	</Entity>
 	<Entity init="true">
@@ -147,16 +153,6 @@
 		<Culling/>
 		<CullingAABBSpecial type="dirLight"/>
 		<DirLight spotlight="yes" spotDecay="0" decay="0.35" radius="69" color="0xffa201ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.3" export="true" />
-	</Entity>
-	<Entity init="true">
-		<Name name="Luz General"/>
-		<Transform pos="0.530000 61.689999 0.000000" lookAt="0.508954 60.690823 0.034696"/>
-		<Camera orthographic="true" w="87.700005" h="94.800003" znear="0.000500" zfar="65.499992">
-			<viewport w="512" h="512"/>
-		</Camera>
-		<Culling/>
-		<CullingAABBSpecial type="dirLight"/>
-		<DirLight spotlight="yes" spotDecay="0.7" decay="0.05" radius="131" color="0x923232ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.7" export="true" />
 	</Entity>
 	<Entity init="yes" >
 		<Name name="Smoke-00" />
@@ -302,49 +298,25 @@
 			<bottom color="b0b0099" />
 		</Mist>
 	</Entity>
-	<Entity init="yes" >
-		<Name name="Smoke-00" />
-		<Transform pos="5.69414 4.9957 1.95969" />
-		<Mist
-			chaotic="yes"
-			dX="1"
-			dZ="1"
-			darkenAlpha="0.4"
-			depthTolerance="200"
-			export="yes"
-			factor="1"
-			h="0.5"
-			intensity="0.8"
-			l="107.081"
-			layerDecay="0.05"
-			minimun="0"
-			sqSqrt="1"
-			unitWorldSize="25"
-			w="139.552"
-		>
-			<top color="280000cc" />
-			<bottom color="6060099" />
-		</Mist>
-	</Entity>
 	<Entity init="true">
 		<Name name="emitter-00"/>
-		<Transform pos="-8.145406 53.017651 1.404900" rot="0.000000 0.000000 0.000000 0.000000"/>
-		<Emitter name="big_smoke_buss" position="-8.145406 53.017651 1.404900" rotation="0.000000 0.000000 0.000000 0.000000" count="2" export="true"  particles0="emitter_0" particles1="emitter_1"/>
+		<Transform pos="-4.845406 52.047649 -5.035100" rot="0.000000 0.000000 0.000000 0.000000"/>
+		<Emitter name="big_smoke_buss" position="-4.845406 52.047649 -5.035100" rotation="0.000000 0.000000 0.000000 0.000000" count="2" export="true"  particles0="emitter_0" particles1="emitter_1"/>
 		</Entity>
 	<Entity init="true">
 		<Name name="emitter-01"/>
-		<Transform pos="-19.508188 43.861515 1.353195" rot="0.000000 0.000000 0.000000 0.000000"/>
-		<Emitter name="chimenea_1" position="-19.508188 43.861515 1.353195" rotation="0.000000 0.000000 0.000000 0.000000" count="1" export="true"  particles0="emitter_0"/>
+		<Transform pos="-10.878189 43.861515 -14.906805" rot="0.000000 0.000000 0.000000 0.000000"/>
+		<Emitter name="chimenea_1" position="-10.878189 43.861515 -14.906805" rotation="0.000000 0.000000 0.000000 0.000000" count="1" export="true"  particles0="emitter_0"/>
 		</Entity>
 	<Entity init="true">
 		<Name name="emitter-02"/>
-		<Transform pos="5.990339 46.357559 11.591911" rot="0.000000 0.000000 0.000000 0.000000"/>
-		<Emitter name="chimenea_2" position="5.990339 46.357559 11.591911" rotation="0.000000 0.000000 0.000000 0.000000" count="1" export="true"  particles0="emitter_0"/>
+		<Transform pos="-7.179661 45.337559 11.711911" rot="0.000000 0.000000 0.000000 0.000000"/>
+		<Emitter name="chimenea_2" position="-7.179661 45.337559 11.711911" rotation="0.000000 0.000000 0.000000 0.000000" count="1" export="true"  particles0="emitter_0"/>
 		</Entity>
 	<Entity init="true">
 		<Name name="emitter-03"/>
-		<Transform pos="5.852279 47.372471 -12.439787" rot="0.000000 0.000000 0.000000 0.000000"/>
-		<Emitter name="smoke" position="5.852279 47.372471 -12.439787" rotation="0.000000 0.000000 0.000000 0.000000" count="1" export="true"  particles0="emitter_0"/>
+		<Transform pos="12.742279 46.612473 -0.069787" rot="0.000000 0.000000 0.000000 0.000000"/>
+		<Emitter name="smoke" position="12.742279 46.612473 -0.069787" rotation="0.000000 0.000000 0.000000 0.000000" count="1" export="true"  particles0="emitter_0"/>
 		</Entity>
 	<Entity init="true">
 		<Name name="emitter-04"/>

@@ -215,26 +215,26 @@ class App {
 		component::Handle playerModelEntity_h;
 
         enum channel_e {
-            FINAL,
-            FX_FINAL, 
+            POSITION,
+            DEPTH,
             ALBEDO,
             ALBEDO_PLUS_PARTICLES,
-            LIGHTS,
-            SPECULAR,
             SELFILL,
-            FXSELFILL,
-            DEPTH,
+            DATA,
+            PAINT,
+            PAINT_AMOUNT,
             NORMALS,
-            AMBIENT,
-            POSITION,
+            UVPAINT,
             SHADOW,
             FXSHADOW,
             CUBESHADOW,
             FXCUBESHADOW,
-            PAINT,
-            PAINT_AMOUNT,
-            DATA,
-            UVPAINT,
+            LIGHTS,
+            SPECULAR,
+            AMBIENT,
+            FXSELFILL,
+            FINAL,
+            FX_FINAL, 
             channel_e_MAX
         } selectedChannel = INIT_SELECTEDCHANNEL;
         unsigned shadowToRender = 0;

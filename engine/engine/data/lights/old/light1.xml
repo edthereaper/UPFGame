@@ -1,5 +1,16 @@
 <scene>
 	<Entity init="true">
+		<Name name="ptLight-00"/>
+		<Transform pos="-72.564346 69.396767 144.163910"/>
+		<Camera fov="90" znear="0.100000" zfar="1000.000000">
+			<viewport w="256" h="256"/>
+		</Camera>
+		<CullingCube/>
+		<CubeShadow resolution="256" enable="ff" />
+		<PtLight radius="162.900009" decay="1" color="0x903434ff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" offset="0.000000 0.000000 0.000000" specularAmountModifier="0" specularPowerFactor="1" intensity="0.25" export="true" />
+		<CullingAABBSpecial type="ptLight"/>
+	</Entity>
+	<Entity init="true">
 		<Name name="luzP"/>
 		<Transform pos="-172.355621 15.900000 144.109451"/>
 		<PtLight radius="4.000000" decay="0.4" color="0xd3d32dff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" offset="0.000000 0.000000 0.000000" specularAmountModifier="0" specularPowerFactor="1" intensity="1" export="true" />
@@ -223,14 +234,15 @@
 		<DirLight spotlight="yes" spotDecay="0.7" decay="0.3" radius="9.8" color="0xfbed64ff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.509804" export="true" />
 	</Entity>
 	<Entity init="true">
-		<Name name="Luz_gerenal"/>
-		<Transform pos="-97.289970 110.760094 132.591522" lookAt="-96.917496 109.777954 132.603149"/>
-		<Camera orthographic="true" w="179.399994" h="195.399979" znear="0.000500" zfar="118.300003">
-			<viewport w="512" h="512"/>
+		<Name name="faro0E"/>
+		<Transform pos="-127.558716 14.191265 136.264130" lookAt="-127.549530 13.192547 136.266998"/>
+		<Shadow resolution="256"/>
+		<Camera fov="86.000000" znear="0.300000" zfar="4.900001">
+			<viewport w="256" h="256"/>
 		</Camera>
 		<Culling/>
 		<CullingAABBSpecial type="dirLight"/>
-		<DirLight spotlight="yes" spotDecay="0.7" decay="0.05" radius="266.7" color="0x923232ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.7" export="true" />
+		<DirLight spotlight="yes" spotDecay="0.7" decay="0.3" radius="9.8" color="0xfbed64ff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.509804" export="true" />
 	</Entity>
 	<Entity init="true">
 		<Name name="faro0F"/>

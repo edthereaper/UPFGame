@@ -291,6 +291,12 @@ fsmState_t AppFSMExecutor::changelvl(float elapsed)
 #endif
 }
 
+fsmState_t AppFSMExecutor::retry(float elapsed)
+{
+	App::get().retry();
+	return STATE_game;
+}
+
 fsmState_t AppFSMExecutor::waitvideo(float elapsed)
 {
 	App &app = App::get();
@@ -1964,9 +1970,12 @@ void App::render()
 	activateBoneBuffer();
 #endif
 
-	//shadow
+#ifdef _DEBUG
+    if (enableRenderGBufferChannels || selectedChannel >= SHADOW)
+#endif
 	{
-		TraceScoped scope("gen_shadows");
+	    //shadow
+		TraceScoped scope("shadows");
 		activateZConfig(zConfig_e::ZCFG_DEFAULT);
         activateRSConfig(RSCFG_SHADOWS);
 		getManager<CShadow>()->forall(&CShadow::generate);

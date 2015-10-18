@@ -416,6 +416,7 @@ void CLiana::updateJointLimits(int lastLink)
 
 void CLiana::setFilters(physX_user::filter_t filter, bool colliders, bool triggers)
 {
+    static const auto obligatory1stFilter = filter_t(filter_t::NONE, filter_t::SCENE, filter_t::NONE);
     if(colliders) {
         linkFilter |= filter;
         for(auto& shape : links) {shape.setFilters(filter);}
@@ -424,9 +425,12 @@ void CLiana::setFilters(physX_user::filter_t filter, bool colliders, bool trigge
         linkTriggerFilter |= filter;
         for(auto& shape : linkTriggers) {shape.setFilters(filter);}
     }
+    links[0].setFilters(obligatory1stFilter);
+    linkTriggers[0].setFilters(obligatory1stFilter);
 }
 void CLiana::removeFilters(physX_user::filter_t filter, bool colliders, bool triggers)
 {
+    static const auto obligatory1stFilter = filter_t(filter_t::NONE, filter_t::SCENE, filter_t::NONE);
     if(colliders) {
         linkFilter &=~filter;
         for(auto& shape : links) {shape.removeFilters(filter);}
@@ -435,6 +439,8 @@ void CLiana::removeFilters(physX_user::filter_t filter, bool colliders, bool tri
         linkTriggerFilter &=~filter;
         for(auto& shape : linkTriggers) {shape.removeFilters(filter);}
     }
+    links[0].setFilters(obligatory1stFilter);
+    linkTriggers[0].setFilters(obligatory1stFilter);
 }
 
 void CLiana::setCapsule(float radius, float height, bool colliders, bool triggers)
