@@ -1150,8 +1150,7 @@ void CBoss::init()
         {
             Entity* cannon = system.cannon;
             CTransform* cannonT = cannon->get<CTransform>();
-            /*cannonT->set(marks.cannonTop[i]);
-            system.cannonMark = marks.cannonBottom[i];*/
+            cannonT->set(marks.cannonTop[i]);
 			CMaxAnim *max = cannon->get<CMaxAnim>();
 			max->loadCannon(i+1);
 

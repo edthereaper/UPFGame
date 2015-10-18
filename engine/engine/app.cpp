@@ -1026,7 +1026,10 @@ void App::retry()
 	EntityListManager::get(CEnemy::TAG).broadcast(MsgSetPlayer(playerEntity_h));
 	EntityListManager::get(CEnemy::TAG).broadcast(MsgSetBichito(bichitoEntity_h));
 	spawn();
-    PaintManager::reset();
+    
+    if (!levelData->isBossLevel()) {
+        PaintManager::reset();
+    }
     MessageManager::dispatchPosts();
 
     EntityListManager::cleanupLists();
