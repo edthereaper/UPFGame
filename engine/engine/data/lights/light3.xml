@@ -962,45 +962,96 @@
 		<Name name="emitter-0B"/>
 		<Transform pos="-5.430790 74.744637 1.787571" rot="0.000000 0.000000 0.000000 0.000000"/>
 		<Emitter name="lava_ceniza_waterfall" position="-5.430790 74.744637 1.787571" rotation="0.000000 0.000000 0.000000 0.000000" count="2" export="true"  particles0="emitter_0" particles1="emitter_1"/>
-		</Entity>
+	</Entity>
 	<Entity init="true">
 		<Name name="emitter-0C"/>
 		<Transform pos="1.100233 75.006989 1.625561" rot="0.000000 0.000000 0.000000 0.000000"/>
 		<Emitter name="lava_ceniza_waterfall" position="1.100233 75.006989 1.625561" rotation="0.000000 0.000000 0.000000 0.000000" count="2" export="true"  particles0="emitter_0" particles1="emitter_1"/>
-		</Entity>
+	</Entity>
 	<Entity init="true">
 		<Name name="emitter-0D"/>
 		<Transform pos="-1.912912 74.945740 -4.279224" rot="0.000000 0.000000 0.000000 0.000000"/>
 		<Emitter name="lava_ceniza_waterfall" position="-1.912912 74.945740 -4.279224" rotation="0.000000 0.000000 0.000000 0.000000" count="2" export="true"  particles0="emitter_0" particles1="emitter_1"/>
-		</Entity>
+	</Entity>
 	<Entity init="true">
 		<Name name="emitter-0E"/>
 		<Transform pos="-5.866299 80.212013 -1.932106" rot="0.000000 0.000000 0.000000 0.000000"/>
 		<Emitter name="lava_ceniza_waterfall" position="-5.866299 80.212013 -1.932106" rotation="0.000000 0.000000 0.000000 0.000000" count="2" export="true"  particles0="emitter_0" particles1="emitter_1"/>
-		</Entity>
+	</Entity>
 	<Entity init="true">
 		<Name name="emitter-0F"/>
 		<Transform pos="-1.909728 79.920357 4.564344" rot="0.000000 0.000000 0.000000 0.000000"/>
 		<Emitter name="lava_ceniza_waterfall" position="-1.909728 79.920357 4.564344" rotation="0.000000 0.000000 0.000000 0.000000" count="2" export="true"  particles0="emitter_0" particles1="emitter_1"/>
-		</Entity>
+	</Entity>
 	<Entity init="true">
 		<Name name="emitter-10"/>
 		<Transform pos="2.919826 79.316483 -1.767089" rot="0.000000 0.000000 0.000000 0.000000"/>
 		<Emitter name="lava_ceniza_waterfall" position="2.919826 79.316483 -1.767089" rotation="0.000000 0.000000 0.000000 0.000000" count="2" export="true"  particles0="emitter_0" particles1="emitter_1"/>
-		</Entity>
+	</Entity>
 	<Entity init="true">
 		<Name name="emitter-14"/>
 		<Transform pos="-1.840000 37.968002 -20.403633" rot="0.000000 0.000000 0.000000 0.000000"/>
 		<Emitter name="caldera_flame" position="-1.840000 37.968002 -20.403633" rotation="0.000000 0.000000 0.000000 0.000000" count="1" export="true"  particles0="emitter_0"/>
-		</Entity>
+	</Entity>
 	<Entity init="true">
 		<Name name="emitter-15"/>
 		<Transform pos="-2.010000 38.068001 -20.563633" rot="0.000000 0.000000 0.000000 0.000000"/>
 		<Emitter name="caldera_flame" position="-2.010000 38.068001 -20.563633" rotation="0.000000 0.000000 0.000000 0.000000" count="1" export="true"  particles0="emitter_0"/>
-		</Entity>
+	</Entity>
 	<Entity init="true">
 		<Name name="emitter-16"/>
 		<Transform pos="-1.335553 44.496964 -21.310001" rot="0.000000 0.000000 0.000000 0.000000"/>
 		<Emitter name="caldera_smoke" position="-1.335553 44.496964 -21.310001" rotation="0.000000 0.000000 0.000000 0.000000" count="1" export="true"  particles0="emitter_0"/>
+	</Entity>
+	<Entity init="true">
+		<Name name="emitter-00"/>
+		<Transform pos="-3.147775 -10.474487 -6.792939" rot="0.000000 0.000000 0.000000 0.000000"/>
+		<Emitter name="lava_smok" position="-3.147775 -10.474487 -6.792939" rotation="0.000000 0.000000 0.000000 0.000000" count="1" particles0="emitter_0"/>
+	</Entity>
+	<Entity init="true">
+		<Name name="emitter-02"/>
+		<Transform pos="-0.437775 -10.444488 -6.792939" rot="0.000000 0.000000 0.000000 0.000000"/>
+		<Emitter name="lava_smok" position="-0.437775 -10.444488 -6.792939" rotation="0.000000 0.000000 0.000000 0.000000" count="1" particles0="emitter_0"/>
+	</Entity>
+	<Entity init="true">
+		<Name name="emitter-03"/>
+		<Transform pos="-1.570323 -10.389903 -7.092942" rot="0.000000 0.000000 0.000000 0.000000"/>
+		<Emitter name="ceniza" position="-1.570323 -10.389903 -7.092942" rotation="0.000000 0.000000 0.000000 0.000000" count="2" particles0="emitter_0" particles1="emitter_1"/>
+	</Entity>
+	<Entity init="true">
+		<Name name="emitter-04"/>
+		<Transform pos="4.419724 -10.532158 1.696520" rot="0.000000 0.000000 0.000000 0.000000"/>
+		<Emitter name="lava_smok" position="4.419724 -10.532158 1.696520" rotation="0.000000 0.000000 0.000000 0.000000" count="1" particles0="emitter_0"/>
+	</Entity>
+	<Entity init="true">
+		<Name name="emitter-05"/>
+		<Transform pos="3.175307 -10.637136 4.003386" rot="0.000000 0.000000 0.000000 0.000000"/>
+		<Emitter name="ceniza" position="3.175307 -10.637136 4.003386" rotation="0.000000 0.000000 0.000000 0.000000" count="0"/>
+	</Entity>
+	<Entity init="true">
+		<Name name="emitter-06"/>
+		<Transform pos="2.920260 -10.464851 4.353061" rot="0.000000 0.000000 0.000000 0.000000"/>
+		<Emitter name="lava_smok" position="2.920260 -10.464851 4.353061" rotation="0.000000 0.000000 0.000000 0.000000" count="1" particles0="emitter_0"/>
+	</Entity>
+	<Entity init="true">
+		<Name name="emitter-07"/>
+		<Transform pos="3.513269 -10.062618 3.171252" rot="0.000000 0.000000 0.000000 0.000000"/>
+		<Emitter name="ceniza" position="3.513269 -10.062618 3.171252" rotation="0.000000 0.000000 0.000000 0.000000" count="2" particles0="emitter_0" particles1="emitter_1"/>
+	</Entity>
+	<Entity init="true">
+		<Name name="emitter-08"/>
+		<Transform pos="-7.315405 -10.861646 4.382705" rot="0.000000 0.000000 0.000000 0.000000"/>
+		<Emitter name="lava_smok" position="-7.315405 -10.861646 4.382705" rotation="0.000000 0.000000 0.000000 0.000000" count="1" particles0="emitter_0"/>
 		</Entity>
+	<Entity init="true">
+		<Name name="emitter-09"/>
+		<Transform pos="-8.462751 -10.778660 1.946324" rot="0.000000 0.000000 0.000000 0.000000"/>
+		<Emitter name="lava_smok" position="-8.462751 -10.778660 1.946324" rotation="0.000000 0.000000 0.000000 0.000000" count="1" particles0="emitter_0"/>
+		</Entity>
+	<Entity init="true">
+		<Name name="emitter-0A"/>
+		<Transform pos="-7.478054 -10.530725 2.961931" rot="0.000000 0.000000 0.000000 0.000000"/>
+		<Emitter name="ceniza" position="-7.478054 -10.530725 2.961931" rotation="0.000000 0.000000 0.000000 0.000000" count="2" particles0="emitter_0" particles1="emitter_1"/>
+		</Entity>
+	<Entity init="true">
 </scene>

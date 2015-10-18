@@ -322,15 +322,16 @@ namespace particles{
 			}
 			
 		}
-#endif
-#if defined(_LIGHTTOOL) && !defined(_PARTICLES) 
+#else
+	
+		for (auto i : emitterData->keys)
+			ParticleUpdaterManager::get().removePS(i);
 
-	emitterData->listKeys.clear();
+		if (emitterData->listKeys.size() > 0 && emitterData != nullptr)
+		 emitterData->listKeys.clear();
 
-	for (auto i : emitterData->keys)
-		ParticleUpdaterManager::get().removePS(i);
-
-	emitterData->keys.clear();
+		if (emitterData->keys.size() > 0 && emitterData != nullptr)
+		 emitterData->keys.clear();
 #endif
 		
 	}

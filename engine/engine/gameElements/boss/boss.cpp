@@ -290,9 +290,14 @@ void BossBtExecutor::spawnMinion(float elapsed)
     		
     		e->sendMsg(MsgSetPlayer(playerEntity));
     		e->sendMsg(MsgSetBichito(bichitoEntity));
+
+			
     		
     		EntityListManager::get(CEnemy::TAG).add(e);
     		e->init();
+
+			CCharacterController *character = e->get<CCharacterController>();
+			character->jumpParabolic(transform->getUp(), transform->getFront(), elapsed, 2);
     
             CEnemy* enemy = e->get<CEnemy>();
             enemy->setFlying(m.point.getPosition(), 5.5f);
@@ -447,7 +452,7 @@ ret_e BossBtExecutor::gameOver(float elapsed)
 {
     //TODO: YOU WIN!
 	App &app = App::get();
-	app.setWinGame();
+	app.setWinGame(true);
     return STAY;
 }
 
@@ -1110,6 +1115,10 @@ void CBoss::reset()
             //Reset hammer
 
             Entity* e_prev = system.hammer;
+			if (e_prev->has<CEmitter>()){
+				CEmitter *prevEmitter = e_prev->get <CEmitter>();
+				prevEmitter->removeAll();
+			}
             Entity* e = getManager<Entity>()->createObj();
             PrefabManager::get().prefabricateComponents("boss/hammer", e);
             
@@ -1128,6 +1137,12 @@ void CBoss::reset()
         {
             //Reset Weak Spot
             Entity* e_prev(system.weakSpot);
+			if (e_prev->has<CEmitter>()){
+				CEmitter *prevEmitter = e_prev->get <CEmitter>();
+				prevEmitter->removeAll();
+			}
+
+
             Entity* e = getManager<Entity>()->createObj();
             PrefabManager::get().prefabricateComponents("boss/weak-spot", e);
             CTransform* t_prev = e_prev->get<CTransform>();

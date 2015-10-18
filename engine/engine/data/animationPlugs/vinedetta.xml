@@ -140,7 +140,7 @@
 	<!-- UNPLUG CASE: stop dash anim if we collide with mushroom -->
 	<plug id="55" anim="dash" unplug="true" type="action" delayOut="0.0">
 		<on key="0x835c"/>
-		<on key="0x1110"/>
+		<on key="0x1111"/>
 	</plug>
 	<!-- UNPLUG CASE: when revive we must quit the dead animation (that was on lock state) -->
 	<plug id="56" anim="dying" unplug="true" type="action" delayOut="0.0">

@@ -1,1 +1,5 @@
+<<<<<<< HEAD
+<std_material name="catarata_lava_torre" diffuse="animated_waterfall_lava" normal="animated_waterfall_lava_NRM" diffuse_selfIllumination="0.7" animFPS="10" paint_clamp="0" />
+=======
 <std_material name="catarata_lava_torre" diffuse="animated_waterfall_lava" diffuse_selfIllumination="0.7" animFPS="15" paint_clamp="0" />
+>>>>>>> 918a6bb957de236157c78f728c64b9830074e706
