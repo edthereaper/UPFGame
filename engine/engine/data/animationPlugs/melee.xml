@@ -64,4 +64,12 @@
 	<plug id="22" anim="combo3" unplug="true" type="action" delayOut="0.2">
 		<on key="0xD01C"/>			
 	</plug>	
+	
+	
+	<plug id="50" anim="dash" type="action" delay="0.2" delayOut="0.1" factor="0.5">
+		<on key="0xA002"/> <!-- flying - onair -->
+	</plug>
+	<plug id="53" anim="idle_fight" type="cycle" delay="0.3" delayOut="0.3">
+		<on key="0xA003"/> <!-- flying - brake -->			
+	</plug>
 </archetype>

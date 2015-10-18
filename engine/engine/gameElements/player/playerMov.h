@@ -290,7 +290,7 @@ namespace gameElements {
 		CamCannonController camCannon;
 		Cam3PController cam3P;
 
-		static inline float calculateImpulse(float amount) { return sqrt(amount * 2 * GRAVITY); }
+		static inline float calculateImpulse(float amount) { return std::sqrt(amount * 2 * GRAVITY); }
 
 		//conditions
 		inline bool inboxIsNotEmpty(float) const { return !inbox.isEmpty(); }

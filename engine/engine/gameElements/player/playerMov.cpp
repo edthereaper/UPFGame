@@ -1894,12 +1894,10 @@ void CPlayerMov::receive(const MsgHitEvent &msg)
         XMVECTOR reflected = reflect(c-o, msg.worldNormal); 
         XMVECTOR target = c + r*XMVector3Normalize(projectPlane(reflected, yAxis_v));
 
-        CCharacterController* charCo = me->get<CCharacterController>();
-        charCo->teleport(target+yAxis_v, false);
-
         auto bounce = calculateAimAngle(target, p, 0.5f,
             PlayerMovBtExecutor::calculateImpulse(
-                PlayerMovBtExecutor::TRAMPOLINE_IMPULSE_V*PlayerMovBtExecutor::TRAMPOLINE_IMPULSE_CANNON_FACTOR),
+                PlayerMovBtExecutor::TRAMPOLINE_IMPULSE_V *
+                PlayerMovBtExecutor::TRAMPOLINE_IMPULSE_CANNON_FACTOR),
             PlayerMovBtExecutor::GRAVITY
             );
 
@@ -1909,10 +1907,13 @@ void CPlayerMov::receive(const MsgHitEvent &msg)
 
 		auto v = meT->getFront();
 		bte.yVelocity  = project(bounce, yAxis_v);
+		bte.xzVelocity = projectPlane(bounce, yAxis_v);
         if (testIsBehind(bte.yVelocity, yAxis_v)) {
             bte.yVelocity = -bte.yVelocity;
         }
-		bte.xzVelocity = projectPlane(bounce, yAxis_v);
+        if (testIsBehind(bte.xzVelocity, msg.worldNormal)) {
+            bte.xzVelocity = -bte.xzVelocity;
+        }
         dbgXMVECTOR3(bte.yVelocity, false);
         dbg("  +  ");
         dbgXMVECTOR3(bte.xzVelocity, true);

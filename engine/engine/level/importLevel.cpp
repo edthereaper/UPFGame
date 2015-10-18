@@ -811,8 +811,8 @@ gameElements::CBoss* LevelImport::setupBoss(Entity* e, const pieceData_t& p)
                 assert (n >= 0 && n <3);
                 cannonBottom[n] = w;
             } else if (w.tag2 == "spawner") {
-                if (n > 0 && n <=12) {
-                    boss->addSpawn(w.transform, n-1);
+                if (n >= 0 && n <12) {
+                    boss->addSpawn(w.transform, n);
                 }
             }
         } else if (w.tag1 == "altura" && w.tag2 == "hammer" ) {

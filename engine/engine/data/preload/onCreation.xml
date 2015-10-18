@@ -10,4 +10,16 @@
 	<material name="bala"/>
 	<material name="pickupgreen"/>
 	<material name="pickupmagenta01"/>
+	<coreModel name="flare"/>
+	<coreModel name="melee"/>
+	<coreModel name="vinedetta"/>
+	<coreModel name="bichito"/>
+	<animationArchetype name="flare"/>
+	<animationArchetype name="melee"/>
+	<animationArchetype name="vinedetta"/>
+	<animationArchetype name="bichito"/>
+	<mesh name="flare"/>
+	<mesh name="melee"/>
+	<mesh name="vinedetta"/>
+	<mesh name="bichito"/>
 </preload>

@@ -34,9 +34,11 @@ using namespace animation;
 #include "Particles/ParticlesManager.h"
 using namespace particles;
 
-#ifdef DEBUG //Prevent these debuggers to slip in into release...
+#ifdef _DEBUG //Prevent these debuggers to slip in into release...
 //#define ONLY_PUNCHES
 //#define ONLY_MINIONS
+//#define ALL_MINIONS
+//#define ONLY_FLARES
 #endif
 
 namespace behavior {
@@ -167,7 +169,11 @@ const float BossBtExecutor::FLARE_SPEED = FlareBtExecutor::FLARE_SPEED;
 const unsigned BossBtExecutor::N_SHOTS[N_STAGES] = {3,5,7};
 const float BossBtExecutor::COOLDOWN_PUNCH_FIRST_TIME = 15.f;
 const float BossBtExecutor::COOLDOWN_PUNCH[N_STAGES] = {10.f, 12.5f, 15.0f};
+#ifdef ALL_MINIONS
+const unsigned BossBtExecutor::MIN_SPAWN[N_STAGES] = {12, 12, 12};
+#else
 const unsigned BossBtExecutor::MIN_SPAWN[N_STAGES] = {2, 5, 8};
+#endif
 const float BossBtExecutor::TIME_HEATING[N_STAGES] = {4.0f, 4.0f, 4.0f};
 const float BossBtExecutor::COOLDOWN_SHOOT[N_STAGES] = {1.5f, 1.2f, 0.9f};
 const float BossBtExecutor::TIME_PUNCH_WARNING[N_STAGES] = {3.5f, 3.5f, 3.5f};
@@ -201,17 +207,34 @@ const std::function<bool()> BossBtExecutor::CHANCE_PUNCH[BossBtExecutor::N_STAGE
     [=](){return chance(20,100);},
 };
 
+
+#ifdef ALL_MINIONS
+const std::function<bool()> BossBtExecutor::MINION_CHANCE[BossBtExecutor::N_STAGES] = {
+    [=](){return true;},
+    [=](){return true;},
+    [=](){return true;},
+};
+#else
 const std::function<bool()> BossBtExecutor::MINION_CHANCE[BossBtExecutor::N_STAGES] = {
     [=](){return chance(30,100);},
     [=](){return chance(50,100);},
     [=](){return chance(70,100);},
 };
+#endif
 
+#ifdef ONLY_FLARES
+const std::function<bool()> BossBtExecutor::FLARE_CHANCE[BossBtExecutor::N_STAGES] = {
+    [=](){return true;},
+    [=](){return true;},
+    [=](){return true;},
+};
+#else
 const std::function<bool()> BossBtExecutor::FLARE_CHANCE[BossBtExecutor::N_STAGES] = {
     [=](){return chance(75,1000);},
     [=](){return chance(150,1000);},
-    [=](){return chance(200,1000);},
+    [=](){return chance(250,1000);},
 };
+#endif
 
 enum _smokePanels_e {
     _1 = 1<<0,  _3 = 1<<2,  _5 = 1<<4,  _7 = 1<<6,
@@ -258,11 +281,12 @@ void BossBtExecutor::spawnMinion(float elapsed)
     		} else {
     			PrefabManager::get().prefabricateComponents("components/melee", m.entity);
     		}
-    
-    		//We up the enemy to avoid collisions with the ground
+    		CTransform* meT = meEntity.getSon<CTransform>();
     		CTransform* transform = e->get<CTransform>();
     		transform->set(m.point);
-    		transform->setPosition(transform->getPosition() + XMVectorSet(0, 0.45f, 0, 0));
+    		transform->refPosition() +=
+                (meT->getPosition() - transform->getPosition())*.5f +
+                XMVectorSet(0, -1.25f, 0, 0);
     		
     		e->sendMsg(MsgSetPlayer(playerEntity));
     		e->sendMsg(MsgSetBichito(bichitoEntity));
@@ -270,6 +294,9 @@ void BossBtExecutor::spawnMinion(float elapsed)
     		EntityListManager::get(CEnemy::TAG).add(e);
     		e->init();
     
+            CEnemy* enemy = e->get<CEnemy>();
+            enemy->setFlying(m.point.getPosition(), 5.5f);
+
     		nSpawn++;
     	}
     } else {

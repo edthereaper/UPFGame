@@ -33,6 +33,10 @@ class EnemyBtExecutor {
         enum nodeId_e {
             ENEMY				=	0xB001,
             EVENT				=	0xB002,
+			FLYING              =   0xA000,
+			FLYING_SETUP        =   0xA001,
+			FLYING_ONAIR        =   0xA002,
+			FLYING_BRAKE        =   0xA003,
             STUN				=	0xB003, 
             STUN_CAUSE			=	0xB004,
             TACKLE				=	0xB005,
@@ -71,7 +75,8 @@ class EnemyBtExecutor {
             E_SHOT,
             E_TACKLED,
             E_TRANSFORMED,
-            E_CELEBRATE
+            E_CELEBRATE,
+            E_SENDFLYING,
         } lastEvent = E_NOTHING;
 
         friend behavior::EnemyBt;
@@ -92,8 +97,10 @@ class EnemyBtExecutor {
 					bool alerted	:1;
 					bool protect	:1;
 					bool stopdef	:1;
+					bool flyer	    :1;
+					uint8_t _       :7;
                 };
-                uint8_t raw;
+                uint16_t raw;
             };
             bool isEmpty() const {
                 return raw == 0;
@@ -134,6 +141,9 @@ class EnemyBtExecutor {
         Handle playerEntity;
 		Handle bichitoEntity;
 
+        XMVECTOR flyPosition;
+        float flySpeed;
+
 		int lives = 3;
 													//tmp to remove CParticles
 		utils::Counter<float> timer, timerTransform;
@@ -152,13 +162,15 @@ class EnemyBtExecutor {
 		XMVECTOR originScaleV = utils::one_v;
 
 		XMVECTOR yVelocity = utils::zero_v;	
+        mutable float prevY = -1000000;
 		XMVECTOR xzVelocity = utils::zero_v;
-		float movSpeed = 1;					
 
     private:
         //conditions
+        inline bool isFlying(float) const {return lastEvent == E_SENDFLYING;}
         bool isDetected(float) const;
 		bool onGround(float) const;
+		bool onWall(float) const;
 
 		bool playerAchiable(float) const;
 
@@ -186,6 +198,9 @@ class EnemyBtExecutor {
         inline ret_e stay(float) { return STAY; }
         ret_e treatEvents(float);
         ret_e initTransforming(float);
+        ret_e startFlying(float);
+        ret_e doFlying(float);
+        ret_e brakeFlying(float);
         ret_e transform(float);
         ret_e angry(float);
         ret_e randomAngry(float);
@@ -205,12 +220,6 @@ class EnemyBtExecutor {
 		ret_e lookAround(float);
 
 		void updatePosition(float elapsed);
-
-		XMVECTOR getPosition(){
-			Entity* me(meEntity);
-			CTransform* meTransform(me->get<CTransform>());
-			return meTransform->getPosition();
-		}
 
 		void endOffensive(){
 			alert = false;
@@ -297,11 +306,6 @@ class CEnemy {
         void setOffensive(Handle newOffensiveAi) {bt.getExecutor().offensiveAi = newOffensiveAi;}
         void setIdle(Handle newIdleAi) {bt.getExecutor().idleAi = newIdleAi;}
 
-		//Test (check app.cpp line 426)
-		XMVECTOR getPosition(){
-			return bt.getExecutor().getPosition();
-		}
-
 		inline int getAction() const {return bt.getCurrentAction();}
 
         inline bool isDead() const { return (getAction() & EnemyBtExecutor::COD_DEAD) != 0;}
@@ -312,6 +316,14 @@ class CEnemy {
 		}
 
 		bool transform(float elapsed);
+
+        void setFlying(XMVECTOR pos, float s) {
+            auto& bte = bt.getExecutor();
+            bte.flyPosition = pos;
+            bte.flySpeed = s;
+            bte.inbox.flyer = true;
+			bt.reset();
+        }
 };
 
 }

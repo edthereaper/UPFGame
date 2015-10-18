@@ -9,4 +9,7 @@
 	<anim name="victory"/>
 	<anim name="shot"/>
 	<anim name="get_damage"/>
+	<anim name="dash"/>
+	<anim name="angry"/>
+	<anim name="idle_fight"/>
 </skeleton>

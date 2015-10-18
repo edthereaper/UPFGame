@@ -28,4 +28,11 @@
 	<plug id="7" anim="get_damage" type="action" delay="0.1" delayOut="0.1" repeat="true">
 		<on key="0xB036"/>
 	</plug>
+	
+	<plug id="50" anim="dash" type="action" delay="0.2" delayOut="0.1" factor="0.5">
+		<on key="0xA002"/> <!-- flying - onair -->
+	</plug>
+	<plug id="53" anim="idle_fight" type="cycle" delay="0.3" delayOut="0.3">
+		<on key="0xA003"/> <!-- flying - brake -->			
+	</plug>
 </archetype>
