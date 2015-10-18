@@ -51,6 +51,7 @@ public:
 		STATE_credits,
 		STATE_quit,
 		STATE_change_camera,
+		STATE_waitvideo,
 	};
 
 private:
@@ -68,6 +69,7 @@ private:
 	behavior::fsmState_t credits(float elapsed);
 	behavior::fsmState_t quit(float elapsed);
 	behavior::fsmState_t cinematic(float elapsed);
+	behavior::fsmState_t waitvideo(float elapsed);
 
 public:
 	inline behavior::fsmState_t init() { return STATE_loading; }
@@ -142,6 +144,7 @@ class App {
 		void renderGameOver();
         void addMappings();
 		void xboxControllerKeys();
+		bool waitVideo();
 #if defined(_DEBUG) || defined(_OBJECTTOOL)
         void renderGBufferChannels();
         void renderSelectedChannel();
@@ -255,6 +258,7 @@ class App {
 		int globalHealth = 150;
 		int globalEnergy = 100;
 		utils::Counter<float> timerGameOver;
+		std::thread thread_1;
 
 		int xboxPadSensiblity;
 		bool gameOverImg = false;
@@ -270,6 +274,8 @@ class App {
 		bool enableShadows = true;
 
 	public:
+		bool isLoadingThreadActve = false;
+		bool loadingLevelComplete = false;
 		bool loadingthreadVar = true;
         utils::Counter<float> timerThreadAnim;
 

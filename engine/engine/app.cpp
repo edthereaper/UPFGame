@@ -133,6 +133,7 @@ namespace behavior {
 		SET_FSM_STATE(win);
 		SET_FSM_STATE(credits);
 		SET_FSM_STATE(quit);
+		SET_FSM_STATE(waitvideo);
 	}
 }
 
@@ -282,16 +283,18 @@ fsmState_t AppFSMExecutor::changelvl(float elapsed)
         CLevelData* lvl (levelE->get<CLevelData>());
         lvl->stopSong();
     }
-
-
 	app.loadlvl();
+#if defined(DISPLAY_VIDEO_AND_MENUS)
+	return STATE_waitvideo;
+#else
 	return STATE_game;
+#endif
 }
 
-fsmState_t AppFSMExecutor::retry(float elapsed)
+fsmState_t AppFSMExecutor::waitvideo(float elapsed)
 {
 	App &app = App::get();
-	app.retry();
+	if (app.waitVideo())	return STATE_waitvideo;
 	return STATE_game;
 }
 
@@ -647,9 +650,9 @@ void loadingThread()
 {
 	App &app = App::get();
 	if (app.getLvl() == 1){
-		isLoadingThreadActve = true;
-		while (app.updateVideo(loadingLevelComplete));
-		isLoadingThreadActve = false;
+		app.isLoadingThreadActve = true;
+		while (app.updateVideo(app.loadingLevelComplete));
+		app.isLoadingThreadActve = false;
 	}
 	else{
 		while (app.loadingthreadVar){
@@ -707,6 +710,7 @@ void App::loadlvl()
 	activateCamera(*camera);
 	activateObjectConstants();
 
+#if defined(DISPLAY_VIDEO_AND_MENUS)
 	switch (gamelvl) {
 		case 1:
 			loadVideo("level1.ogv", "video_level1");
@@ -724,7 +728,8 @@ void App::loadlvl()
 			timerThreadAnim.reset();
 		break;
 	}
-	std::thread thread_1 = std::thread(loadingThread);
+	thread_1 = std::thread(loadingThread);
+#endif
 
 
 #if !defined(_OBJECTTOOL) && !defined(_LIGHTTOOL) && !defined(_PARTICLES)
@@ -801,7 +806,7 @@ void App::loadlvl()
 
 #endif
 
-#if !defined(_PARTICLES) && !defined(_LIGHTTOOL) 
+#ifdef _DEBUG
     lvlT->playSong();
 #endif
 
@@ -923,10 +928,22 @@ void App::loadlvl()
 	getManager<CAmbientSound>()->forall(&CAmbientSound::playSound);
 
 	dbg("Load complete.\n");
+	loadingLevelComplete = true;
+#if defined(_LIGHTTOOL) || defined(_PARTICLES)
+    Entity* cam = camera_h;
+    cam->add(getManager<CAABB>()->createObj());
+    CAABB* camAABB = cam->get<CAABB>();
+    camAABB->setCorners(-0.1f*one_v,0.1f*one_v);
+	getManager<logic::CSpatialIndex>()->forall<void, Handle>(
+        &logic::CSpatialIndex::setPlayer, camera_h, false);
+#endif
+}
+
+bool App::waitVideo(){
 	switch (gamelvl) {
 	case 1:
-		loadingLevelComplete = true;
-		while (isLoadingThreadActve);
+		if (isLoadingThreadActve) return true;
+		loadingthreadVar = false;
 		thread_1.join();
 		loadingLevelComplete = false;
 		break;
@@ -943,14 +960,11 @@ void App::loadlvl()
 		thread_1.join();
 		break;
 	}
-#if defined(_LIGHTTOOL) || defined(_PARTICLES)
-    Entity* cam = camera_h;
-    cam->add(getManager<CAABB>()->createObj());
-    CAABB* camAABB = cam->get<CAABB>();
-    camAABB->setCorners(-0.1f*one_v,0.1f*one_v);
-	getManager<logic::CSpatialIndex>()->forall<void, Handle>(
-        &logic::CSpatialIndex::setPlayer, camera_h, false);
+#if !defined(_PARTICLES) && !defined(_LIGHTTOOL)
+	CLevelData* levelData = levelE->get<CLevelData>();
+	levelData->playSong();
 #endif
+	return false;
 }
 
 void resetLiana(Entity* l, CLevelData* level)
