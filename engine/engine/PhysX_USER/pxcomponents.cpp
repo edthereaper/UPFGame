@@ -160,7 +160,7 @@ void Shape::loadFromProperties(const std::string& elem, utils::MKeyValue &atts)
     } else if (shapeType == "capsule") {
         setCapsule(atts.getFloat("radius", 1e-2f), atts.getFloat("height", 0));
     } else if (shapeType == "triangleMesh") {
-        setTriangleMesh(CollisionMeshLoader::load(atts.getString("mesh").c_str()));
+        setTriangleMesh(CollisionMeshLoader::load(atts.getString("mesh")));
 	} else if (shapeType == "particles_system"){
 		setParticlesSystem(
 			atts.getFloat("gridsize",3.0f),

@@ -3,6 +3,9 @@
 
 #include "render/mesh/mesh.h"
 
+#include "utils/data_provider.h"
+#include "utils/data_saver.h"
+
 using namespace physx;
 using namespace utils;
 using namespace render;
@@ -14,19 +17,30 @@ using index_t = render::Mesh::index_t;
 
 namespace physX_user {
 
-physx::PxTriangleMesh * CollisionMeshLoader::load(const char *name)
+physx::PxTriangleMesh * CollisionMeshLoader::load(const std::string& name)
 {
-	char full_name[MAX_PATH];
+    auto cookedMeshFileName = "data/cookedMesh/"+name+".pxTrimesh";
 
-	sprintf(full_name, "data/meshes/%s.mesh", name);
-	FileDataProvider fdp(full_name);
-
-	if (!fdp.isValid()) {
-        return nullptr;
+    FileDataProvider cookedMeshFDP(cookedMeshFileName);
+    if (!cookedMeshFDP.isValid()) {
+        FileDataProvider uncookedMeshFDP("data/meshes/"+name+".mesh");
+        if (uncookedMeshFDP.isValid()) {
+            auto buf = cook(uncookedMeshFDP);
+            MemoryDataSaver save;
+            save.write(buf.data, buf.size);
+            bool ok = save.saveToFile(cookedMeshFileName.c_str());
+            assert(ok);
+            return ok ? load(PxDefaultMemoryInputData(buf.data, unsigned(buf.size))) : nullptr;
+        } else {
+            dbg("Triangle mesh %s not found.\n", name.c_str());
+            return nullptr;
+        }
     } else {
-	    return (load(fdp));
+        auto nBytes = cookedMeshFDP.getFileSize();
+        auto buffer = new unsigned char[nBytes];
+        cookedMeshFDP.read(buffer, nBytes);
+        return load(PxDefaultMemoryInputData(buffer, unsigned(nBytes)));
     }
-
 }
 
 #define _VALIDATE_MESH
@@ -66,7 +80,13 @@ bool CollisionMeshLoader::validateMesh(const PxTriangleMeshDesc& d)
     return ok;
 }
 
-physx::PxTriangleMesh* CollisionMeshLoader::load(DataProvider& dp)
+physx::PxTriangleMesh* CollisionMeshLoader::load(PxDefaultMemoryInputData& readBuffer)
+{
+    PxTriangleMesh *trianguleMesh = Physics.gPhysicsSDK->createTriangleMesh(readBuffer);
+    return trianguleMesh;
+}
+
+staticBuffer_t CollisionMeshLoader::cook(DataProvider& dp)
 {
     auto data = render::Mesh::loadFileData(dp);
     
@@ -89,10 +109,7 @@ physx::PxTriangleMesh* CollisionMeshLoader::load(DataProvider& dp)
     
     assert(status);
     
-    PxDefaultMemoryInputData readBuffer(writeBuffer.getData(), writeBuffer.getSize());
-    PxTriangleMesh *trianguleMesh = Physics.gPhysicsSDK->createTriangleMesh(readBuffer);
-    
-    return trianguleMesh;
+    return staticBuffer_t(writeBuffer.getData(), writeBuffer.getSize());
 }
 
 }

@@ -6,6 +6,7 @@
 #undef PRINT_FPS                //print fps using dbg()
 #undef DEBUG_LIGHTS             //Draw fustrums and icosaedrons
 #undef PAUSE_ON_FOCUS_LOSE      //Helpful to disable on debug
+#undef ANALIZE_LOAD_TIME       //load level then close
 #endif
 
 #if defined(NDEBUG) && !defined(_ANITOOL) && !defined(LOOKAT_TOOL) && !defined(_LIGHTTOOL) && !defined(_OBJECTTOOL) && !defined(_PARTICLES)
@@ -603,6 +604,10 @@ bool App::create()
 
 #ifndef DISPLAY_VIDEO_AND_MENUS
 	loadlvl();
+    #ifdef ANALIZE_LOAD_TIME
+        dbg("Flag ANALIZE_LOAD_TIME was on. Closing App...\n");
+        return false;
+    #endif
 #else
 	//Necessary to display a video
 	camera_h = PrefabManager::get().prefabricate("camera");
@@ -2086,6 +2091,7 @@ void App::render()
 
 void App::destroy()
 {
+    dbg("Destroying app.\n");
     try {
 #ifdef LOOKAT_TOOL
         for (auto& tw : lookAtTw) {SAFE_DELETE(tw);}
