@@ -61,7 +61,6 @@ class DeferredRender {
         void clearGBuffer();
         void initGBuffer(uint32_t mask = ~0) const;
         void renderGBuffer(component::Handle camera_h);
-        void renderLights();
         void postProcessGBuffer();
         void resolve();
         void postProcessOutput();

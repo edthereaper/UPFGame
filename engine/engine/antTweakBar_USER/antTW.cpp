@@ -94,6 +94,7 @@ TwType gbufferChannelSelectEnum()
        {App::FXSHADOW, "FX ShadowBuffer"},
        {App::CUBESHADOW, "Cube ShadowBuffer"},
        {App::FXCUBESHADOW, "FX Cube ShadowBuffer"},
+       {App::UVPAINT, "UV and paint"},
     };
     return TwDefineEnum("GBufferChannel", enumVals, ARRAYSIZE(enumVals));
 }

@@ -230,6 +230,7 @@ class App {
             PAINT,
             PAINT_AMOUNT,
             DATA,
+            UVPAINT,
             channel_e_MAX
         } selectedChannel = INIT_SELECTEDCHANNEL;
         unsigned shadowToRender = 0;

@@ -297,20 +297,63 @@ void DeferredRender::screenEffects()
 
 void DeferredRender::operator()(component::Handle camera_h)
 {
+//In debug, if we're rendering only some channels,
+//exit the pipeline early and improve performance
+
+#ifdef _DEBUG
+    auto& app = App::get();
+    const auto& b = !app.enableRenderGBufferChannels;
+    const auto& c = app.selectedChannel;
+#endif
     TraceScoped _("deferred render");
     renderGBuffer(camera_h);
+#ifdef _DEBUG
+    if (b && (c == App::POSITION || c == App::DEPTH)) {return;}
+#endif
     drawMists();
+#ifdef _DEBUG
+    if (b && (c == App::ALBEDO || c == App::SELFILL || c == App::DATA)) {return;}
+#endif
     drawPaint();
-    renderLights();
+#ifdef _DEBUG
+    if (b && (c == App::PAINT || c == App::PAINT_AMOUNT ||
+        c == App::NORMALS ||c == App::UVPAINT)) {return;}
+#endif
+    {
+        TraceScoped _("illumination");
+        generateShadowBuffers();
+#ifdef _DEBUG
+        if (b && (c == App::SHADOW || c == App::FXSHADOW ||
+            c == App::CUBESHADOW || c == App::FXCUBESHADOW)) {
+            return;
+        }
+#endif
+        generateLightBuffer();  
+#ifdef _DEBUG
+        if (b && (c == App::LIGHTS || c == App::SPECULAR)) {return;}
+#endif 
+    }
     generateAmbient();
-    postProcessGBuffer();
+#ifdef _DEBUG
+    if (b && (c == App::AMBIENT)) {return;}
+#endif
+    postProcessGBuffer();  
+#ifdef _DEBUG
+    if (b && (c == App::FXSELFILL)) {return;}
+#endif 
     resolve();
     screenEffects();
     drawVolumetricLights();
     renderParticles();
+#ifdef _DEBUG
+    if (b && (c == App::FINAL)) {return;}
+#endif
     postProcessOutput();
-#if defined(_DEBUG) || defined(_OBJECTTOOL)
-    if (debugLayer) {renderDebug();}
+#if defined(_DEBUG)
+    if (debugLayer) {
+        renderDebug();
+    }
+    
 #endif
 }
 
@@ -319,13 +362,6 @@ void DeferredRender::renderGBuffer(component::Handle camera_h)
     TraceScoped _("gbuffer");
 	activateZConfig(zConfig_e::ZCFG_DEFAULT);
     RenderManager::renderAll(camera_h, *this);
-}
-
-void DeferredRender::renderLights()
-{
-    TraceScoped _("illumination");
-    generateShadowBuffers();
-    generateLightBuffer();   
 }
 
 void DeferredRender::destroy()

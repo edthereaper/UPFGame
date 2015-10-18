@@ -356,6 +356,32 @@ void App::loadConfig()
         windowedStr, ARRAYSIZE(windowedStr)-1, ".\\config.ini");
     GetPrivateProfileString("debug", "shadows", "true",
         shadowsStr, ARRAYSIZE(shadowsStr)-1, ".\\config.ini");
+	char channelStr[32] {};
+    GetPrivateProfileString("debug", "initChannel", "FX_FINAL",
+        channelStr, ARRAYSIZE(channelStr)-1, ".\\config.ini");
+
+#define IF_CASE_CONFIG_CHANNEL(name) if (!strcmp(channelStr, #name)) {selectedChannel = name;}
+#define ELIF_CASE_CONFIG_CHANNEL(name) else if (!strcmp(channelStr, #name)) {selectedChannel = name;}
+    IF_CASE_CONFIG_CHANNEL(ALBEDO)
+    ELIF_CASE_CONFIG_CHANNEL(FX_FINAL)
+    ELIF_CASE_CONFIG_CHANNEL(FINAL)
+    ELIF_CASE_CONFIG_CHANNEL(POSITION)
+    ELIF_CASE_CONFIG_CHANNEL(DEPTH)
+    ELIF_CASE_CONFIG_CHANNEL(SELFILL)
+    ELIF_CASE_CONFIG_CHANNEL(FXSELFILL)
+    ELIF_CASE_CONFIG_CHANNEL(LIGHTS)
+    ELIF_CASE_CONFIG_CHANNEL(PAINT)
+    ELIF_CASE_CONFIG_CHANNEL(PAINT_AMOUNT)
+    ELIF_CASE_CONFIG_CHANNEL(NORMALS)
+    ELIF_CASE_CONFIG_CHANNEL(DATA)
+    ELIF_CASE_CONFIG_CHANNEL(AMBIENT)
+    ELIF_CASE_CONFIG_CHANNEL(SHADOW)
+    ELIF_CASE_CONFIG_CHANNEL(FXSHADOW)
+    ELIF_CASE_CONFIG_CHANNEL(CUBESHADOW)
+    ELIF_CASE_CONFIG_CHANNEL(FXCUBESHADOW)
+    ELIF_CASE_CONFIG_CHANNEL(UVPAINT)
+    ELIF_CASE_CONFIG_CHANNEL(SPECULAR)
+
 #else	
 	config.xres = GetPrivateProfileInt("display", "x", defConfig.xres, ".\\config.ini");
 	config.yres = GetPrivateProfileInt("display", "y", defConfig.yres, ".\\config.ini");
@@ -1744,6 +1770,8 @@ void App::renderGameOver()
 #if defined(_DEBUG) || defined(_OBJECTTOOL)
 void App::renderSelectedChannel()
 {
+    activateRSConfig(RSCFG_DEFAULT);
+    activateZConfig(ZCFG_DEFAULT);
     activateBlendConfig(BLEND_CFG_DEFAULT);
     static const Technique*const alphaTech = Technique::getManager().getByName("FX_alpha");
     static const Technique*const invAlphaTech = Technique::getManager().getByName("FX_invalpha");
@@ -1765,6 +1793,7 @@ void App::renderSelectedChannel()
         case POSITION: channel = deferred.getSpace(); break;
         case AMBIENT: channel = deferred.getAmbient(); break;
         case DATA: channel = deferred.getData1(); break;
+        case UVPAINT: channel = deferred.getData2(); break;
         case PAINT: channel = deferred.getPaint(); break;
         case CUBESHADOW:
             if(cubeShadowMan->getSize() > cubeShadowToRender) {
@@ -1785,7 +1814,7 @@ void App::renderSelectedChannel()
 
         case SPECULAR: channel = deferred.getLights(); tech = alphaTech; break;
         case DEPTH: channel = deferred.getSpace(); tech = alphaTech; break;
-        case PAINT_AMOUNT: channel = deferred.getPaint(); tech = alphaTech; break;
+        case PAINT_AMOUNT: channel = deferred.getData2(); tech = alphaTech; break;
 
         default: channel = deferred.getFxOut(); break;
     }
@@ -1811,14 +1840,47 @@ void App::printSelectedChannelName()
         _CASE_NAME(DEPTH, txt)
         _CASE_NAME(NORMALS, txt)
         _CASE_NAME(POSITION, txt)
-        _CASE_NAME(CUBESHADOW, txt)
-        _CASE_NAME(FXCUBESHADOW, txt)
-        _CASE_NAME(SHADOW, txt)
-        _CASE_NAME(FXSHADOW, txt)
         _CASE_NAME(DATA, txt)
         _CASE_NAME(PAINT, txt)
         _CASE_NAME(PAINT_AMOUNT, txt)
         _CASE_NAME(AMBIENT, txt)
+        _CASE_NAME(UVPAINT, txt)
+        case SHADOW: {
+            auto shadowMan = getManager<CShadow>();
+            if(shadowMan->getSize() > shadowToRender) {
+                Entity* e = Handle(*shadowMan->begin() + shadowToRender).getOwner();
+                txt = "SHADOW: " + e->getName();
+            } else {
+                txt = "SHADOW (invalid selected)";
+            }
+        } break;
+        case FXSHADOW: {
+            auto shadowMan = getManager<CShadow>();
+            if(shadowMan->getSize() > shadowToRender) {
+                Entity* e = Handle(*shadowMan->begin() + shadowToRender).getOwner();
+                txt = "FXSHADOW: " + e->getName();
+            } else {
+                txt = "FXSHADOW (invalid selected)";
+            }
+        } break;
+        case CUBESHADOW: {
+            auto shadowMan = getManager<CCubeShadow>();
+            if(shadowMan->getSize() > cubeShadowToRender) {
+                Entity* e = Handle(*shadowMan->begin() + cubeShadowToRender).getOwner();
+                txt = "CUBESHADOW: " + e->getName();
+            } else {
+                txt = "CUBESHADOW (invalid selected)";
+            }
+        } break;
+        case FXCUBESHADOW: {
+            auto shadowMan = getManager<CCubeShadow>();
+            if(shadowMan->getSize() > cubeShadowToRender) {
+                Entity* e = Handle(*shadowMan->begin() + cubeShadowToRender).getOwner();
+                txt = "FXCUBESHADOW: " + e->getName();
+            } else {
+                txt = "FXCUBESHADOW (invalid selected)";
+            }
+        } break;
         default: break;
     }
     fontDBG.color = (Color::PALE_PINK).abgr();
