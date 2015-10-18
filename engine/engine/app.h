@@ -215,6 +215,7 @@ class App {
             FINAL,
             FX_FINAL, 
             ALBEDO,
+            ALBEDO_PLUS_PARTICLES,
             LIGHTS,
             SPECULAR,
             SELFILL,

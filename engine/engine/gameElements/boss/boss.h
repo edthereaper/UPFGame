@@ -301,7 +301,8 @@ class CBoss {
             float spin;
         } spinners[MAX_SPINNERS];
         unsigned nSpinners = 0;
-
+        
+        float spinFactor = 1;
 
     public:
         static const EntityListManager::key_t TAG = 0xBADDB055;
@@ -322,7 +323,9 @@ class CBoss {
             reset();
         }
 
-        void loadFromProperties(const std::string& elem, utils::MKeyValue &atts) {}
+        void loadFromProperties(const std::string& elem, utils::MKeyValue &atts) {
+            spinFactor = atts.getFloat("spinFactor", spinFactor);
+        }
 
 		inline int getAction() const {return bt.getCurrentAction();}
 

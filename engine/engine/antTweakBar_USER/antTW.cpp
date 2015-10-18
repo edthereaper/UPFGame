@@ -79,6 +79,7 @@ TwType gbufferChannelSelectEnum()
        {App::FINAL, "Out"},
        {App::FX_FINAL, "FX Out"},
        {App::ALBEDO, "Albedo"},
+       {App::ALBEDO_PLUS_PARTICLES, "Albedo and particles"},
        {App::LIGHTS, "Lights"},
        {App::SPECULAR, "Specular"},
        {App::SELFILL, "Self-Illumination"},
