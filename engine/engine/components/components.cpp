@@ -107,7 +107,7 @@ DECLARE_OBJECT_MANAGER(CLevelData, LevelData,                       N_ENTITIES);
 DECLARE_OBJECT_MANAGER(CWhiteBox, WhiteBox,                         N_ENTITIES);
 DECLARE_OBJECT_MANAGER(CKnife, Knife,							    N_ENTITIES);
 DECLARE_OBJECT_MANAGER(CParticleSystem, particle_system,			N_ENTITIES);
-DECLARE_OBJECT_MANAGER(CSmokeTower, SmokeTower,                     N_ENTITIES);
+DECLARE_OBJECT_MANAGER(CSmokeTower, SmokeTower,                     1);
 DECLARE_OBJECT_MANAGER(CLua, Lua,									N_ENTITIES);
 DECLARE_OBJECT_MANAGER(CBichito, Bichito,							1);
 DECLARE_OBJECT_MANAGER(CVolPtLight, VolPtLight,						N_ENTITIES);

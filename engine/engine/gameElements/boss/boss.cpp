@@ -36,7 +36,7 @@ using namespace particles;
 
 #ifdef _DEBUG //Prevent these debuggers to slip in into release...
 //#define ONLY_PUNCHES
-//#define ONLY_MINIONS
+#define ONLY_MINIONS
 //#define ALL_MINIONS
 //#define ONLY_FLARES
 #endif
@@ -1027,7 +1027,12 @@ ret_e BossBtExecutor::startWallOfSmoke(float elapsed)
 
 	CEmitter *emitter = me->get<CEmitter>();
 	auto smokeWallParticles = emitter->getKey("emitter_0");
-	ParticleUpdaterManager::get().sendActive(smokeWallParticles);
+	auto& man = ParticleUpdaterManager::get();
+    if (!man.isExist(smokeWallParticles)) {
+        emitter->load("emitter_0", smokeWallParticles);
+        smokeWallParticles = emitter->getKey("emitter_0");
+    }
+    man.sendActive(smokeWallParticles);
 
     nSpawn = 0;
     failed = 0;
@@ -1089,7 +1094,7 @@ ret_e BossBtExecutor::endWallOfSmoke(float elapsed)
 
 	CEmitter *emitter = me->get<CEmitter>();
 	auto smokeWallParticles = emitter->getKey("emitter_0");
-	ParticleUpdaterManager::get().sendInactive(smokeWallParticles);
+	ParticleUpdaterManager::get().setDeleteSelf(smokeWallParticles);
 
     return DONE;
 }
@@ -1107,6 +1112,16 @@ void CBoss::setMarks(
 
 void CBoss::reset()
 {
+
+    Entity *me = Handle(this).getOwner();
+    if (me->has<CEmitter>()){
+        CEmitter *em = me->get<CEmitter>();
+        for (auto& k : em->iterateKeys()) {
+            Entity* ps = ParticleUpdaterManager::get().getPs(k);
+            ps->postMsg(MsgDeleteSelf());
+        }
+    }
+
     auto& bte(bt.getExecutor());
     for(auto& system : bte.hammers) {
         {

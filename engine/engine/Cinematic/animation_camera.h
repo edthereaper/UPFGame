@@ -84,7 +84,7 @@ namespace cinematic{
 		HeaderCamera      headerCamera;
 		std::vector<Key>  keys;
 		std::string		  fileName;
-		float             curr_time;
+		float             curr_time=0;
 		cinematic::CameraManager::CameraStream stream;
         Counter<float> counterFinish;
 

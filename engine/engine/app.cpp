@@ -308,7 +308,7 @@ fsmState_t AppFSMExecutor::credits(float elapsed)
 {
 	App &app = App::get();
 	app.videoEndsTo = 0;
-	app.loadVideo("eyes.ogg", "");
+	app.loadVideo("eyes.ogv", "");
     
     Handle::setCleanup(true);
     auto entityMan = component::getManager<Entity>();
@@ -323,9 +323,16 @@ fsmState_t AppFSMExecutor::credits(float elapsed)
 fsmState_t AppFSMExecutor::win(float elapsed)
 {
 	App &app = App::get();
-	app.videoEndsTo = 2;
-	app.loadVideo("eyes.ogg", "");
-	return STATE_playvideo;
+    if (levelE != nullptr) {
+        CLevelData* lvl (levelE->get<CLevelData>());
+        lvl->stopSong();
+    }
+    fmodUser::fmodUserClass::stopSounds();
+	//App &app = App::get();
+	//app.videoEndsTo = 2;
+	//app.loadVideo("eyes.ogv", "");
+	//return STATE_playvideo;
+    return STATE_credits;
 }
 
 fsmState_t AppFSMExecutor::quit(float elapsed)
@@ -1064,7 +1071,6 @@ void App::retry()
 	getManager<CPickup>()->forall(&CPickup::removeFromScene);
 	getManager<CFlareShot>()->forall(&CFlareShot::removeFromScene);
     component::getManager<Entity>()->forall<void>(sendRevive);
-
 
     EntityList(EntityListManager::get(CEnemy::TAG)).forall(
         [levelData] (Handle h) {resetEnemy(h, levelData);}

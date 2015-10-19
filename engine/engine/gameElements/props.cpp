@@ -33,7 +33,7 @@ using namespace fmodUser;
 using namespace render;
 
 #include "Particles/ParticlesManager.h"
-
+using namespace particles;
     
 TransformableFSM::container_t TransformableFSM::states;
 void TransformableFSM::initType()
@@ -912,7 +912,9 @@ void CTrampoline::revive(const MsgRevive&)
 
 	particles::CEmitter *emitter = me->get<particles::CEmitter>();
 	auto k = emitter->getKey("emitter_0");
-    emitter->load("emitter_0", k);
+    if(!ParticleUpdaterManager::get().isExist(k)) {
+        emitter->load("emitter_0", k);
+    }
 }
 
 void CCannon::revive(const MsgRevive&)
