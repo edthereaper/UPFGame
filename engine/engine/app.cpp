@@ -659,7 +659,7 @@ void loadingThread()
 	App &app = App::get();
 	if (app.getLvl() == 1){
 		app.isLoadingThreadActve = true;
-		while (app.updateVideo(app.loadingLevelComplete));
+		while (app.updateVideo(app.loadingLevelComplete, true));
 		app.isLoadingThreadActve = false;
 	}
 	else{
@@ -2191,7 +2191,7 @@ void App::loadVideo(const char* name, const char* audio)
 #endif
 		}
 
-bool App::updateVideo(bool canSkipVideo){
+bool App::updateVideo(bool canSkipVideo, bool inThread){
 	pad.update();
 	if (xboxController.is_connected()){
 		xboxControllerKeys();
@@ -2202,10 +2202,19 @@ bool App::updateVideo(bool canSkipVideo){
 			return false;
 		}
 	}
-	if (isKeyPressed(VK_RETURN) && canSkipVideo){
-		fmodUser::fmodUserClass::stopSounds();
-		return false;
+	if (inThread){
+		if (isKeyPressed(VK_RETURN) && canSkipVideo){
+			fmodUser::fmodUserClass::stopSounds();
+			return false;
+		}
 	}
+	else{
+		if (pad.getState(APP_ENTER).isHit() && canSkipVideo){
+			fmodUser::fmodUserClass::stopSounds();
+			return false;
+		}
+	}
+	
 	return renderVideo();
 }
 

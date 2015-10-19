@@ -304,7 +304,7 @@ class App {
 		void renderChapterSelectionMenu();
 		void renderPaused();
 		void loadVideo(const char* name, const char* audio);
-		bool updateVideo(bool canSkipVideo);
+		bool updateVideo(bool canSkipVideo, bool inThread = false);
 		bool renderVideo();
 		
 		void getImgValues(float& posX, float& posY, float& imgW, float& imgH, float originX, float originY, float originW, float originH);
