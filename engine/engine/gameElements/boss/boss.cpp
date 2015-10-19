@@ -262,6 +262,8 @@ const std::vector<uint32_t> BossBtExecutor::smokePatterns[N_STAGES] = {
      }
     };
 
+
+//NOTE: minion flying depends on physx framerate... numbers were tested with 30+ fps
 void BossBtExecutor::spawnMinion(float elapsed)
 {
     auto& m = minions[iSpawn];
@@ -286,7 +288,7 @@ void BossBtExecutor::spawnMinion(float elapsed)
     		transform->set(m.point);
     		transform->refPosition() +=
                 (meT->getPosition() - transform->getPosition())*.5f +
-                XMVectorSet(0, -1.25f, 0, 0);
+                XMVectorSet(0, -6.5f, 0, 0);
     		
     		e->sendMsg(MsgSetPlayer(playerEntity));
     		e->sendMsg(MsgSetBichito(bichitoEntity));
@@ -300,7 +302,7 @@ void BossBtExecutor::spawnMinion(float elapsed)
 			character->jumpParabolic(transform->getUp(), transform->getFront(), elapsed, 2);
     
             CEnemy* enemy = e->get<CEnemy>();
-            enemy->setFlying(m.point.getPosition(), 5.5f);
+            enemy->setFlying(m.point.getPosition(),8.5f);
 
     		nSpawn++;
     	}

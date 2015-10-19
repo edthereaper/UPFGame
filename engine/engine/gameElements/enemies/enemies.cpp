@@ -263,12 +263,14 @@ ret_e EnemyBtExecutor::doFlying(float e)
     }
 }
 
-#define FLYING_BRAKE_SPEED 30.f
+#define FLYING_BRAKE_SPEED 15.0f
 
 ret_e EnemyBtExecutor::brakeFlying(float e)
 {
     auto prev = xzVelocity;
     xzVelocity -= XMVector3Normalize(xzVelocity)*e*FLYING_BRAKE_SPEED;
+    CTransform* t = meEntity.getSon<CTransform>();
+    alignXZ(t, t->getPosition()-xzVelocity, ALERT_ROTATE_SPEED*2.5f*e);
     if (testIsBehind(xzVelocity, prev)) {
         xzVelocity = zero_v;
         return DONE;
@@ -467,11 +469,11 @@ bool EnemyBtExecutor::onGround(float) const
 {
 	Entity* me = meEntity;
     CTransform* t = me->get<CTransform>();
-    float y = XMVectorGetY(t->getPosition());
-    if (y == prevY) {
-        return true;
-    }
-    prevY = y;
+    //float y = XMVectorGetY(t->getPosition());
+    //if (y == prevY) {
+    //    return true;
+    //}
+    //prevY = y;
 	PxRaycastBuffer hit;
     auto f = filter_t::SCENE|filter_t::PROP|filter_t::TOOL;
     static const auto rayLength = 0.1f;
@@ -501,7 +503,7 @@ void EnemyBtExecutor::updatePosition(float elapsed)
 	Entity* me = meEntity;
 	if (!changemesh){
 		if (onGround(elapsed)) {
-            yVelocity = -yAxis_v * GRAVITY * elapsed;
+            yVelocity = -yAxis_v * GRAVITY;
         } else {
             yVelocity -= yAxis_v * GRAVITY * elapsed;
         }
