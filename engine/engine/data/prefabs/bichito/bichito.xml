@@ -4,7 +4,7 @@
 	<Mesh motionBlur="0.2" diffuseAsSelfIllumination="0.2" skipGeometryLoad="yes"/>
 	<Skeleton name="bichito"/>
 	<prefab name="mesh/bichito"/>
-	<AABB min="-0.5 -0.5 -0.5" max="0.5 0.5 0.5" />
+	<AABB min="-20 -20 -20" max="20 20 20" />
 	<CullingAABB/>
 	
 	<AnimationPlugger archetype="bichito"/>

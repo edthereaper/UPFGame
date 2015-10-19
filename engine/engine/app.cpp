@@ -308,7 +308,7 @@ fsmState_t AppFSMExecutor::credits(float elapsed)
 {
 	App &app = App::get();
 	app.videoEndsTo = 0;
-	app.loadVideo("bunny.ogg", "");
+	app.loadVideo("eyes.ogg", "");
     
     Handle::setCleanup(true);
     auto entityMan = component::getManager<Entity>();
@@ -324,7 +324,7 @@ fsmState_t AppFSMExecutor::win(float elapsed)
 {
 	App &app = App::get();
 	app.videoEndsTo = 2;
-	app.loadVideo("bunny.ogg", "");
+	app.loadVideo("eyes.ogg", "");
 	return STATE_playvideo;
 }
 
