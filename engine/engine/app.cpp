@@ -408,6 +408,8 @@ void App::loadConfig()
         shadowsStr, ARRAYSIZE(shadowsStr)-1, ".\\config.ini");
 #endif
 	xboxPadSensiblity = GetPrivateProfileInt("sensibility", "xbox", 5, ".\\config.ini");
+	if (xboxPadSensiblity < 1)	xboxPadSensiblity = 1;
+	if (xboxPadSensiblity > 10) xboxPadSensiblity = 10;
 	//Check the desktop resolution, if its lower than the resolution set in config. Set the resolution same as desktop.
 	RECT desktop;
 	const HWND hDesktop = GetDesktopWindow();
@@ -547,8 +549,8 @@ void App::xboxControllerKeys()
 	else{
 	App::get().getPad().onKey(VK_LBUTTON, false);
 	}*/
-	Mouse::setSysXboxController(int(xboxController.State._right_thumbstickX * 400 * elapsed * xboxPadSensiblity),
-								int(-xboxController.State._right_thumbstickY * 200 * elapsed * xboxPadSensiblity));
+	Mouse::setSysXboxController(int(xboxController.State._right_thumbstickX  * 400 * elapsed * xboxPadSensiblity),
+								int(-xboxController.State._right_thumbstickY * 400 * elapsed * (xboxPadSensiblity/2)));
 }
 
 void App::addMappings()

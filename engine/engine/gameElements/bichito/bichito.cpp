@@ -580,6 +580,7 @@ namespace gameElements {
 			}
 			else{
 				//dbg("CCC %f\n", timerFollow.count(elapsed));
+				align3D(meT, playerT->getPosition() + levitatePos + playerT->getFront() * 10, (CHASE_ROTATE_SPEED / 5) * elapsed);
 				if (timerFollow.count(elapsed) >= TIME_WAIT_FOLLOW) {
 					if (!testDistanceSqEu(meT->getPosition() - levitatePos, playerT->getPosition(), DISTANCE_IDLE_PLAYER)){
 						timerFollow.reset();
@@ -677,6 +678,9 @@ namespace gameElements {
 			XMVECTOR vEnd = DirectX::XMQuaternionMultiply(
 				DirectX::XMQuaternionRotationAxis(zAxis_v, deg2rad(180)),
 				DirectX::XMQuaternionRotationAxis(yAxis_v, angleY));
+			int tint = 4294967295;
+			float distCamLevi = sqEuclideanDistance(pos, cam->getPosition());
+			if (distCamLevi < 20.0f)		tint -= int(255 * ((20 - distCamLevi) / 20));
 			setObjectConstants(XMMatrixAffineTransformation(XMVectorSet(1.5f, 1, 1, 1)/*one_v*/, zero_v, vEnd, pos));
 			mesh_textured_quad_xy_centered.activateAndRender();
 			activateZConfig(ZCFG_DEFAULT);

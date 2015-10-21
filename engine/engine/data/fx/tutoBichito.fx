@@ -41,5 +41,6 @@ float4 PS(VS_TEXTURED_OUTPUT input, in float4 iPosition : SV_Position) : SV_Targ
   float4 color = txDiffuse.Sample(samClampLinear, input.UV);
   color = float4(color.rgb*(Tint.rgb*Tint.a) + color.rgb*(1-Tint.a), color.a);
   color.a *= delta_z;
+  color.a *= Tint.a;
   return color;
 }

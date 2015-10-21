@@ -1793,6 +1793,9 @@ void CPlayerMov::update(float elapsed)
 			case 0x2504:	//Begin
 				animPlugger->plug(0x2400);
 				break;
+			case 0x1111:	//When enter cannon we must quit run
+				animPlugger->plug(0x111D);
+				break;
 			case 0x2231:	//Dash Bounce
 				animPlugger->plug(0x835c);
 				animPlugger->plug(0xd0c1);

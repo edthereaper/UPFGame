@@ -19,8 +19,8 @@ using namespace utils;
 
 using namespace particles;
 
-#define HEALTH_AMOUNT_PICKUP		 2
-#define ENERGY_AMOUNT_PICKUP		 2
+#define HEALTH_AMOUNT_PICKUP		 10
+#define ENERGY_AMOUNT_PICKUP		 10
 #define TIME_INMORTAL_PICKUP		 7.5f
 #define COIN_POINTS_PICKUP			 1
 #define COLLECTIBLE_POINTS_PICKUP	 1
