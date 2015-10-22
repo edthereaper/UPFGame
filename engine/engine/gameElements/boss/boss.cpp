@@ -460,7 +460,7 @@ ret_e BossBtExecutor::gameOver(float elapsed)
 
 ret_e BossBtExecutor::weakSpotCrashFx(float elapsed)
 {
-	fmodUser::fmodUserClass::playSound("Glass_break", 1.0f, 0.0f);
+	fmodUser::FmodStudio::playEvent(fmodUser::FmodStudio::getEventInstance("SFX/boss_lifeleft"));
     Entity* me(meEntity);
     
 #if defined(_DEBUG) && defined(DEBUG_BOSS_TINTING)
@@ -579,7 +579,7 @@ ret_e BossBtExecutor::setupPunchWarning(float elapsed)
     mobile->startShaking(
           HAMMER_WARNING_SHAKE_AMPLITUDE, HAMMER_WARNING_SHAKE_FREQUENCY,
           CMobile::SHAKE_SIN, xAxis_v, CMobile::REF_RELATIVE);
-	fmodUser::fmodUserClass::playSound("boss_chargesmoke", 1.0f, 0.0f);
+	fmodUser::FmodStudio::playEvent(fmodUser::FmodStudio::getEventInstance("SFX/boss_chargesmoke"));
     //TODO: start fx
     timer.set(-TIME_PUNCH_WARNING[stage]);
 
@@ -643,7 +643,7 @@ ret_e BossBtExecutor::setupSmokeWarning(float elapsed)
     const auto pattern = patterns[rand_uniform(int(patterns.size())-1)];
     EntityListManager::get(CSmokePanel::TAG).broadcast(MsgActivateSmokeWarning(pattern));
     timer.set(-TIME_EARTHQUAKE[stage]);
-	fmodUser::fmodUserClass::playSound("boss_smokeout", 1.0f, 0.0f);
+	fmodUser::FmodStudio::playEvent(fmodUser::FmodStudio::getEventInstance("SFX/boss_smokeout"));
     
     Entity* hammer = hammers[currentHammer].hammer;
     CMobile* mobile = hammer->get<CMobile>();
@@ -767,7 +767,7 @@ ret_e BossBtExecutor::setupArmResisting(float elapsed)
           HAMMER_RESISTING_SHAKE_AMPLITUDE, HAMMER_RESISTING_SHAKE_FREQUENCY,
           CMobile::SHAKE_SIN, xAxis_v, CMobile::REF_RELATIVE);
     timer.set(-TIME_ARM_RESISTING);
-	fmodUser::fmodUserClass::playSound("boss_damage", 1.0f, 0.0f);
+	fmodUser::FmodStudio::playEvent(fmodUser::FmodStudio::getEventInstance("SFX/boss_damage"));
     return DONE;
 }
 
@@ -797,7 +797,7 @@ ret_e BossBtExecutor::dropCannon(float elapsed)
 	CMaxAnim *anim = cannon->get<CMaxAnim>();
 //	anim->setTiming(1.0);
 	anim->setPlay(true);
-	fmodUser::fmodUserClass::playSound("boss_cannonout", 1.0f, 0.0f);
+	fmodUser::FmodStudio::playEvent(fmodUser::FmodStudio::getEventInstance("SFX/boss_cannonout"));
     return DONE_QUICKSTEP;
 }
 
@@ -901,7 +901,7 @@ ret_e BossBtExecutor::setupHeat(float elapsed)
 #endif
 
     //TODO: start fx
-	fmodUser::fmodUserClass::playSound("boss_chargecanon", 2.0f, 0.0f);
+	fmodUser::FmodStudio::playEvent(fmodUser::FmodStudio::getEventInstance("SFX/boss_chargecanon"));
     timer.set(-TIME_HEATING[stage]);
     return DONE;
 }
@@ -925,7 +925,7 @@ void BossBtExecutor::shootFlare()
 	XMVECTOR vel = XMVector3Normalize((playerT->getPosition() + playerT->getPivot()) - origin) * FLARE_SPEED * randomSpeed;
 	CFlareShot* flareShot = shot->get<CFlareShot>();
 	flareShot->setup(origin, vel, XMQuaternionIdentity());
-	fmodUser::fmodUserClass::playSound("boss_shootcanon", 1.0f, 0.0f);
+	fmodUser::FmodStudio::playEvent(fmodUser::FmodStudio::getEventInstance("SFX/boss_shootcanon"));
 }
 
 ret_e BossBtExecutor::shoot(float elapsed)
@@ -1023,7 +1023,7 @@ ret_e BossBtExecutor::startWallOfSmoke(float elapsed)
 #endif
 
     timer.set(-TIME_SEND_MINIONS_BEFORE);
-	//fmodUser::fmodUserClass::playSound("boss_invokeenemies", 1.0f, 0.0f);
+	fmodUser::FmodStudio::playEvent(fmodUser::FmodStudio::getEventInstance("SFX/boss_invokeenemies"));
 
 	CEmitter *emitter = me->get<CEmitter>();
 	auto smokeWallParticles = emitter->getKey("emitter_0");

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.01.05.00">
+    <object class="AudioFile" id="{f75b0c22-0236-4afc-98db-b81e39b81d5a}">
+        <property name="frequencyInKHz">
+            <value>44.0999985</value>
+        </property>
+        <property name="channelCount">
+            <value>1</value>
+        </property>
+        <property name="length">
+            <value>0.68063492063492059</value>
+        </property>
+        <property name="audioFilePath">
+            <value>$(AUDIO_BIN_DIR)/levi_alert_hp {b61b4a45-60d2-4fd6-8db8-c5a765b156d6}.wav</value>
+        </property>
+        <relationship name="container">
+            <destination>{22cc3fdc-5186-4411-9703-b8b0e5e28f34}</destination>
+        </relationship>
+    </object>
+</objects>

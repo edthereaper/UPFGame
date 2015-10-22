@@ -17,7 +17,7 @@ using namespace physX_user;
 #include "gameElements/player/playerStats.h"
 using namespace gameElements;
 
-#include "fmod_User/fmodUser.h"
+#include "fmod_User/fmodStudio.h"
 using namespace fmodUser;
 
 #include "Particles/ParticlesManager.h"
@@ -56,7 +56,7 @@ namespace gameElements {
 		//launch Fx, wait...
 		Entity* me = meEntity;
 		CTransform* meT = ((Entity*)me)->get<CTransform>();
-		fmodUser::fmodUserClass::play3DSingleSound("smokepanel_tremor", meT->getPosition());
+		fmodUser::FmodStudio::play3DSingleEvent(fmodUser::FmodStudio::getEventInstance("SFX/smokepanel_tremor"), meT->getPosition());
 
 		if (me->has<CEmitter>()){
 			CEmitter *emitter = me->get<CEmitter>();
@@ -73,11 +73,6 @@ namespace gameElements {
 			signal = false;
 			Entity* me = meEntity;
 			CTransform* meT = me->get<CTransform>();
-			char cstr[32] = "smokepanel_firing";
-			int randomV = rand_uniform(3, 1);
-			char randomC[32] = "";
-			sprintf(randomC, "%d", randomV);
-			strcat(cstr, randomC);
 
 				if (me->has<CEmitter>()){
 
@@ -91,7 +86,7 @@ namespace gameElements {
 					ParticleUpdaterManager::get().sendActive(key1);
 					ParticleUpdaterManager::get().sendActive(key2);
 
-					fmodUser::fmodUserClass::play3DSingleSound(cstr, meT->getPosition());
+					fmodUser::FmodStudio::play3DSingleEvent(fmodUser::FmodStudio::getEventInstance("SFX/smokepanel_firing"), meT->getPosition());
 				}
 			return STATE_firing;
 		}
@@ -106,12 +101,7 @@ namespace gameElements {
 			signal = false;
 			Entity* me = meEntity;
 			CTransform* meT = ((Entity*)me)->get<CTransform>();
-			char cstr[32] = "smokepanel_cooling";
-			int randomV = rand_uniform(3, 1);
-			char randomC[32] = "";
-			sprintf(randomC, "%d", randomV);
-			strcat(cstr, randomC);
-			fmodUser::fmodUserClass::play3DSingleSound(cstr, meT->getPosition());
+			fmodUser::FmodStudio::play3DSingleEvent(fmodUser::FmodStudio::getEventInstance("SFX/smokepanel_cooling"), meT->getPosition());
 
 			if (me->has<CEmitter>()){
 

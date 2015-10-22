@@ -216,12 +216,12 @@ void CPickup::activate()
 	switch (type)
 	{
 	case gameElements::CPickup::HEALTH:
-		fmodUser::fmodUserClass::playSound("Pickup_life", 1.0f, 0.0f);
+		fmodUser::FmodStudio::playEvent(fmodUser::FmodStudio::getEventInstance("SFX/Pickup"));
 		player->sendMsg(MsgPickupHeal(HEALTH_AMOUNT_PICKUP));
 		break;
 
 	case gameElements::CPickup::ENERGY:
-		fmodUser::fmodUserClass::playSound("Pickup_energy", 1.0f, 0.0f);
+		fmodUser::FmodStudio::playEvent(fmodUser::FmodStudio::getEventInstance("SFX/Pickup"));
 		player->sendMsg(MsgPickupEnergy(ENERGY_AMOUNT_PICKUP));
 		break;
 
@@ -229,7 +229,7 @@ void CPickup::activate()
 		player->sendMsg(MsgPickupInvincible(TIME_INMORTAL_PICKUP));
 		break;
 	case gameElements::CPickup::COIN:
-		fmodUser::fmodUserClass::playSound("Pickup_coin", 1.0f, 0.0f);
+		fmodUser::FmodStudio::playEvent(fmodUser::FmodStudio::getEventInstance("SFX/Pickup"));
 		player->sendMsg(MsgPickupCoin(COIN_POINTS_PICKUP));
 		break;
 	case gameElements::CPickup::COLLECTABLE:

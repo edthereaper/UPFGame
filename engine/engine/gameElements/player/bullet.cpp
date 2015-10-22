@@ -90,12 +90,7 @@ void CBullet::receive(const MsgCollisionEvent& msg)
 		else{
 			if (!didSound){
 				CTransform* ownerT = owner->get<CTransform>();
-				char cstr[32] = "Bullet_bounce";
-				int randomV = rand_uniform(3, 1);
-				char randomC[32] = "";
-				sprintf(randomC, "%d", randomV);
-				strcat(cstr, randomC);
-				fmodUser::fmodUserClass::play3DSingleSound(cstr, ownerT->getPosition(),0.5f);
+				fmodUser::FmodStudio::play3DSingleEvent(fmodUser::FmodStudio::getEventInstance("SFX/Bullet_bounce"), ownerT->getPosition());
 				didSound = true;
 				timer.reset();
 			}
@@ -103,12 +98,7 @@ void CBullet::receive(const MsgCollisionEvent& msg)
 	}else{
 		if(!didSound){
 			CTransform* ownerT = owner->get<CTransform>();
-			char cstr[32] = "Bullet_bounce";
-			int randomV = rand_uniform(3, 1);
-			char randomC[32] = "";
-			sprintf(randomC, "%d", randomV);
-			strcat(cstr, randomC);
-			fmodUser::fmodUserClass::play3DSingleSound(cstr, ownerT->getPosition());
+			fmodUser::FmodStudio::play3DSingleEvent(fmodUser::FmodStudio::getEventInstance("SFX/Bullet_bounce"), ownerT->getPosition());
 			didSound = true;
 			timer.reset();
 		}

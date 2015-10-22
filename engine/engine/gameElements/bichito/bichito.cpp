@@ -283,7 +283,7 @@ namespace gameElements {
 		}
 		if(playSound){
 			CTransform* meT = ((Entity*)meEntity)->get<CTransform>();			
-			fmodUser::fmodUserClass::play3DSingleSound("levi_alert_win", meT->getPosition(), 0.5f);
+			fmodUser::FmodStudio::play3DSingleEvent(fmodUser::FmodStudio::getEventInstance("SFX/levi_alert_win"), meT->getPosition());
 			playSound = false;
 		}
 		helperType = 8;
@@ -314,7 +314,7 @@ namespace gameElements {
 		}
 		if(playSound){
 			CTransform* meT = ((Entity*)meEntity)->get<CTransform>();
-			fmodUser::fmodUserClass::play3DSingleSound("levi_alert_hp", meT->getPosition(), 0.5f);
+			fmodUser::FmodStudio::play3DSingleEvent(fmodUser::FmodStudio::getEventInstance("SFX/levi_alert_hp"), meT->getPosition());
 			playSound = false;
 		}
 		helperType = 3;
@@ -332,13 +332,8 @@ namespace gameElements {
 			return DONE;
 		}
 		if(playSound){
-			char cstr[32] = "levi_alert_tuto";
-			int randomV = rand_uniform(3, 1);
-			char randomC[32] = "";
-			sprintf(randomC, "%d", randomV);
-			strcat(cstr, randomC);
 			CTransform* meT = ((Entity*)meEntity)->get<CTransform>();
-			fmodUser::fmodUserClass::play3DSingleSound(cstr, meT->getPosition(), 0.5f);
+			fmodUser::FmodStudio::play3DSingleEvent(fmodUser::FmodStudio::getEventInstance("SFX/levi_alert_tuto"), meT->getPosition());
 			playSound = false;
 		}
 		helperType = 7;
@@ -357,7 +352,7 @@ namespace gameElements {
 		}
 		if(playSound){
 			CTransform* meT = ((Entity*)meEntity)->get<CTransform>();
-			fmodUser::fmodUserClass::play3DSingleSound("levi_alert_earthquake", meT->getPosition(), 0.5f);
+			fmodUser::FmodStudio::play3DSingleEvent(fmodUser::FmodStudio::getEventInstance("SFX/levi_alert_earthquake"), meT->getPosition());
 			playSound = false;
 		}
 		helperType = 4;
@@ -415,7 +410,7 @@ namespace gameElements {
 		}
 		if(playSound){
 			CTransform* meT = ((Entity*)meEntity)->get<CTransform>();
-			fmodUser::fmodUserClass::play3DSingleSound("levi_alert_tool", meT->getPosition(), 0.3f);
+			fmodUser::FmodStudio::play3DSingleEvent(fmodUser::FmodStudio::getEventInstance("SFX/levi_alert_tool"), meT->getPosition());
 			playSound = false;
 		}
 		helperType = 6;
@@ -529,7 +524,7 @@ namespace gameElements {
 			//The front value varies from the begining of the func shot looking at the back
 			bullet->setup(meT->getPosition(), vel, XMQuaternionRotationAxis(yAxis_v, getYawFromVector(propT->getCenterAim() - meT->getPosition())));
 			CTransform* meT = ((Entity*)meEntity)->get<CTransform>();
-			fmodUser::fmodUserClass::play3DSingleSound("levi_transform", meT->getPosition(), 0.5f);
+			fmodUser::FmodStudio::play3DSingleEvent(fmodUser::FmodStudio::getEventInstance("SFX/levi_alert_earthquake"), meT->getPosition());
 			playSound = false;
 			return DONE;
 		}

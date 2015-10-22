@@ -9,7 +9,7 @@ using namespace component;
 #include "PhysX_USER/pxcomponents.h"
 using namespace physX_user;
 
-#include "fmod_User/fmodUser.h"
+#include "fmod_User/fmodStudio.h"
 using namespace fmodUser;
 
 #include "behavior/bt.h"
@@ -150,7 +150,7 @@ class EnemyBtExecutor {
 													//tmp to remove CParticles
 		utils::Counter<float> timer, timerTransform;
 
-		FMOD::Channel *stunChannel = NULL;
+		fmodUser::FmodStudio::EventInstance instanceFmod = nullptr;
 
         float angerTime = 0.f;
         float stunTime  = 0.f;

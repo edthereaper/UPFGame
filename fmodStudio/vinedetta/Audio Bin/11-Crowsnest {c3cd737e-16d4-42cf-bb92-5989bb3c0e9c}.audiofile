@@ -14,7 +14,7 @@
             <value>$(AUDIO_BIN_DIR)/11-Crowsnest {b52a6469-4f2f-45bb-a742-a24bc9b57f04}.wav</value>
         </property>
         <relationship name="container">
-            <destination>{131d8af6-0701-4a39-9bb9-ebf49383548c}</destination>
+            <destination>{2c835540-c7d8-409a-aa21-7d58a7cfb9da}</destination>
         </relationship>
     </object>
 </objects>

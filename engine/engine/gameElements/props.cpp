@@ -26,7 +26,7 @@ using namespace physX_user;
 #include "destructible.h"
 using namespace behavior;
 
-#include "fmod_User/fmodUser.h"
+#include "fmod_User/fmodStudio.h"
 using namespace fmodUser;
 
 #include "render/texture/tilemap.h"
@@ -595,13 +595,7 @@ void TransformableFSMExecutor::setupTransforming()
         CMesh* mesh = me->get<CMesh>();
         mesh->setVisible(true);
     }
-	char cstr[32] = "Prop_transform";
-	int randomV = rand_uniform(9, 1);
-	char randomC[32] = "";
-	sprintf(randomC, "%d", randomV);
-	strcat(cstr, randomC);
-
-	fmodUser::fmodUserClass::play3DSingleSound(cstr, t->getPosition());
+	fmodUser::FmodStudio::play3DSingleEvent(fmodUser::FmodStudio::getEventInstance("SFX/Prop_transform"), t->getPosition());
 
     applySelfIllumination(0,1,true, true);
     applyDiffuseAsSelfIllumination(TRANSFORMED_DIFFUSE_SELFILLUMINATION, true, true);
