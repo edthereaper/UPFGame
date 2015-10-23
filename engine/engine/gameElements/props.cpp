@@ -895,6 +895,44 @@ void CCreep::receive(const MsgTransform&)
 {
 	CStaticBody* s = Handle(this).getBrother<CStaticBody>();
     s->setFilters(filter_t::NONE, filter_t::PLAYER, filter_t::NONE);
+	
+	//Check if you are close to the creep in order to send a msg.
+	Entity* me = Handle(this).getOwner();
+	Entity* player = playerEntity;
+	CTransform* t = player->get<CTransform>();
+	XMVECTOR origin = t->getPosition() + (yAxis_v*2);
+	XMVECTOR dir = t->getFront();
+	PxReal distance = 0.5f;
+	PxRaycastBuffer hit;
+	if (PhysicsManager::get().raycast(origin, dir, distance, hit,
+		filter_t(
+		filter_t::NONE,
+		~filter_t::id_t(filter_t::TOOL | filter_t::PROP),
+		filter_t::ALL_IDS))){
+		Handle hitHandle = Handle::fromRaw(hit.block.shape->userData);
+		Entity *eOther = hitHandle;
+		if (eOther->has<CTransformable>()){
+			CTransformable* transf = eOther->get<CTransformable>();
+			if (transf->isTransformed() && eOther->has<CCreep>()){
+				player->sendMsg(MsgPlayerCreep(me));
+			}
+		}
+	}
+	origin = t->getPosition() - (yAxis_v * 0.3f);
+	if (PhysicsManager::get().raycast(origin, dir, distance, hit,
+		filter_t(
+		filter_t::NONE,
+		~filter_t::id_t(filter_t::TOOL | filter_t::PROP),
+		filter_t::ALL_IDS))){
+		Handle hitHandle = Handle::fromRaw(hit.block.shape->userData);
+		Entity *eOther = hitHandle;
+		if (eOther->has<CTransformable>()){
+			CTransformable* transf = eOther->get<CTransformable>();
+			if (transf->isTransformed() && eOther->has<CCreep>()){
+				player->sendMsg(MsgPlayerCreep(me));
+			}
+		}
+	}
 }
 
 

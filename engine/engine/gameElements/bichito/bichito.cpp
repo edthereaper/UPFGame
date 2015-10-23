@@ -673,10 +673,17 @@ namespace gameElements {
 			XMVECTOR vEnd = DirectX::XMQuaternionMultiply(
 				DirectX::XMQuaternionRotationAxis(zAxis_v, deg2rad(180)),
 				DirectX::XMQuaternionRotationAxis(yAxis_v, angleY));
-			int tint = 4294967295;
+			int tint = 4294967295;	// 0xFFFFFFFF
 			float distCamLevi = sqEuclideanDistance(pos, cam->getPosition());
-			if (distCamLevi < 20.0f)		tint -= int(255 * ((20 - distCamLevi) / 20));
-			setObjectConstants(XMMatrixAffineTransformation(XMVectorSet(1.5f, 1, 1, 1)/*one_v*/, zero_v, vEnd, pos));
+			if (distCamLevi < 30.0f){
+				if (distCamLevi < 3.0f){
+					tint -= 255;
+				}
+				else{
+					tint -= int(255 * ((30 - distCamLevi) / 27));
+				}
+			}
+			setObjectConstants(XMMatrixAffineTransformation(XMVectorSet(1.5f, 1, 1, 1)/*one_v*/, zero_v, vEnd, pos), tint);
 			mesh_textured_quad_xy_centered.activateAndRender();
 			activateZConfig(ZCFG_DEFAULT);
 			activateBlendConfig(BLEND_CFG_DEFAULT);
