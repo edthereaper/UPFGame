@@ -59,8 +59,10 @@ namespace fmodUser {
 	FMOD::Studio::EventInstance* FmodStudio::play3DSingleEvent(FMOD::Studio::EventInstance* in, XMVECTOR posSource)
 	{
 		assert(in != nullptr);
+		CTransform* playerT = App::get().getPlayer().getSon<CTransform>();
 		FMOD_3D_ATTRIBUTES attributes = { { 0 } };
-		attributes.position = { XMVectorGetX(posSource), XMVectorGetY(posSource), XMVectorGetZ(posSource) };
+		XMVECTOR relative = posSource - playerT->getPosition();
+		attributes.position = { XMVectorGetX(relative), XMVectorGetY(relative), XMVectorGetZ(relative) };
 		CHECKED(in->set3DAttributes(&attributes));
 		CHECKED(in->start());
 		return in;
@@ -69,8 +71,10 @@ namespace fmodUser {
 	FMOD::Studio::EventInstance* FmodStudio::play3DAmbientEvent(FMOD::Studio::EventInstance* in, XMVECTOR posSource)
 	{
 		assert(in != nullptr);
+		CTransform* playerT = App::get().getPlayer().getSon<CTransform>();
 		FMOD_3D_ATTRIBUTES attributes = { { 0 } };
-		attributes.position = { XMVectorGetX(posSource), XMVectorGetY(posSource), XMVectorGetZ(posSource) };
+		XMVECTOR relative = posSource - playerT->getPosition();
+		attributes.position = { XMVectorGetX(relative), XMVectorGetY(relative), XMVectorGetZ(relative) };
 		CHECKED(in->set3DAttributes(&attributes));
 		CHECKED(in->start());
 		return in;
@@ -79,8 +83,10 @@ namespace fmodUser {
 	FMOD::Studio::EventInstance* FmodStudio::update3DAmbientEvent(FMOD::Studio::EventInstance* in, XMVECTOR posSource)
 	{
 		assert(in != nullptr);
+		CTransform* playerT = App::get().getPlayer().getSon<CTransform>();
 		FMOD_3D_ATTRIBUTES attributes = { { 0 } };
-		attributes.position = { XMVectorGetX(posSource), XMVectorGetY(posSource), XMVectorGetZ(posSource) };
+		XMVECTOR relative = posSource - playerT->getPosition();
+		attributes.position = { XMVectorGetX(relative), XMVectorGetY(relative), XMVectorGetZ(relative) };
 		CHECKED(in->set3DAttributes(&attributes));
 		return in;
 	}
@@ -88,14 +94,6 @@ namespace fmodUser {
 	FMOD::Studio::EventInstance* FmodStudio::playEvent(FMOD::Studio::EventInstance* in)
 	{
 		assert(in != nullptr);
-		Entity* player = App::get().getPlayer();
-		FMOD_3D_ATTRIBUTES attributes = { { 0 } };
-		attributes.position = { { 0 } };
-		if (player != nullptr){
-			CTransform* playerT = player->get<CTransform>();
-			attributes.position = { XMVectorGetX(playerT->getPosition()), XMVectorGetY(playerT->getPosition()), XMVectorGetZ(playerT->getPosition()) };
-		}
-		CHECKED(in->set3DAttributes(&attributes));
 		CHECKED(in->start());
 		return in;
 	}
@@ -154,6 +152,12 @@ namespace fmodUser {
 		loadBank("Music");
 		loadBank("SFX");
 		loadBank("MenuVideos");
+
+		// Position the listener at the origin
+		FMOD_3D_ATTRIBUTES attributes = { { 0 } };
+		attributes.forward.z = 1.0f;
+		attributes.up.y = 1.0f;
+		CHECKED(system->setListenerAttributes(0, &attributes));
 	}
 
 	void FmodStudio::updateListener()
@@ -161,22 +165,17 @@ namespace fmodUser {
 		// Position the listener
 		Entity* player = App::get().getPlayer();
 		FMOD_3D_ATTRIBUTES attributes = { { 0 } };
-		if (player != nullptr){
-			CTransform* playerT = player->get<CTransform>();	
-			attributes.position = { XMVectorGetX(playerT->getPosition()), XMVectorGetY(playerT->getPosition()), XMVectorGetZ(playerT->getPosition()) };
-			attributes.forward = { XMVectorGetX(playerT->getFront()), XMVectorGetY(playerT->getFront()), XMVectorGetZ(playerT->getFront()) };	
-		}
-		else{
-			attributes.position = { { 0 } };
-			attributes.forward = { 1, 0, 0 };
-		}
+		attributes.forward.z = 1.0f;
 		attributes.up.y = 1.0f;
+		if (player != NULL){
+			CTransform* playerT = player->get<CTransform>();
+			attributes.forward = { XMVectorGetX(playerT->getFront()), XMVectorGetY(playerT->getFront()), XMVectorGetZ(playerT->getFront()) };
+		}
 		CHECKED(system->setListenerAttributes(0, &attributes));
 	}
 
 	void FmodStudio::update()
 	{
-		updateListener();
 		CHECKED(system->update());
 	}
 

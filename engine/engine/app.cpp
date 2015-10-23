@@ -98,7 +98,6 @@ Font fontDBG;
 //TEMP {
 Handle skyboxTint_h;
 Entity* levelE;
-fmodUser::FmodStudio::EventInstance instanceFmodApp = nullptr;
 
 App::App()
  : config(defConfig), deferred("rt_")
@@ -1594,7 +1593,7 @@ bool App::update(float elapsed)
     getManager<CCullingAABB>()->update(elapsed);
     getManager<CCullingAABBSpecial>()->update(elapsed);
 	getManager<CAmbientSound>()->update(elapsed);
-	fmodUser::fmodUserClass::updateFmod();
+	fmodUser::FmodStudio::updateListener();
 
     //Render-related components
     auto dirLights = getManager<CDirLight>();
@@ -2200,6 +2199,7 @@ void App::loadVideo(const char* name, const char* audio)
 	if (audio != ""){
 		char full_name_audio[MAX_PATH];
 		sprintf(full_name_audio, "%s/%s", "", audio);
+		//Set with the lowlevel api becouse the studio takes a bit to load and gets NOT syncronized correctly
 		fmodUser::fmodUserClass::playSound(full_name_audio, 1.0f, 0.0f);
 	}
 	clip->play();

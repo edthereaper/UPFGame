@@ -51,8 +51,8 @@ namespace fmodUser {
 		}
 		static FMOD::Studio::EventInstance* playEvent(FMOD::Studio::EventInstance* ei);
 
-		static FMOD::Studio::EventInstance* play3DSingleEvent(FMOD::Studio::EventInstance* ei, XMVECTOR posSource);
 		static void updateListener();
+		static FMOD::Studio::EventInstance* play3DSingleEvent(FMOD::Studio::EventInstance* ei, XMVECTOR posSource);
 		static FMOD::Studio::EventInstance* FmodStudio::play3DAmbientEvent(FMOD::Studio::EventInstance* in, XMVECTOR posSource);
 		static FMOD::Studio::EventInstance* FmodStudio::update3DAmbientEvent(FMOD::Studio::EventInstance* in, XMVECTOR posSource);
 

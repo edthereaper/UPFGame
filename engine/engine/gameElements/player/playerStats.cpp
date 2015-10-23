@@ -260,7 +260,6 @@ namespace gameElements {
 				App &app = App::get();
 				app.setPlayerDead(true);
 				getManager<CAmbientSound>()->forall(&CAmbientSound::stopSound);
-				//fmodUser::fmodUserClass::stopSounds();
 				app.stopSong();
 			}else{
 				fadeoutTim = tim;
