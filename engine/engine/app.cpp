@@ -670,6 +670,14 @@ void loadingThread()
 		app.isLoadingThreadActve = true;
 		while (app.updateVideo(app.loadingLevelComplete, true));
 		app.isLoadingThreadActve = false;
+		while (app.loadingthreadVar){
+			Render::getContext()->ClearRenderTargetView(Render::getRenderTargetView(), utils::BLACK);
+			Render::getContext()->ClearDepthStencilView(Render::getDepthStencilView(), D3D11_CLEAR_DEPTH, 1.0f, 0);
+			drawTexture2D(pixelRect(app.config.xres, app.config.yres), pixelRect(app.config.xres, app.config.yres), Texture::getManager().getByName("loading"));
+			drawTexture2DAnim(pixelRect(5, 5, 100, 100), pixelRect(app.config.xres, app.config.yres),
+				Texture::getManager().getByName("loadingSpin"), true, app.timerThreadAnim.count(app.countTime()));
+			Render::getSwapChain()->Present(0, 0);
+		}
 	}
 	else{
 		while (app.loadingthreadVar){
@@ -961,8 +969,8 @@ void App::loadlvl()
 bool App::waitVideo(){
 	switch (gamelvl) {
 	case 1:
-		if (isLoadingThreadActve) return true;
 		loadingthreadVar = false;
+		if (isLoadingThreadActve) return true;
 		thread_1.join();
 		loadingLevelComplete = false;
 		break;
