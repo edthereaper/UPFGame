@@ -38,10 +38,7 @@ void CBullet::update(float elapsed)
 		PxReal distance = 2.55f;
 		PxRaycastBuffer hit;
 		if (PhysicsManager::get().raycast(origin, dir, distance, hit,
-			filter_t(
-			filter_t::NONE,
-			filter_t::id_t(filter_t::PLAYER | filter_t::PAINT_SPHERE | filter_t::BULLET | filter_t::CANNONPATH | filter_t::KNIFE | filter_t::FLARESHOT | filter_t::PICKUP | filter_t::PROP | filter_t::SCENE),
-			filter_t::ENEMY))){
+			filter_t(filter_t::NONE, ~filter_t::id_t(filter_t::ENEMY), filter_t::ENEMY))){
 			Handle HitHandle = Handle::fromRaw(hit.block.shape->userData);
 			Entity *eOther = HitHandle;
 			if (eOther->has<CEnemy>()){
