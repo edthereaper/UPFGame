@@ -36,7 +36,7 @@ using namespace particles;
 
 #ifdef _DEBUG //Prevent these debuggers to slip in into release...
 //#define ONLY_PUNCHES
-#define ONLY_MINIONS
+//#define ONLY_MINIONS
 //#define ALL_MINIONS
 //#define ONLY_FLARES
 #endif
