@@ -5,6 +5,7 @@
 #include "app.h"
 #include <AntTweakBar.h>
 #include <Windowsx.h>
+#include "resource.h"
 
 #include "utils/input.h"
 using namespace utils;
@@ -104,7 +105,7 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance,
 }
 
 
-
+HICON hMyIcon;
 //
 //  FUNCTION: MyRegisterClass()
 //
@@ -112,6 +113,7 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance,
 //
 ATOM MyRegisterClass(HINSTANCE hInstance)
 {
+	hMyIcon = (HICON) LoadImage(hInstance, MAKEINTRESOURCE(IDI_MAIN_ICON), IMAGE_ICON, 256, 256, LR_SHARED);	
 	WNDCLASSEX wcex;
 
 	wcex.cbSize = sizeof(WNDCLASSEX);
@@ -121,12 +123,12 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 	wcex.cbClsExtra = 0;
 	wcex.cbWndExtra = 0;
 	wcex.hInstance = hInstance;
-	wcex.hIcon = 0; // LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ENGINE));
+	wcex.hIcon = hMyIcon;
 	wcex.hCursor = 0; //; LoadCursor(NULL, IDC_ARROW);
     wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
 	wcex.lpszMenuName = 0; // MAKEINTRESOURCE(IDC_ENGINE);
 	wcex.lpszClassName = "Vinedetta";
-	wcex.hIconSm = 0; // LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
+	wcex.hIconSm = hMyIcon;
 
 	return RegisterClassEx(&wcex);
 }

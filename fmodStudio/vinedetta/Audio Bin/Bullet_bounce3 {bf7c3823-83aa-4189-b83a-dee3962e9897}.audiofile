@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.01.05.00">
+    <object class="AudioFile" id="{bf7c3823-83aa-4189-b83a-dee3962e9897}">
+        <property name="frequencyInKHz">
+            <value>44.0999985</value>
+        </property>
+        <property name="channelCount">
+            <value>1</value>
+        </property>
+        <property name="length">
+            <value>0.90646258503401356</value>
+        </property>
+        <property name="audioFilePath">
+            <value>$(AUDIO_BIN_DIR)/Bullet_bounce3 {36eb4c2f-b17c-4695-9f3e-67113e912798}.wav</value>
+        </property>
+        <relationship name="container">
+            <destination>{186f1332-c1a9-4c4b-b0e7-1ee1da8e6d54}</destination>
+        </relationship>
+    </object>
+</objects>

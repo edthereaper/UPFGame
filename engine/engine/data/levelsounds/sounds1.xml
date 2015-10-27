@@ -1,17 +1,9 @@
 <scene>
-	<!-- Necessary sound (BUG no ambiental sounds are played in character) -->
-	<Entity init="true">
-		<Transform pos="-3900.5735 0.0 10000.0481186"/>
-		<AmbientSound file="mario_jump" volume="0.0" pan="0.0" radius="0.5"/> 
-	</Entity>
+	<!-- example -->
 	<!--
 	<Entity init="true">
-		<Transform pos="-178.037 5.0 131.442"/>
-		<AmbientSound file="mario_jump" volume="1.0" pan="0.0" radius="50.0"/> 
-	</Entity>
-	<Entity init="true">
-		<Transform pos="-148.037 5.0 131.442"/>
-		<AmbientSound file="jump1" volume="1.0" pan="0.0" radius="50.0"/> 
+		<Transform pos="-3900.5735 0.0 10000.0481186"/>
+		<AmbientSound file="mario_jump" volume="0.0" pan="0.0" radius="50.0"/> 
 	</Entity>
 	-->
 </scene>

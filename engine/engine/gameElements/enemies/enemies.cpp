@@ -135,7 +135,7 @@ ret_e EnemyBtExecutor::initCelebration(float)
 ret_e EnemyBtExecutor::initTransforming(float)
 {
 	((Entity*)meEntity)->sendMsg(MsgTransform());
-	if (stunChannel != NULL)		fmodUser::fmodUserClass::stopAmbient3DSound(stunChannel);
+	if (instanceFmod != nullptr)		fmodUser::FmodStudio::stopEvent(instanceFmod);
 	return DONE;
 }
 
@@ -171,12 +171,7 @@ ret_e EnemyBtExecutor::transform(float elapsed)
 		*self = 0xFFFFFFFF;
 		cmesh->init();
 		changemesh = true;
-		char cstr[32] = "Prop_transform";
-		int randomV = rand_uniform(9, 1);
-		char randomC[32] = "";
-		sprintf(randomC, "%d", randomV);
-		strcat(cstr, randomC);
-		fmodUser::fmodUserClass::play3DSingleSound(cstr, meTransform->getPosition());
+		fmodUser::FmodStudio::play3DSingleEvent(fmodUser::FmodStudio::getEventInstance("SFX/Prop_transform"), ctransf->getPosition());
 	}
 
 	if (timerTransform.count(elapsed) >= TIME_SHOW_ONSHOT && timerTransform.count(elapsed) < TIME_SHOW_ONSHOT) {
@@ -210,12 +205,12 @@ ret_e EnemyBtExecutor::stunned(float elapsed)
 	if (timer.count(elapsed) >= stunTime) {
 		stunTime = 0;
 		stun = false;
-		if (stunChannel != NULL)		fmodUser::fmodUserClass::stopAmbient3DSound(stunChannel);
+		fmodUser::FmodStudio::stopEvent(instanceFmod);
 		return DONE;
 	}
 	else {
 		CTransform* meTransform = me->get<CTransform>();
-		if (stunChannel != NULL)		fmodUser::fmodUserClass::updateAmbient3DSound(stunChannel, meTransform->getPosition());
+		if (instanceFmod != nullptr)		fmodUser::FmodStudio::update3DAmbientEvent(instanceFmod, meTransform->getPosition());
 		return STAY;
 	}
 }
@@ -288,7 +283,7 @@ ret_e EnemyBtExecutor::brakeFlying(float e)
 ret_e EnemyBtExecutor::protect(float elapsed)
 {
 	CTransform* meT = ((Entity*)meEntity)->get<CTransform>();
-	fmodUser::fmodUserClass::play3DSingleSound("melee_defend", meT->getPosition());
+	fmodUser::FmodStudio::play3DSingleEvent(fmodUser::FmodStudio::getEventInstance("SFX/melee_defend"), meT->getPosition());
 	return DONE;
 }
 
@@ -350,14 +345,9 @@ ret_e EnemyBtExecutor::treatEvents(float elapsed)
 			else{
 				CAnimationPlugger* aniP = ((Entity*)meEntity)->get<CAnimationPlugger>();
 				aniP->plug(0xB036);
-				char cstr[32] = "enemy_damage";
-				int randomV = rand_uniform(3, 1);
-				char randomC[32] = "";
-				sprintf(randomC, "%d", randomV);
-				strcat(cstr, randomC);
 				Entity* me = meEntity;
 				CTransform* ctransf = me->get<CTransform>();
-				fmodUser::fmodUserClass::play3DSingleSound(cstr, ctransf->getPosition(), 0.8f);
+				fmodUser::FmodStudio::play3DSingleEvent(fmodUser::FmodStudio::getEventInstance("SFX/enemy_damage"), ctransf->getPosition());
 				lastEvent = E_SHOT;
 			}
 		}
@@ -449,12 +439,16 @@ ret_e EnemyBtExecutor::randomAngry(float)
 ret_e EnemyBtExecutor::randomStunned(float)
 {
 	stunTime = utils::rand_uniform(3.5f, 2.5f);
-	if (stunChannel == NULL){
-		fmodUser::fmodUserClass::playAmbient3DSound(stunChannel, "enemy_stun");
+	Entity* me = meEntity;
+	CTransform* ctransf = me->get<CTransform>();
+	if (instanceFmod == nullptr){
+		instanceFmod = fmodUser::FmodStudio::getEventInstance("SFX/enemy_stun");
+		fmodUser::FmodStudio::play3DAmbientEvent(instanceFmod, ctransf->getPosition());
 	}
 	else{
-		fmodUser::fmodUserClass::stopAmbient3DSound(stunChannel);
-		fmodUser::fmodUserClass::playAmbient3DSound(stunChannel, "enemy_stun");
+		fmodUser::FmodStudio::stopEvent(instanceFmod);
+		instanceFmod = fmodUser::FmodStudio::getEventInstance("SFX/enemy_stun");
+		fmodUser::FmodStudio::play3DAmbientEvent(instanceFmod, ctransf->getPosition());
 	}
 	return DONE;
 }

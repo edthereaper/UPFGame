@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.01.05.00">
+    <object class="AudioFile" id="{5a9666ee-3a9b-48ff-96b1-b753474bc93a}">
+        <property name="frequencyInKHz">
+            <value>48</value>
+        </property>
+        <property name="channelCount">
+            <value>2</value>
+        </property>
+        <property name="length">
+            <value>3.9182291666666669</value>
+        </property>
+        <property name="audioFilePath">
+            <value>$(AUDIO_BIN_DIR)/boss_chargecanon {8b4de909-a5f4-4552-ad74-3a7fad2d7ef9}.wav</value>
+        </property>
+        <relationship name="container">
+            <destination>{7536ac5d-ce75-49a0-adc3-5a702eb2182c}</destination>
+        </relationship>
+    </object>
+</objects>

@@ -17,7 +17,7 @@ using namespace physX_user;
 
 using namespace DirectX;
 
-#include "fmod_User/fmodUser.h"
+#include "fmod_User/fmodStudio.h"
 using namespace fmodUser;
 
 #include "particles/ParticlesManager.h"
@@ -38,7 +38,7 @@ void CDestructible::breakGlass()
 	me->get<CStaticBody>().destroy();
 
 	//create particles
-	fmodUser::fmodUserClass::playSound("Glass_break", 0.5f, 0.0f);
+	fmodUser::FmodStudio::playEvent(fmodUser::FmodStudio::getEventInstance("SFX/Glass_break"));
     CTransform* t = me->get<CTransform>();
     me->postMsg(MsgDeleteSelf());
 

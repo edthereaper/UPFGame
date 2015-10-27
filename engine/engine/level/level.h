@@ -15,6 +15,8 @@ using namespace component;
 
 #include "fmod_User/fmodStudio.h"
 
+//#define MUSIC_DISABLED
+
 namespace level {
 
 struct MsgSetLevel {
@@ -121,24 +123,32 @@ class CLevelData : public SpatiallyIndexed {
         inline float getZFar() const {return zFar;}
 
         inline void playSong() const {
+#ifndef MUSIC_DISABLED
             if (song != nullptr) {
                 fmodUser::FmodStudio::playEvent(song);
             }
+#endif
         }
         inline void stopSong() const {
+#ifndef MUSIC_DISABLED
             if (song != nullptr) {
                 fmodUser::FmodStudio::stopEvent(song);
             }
+#endif
         }
 		inline void pauseSong() const {
+#ifndef MUSIC_DISABLED
 			if (song != nullptr) {
 				fmodUser::FmodStudio::pauseEvent(song);
 			}
+#endif
 		}
 		inline void resumeSong() const {
+#ifndef MUSIC_DISABLED
 			if (song != nullptr) {
 				fmodUser::FmodStudio::resumeEvent(song);
 			}
+#endif
 		}
 
         inline float getSkyboxBright() const { return skyboxBright;}

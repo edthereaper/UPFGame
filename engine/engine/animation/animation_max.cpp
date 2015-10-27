@@ -10,7 +10,7 @@ using namespace component;
 #include "app.h"
 #include "gameElements/props.h"
 #include "gameElements/gameMsgs.h"
-#include "fmod_User/fmodUser.h"
+#include "fmod_User/fmodStudio.h"
 using namespace fmodUser;
 using namespace DirectX;
 using namespace utils;
@@ -108,8 +108,8 @@ namespace animation{
 	void CMaxAnim::enableCannon(){
 
 		Entity *me = Handle(this).getOwner();
-
-		fmodUser::fmodUserClass::playSound("boss_canonland", 1.0f, 0.0f);
+		CTransform* t = me->get<CTransform>();
+		fmodUser::FmodStudio::play3DSingleEvent(fmodUser::FmodStudio::getEventInstance("SFX/boss_canonland"), t->getPosition());
 		CMaxAnim* maxAnim = me->get<CMaxAnim>();
 		maxAnim->setPostFinish(true);
         me->sendMsg(MsgFlyingMobileEnded());

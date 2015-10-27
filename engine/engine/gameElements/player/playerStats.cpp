@@ -260,7 +260,6 @@ namespace gameElements {
 				App &app = App::get();
 				app.setPlayerDead(true);
 				getManager<CAmbientSound>()->forall(&CAmbientSound::stopSound);
-				fmodUser::fmodUserClass::stopSounds();
 				app.stopSong();
 			}else{
 				fadeoutTim = tim;
@@ -320,12 +319,7 @@ namespace gameElements {
 			playerDamaged = true;
 			if (health > 0){
 				if (!dmgFromFalling){
-					char cstr[32] = "vine_damage";
-					int randomV = rand_uniform(2, 1);
-					char randomC[32] = "";
-					sprintf(randomC, "%d", randomV);
-					strcat(cstr, randomC);
-					fmodUser::fmodUserClass::playSound(cstr, 1.5f, 0.0f);
+					fmodUser::FmodStudio::playEvent(fmodUser::FmodStudio::getEventInstance("SFX/vine_damage"));
 					if (((CPlayerMov*)me->get<CPlayerMov>())->canPlayPartialAnimation())		animPlugger->plug(PLUG_DAMAGE);
 				}
 				if (health > HP_ALERT){

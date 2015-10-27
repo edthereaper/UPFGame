@@ -2,25 +2,40 @@
 #include "ambientsound.h"
 
 namespace gameElements {
-    
-void CAmbientSound::update(float)
-{
-	Entity* e(Handle(this).getOwner());
-    if (e != nullptr) {
-	    CTransform* t = e->get<CTransform>();
-	    fmodUser::fmodUserClass::updateAmbient3DSound(channelFmod, t->getPosition());
-    }
-}
 
-void CAmbientSound::playSound()
-{	
-	playerEntity = App::get().getPlayer();
-	fmodUser::fmodUserClass::playAmbient3DSound(channelFmod, (char*)filename.c_str(), volume, pan, radius);
-}
+	void CAmbientSound::update(float)
+	{
+		Entity* e(Handle(this).getOwner());
+		if (e != nullptr) {
+			CTransform* t = e->get<CTransform>();
+			fmodUser::FmodStudio::update3DAmbientEvent(instanceFmod, t->getPosition());
+		}
+	}
 
-void CAmbientSound::stopSound()
-{	
-	fmodUser::fmodUserClass::stopAmbient3DSound(channelFmod);
-}
+	void CAmbientSound::playSound()
+	{
+		Entity* e(Handle(this).getOwner());
+		if (e != nullptr) {
+			CTransform* t = e->get<CTransform>();
+			instanceFmod = fmodUser::FmodStudio::getEventInstance("SFX/" + filename);
+			fmodUser::FmodStudio::play3DAmbientEvent(instanceFmod, t->getPosition());
+		}
+	}
+
+	void CAmbientSound::stopSound()
+	{
+		fmodUser::FmodStudio::stopEvent(instanceFmod);
+	}
+
+	void CAmbientSound::pauseSound()
+	{
+		fmodUser::FmodStudio::pauseEvent(instanceFmod);
+	}
+
+	void CAmbientSound::resumeSound()
+	{
+		fmodUser::FmodStudio::resumeEvent(instanceFmod);
+	}
+
 
 }

@@ -408,6 +408,8 @@ void App::loadConfig()
         shadowsStr, ARRAYSIZE(shadowsStr)-1, ".\\config.ini");
 #endif
 	xboxPadSensiblity = GetPrivateProfileInt("sensibility", "xbox", 5, ".\\config.ini");
+	if (xboxPadSensiblity < 1)	xboxPadSensiblity = 1;
+	if (xboxPadSensiblity > 10) xboxPadSensiblity = 10;
 	//Check the desktop resolution, if its lower than the resolution set in config. Set the resolution same as desktop.
 	RECT desktop;
 	const HWND hDesktop = GetDesktopWindow();
@@ -547,8 +549,8 @@ void App::xboxControllerKeys()
 	else{
 	App::get().getPad().onKey(VK_LBUTTON, false);
 	}*/
-	Mouse::setSysXboxController(int(xboxController.State._right_thumbstickX * 400 * elapsed * xboxPadSensiblity),
-								int(-xboxController.State._right_thumbstickY * 200 * elapsed * xboxPadSensiblity));
+	Mouse::setSysXboxController(int(xboxController.State._right_thumbstickX  * 400 * elapsed * xboxPadSensiblity),
+								int(-xboxController.State._right_thumbstickY * 400 * elapsed * (xboxPadSensiblity/2)));
 }
 
 void App::addMappings()
@@ -668,6 +670,14 @@ void loadingThread()
 		app.isLoadingThreadActve = true;
 		while (app.updateVideo(app.loadingLevelComplete, true));
 		app.isLoadingThreadActve = false;
+		while (app.loadingthreadVar){
+			Render::getContext()->ClearRenderTargetView(Render::getRenderTargetView(), utils::BLACK);
+			Render::getContext()->ClearDepthStencilView(Render::getDepthStencilView(), D3D11_CLEAR_DEPTH, 1.0f, 0);
+			drawTexture2D(pixelRect(app.config.xres, app.config.yres), pixelRect(app.config.xres, app.config.yres), Texture::getManager().getByName("loading"));
+			drawTexture2DAnim(pixelRect(5, 5, 100, 100), pixelRect(app.config.xres, app.config.yres),
+				Texture::getManager().getByName("loadingSpin"), true, app.timerThreadAnim.count(app.countTime()));
+			Render::getSwapChain()->Present(0, 0);
+		}
 	}
 	else{
 		while (app.loadingthreadVar){
@@ -959,8 +969,8 @@ void App::loadlvl()
 bool App::waitVideo(){
 	switch (gamelvl) {
 	case 1:
-		if (isLoadingThreadActve) return true;
 		loadingthreadVar = false;
+		if (isLoadingThreadActve) return true;
 		thread_1.join();
 		loadingLevelComplete = false;
 		break;
@@ -1097,6 +1107,7 @@ void App::retry()
 
     EntityListManager::cleanupLists();
 	playSong();
+	getManager<CAmbientSound>()->forall(&CAmbientSound::playSound);
 }
 
 bool App::doGameOver()
@@ -1107,12 +1118,12 @@ bool App::doGameOver()
 		xboxPad.update();
 		if ((pad.getState(CONTROLS_UP).isPressed() ||
 			pad.getState(CONTROLS_LEFT).isPressed()) && pauseState == 1){
-			fmodUser::fmodUserClass::playSound("Menu_move", 1.0f, 0.0f);
+			fmodUser::FmodStudio::playEvent(fmodUser::FmodStudio::getEventInstance("MenuVideos/Menu_move"));
 			pauseState = 0;
 		}
 		if ((pad.getState(CONTROLS_DOWN).isPressed() ||
 			pad.getState(CONTROLS_RIGHT).isPressed()) && pauseState == 0){
-			fmodUser::fmodUserClass::playSound("Menu_move", 1.0f, 0.0f);
+			fmodUser::FmodStudio::playEvent(fmodUser::FmodStudio::getEventInstance("MenuVideos/Menu_move"));
 			pauseState = 1;
 		}
 		if (pad.getState(CONTROLS_JUMP).isPressed()){
@@ -1122,7 +1133,7 @@ bool App::doGameOver()
 			if (pauseState == 0){
 				playAgain = true;
 			}
-			fmodUser::fmodUserClass::playSound("Menu_enter", 1.5f, 0.0f);
+			fmodUser::FmodStudio::playEvent(fmodUser::FmodStudio::getEventInstance("MenuVideos/Menu_enter"));
 			pauseState = 0;
 			isPlayerDead = false;
 			return true;
@@ -1131,12 +1142,12 @@ bool App::doGameOver()
 	pad.update();
 	if ((pad.getState(CONTROLS_MENU_UP).isPressed() ||
 		pad.getState(CONTROLS_MENU_LEFT).isPressed()) && pauseState == 1){
-		fmodUser::fmodUserClass::playSound("Menu_move", 1.0f, 0.0f);
+		fmodUser::FmodStudio::playEvent(fmodUser::FmodStudio::getEventInstance("MenuVideos/Menu_move"));
 		pauseState = 0;
 	}
 	if ((pad.getState(CONTROLS_MENU_DOWN).isPressed() ||
 		pad.getState(CONTROLS_MENU_RIGHT).isPressed()) && pauseState == 0){
-		fmodUser::fmodUserClass::playSound("Menu_move", 1.0f, 0.0f);
+		fmodUser::FmodStudio::playEvent(fmodUser::FmodStudio::getEventInstance("MenuVideos/Menu_move"));
 		pauseState = 1;
 	}
 	if (pad.getState(APP_ENTER).isPressed()){
@@ -1146,7 +1157,7 @@ bool App::doGameOver()
 		if (pauseState == 0){
 			playAgain = true;
 		}
-		fmodUser::fmodUserClass::playSound("Menu_enter", 1.5f, 0.0f);
+		fmodUser::FmodStudio::playEvent(fmodUser::FmodStudio::getEventInstance("MenuVideos/Menu_enter"));
 		pauseState = 0;
 		isPlayerDead = false;
 		return true;
@@ -1164,6 +1175,7 @@ bool App::doFrame()
 		if (xboxPad.getState(APP_PAUSE).isHit()) { 
 			paused = true; 
 			pauseSong();
+			getManager<CAmbientSound>()->forall(&CAmbientSound::pauseSound);
 		}
 		xboxControllerKeys();
 		xboxController.update();
@@ -1175,6 +1187,7 @@ bool App::doFrame()
 	if (pad.getState(APP_PAUSE).isHit()) { 
 		paused = true; 
 		pauseSong();
+		getManager<CAmbientSound>()->forall(&CAmbientSound::pauseSound);
 	}
     if (pad.getState(APP_TOGGLE_MOUSE_CAPTURE).isHit()) {
         Mouse::toggleCapture();
@@ -1435,23 +1448,25 @@ bool App::pauseMenu()
 		xboxPad.update();
 		if ((pad.getState(CONTROLS_UP).isPressed() ||
 			pad.getState(CONTROLS_LEFT).isPressed()) && pauseState == 1){
-			fmodUser::fmodUserClass::playSound("Menu_move", 1.0f, 0.0f);
+			fmodUser::FmodStudio::playEvent(fmodUser::FmodStudio::getEventInstance("MenuVideos/Menu_move"));
 			pauseState = 0;
 		}
 		if ((pad.getState(CONTROLS_DOWN).isPressed() ||
 			pad.getState(CONTROLS_RIGHT).isPressed()) && pauseState == 0){
-			fmodUser::fmodUserClass::playSound("Menu_move", 1.0f, 0.0f);
+			fmodUser::FmodStudio::playEvent(fmodUser::FmodStudio::getEventInstance("MenuVideos/Menu_move"));
 			pauseState = 1;
 		}
 		if (pad.getState(CONTROLS_JUMP).isPressed()){
 			if (pauseState == 1){
 				returnToMenu = true;
 				stopSong();
+				getManager<CAmbientSound>()->forall(&CAmbientSound::stopSound);
 			}
 			else{
 				resumeSong();
+				getManager<CAmbientSound>()->forall(&CAmbientSound::resumeSound);
 			}
-			fmodUser::fmodUserClass::playSound("Menu_enter", 1.5f, 0.0f);
+			fmodUser::FmodStudio::playEvent(fmodUser::FmodStudio::getEventInstance("MenuVideos/Menu_enter"));
 			pauseState = 0;
 			paused = false;
 			return true;
@@ -1459,23 +1474,25 @@ bool App::pauseMenu()
 	}
 	if ((pad.getState(CONTROLS_MENU_UP).isPressed() ||
 		pad.getState(CONTROLS_MENU_LEFT).isPressed()) && pauseState == 1){
-		fmodUser::fmodUserClass::playSound("Menu_move", 1.0f, 0.0f);
+		fmodUser::FmodStudio::playEvent(fmodUser::FmodStudio::getEventInstance("MenuVideos/Menu_move"));
 		pauseState = 0;
 	}
 	if ((pad.getState(CONTROLS_MENU_DOWN).isPressed() ||
 		pad.getState(CONTROLS_MENU_RIGHT).isPressed()) && pauseState == 0){
-		fmodUser::fmodUserClass::playSound("Menu_move", 1.0f, 0.0f);
+		fmodUser::FmodStudio::playEvent(fmodUser::FmodStudio::getEventInstance("MenuVideos/Menu_move"));
 		pauseState = 1;
 	}
 	if (pad.getState(APP_ENTER).isPressed()){
 		if (pauseState == 1){
 			returnToMenu = true;
 			stopSong();
+			getManager<CAmbientSound>()->forall(&CAmbientSound::stopSound);
 		}
 		else{
 			resumeSong();
+			getManager<CAmbientSound>()->forall(&CAmbientSound::resumeSound);
 		}
-		fmodUser::fmodUserClass::playSound("Menu_enter", 1.5f, 0.0f);
+		fmodUser::FmodStudio::playEvent(fmodUser::FmodStudio::getEventInstance("MenuVideos/Menu_enter"));
 		pauseState = 0;
 		paused = false;
 		return true;
@@ -1584,7 +1601,7 @@ bool App::update(float elapsed)
     getManager<CCullingAABB>()->update(elapsed);
     getManager<CCullingAABBSpecial>()->update(elapsed);
 	getManager<CAmbientSound>()->update(elapsed);
-	fmodUser::fmodUserClass::updateFmod();
+	fmodUser::FmodStudio::updateListener();
 
     //Render-related components
     auto dirLights = getManager<CDirLight>();
@@ -2190,6 +2207,7 @@ void App::loadVideo(const char* name, const char* audio)
 	if (audio != ""){
 		char full_name_audio[MAX_PATH];
 		sprintf(full_name_audio, "%s/%s", "", audio);
+		//Set with the lowlevel api becouse the studio takes a bit to load and gets NOT syncronized correctly
 		fmodUser::fmodUserClass::playSound(full_name_audio, 1.0f, 0.0f);
 	}
 	clip->play();
@@ -2276,32 +2294,32 @@ int App::updateMainMenu(){
 		xboxController.update();
 		xboxPad.update();
 		if (pad.getState(CONTROLS_UP).isHit() && mainMenuState > 0){
-			fmodUser::fmodUserClass::playSound("Menu_move", 1.0f, 0.0f);
+			fmodUser::FmodStudio::playEvent(fmodUser::FmodStudio::getEventInstance("MenuVideos/Menu_move"));
 			mainMenuState--;
 		}
 		if (pad.getState(CONTROLS_DOWN).isHit() && mainMenuState < 3){
-			fmodUser::fmodUserClass::playSound("Menu_move", 1.0f, 0.0f);
+			fmodUser::FmodStudio::playEvent(fmodUser::FmodStudio::getEventInstance("MenuVideos/Menu_move"));
 			mainMenuState++;
 		}
 		if (pad.getState(CONTROLS_JUMP).isHit()){
-			fmodUser::fmodUserClass::playSound("Menu_enter", 1.5f, 0.0f);
+			fmodUser::FmodStudio::playEvent(fmodUser::FmodStudio::getEventInstance("MenuVideos/Menu_enter"));
 			return mainMenuState;
 		}
 	}
 	if (pad.getState(APP_QUIT).isHit()){
-		fmodUser::fmodUserClass::playSound("Menu_move", 1.0f, 0.0f);
+		fmodUser::FmodStudio::playEvent(fmodUser::FmodStudio::getEventInstance("MenuVideos/Menu_move"));
 		mainMenuState = 3;
 	}
 	if (pad.getState(CONTROLS_MENU_UP).isHit() && mainMenuState > 0){
-		fmodUser::fmodUserClass::playSound("Menu_move", 1.0f, 0.0f);
+		fmodUser::FmodStudio::playEvent(fmodUser::FmodStudio::getEventInstance("MenuVideos/Menu_move"));
 		mainMenuState--;
 	}
 	if (pad.getState(CONTROLS_MENU_DOWN).isHit() && mainMenuState < 3){
-		fmodUser::fmodUserClass::playSound("Menu_move", 1.0f, 0.0f);
+		fmodUser::FmodStudio::playEvent(fmodUser::FmodStudio::getEventInstance("MenuVideos/Menu_move"));
 		mainMenuState++;
 	}
 	if (pad.getState(APP_ENTER).isHit()){
-		fmodUser::fmodUserClass::playSound("Menu_enter", 1.5f, 0.0f);
+		fmodUser::FmodStudio::playEvent(fmodUser::FmodStudio::getEventInstance("MenuVideos/Menu_enter"));
 		return mainMenuState;
 	}
 	renderMainMenu();
@@ -2342,32 +2360,32 @@ int App::updateChapterSelectionMenu(){
 		xboxController.update();
 		xboxPad.update();
 		if (pad.getState(CONTROLS_UP).isHit() && chapterSelectionState > 0){
-			fmodUser::fmodUserClass::playSound("Menu_move", 1.0f, 0.0f);
+			fmodUser::FmodStudio::playEvent(fmodUser::FmodStudio::getEventInstance("MenuVideos/Menu_move"));
 			chapterSelectionState--;
 		}
 		if (pad.getState(CONTROLS_DOWN).isHit() && chapterSelectionState < 4){
-			fmodUser::fmodUserClass::playSound("Menu_move", 1.0f, 0.0f);
+			fmodUser::FmodStudio::playEvent(fmodUser::FmodStudio::getEventInstance("MenuVideos/Menu_move"));
 			chapterSelectionState++;
 		}
 		if (pad.getState(CONTROLS_JUMP).isHit()){
-			fmodUser::fmodUserClass::playSound("Menu_enter", 1.5f, 0.0f);
+			fmodUser::FmodStudio::playEvent(fmodUser::FmodStudio::getEventInstance("MenuVideos/Menu_enter"));
 			return chapterSelectionState;
 		}
 	}
 	if (pad.getState(APP_QUIT).isHit()){
-		fmodUser::fmodUserClass::playSound("Menu_move", 1.0f, 0.0f);
+		fmodUser::FmodStudio::playEvent(fmodUser::FmodStudio::getEventInstance("MenuVideos/Menu_move"));
 		chapterSelectionState = 3;
 	}
 	if (pad.getState(CONTROLS_MENU_UP).isHit() && chapterSelectionState > 0){
-		fmodUser::fmodUserClass::playSound("Menu_move", 1.0f, 0.0f);
+		fmodUser::FmodStudio::playEvent(fmodUser::FmodStudio::getEventInstance("MenuVideos/Menu_move"));
 		chapterSelectionState--;
 	}
 	if (pad.getState(CONTROLS_MENU_DOWN).isHit() && chapterSelectionState < 4){
-		fmodUser::fmodUserClass::playSound("Menu_move", 1.0f, 0.0f);
+		fmodUser::FmodStudio::playEvent(fmodUser::FmodStudio::getEventInstance("MenuVideos/Menu_move"));
 		chapterSelectionState++;
 	}
 	if (pad.getState(APP_ENTER).isHit()){
-		fmodUser::fmodUserClass::playSound("Menu_enter", 1.5f, 0.0f);
+		fmodUser::FmodStudio::playEvent(fmodUser::FmodStudio::getEventInstance("MenuVideos/Menu_enter"));
 		return chapterSelectionState;
 	}
 	renderChapterSelectionMenu();

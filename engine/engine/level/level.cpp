@@ -58,7 +58,6 @@ void CLevelData::loadFromProperties(
     const std::string &elem, utils::MKeyValue &atts)
 {
     if (atts.has("song")) {
-        fmodUser::FmodStudio::loadBank("Music");
         std::string songName = atts.getString("song", "brote");
         song = fmodUser::FmodStudio::getEventInstance("Music/"+songName);
     }

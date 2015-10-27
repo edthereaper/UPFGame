@@ -9,7 +9,7 @@ using namespace component;
 #include "app.h"
 #include "props.h"
 #include "gameMsgs.h"
-#include "fmod_User/fmodUser.h"
+#include "fmod_User/fmodStudio.h"
 using namespace fmodUser;
 using namespace DirectX;
 using namespace utils;
@@ -64,7 +64,7 @@ behavior::fsmState_t FlyingMobileFSMExecutor::running(float elapsed)
 
 		if (me->has<CCannon>() && app.getLvl() == 4){
 
-			fmodUser::fmodUserClass::playSound("boss_canonland", 1.0f, 0.0f);
+			fmodUser::FmodStudio::play3DSingleEvent(fmodUser::FmodStudio::getEventInstance("SFX/boss_canonland"), t->getPosition());
 			CMaxAnim* maxAnim = me->get<CMaxAnim>();
 			maxAnim->setPostFinish(true);
 		}

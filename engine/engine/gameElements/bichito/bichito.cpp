@@ -283,7 +283,7 @@ namespace gameElements {
 		}
 		if(playSound){
 			CTransform* meT = ((Entity*)meEntity)->get<CTransform>();			
-			fmodUser::fmodUserClass::play3DSingleSound("levi_alert_win", meT->getPosition(), 0.5f);
+			fmodUser::FmodStudio::play3DSingleEvent(fmodUser::FmodStudio::getEventInstance("SFX/levi_alert_win"), meT->getPosition());
 			playSound = false;
 		}
 		helperType = 8;
@@ -314,7 +314,7 @@ namespace gameElements {
 		}
 		if(playSound){
 			CTransform* meT = ((Entity*)meEntity)->get<CTransform>();
-			fmodUser::fmodUserClass::play3DSingleSound("levi_alert_hp", meT->getPosition(), 0.5f);
+			fmodUser::FmodStudio::play3DSingleEvent(fmodUser::FmodStudio::getEventInstance("SFX/levi_alert_hp"), meT->getPosition());
 			playSound = false;
 		}
 		helperType = 3;
@@ -332,13 +332,8 @@ namespace gameElements {
 			return DONE;
 		}
 		if(playSound){
-			char cstr[32] = "levi_alert_tuto";
-			int randomV = rand_uniform(3, 1);
-			char randomC[32] = "";
-			sprintf(randomC, "%d", randomV);
-			strcat(cstr, randomC);
 			CTransform* meT = ((Entity*)meEntity)->get<CTransform>();
-			fmodUser::fmodUserClass::play3DSingleSound(cstr, meT->getPosition(), 0.5f);
+			fmodUser::FmodStudio::play3DSingleEvent(fmodUser::FmodStudio::getEventInstance("SFX/levi_alert_tuto"), meT->getPosition());
 			playSound = false;
 		}
 		helperType = 7;
@@ -357,7 +352,7 @@ namespace gameElements {
 		}
 		if(playSound){
 			CTransform* meT = ((Entity*)meEntity)->get<CTransform>();
-			fmodUser::fmodUserClass::play3DSingleSound("levi_alert_earthquake", meT->getPosition(), 0.5f);
+			fmodUser::FmodStudio::play3DSingleEvent(fmodUser::FmodStudio::getEventInstance("SFX/levi_alert_earthquake"), meT->getPosition());
 			playSound = false;
 		}
 		helperType = 4;
@@ -415,7 +410,7 @@ namespace gameElements {
 		}
 		if(playSound){
 			CTransform* meT = ((Entity*)meEntity)->get<CTransform>();
-			fmodUser::fmodUserClass::play3DSingleSound("levi_alert_tool", meT->getPosition(), 0.3f);
+			fmodUser::FmodStudio::play3DSingleEvent(fmodUser::FmodStudio::getEventInstance("SFX/levi_alert_tool"), meT->getPosition());
 			playSound = false;
 		}
 		helperType = 6;
@@ -529,7 +524,7 @@ namespace gameElements {
 			//The front value varies from the begining of the func shot looking at the back
 			bullet->setup(meT->getPosition(), vel, XMQuaternionRotationAxis(yAxis_v, getYawFromVector(propT->getCenterAim() - meT->getPosition())));
 			CTransform* meT = ((Entity*)meEntity)->get<CTransform>();
-			fmodUser::fmodUserClass::play3DSingleSound("levi_transform", meT->getPosition(), 0.5f);
+			fmodUser::FmodStudio::play3DSingleEvent(fmodUser::FmodStudio::getEventInstance("SFX/levi_alert_earthquake"), meT->getPosition());
 			playSound = false;
 			return DONE;
 		}
@@ -580,6 +575,7 @@ namespace gameElements {
 			}
 			else{
 				//dbg("CCC %f\n", timerFollow.count(elapsed));
+				align3D(meT, playerT->getPosition() + levitatePos + playerT->getFront() * 10, (CHASE_ROTATE_SPEED / 5) * elapsed);
 				if (timerFollow.count(elapsed) >= TIME_WAIT_FOLLOW) {
 					if (!testDistanceSqEu(meT->getPosition() - levitatePos, playerT->getPosition(), DISTANCE_IDLE_PLAYER)){
 						timerFollow.reset();
@@ -677,7 +673,17 @@ namespace gameElements {
 			XMVECTOR vEnd = DirectX::XMQuaternionMultiply(
 				DirectX::XMQuaternionRotationAxis(zAxis_v, deg2rad(180)),
 				DirectX::XMQuaternionRotationAxis(yAxis_v, angleY));
-			setObjectConstants(XMMatrixAffineTransformation(XMVectorSet(1.5f, 1, 1, 1)/*one_v*/, zero_v, vEnd, pos));
+			int tint = 4294967295;	// 0xFFFFFFFF
+			float distCamLevi = sqEuclideanDistance(pos, cam->getPosition());
+			if (distCamLevi < 30.0f){
+				if (distCamLevi < 3.0f){
+					tint -= 255;
+				}
+				else{
+					tint -= int(255 * ((30 - distCamLevi) / 27));
+				}
+			}
+			setObjectConstants(XMMatrixAffineTransformation(XMVectorSet(1.5f, 1, 1, 1)/*one_v*/, zero_v, vEnd, pos), tint);
 			mesh_textured_quad_xy_centered.activateAndRender();
 			activateZConfig(ZCFG_DEFAULT);
 			activateBlendConfig(BLEND_CFG_DEFAULT);

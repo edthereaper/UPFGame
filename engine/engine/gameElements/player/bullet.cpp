@@ -38,10 +38,7 @@ void CBullet::update(float elapsed)
 		PxReal distance = 2.55f;
 		PxRaycastBuffer hit;
 		if (PhysicsManager::get().raycast(origin, dir, distance, hit,
-			filter_t(
-			filter_t::NONE,
-			filter_t::id_t(filter_t::PLAYER | filter_t::PAINT_SPHERE | filter_t::BULLET | filter_t::CANNONPATH | filter_t::KNIFE | filter_t::FLARESHOT | filter_t::PICKUP | filter_t::PROP | filter_t::SCENE),
-			filter_t::ENEMY))){
+			filter_t(filter_t::NONE, ~filter_t::id_t(filter_t::ENEMY), filter_t::ENEMY))){
 			Handle HitHandle = Handle::fromRaw(hit.block.shape->userData);
 			Entity *eOther = HitHandle;
 			if (eOther->has<CEnemy>()){
@@ -90,12 +87,7 @@ void CBullet::receive(const MsgCollisionEvent& msg)
 		else{
 			if (!didSound){
 				CTransform* ownerT = owner->get<CTransform>();
-				char cstr[32] = "Bullet_bounce";
-				int randomV = rand_uniform(3, 1);
-				char randomC[32] = "";
-				sprintf(randomC, "%d", randomV);
-				strcat(cstr, randomC);
-				fmodUser::fmodUserClass::play3DSingleSound(cstr, ownerT->getPosition(),0.5f);
+				fmodUser::FmodStudio::play3DSingleEvent(fmodUser::FmodStudio::getEventInstance("SFX/Bullet_bounce"), ownerT->getPosition());
 				didSound = true;
 				timer.reset();
 			}
@@ -103,12 +95,7 @@ void CBullet::receive(const MsgCollisionEvent& msg)
 	}else{
 		if(!didSound){
 			CTransform* ownerT = owner->get<CTransform>();
-			char cstr[32] = "Bullet_bounce";
-			int randomV = rand_uniform(3, 1);
-			char randomC[32] = "";
-			sprintf(randomC, "%d", randomV);
-			strcat(cstr, randomC);
-			fmodUser::fmodUserClass::play3DSingleSound(cstr, ownerT->getPosition());
+			fmodUser::FmodStudio::play3DSingleEvent(fmodUser::FmodStudio::getEventInstance("SFX/Bullet_bounce"), ownerT->getPosition());
 			didSound = true;
 			timer.reset();
 		}

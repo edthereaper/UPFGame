@@ -10,8 +10,6 @@ using namespace component;
 #include "filterShader.h"
 
 #include "app.h"
-#include "fmod_User/fmodUser.h"
-using namespace fmodUser;
 
 #define DEBUGGER_FLAGS \
     PxVisualDebuggerFlag::eTRANSMIT_CONTACTS | \

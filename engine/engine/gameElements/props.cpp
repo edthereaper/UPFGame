@@ -26,7 +26,7 @@ using namespace physX_user;
 #include "destructible.h"
 using namespace behavior;
 
-#include "fmod_User/fmodUser.h"
+#include "fmod_User/fmodStudio.h"
 using namespace fmodUser;
 
 #include "render/texture/tilemap.h"
@@ -595,13 +595,7 @@ void TransformableFSMExecutor::setupTransforming()
         CMesh* mesh = me->get<CMesh>();
         mesh->setVisible(true);
     }
-	char cstr[32] = "Prop_transform";
-	int randomV = rand_uniform(9, 1);
-	char randomC[32] = "";
-	sprintf(randomC, "%d", randomV);
-	strcat(cstr, randomC);
-
-	fmodUser::fmodUserClass::play3DSingleSound(cstr, t->getPosition());
+	fmodUser::FmodStudio::play3DSingleEvent(fmodUser::FmodStudio::getEventInstance("SFX/Prop_transform"), t->getPosition());
 
     applySelfIllumination(0,1,true, true);
     applyDiffuseAsSelfIllumination(TRANSFORMED_DIFFUSE_SELFILLUMINATION, true, true);
@@ -901,6 +895,44 @@ void CCreep::receive(const MsgTransform&)
 {
 	CStaticBody* s = Handle(this).getBrother<CStaticBody>();
     s->setFilters(filter_t::NONE, filter_t::PLAYER, filter_t::NONE);
+	
+	//Check if you are close to the creep in order to send a msg.
+	Entity* me = Handle(this).getOwner();
+	Entity* player = playerEntity;
+	CTransform* t = player->get<CTransform>();
+	XMVECTOR origin = t->getPosition() + (yAxis_v*2);
+	XMVECTOR dir = t->getFront();
+	PxReal distance = 0.5f;
+	PxRaycastBuffer hit;
+	if (PhysicsManager::get().raycast(origin, dir, distance, hit,
+		filter_t(
+		filter_t::NONE,
+		~filter_t::id_t(filter_t::TOOL | filter_t::PROP),
+		filter_t::ALL_IDS))){
+		Handle hitHandle = Handle::fromRaw(hit.block.shape->userData);
+		Entity *eOther = hitHandle;
+		if (eOther->has<CTransformable>()){
+			CTransformable* transf = eOther->get<CTransformable>();
+			if (transf->isTransformed() && eOther->has<CCreep>()){
+				player->sendMsg(MsgPlayerCreep(me));
+			}
+		}
+	}
+	origin = t->getPosition() - (yAxis_v * 0.3f);
+	if (PhysicsManager::get().raycast(origin, dir, distance, hit,
+		filter_t(
+		filter_t::NONE,
+		~filter_t::id_t(filter_t::TOOL | filter_t::PROP),
+		filter_t::ALL_IDS))){
+		Handle hitHandle = Handle::fromRaw(hit.block.shape->userData);
+		Entity *eOther = hitHandle;
+		if (eOther->has<CTransformable>()){
+			CTransformable* transf = eOther->get<CTransformable>();
+			if (transf->isTransformed() && eOther->has<CCreep>()){
+				player->sendMsg(MsgPlayerCreep(me));
+			}
+		}
+	}
 }
 
 
