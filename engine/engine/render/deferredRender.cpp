@@ -282,7 +282,7 @@ void DeferredRender::drawPaint()
     activateZConfig(ZCFG_TEST_GT);
     activateBlendConfig(BLEND_CFG_PAINT);
 
-    getManager<CPaintGroup>()->forall(&CPaintGroup::draw);
+    PaintManager::drawAll();
 }
 
 void DeferredRender::screenEffects()

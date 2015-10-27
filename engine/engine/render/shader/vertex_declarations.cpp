@@ -132,6 +132,17 @@ D3D11_INPUT_ELEMENT_DESC vdcl_paint_layout[] =
 };
 DEF_VTX_DECL(vdcl_paint);
 
+D3D11_INPUT_ELEMENT_DESC vdcl_flower_layout[] =
+{
+    { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,  0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+    { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,    0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+    { "POSITION", 1, DXGI_FORMAT_R32G32B32_FLOAT, 1,  0, D3D11_INPUT_PER_INSTANCE_DATA, 1 },
+    { "FRAME"   , 0, DXGI_FORMAT_R32_UINT,        1, 12, D3D11_INPUT_PER_INSTANCE_DATA, 1 },
+    { "SCALE"   , 0, DXGI_FORMAT_R32G32_FLOAT,    1, 16, D3D11_INPUT_PER_INSTANCE_DATA, 1 },
+    { "LIFE"    , 0, DXGI_FORMAT_R32_FLOAT,       1, 20, D3D11_INPUT_PER_INSTANCE_DATA, 1 },
+};
+DEF_VTX_DECL(vdcl_flower);
+
 template<> VertexDecl* getVertexDecl<VertexPos>()                   {return &vdcl_position;}
 template<> VertexDecl* getVertexDecl<VertexPosColor>()              {return &vdcl_position_color;}
 template<> VertexDecl* getVertexDecl<VertexPosUV>()                 {return &vdcl_position_uv;}
@@ -141,5 +152,6 @@ template<> VertexDecl* getVertexDecl<VertexPUNTInstance>()          {return &vdc
 template<> VertexDecl* getVertexDecl<VertexSkin>()                  {return &vdcl_skin;}
 template<> VertexDecl* getVertexDecl<VertexParticleUData>()			{return &vdcl_particle; }
 template<> VertexDecl* getVertexDecl<VertexPaintData>()			    {return &vdcl_paint; }
+template<> VertexDecl* getVertexDecl<VertexFlowerData>()			{return &vdcl_flower; }
 
 }

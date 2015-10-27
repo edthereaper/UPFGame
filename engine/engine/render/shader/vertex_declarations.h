@@ -162,10 +162,30 @@ struct VertexPaintData {
             float radius = 0.f;
             
             inline XMVECTOR getPos() const {return DirectX::XMLoadFloat3(&pos);}
-            inline void setPos(XMVECTOR v) {DirectX::XMStoreFloat3(&pos, v);}
-            inline void set(XMVECTOR v, float r) {
+            inline void setPos(const XMVECTOR& v) {DirectX::XMStoreFloat3(&pos, v);}
+            inline void set(const XMVECTOR& v, float r) {
                 setPos(v);
                 radius = r;
+            }
+    };
+};
+
+struct VertexFlowerData {
+    typedef VertexPosUV vertex;
+    struct instance_t {
+        public:
+            XMFLOAT3 pos;
+            uint32_t frame=0;
+            XMFLOAT2 sca = XMFLOAT2(1,1);
+            float life = 0;
+            
+            inline XMVECTOR getPos() const {return DirectX::XMLoadFloat3(&pos);}
+            inline void setPos(const XMVECTOR& v) {DirectX::XMStoreFloat3(&pos, v);}
+
+            instance_t()=default;
+            instance_t(const XMVECTOR& v, int frame, const XMFLOAT2& sca = XMFLOAT2(1,1)) :
+                frame(frame), sca(sca) {
+                setPos(v);
             }
     };
 };
