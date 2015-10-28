@@ -18,7 +18,7 @@ using namespace animation;
 #include "gameElements/enemies/melee.h"
 using namespace gameElements;
 
-#include "Particles/ParticleSystem.h"
+#include "Particles/ParticlesManager.h"
 using namespace particles;
 
 #define TIME_TRANSFORM		2.f
@@ -331,6 +331,21 @@ ret_e EnemyBtExecutor::treatEvents(float elapsed)
 		CTransform* ctransf = me->get<CTransform>();
 		originScaleV = ctransf->getScale();
 		me->sendMsg(MsgTransform());
+
+		CEmitter *emitter = me->get<CEmitter>();
+		auto key0 = emitter->getKey("emitter_0");
+		auto key1 = emitter->getKey("emitter_1");
+		auto key2 = emitter->getKey("emitter_2");
+
+		ParticleUpdaterManager::get().sendActive(key0);
+		ParticleUpdaterManager::get().sendActive(key1);
+		ParticleUpdaterManager::get().sendActive(key2);
+
+		ParticleUpdaterManager::get().sendMsgKillByTimer(key0,0.5f);
+		ParticleUpdaterManager::get().sendMsgKillByTimer(key1,0.5f);
+		ParticleUpdaterManager::get().sendMsgKillByTimer(key2,0.5f);
+
+
 	}
 	else if (inbox.shot) {
 		if (!defensive){

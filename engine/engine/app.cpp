@@ -833,7 +833,7 @@ void App::loadlvl()
 
 #endif
 
-#if defined(_DEBUG) && !defined(_PARTICLES)
+#if defined(_DEBUG)
     lvlT->playSong();
 #endif
 
