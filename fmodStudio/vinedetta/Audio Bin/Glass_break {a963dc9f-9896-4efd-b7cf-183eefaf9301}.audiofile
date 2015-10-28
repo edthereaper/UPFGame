@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.01.05.00">
+    <object class="AudioFile" id="{a963dc9f-9896-4efd-b7cf-183eefaf9301}">
+        <property name="frequencyInKHz">
+            <value>44.0999985</value>
+        </property>
+        <property name="channelCount">
+            <value>2</value>
+        </property>
+        <property name="length">
+            <value>3.6241269841269843</value>
+        </property>
+        <property name="audioFilePath">
+            <value>$(AUDIO_BIN_DIR)/Glass_break {767f06e4-56f9-4e7f-9e0e-b11e2d3f47d8}.wav</value>
+        </property>
+        <relationship name="container">
+            <destination>{186f1332-c1a9-4c4b-b0e7-1ee1da8e6d54}</destination>
+        </relationship>
+    </object>
+</objects>

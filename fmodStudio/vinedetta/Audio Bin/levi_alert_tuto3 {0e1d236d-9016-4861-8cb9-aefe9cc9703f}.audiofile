@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.01.05.00">
+    <object class="AudioFile" id="{0e1d236d-9016-4861-8cb9-aefe9cc9703f}">
+        <property name="frequencyInKHz">
+            <value>44.0999985</value>
+        </property>
+        <property name="channelCount">
+            <value>2</value>
+        </property>
+        <property name="length">
+            <value>0.91258503401360547</value>
+        </property>
+        <property name="audioFilePath">
+            <value>$(AUDIO_BIN_DIR)/levi_alert_tuto3 {fe06c739-dd9d-411c-81b0-61be72682fa0}.wav</value>
+        </property>
+        <relationship name="container">
+            <destination>{22cc3fdc-5186-4411-9703-b8b0e5e28f34}</destination>
+        </relationship>
+    </object>
+</objects>

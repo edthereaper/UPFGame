@@ -13,7 +13,7 @@
 #include "PhysX_USER/pxcomponents.h"
 using namespace physX_user;
 
-#include "fmod_User/fmodUser.h"
+#include "fmod_User/fmodStudio.h"
 using namespace fmodUser;
 
 using namespace utils;
@@ -22,32 +22,26 @@ using namespace component;
 
 namespace gameElements {
 
-class CAmbientSound {
-    private:
-        std::string filename = ""; 
-		float volume = 1.0f;
-		float pan = 0.0f;
-		float radius = 50.0f;
-		FMOD::Channel *channelFmod = NULL;
+	class CAmbientSound {
+	private:
+		std::string filename = "";
+		FMOD::Studio::EventInstance* instanceFmod = NULL;
 		Handle playerEntity;
 
-    public:
-        CAmbientSound() {}
-    
-        void loadFromProperties(const std::string& elem, utils::MKeyValue &atts) {
-            filename		= atts.getString("file", "");
-            volume			= atts.getFloat("volume", 0.0f);
-			pan				= atts.getFloat("pan", 0.0f);
-			radius			= atts.getFloat("radius", 50.0f);
-        }
-    
-        void drawVolume();
+	public:
+		CAmbientSound() {}
 
-        void init(){}
-        void update(float);
+		void loadFromProperties(const std::string& elem, utils::MKeyValue &atts) {
+			filename = atts.getString("file", "");
+		}
+
+		void init(){}
+		void update(float);
 		void playSound();
 		void stopSound();
-};
+		void pauseSound();
+		void resumeSound();
+	};
 
 }
 #endif

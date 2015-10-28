@@ -14,10 +14,6 @@ using namespace component;
 using namespace luabridge;
 using namespace DirectX;
 
-#include "fmod_User/fmodUser.h"
-
-using namespace fmodUser;
-
 namespace lua_user{
 
 	class CallbackLua : public ConnectorClass

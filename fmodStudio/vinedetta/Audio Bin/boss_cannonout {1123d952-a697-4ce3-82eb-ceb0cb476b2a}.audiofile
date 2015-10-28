@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.01.05.00">
+    <object class="AudioFile" id="{1123d952-a697-4ce3-82eb-ceb0cb476b2a}">
+        <property name="frequencyInKHz">
+            <value>44.0999985</value>
+        </property>
+        <property name="channelCount">
+            <value>2</value>
+        </property>
+        <property name="length">
+            <value>2.9541723356009069</value>
+        </property>
+        <property name="audioFilePath">
+            <value>$(AUDIO_BIN_DIR)/boss_cannonout {e2631ad2-6c4b-45d8-9bae-95ba819495b1}.wav</value>
+        </property>
+        <relationship name="container">
+            <destination>{7536ac5d-ce75-49a0-adc3-5a702eb2182c}</destination>
+        </relationship>
+    </object>
+</objects>

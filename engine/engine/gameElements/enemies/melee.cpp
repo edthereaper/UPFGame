@@ -397,7 +397,7 @@ ret_e MeleeBtExecutor::introAttack(float elapsed)
 	} else {
 		return DONE;
 	}
-	if (timer.count(elapsed) > aniP->getActualPlugDuration() - 0.3f){	//Time of animation he ends
+	if (timer.count(elapsed) > aniP->getActualPlugDuration() - 0.4f){	//Time of animation he ends
 		timer.reset();
 		return DONE;
 	}

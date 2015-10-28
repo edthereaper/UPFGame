@@ -577,12 +577,7 @@ void PlayerMovBtExecutor::updateLianaMovement(float elapsed, bool grasp, bool in
     }
 
 	if (lianaSoundTimer.count(elapsed) > 4.0f){
-		char cstr[32] = "vine_rope";
-		int randomV = rand_uniform(4, 1);
-		char randomC[32] = "";
-		sprintf(randomC, "%d", randomV);
-		strcat(cstr, randomC);
-		fmodUser::fmodUserClass::playSound(cstr, 1.5f, 0.0f);
+		fmodUser::FmodStudio::playEvent(fmodUser::FmodStudio::getEventInstance("SFX/vine_rope"));
 		lianaSoundTimer.reset();
 	}
 }
@@ -1098,14 +1093,14 @@ ret_e PlayerMovBtExecutor::cannonAim(float elapsed)
 		cannonPathTimer.reset();
 		timer.reset();
 		return DONE;
-	} else if ((time >= (TIME_CANNON_TIMEOUT - 1.5f)) && cannonTimeState == 2) {
-		fmodUser::fmodUserClass::playSound("canon_count", 1.0f, 0.0f);
+	}else if ((time >= (TIME_CANNON_TIMEOUT - 1.5f)) && cannonTimeState == 2) {
+		fmodUser::FmodStudio::playEvent(fmodUser::FmodStudio::getEventInstance("SFX/canon_count"));
 		cannonTimeState = 3;
-	} else if ((time >= (TIME_CANNON_TIMEOUT - 3.0f)) && cannonTimeState == 1) {
-		fmodUser::fmodUserClass::playSound("canon_count", 1.0f, 0.0f);
+	}else if ((time >= (TIME_CANNON_TIMEOUT - 3.0f)) && cannonTimeState == 1) {
+		fmodUser::FmodStudio::playEvent(fmodUser::FmodStudio::getEventInstance("SFX/canon_count"));
 		cannonTimeState = 2;
-	} else if ((time >= (TIME_CANNON_TIMEOUT - 4.5f)) && cannonTimeState == 0) {
-		fmodUser::fmodUserClass::playSound("canon_count", 1.0f, 0.0f);
+	}else if ((time >= (TIME_CANNON_TIMEOUT - 4.5f)) && cannonTimeState == 0) {
+		fmodUser::FmodStudio::playEvent(fmodUser::FmodStudio::getEventInstance("SFX/canon_count"));
 		cannonTimeState = 1;
 	}
 	return STAY;
@@ -1381,7 +1376,7 @@ ret_e PlayerMovBtExecutor::death(float elapsed)
 		updateSpeed(elapsed, false, true, true, DEATH_FRICTION_FACTOR);
 	}else{
 		if(!playedSoundDeadFall){
-			fmodUser::fmodUserClass::playSound("vine_deadhole", 1.0f, 0.0f);
+			fmodUser::FmodStudio::playEvent(fmodUser::FmodStudio::getEventInstance("SFX/vine_deadhole"));
 			playedSoundDeadFall = true;
 		}
 		updateSpeed(elapsed, true, true, true);
@@ -1792,6 +1787,9 @@ void CPlayerMov::update(float elapsed)
 				break;
 			case 0x2504:	//Begin
 				animPlugger->plug(0x2400);
+				break;
+			case 0x1111:	//When enter cannon we must quit run
+				animPlugger->plug(0x111D);
 				break;
 			case 0x2231:	//Dash Bounce
 				animPlugger->plug(0x835c);

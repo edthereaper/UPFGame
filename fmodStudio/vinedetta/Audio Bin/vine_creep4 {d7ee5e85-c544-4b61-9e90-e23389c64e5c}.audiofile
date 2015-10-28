@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.01.05.00">
+    <object class="AudioFile" id="{d7ee5e85-c544-4b61-9e90-e23389c64e5c}">
+        <property name="frequencyInKHz">
+            <value>44.0999985</value>
+        </property>
+        <property name="channelCount">
+            <value>2</value>
+        </property>
+        <property name="length">
+            <value>0.60734693877551016</value>
+        </property>
+        <property name="audioFilePath">
+            <value>$(AUDIO_BIN_DIR)/vine_creep4 {a31a7f9c-6863-4d95-bee5-9e950502ebc8}.wav</value>
+        </property>
+        <relationship name="container">
+            <destination>{736d0d6e-bb7e-46c4-89a3-1739ec40aba4}</destination>
+        </relationship>
+    </object>
+</objects>

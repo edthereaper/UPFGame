@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.01.05.00">
+    <object class="AudioFile" id="{351310de-d925-4259-bdcd-4a3f1cd86158}">
+        <property name="frequencyInKHz">
+            <value>44.0999985</value>
+        </property>
+        <property name="channelCount">
+            <value>2</value>
+        </property>
+        <property name="length">
+            <value>1.8209523809523809</value>
+        </property>
+        <property name="audioFilePath">
+            <value>$(AUDIO_BIN_DIR)/smokepanel_cooling2 {ac9a0364-320c-4d70-b249-0f95238cb753}.wav</value>
+        </property>
+        <relationship name="container">
+            <destination>{7536ac5d-ce75-49a0-adc3-5a702eb2182c}</destination>
+        </relationship>
+    </object>
+</objects>

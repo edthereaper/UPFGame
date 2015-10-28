@@ -16,28 +16,28 @@
 	wxy "space" keyboard
 -->
 <TextHelper>
-	<textInfo sizefont="20" timeAnim="2.0" trigger="1"  xbox="false"  	sentence="REMEMBER!|rqst TO MOVE|wxy TO JUMP" />
-	<textInfo sizefont="20" timeAnim="2.0" trigger="1"  xbox="true" 	sentence="REMEMBER!|k TO MOVE|j TO JUMP" />
-	<textInfo sizefont="20" timeAnim="2.0" trigger="2"  xbox="false"  	sentence="LOOK ALL THESE THINGS!|SHOOT WITH d|TO TRANSFORM THEM!"/>
-	<textInfo sizefont="20" timeAnim="2.0" trigger="2"  xbox="true" 	sentence="LOOK ALL THESE THINGS!|SHOOT WITH i|TO TRANSFORM THEM!"/>
-	<textInfo sizefont="20" timeAnim="2.0" trigger="3"  xbox="false" 	sentence="SOME ELEMENTS CAN BE USED|AFTER BEING TRANSFORMED!"/>
-	<textInfo sizefont="20" timeAnim="2.0" trigger="3"  xbox="true" 	sentence="SOME ELEMENTS CAN BE USED|AFTER BEING TRANSFORMED!"/>
-	<textInfo sizefont="20" timeAnim="2.0" trigger="4"  xbox="false"  	sentence="AN ENEMY! TO DEFAT HIM|STUN e AND SHOOT d OR|SHOOT d MULTIPLE TIMES"/>
-	<textInfo sizefont="20" timeAnim="2.0" trigger="4"  xbox="true" 	sentence="AN ENEMY! TO DEFAT HIM|STUN g AND SHOOT i OR|SHOOT i MULTIPLE TIMES"/>
-	<textInfo sizefont="20" timeAnim="2.0" trigger="5"  xbox="false"  	sentence="SOME ELEMENTS CAN BE USED|AFTER BEING TRANSFORMED!"/>
-	<textInfo sizefont="20" timeAnim="2.0" trigger="5"  xbox="true" 	sentence="SOME ELEMENTS CAN BE USED|AFTER BEING TRANSFORMED!"/>
-	<textInfo sizefont="20" timeAnim="2.0" trigger="6"  xbox="false"  	sentence="POSTERS CAN BE TRANSFORMED|AND USED TO CLIMB!"/>
-	<textInfo sizefont="20" timeAnim="2.0" trigger="6"  xbox="true" 	sentence="POSTERS CAN BE TRANSFORMED|AND USED TO CLIMB!"/>
-	<textInfo sizefont="20" timeAnim="2.0" trigger="7"  xbox="false"  	sentence="IF YOU ARE FULL OF ENERGY|PRESS u NEAR YOU ENEMIES|TO UNLEASH YOUR POWER!"/>
-	<textInfo sizefont="20" timeAnim="2.0" trigger="7"  xbox="true" 	sentence="IF YOU ARE FULL OF ENERGY|PRESS h NEAR YOU ENEMIES|TO UNLEASH YOUR POWER!"/>
-	<textInfo sizefont="20" timeAnim="2.0" trigger="8"  xbox="false"  	sentence="ROPES CAN BE TRANSFORMED|AND USED IN ORDER TO|GO OVER THE CLIFFS"/>
-	<textInfo sizefont="20" timeAnim="2.0" trigger="8"  xbox="true" 	sentence="ROPES CAN BE TRANSFORMED|AND USED IN ORDER TO|GO OVER THE CLIFFS"/>
-	<textInfo sizefont="20" timeAnim="2.0" trigger="9"  xbox="false"  	sentence="DEAD END!|HOW DO WE GET OUT OF HERE?"/>
-	<textInfo sizefont="20" timeAnim="2.0" trigger="9"  xbox="true" 	sentence="DEAD END!|HOW DO WE GET OUT OF HERE?"/>
-	<textInfo sizefont="20" timeAnim="2.0" trigger="10" xbox="false" 	sentence="WATCH OUT!|LAVA WILL HURT YOU BAD!"/>
-	<textInfo sizefont="20" timeAnim="2.0" trigger="10" xbox="true"  	sentence="WATCH OUT!|LAVA WILL HURT YOU BAD!"/>
-	<textInfo sizefont="20" timeAnim="2.0" trigger="11" xbox="false" 	sentence="LOOK THAT HAMMER!|SHOOT IT TO BE TRANSORMED!"/>
-	<textInfo sizefont="20" timeAnim="2.0" trigger="11" xbox="true"  	sentence="LOOK THAT HAMMER!|SHOOT IT TO BE TRANSORMED!"/>
-	<textInfo sizefont="20" timeAnim="2.0" trigger="12" xbox="false" 	sentence="USE THE CANNON THAT|HE DROPPED TO DAMAGE|HIS WEAKPOINT!"/>
-	<textInfo sizefont="20" timeAnim="2.0" trigger="12" xbox="true"  	sentence="USE THE CANNON THAT|HE DROPPED TO DAMAGE|HIS WEAKPOINT!"/>
+	<textInfo sizefont="25" timeAnim="2.0" trigger="1"  xbox="false"  	sentence="REMEMBER!|rqst TO MOVE|wxy TO JUMP" />
+	<textInfo sizefont="25" timeAnim="2.0" trigger="1"  xbox="true" 	sentence="REMEMBER!|k TO MOVE|j TO JUMP" />
+	<textInfo sizefont="25" timeAnim="2.0" trigger="2"  xbox="false"  	sentence="LOOK ALL THESE THINGS!|SHOOT WITH d|TO TRANSFORM THEM!"/>
+	<textInfo sizefont="25" timeAnim="2.0" trigger="2"  xbox="true" 	sentence="LOOK ALL THESE THINGS!|SHOOT WITH i|TO TRANSFORM THEM!"/>
+	<textInfo sizefont="25" timeAnim="2.0" trigger="3"  xbox="false" 	sentence="SOME ELEMENTS CAN BE USED|AFTER BEING TRANSFORMED!"/>
+	<textInfo sizefont="25" timeAnim="2.0" trigger="3"  xbox="true" 	sentence="SOME ELEMENTS CAN BE USED|AFTER BEING TRANSFORMED!"/>
+	<textInfo sizefont="25" timeAnim="2.0" trigger="4"  xbox="false"  	sentence="AN ENEMY! TO DEFAT HIM|STUN e AND SHOOT d OR|SHOOT d MULTIPLE TIMES"/>
+	<textInfo sizefont="25" timeAnim="2.0" trigger="4"  xbox="true" 	sentence="AN ENEMY! TO DEFAT HIM|STUN g AND SHOOT i OR|SHOOT i MULTIPLE TIMES"/>
+	<textInfo sizefont="25" timeAnim="2.0" trigger="5"  xbox="false"  	sentence="SOME ELEMENTS CAN BE USED|AFTER BEING TRANSFORMED!"/>
+	<textInfo sizefont="25" timeAnim="2.0" trigger="5"  xbox="true" 	sentence="SOME ELEMENTS CAN BE USED|AFTER BEING TRANSFORMED!"/>
+	<textInfo sizefont="25" timeAnim="2.0" trigger="6"  xbox="false"  	sentence="POSTERS CAN BE TRANSFORMED|AND USED TO CLIMB!"/>
+	<textInfo sizefont="25" timeAnim="2.0" trigger="6"  xbox="true" 	sentence="POSTERS CAN BE TRANSFORMED|AND USED TO CLIMB!"/>
+	<textInfo sizefont="25" timeAnim="2.0" trigger="7"  xbox="false"  	sentence="IF YOU ARE FULL OF ENERGY|PRESS u NEAR YOU ENEMIES|TO UNLEASH YOUR POWER!"/>
+	<textInfo sizefont="25" timeAnim="2.0" trigger="7"  xbox="true" 	sentence="IF YOU ARE FULL OF ENERGY|PRESS h NEAR YOU ENEMIES|TO UNLEASH YOUR POWER!"/>
+	<textInfo sizefont="25" timeAnim="2.0" trigger="8"  xbox="false"  	sentence="ROPES CAN BE TRANSFORMED|AND USED IN ORDER TO|GO OVER THE CLIFFS"/>
+	<textInfo sizefont="25" timeAnim="2.0" trigger="8"  xbox="true" 	sentence="ROPES CAN BE TRANSFORMED|AND USED IN ORDER TO|GO OVER THE CLIFFS"/>
+	<textInfo sizefont="25" timeAnim="2.0" trigger="9"  xbox="false"  	sentence="DEAD END!|HOW DO WE GET OUT OF HERE?"/>
+	<textInfo sizefont="25" timeAnim="2.0" trigger="9"  xbox="true" 	sentence="DEAD END!|HOW DO WE GET OUT OF HERE?"/>
+	<textInfo sizefont="25" timeAnim="2.0" trigger="10" xbox="false" 	sentence="WATCH OUT!|LAVA WILL HURT YOU BAD!"/>
+	<textInfo sizefont="25" timeAnim="2.0" trigger="10" xbox="true"  	sentence="WATCH OUT!|LAVA WILL HURT YOU BAD!"/>
+	<textInfo sizefont="25" timeAnim="2.0" trigger="11" xbox="false" 	sentence="LOOK THAT HAMMER!|SHOOT IT TO BE TRANSORMED!"/>
+	<textInfo sizefont="25" timeAnim="2.0" trigger="11" xbox="true"  	sentence="LOOK THAT HAMMER!|SHOOT IT TO BE TRANSORMED!"/>
+	<textInfo sizefont="25" timeAnim="2.0" trigger="12" xbox="false" 	sentence="USE THE CANNON THAT|HE DROPPED TO DAMAGE|HIS WEAKPOINT!"/>
+	<textInfo sizefont="25" timeAnim="2.0" trigger="12" xbox="true"  	sentence="USE THE CANNON THAT|HE DROPPED TO DAMAGE|HIS WEAKPOINT!"/>
 </TextHelper>

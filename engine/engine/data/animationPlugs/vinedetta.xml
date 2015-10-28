@@ -96,7 +96,7 @@
 		<on key="0x1594"/>			
 	</plug>	
 	<plug id="29" anim="idle_nd" type="cycle" delay="0.0" delayOut="0.0" dummy="false">
-		<on key="0x1111"/>			
+		<on key="0x111D"/>			
 	</plug>		
 	<plug id="30" anim="dying" type="action" delay="0.2" delayOut="0.0" dummy="false" lock="true">
 		<on key="0xAAAADEAD"/>			

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.01.05.00">
+    <object class="AudioFile" id="{a303911c-c888-48a8-bea9-578ba220b2a3}">
+        <property name="frequencyInKHz">
+            <value>44.0999985</value>
+        </property>
+        <property name="channelCount">
+            <value>2</value>
+        </property>
+        <property name="length">
+            <value>0.35310657596371881</value>
+        </property>
+        <property name="audioFilePath">
+            <value>$(AUDIO_BIN_DIR)/melee_combo2 {4fa84c58-f3c3-4af6-a7a9-4583a622ed87}.wav</value>
+        </property>
+        <relationship name="container">
+            <destination>{2d324459-33e1-4997-b669-a60edbbbd5eb}</destination>
+        </relationship>
+    </object>
+</objects>

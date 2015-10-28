@@ -167,29 +167,17 @@ namespace particles{
 
 	}
 
-	void ParticleUpdaterManager::deleteAll(){
-	
+	void ParticleUpdaterManager::deleteAll() {
 		if (map.size() > 0){
 
 			ParticlesUpdaterMap::iterator i = map.begin();
 
 			for (auto& i : map) {
-				
-				auto key = i.first;
-				if (key.h.isValid()){
-					
-					Entity *e(key.h);
-					e->sendMsg(MsgDeleteSelf());
-				}
-
-				Handle h = i.second;
-				if (h.isValid()){
-
-					Entity *e(h);
-					e->sendMsg(MsgDeleteSelf());
-				}
+				Entity* e(i.second);
+                if (e != nullptr) {
+                    e->sendMsg(MsgDeleteSelf());
+                }
 			}
-
 			map.clear();
 		}
 	}

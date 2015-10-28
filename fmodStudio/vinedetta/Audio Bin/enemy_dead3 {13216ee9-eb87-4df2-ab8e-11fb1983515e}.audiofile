@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.01.05.00">
+    <object class="AudioFile" id="{13216ee9-eb87-4df2-ab8e-11fb1983515e}">
+        <property name="frequencyInKHz">
+            <value>44.0999985</value>
+        </property>
+        <property name="channelCount">
+            <value>2</value>
+        </property>
+        <property name="length">
+            <value>1.49281179138322</value>
+        </property>
+        <property name="audioFilePath">
+            <value>$(AUDIO_BIN_DIR)/enemy_dead3 {c09960bc-e0a5-4c66-b825-64199428890d}.wav</value>
+        </property>
+        <relationship name="container">
+            <destination>{2d324459-33e1-4997-b669-a60edbbbd5eb}</destination>
+        </relationship>
+    </object>
+</objects>

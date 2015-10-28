@@ -105,7 +105,12 @@ Entity* LevelImport::createNonInstancedTransformablePiece(const pieceData_t& p)
 	XMMATRIX mat = XMMatrixTransformation(zero_v, zero_v, one_v, zero_v, p.rot, p.pos);
 	XMVECTOR newmin = XMVector3Transform(maabb.getMin(), mat);
 	XMVECTOR newmax = XMVector3Transform(maabb.getMax(), mat);
-    transformable->setCenterAim((newmax+newmin)/2.f);
+    if (p.meshName == "PIECE-farola-farola"){
+		transformable->setCenterAim(p.pos + yAxis_v * 2);
+	}
+	else{
+		transformable->setCenterAim((newmax + newmin) / 2.f);
+	} 
 
     EntityListManager::get(CProp::TAG).add(currentEntity);
     currentEntity_h = Handle();	

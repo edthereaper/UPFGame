@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.01.05.00">
+    <object class="AudioFile" id="{bbc88086-48df-4cf1-933c-71e8ce0ca315}">
+        <property name="frequencyInKHz">
+            <value>44.0999985</value>
+        </property>
+        <property name="channelCount">
+            <value>1</value>
+        </property>
+        <property name="length">
+            <value>0.040249433106575964</value>
+        </property>
+        <property name="audioFilePath">
+            <value>$(AUDIO_BIN_DIR)/vine_stepR3 {c3875d62-d319-480b-99bc-36aa19b769c9}.wav</value>
+        </property>
+        <relationship name="container">
+            <destination>{736d0d6e-bb7e-46c4-89a3-1739ec40aba4}</destination>
+        </relationship>
+    </object>
+</objects>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.01.05.00">
+    <object class="AudioFile" id="{ea14de10-58ef-4b1a-9591-9b98c894cffa}">
+        <property name="frequencyInKHz">
+            <value>32</value>
+        </property>
+        <property name="channelCount">
+            <value>2</value>
+        </property>
+        <property name="length">
+            <value>0.60334374999999996</value>
+        </property>
+        <property name="audioFilePath">
+            <value>$(AUDIO_BIN_DIR)/melee_confused1 {918cbf7b-a642-4d38-b582-1aa0d05d213b}.wav</value>
+        </property>
+        <relationship name="container">
+            <destination>{2d324459-33e1-4997-b669-a60edbbbd5eb}</destination>
+        </relationship>
+    </object>
+</objects>

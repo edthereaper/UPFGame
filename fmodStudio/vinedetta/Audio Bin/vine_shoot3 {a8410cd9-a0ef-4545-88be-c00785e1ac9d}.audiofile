@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.01.05.00">
+    <object class="AudioFile" id="{a8410cd9-a0ef-4545-88be-c00785e1ac9d}">
+        <property name="frequencyInKHz">
+            <value>44.0999985</value>
+        </property>
+        <property name="channelCount">
+            <value>2</value>
+        </property>
+        <property name="length">
+            <value>0.63185941043083904</value>
+        </property>
+        <property name="audioFilePath">
+            <value>$(AUDIO_BIN_DIR)/vine_shoot3 {a736172d-5735-42d9-9a77-5d3270855c51}.wav</value>
+        </property>
+        <relationship name="container">
+            <destination>{736d0d6e-bb7e-46c4-89a3-1739ec40aba4}</destination>
+        </relationship>
+    </object>
+</objects>

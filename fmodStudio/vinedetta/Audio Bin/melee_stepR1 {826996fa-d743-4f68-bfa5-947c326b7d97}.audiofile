@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.01.05.00">
+    <object class="AudioFile" id="{826996fa-d743-4f68-bfa5-947c326b7d97}">
+        <property name="frequencyInKHz">
+            <value>44.0999985</value>
+        </property>
+        <property name="channelCount">
+            <value>1</value>
+        </property>
+        <property name="length">
+            <value>0.11975056689342403</value>
+        </property>
+        <property name="audioFilePath">
+            <value>$(AUDIO_BIN_DIR)/melee_stepR1 {98cf06bd-1c30-4441-9944-d72d87877e2c}.wav</value>
+        </property>
+        <relationship name="container">
+            <destination>{2d324459-33e1-4997-b669-a60edbbbd5eb}</destination>
+        </relationship>
+    </object>
+</objects>

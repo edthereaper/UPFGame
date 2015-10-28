@@ -257,7 +257,7 @@ void CFlareShot::removeFromScene()
 	meAS->stopSound();
 
 	CTransform* meT = e->get<CTransform>();
-	fmodUser::fmodUserClass::play3DSingleSound("Flare_end", meT->getPosition(), 0.5f);
+	fmodUser::FmodStudio::play3DSingleEvent(fmodUser::FmodStudio::getEventInstance("SFX/Flare_end"), meT->getPosition());
 
 	CEmitter *emitter = e->get<CEmitter>();
     auto& particleManager(ParticleUpdaterManager::get());

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.01.05.00">
+    <object class="AudioFile" id="{d08785c5-4c63-4a1b-b175-29131712e9eb}">
+        <property name="frequencyInKHz">
+            <value>44.0999985</value>
+        </property>
+        <property name="channelCount">
+            <value>2</value>
+        </property>
+        <property name="length">
+            <value>2.1478458049886622</value>
+        </property>
+        <property name="audioFilePath">
+            <value>$(AUDIO_BIN_DIR)/boss_invokeenemies {fd52b29e-bdf5-4e62-bc04-8bca6133dfc1}.wav</value>
+        </property>
+        <relationship name="container">
+            <destination>{7536ac5d-ce75-49a0-adc3-5a702eb2182c}</destination>
+        </relationship>
+    </object>
+</objects>

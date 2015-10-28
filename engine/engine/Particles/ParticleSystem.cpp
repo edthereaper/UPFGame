@@ -142,8 +142,6 @@ namespace particles {
 	}
 
 	void CParticleSystem::setup(){
-
-		
 		vectors = new vectors_t;
 
 		Entity* e;
@@ -189,10 +187,11 @@ namespace particles {
 						(yAxis_v * utils::rand_uniform(emitter.rangeDistance, -emitter.rangeDistance)) +
 						(zAxis_v * utils::rand_uniform(emitter.rangeDistance, -emitter.rangeDistance));
 
+                p.scale = emitter.scale;
 				p.pos = toXMFloat3(random);
 
-				p.frame = (float)(utils::rand_uniform(16, 0));
-				p.setAngle((float)(utils::rand_uniform(359, 0)));
+				p.frame = float(utils::rand_uniform(emitter.numberOfFrames, 0));
+				p.setAngle(utils::rand_uniform(M_2_PIf, 0.f));
 
 				//lifetime
 				LifeTimeData lifetime;
@@ -300,18 +299,17 @@ void CParticleSystem::updateParticle(
 {
     if (!emitter.randomParticles) {p.frame += elapsed * emitter.timing;}
 
-	if (rad2deg(p.getAngle()) >= 359)
-		p.setAngle(0.0f);
-
-    p.setAngle(p.getAngle() + elapsed * utils::deg2rad(emitter.rotationRateParticle));
-
+    if (emitter.rotationRateParticle > 0) {
+        p.setAngle(p.getAngle() + elapsed * utils::deg2rad(emitter.rotationRateParticle));
+    }
 	if (emitter.haveColor && emitter.haveFinalColor) {
         p.colorWeight = pData.getColorWeight(lifeTime, emitter.color_rate, elapsed);
     } else {
         p.colorWeight = 0;
     }
 
-    p.scale = emitter.scale * pData.getScale();
+    // No particle varies in scale
+    //p.scale = emitter.scale * pData.getScale();
 }
 
 XMMATRIX cam_vp = XMMatrixIdentity();
@@ -913,7 +911,7 @@ void CParticleSystem::sortParticlesZ()
 		setMaxParticle(50);
 		sefLocalPosition(zero_v);
 		setRangeDistance(1.f);
-		setAngle(30);
+		setAngle(deg2rad(30));
 		setEmitting(true);
 
 		reload();

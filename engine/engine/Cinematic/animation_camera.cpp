@@ -67,46 +67,35 @@ namespace cinematic{
 
 			// Convert t to frame key
 			// 1.1s => 2.22f
-			float frame_number = t * (headerCamera.ntime_keys - 1) / headerCamera.animation_duration;
+			float frame_number = t * headerCamera.ntime_keys / headerCamera.animation_duration;
 
-			// The integer part 2
-			unsigned   prev_iframe = static_cast<int>(frame_number);
-			// The decimal part = 0.22
+			unsigned prev_iframe = unsigned(std::floor(frame_number));
 			float time_in_next = frame_number - prev_iframe;
 			assert(time_in_next >= 0 && time_in_next <= 1.f);
-			unsigned   next_iframe = prev_iframe + 1;
+			unsigned next_iframe = prev_iframe + 1;
 
 			// Caso especial cuando estamos al final de todo
 			// Simular una interpolacion al 100% con el next frame
-			if (next_iframe == headerCamera.ntime_keys) {
-				prev_iframe = next_iframe - 2;
+			if (t >= headerCamera.animation_duration) {
 				time_in_next = 1.0f;
-				next_iframe = next_iframe - 1;
+				next_iframe = headerCamera.ntime_keys;
 			}
 
+			if (float(prev_iframe) > stream.max) {return true;}
+			if (float(next_iframe) > stream.max) {return true;}
 
-			if (float(prev_iframe) >= stream.max)
-                return true;
-			if (float(next_iframe) >= stream.max) 
-                return true;
-
-			auto prev_key = keys.begin() + prev_iframe;
-			auto next_key = keys.begin() + next_iframe;
+			auto prev_key = keys[prev_iframe];
+			auto next_key = keys[next_iframe];
 
 			Key k;
-			k.trans = prev_key->trans + time_in_next * (next_key->trans - prev_key->trans);
-			k.target = prev_key->target + time_in_next * (next_key->target - prev_key->target);
+			k.trans  = XMVectorLerp(prev_key.trans, next_key.trans, time_in_next);
+			k.target = XMVectorLerp(prev_key.target, next_key.target, time_in_next);
 
-
-			component::Handle h = component::Handle(this).getOwner();
-			if (h.isValid()) 
-				assert("not valid");
-		
-			component::CTransform * camT = (((component::Entity*)h)->get<component::CTransform>());
+			component::CTransform * camT = Handle(this).getBrother<component::CTransform>();
 
 			// set position of camera
 			camT->setPosition(k.trans);
-			camT->setScale(XMVectorSet(1, 1, 1, 1));
+			camT->setScale(one_v);
 
 			// align to target to 3d point
 			lookAt3D(camT, k.target);

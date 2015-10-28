@@ -92,7 +92,7 @@ void SmokeTowerFSMExecutor::update(float elapsed)
 			app.spawn();
 			PaintManager::reset(); //Delete all paint spheres
 		}
-		playerS->damage(30, true);
+		playerS->damage(30);
 	} else if (diff > FX_THRESHOLD){
         ((CPlayerStats*)player->get<CPlayerStats>())->damage(5);
 	}
@@ -201,7 +201,7 @@ void CSmokeTower::receive(const MsgSmokeTowerResetPhase& msg)
 {
 	CTransform* meT = ((Entity*)fsm.getExecutor().meEntity)->get<CTransform>();
 	fsm.getExecutor().beginDmgSmoke = false;
-	if (fsm.getExecutor().phase == 0){
+	if (fsm.getExecutor().phase == -1){
 		meT->setPosition(XMVectorSetY(meT->getPosition(), initH));
 	} else {
 		meT->setPosition(

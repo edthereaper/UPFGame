@@ -3,7 +3,7 @@
 #include "animationplugger.h"
 #include "Cinematic/camera_manager.h"
 #include "app.h"
-#include "fmod_User/fmodUser.h"
+#include "fmod_User/fmodStudio.h"
 #include "handles/entity.h"
 #include "handles/handle.h"
 #include "handles/prefab.h"
@@ -22,36 +22,26 @@ namespace animation {
 			if (atts.has("anim"))		{ currentSound.anim = atts.getString("anim", ""); }
 			if (atts.has("sound"))		{ currentSound.sound = atts.getString("sound", ""); }
 			if (atts.has("time"))		{ currentSound.time = atts.getFloat("time", 0.0f); }
-			if (atts.has("volume"))		{ currentSound.volume = atts.getFloat("volume", 1.0f); }
-			if (atts.has("numsounds"))	{ currentSound.numsounds = atts.getInt("numsounds", 0); }
-			//dbg("loaded: %s\n", currentSound.sound.c_str());
 			sounds.push_back(currentSound);
 		}
 	}
 
 	void CAnimationSounds::soundActioner()
 	{
-
 		if (cinematic::CameraManager::get().isPlayerCam()){
-
 			CAnimationPlugger* aniP = Handle(this).getBrother<CAnimationPlugger>();
 			size = (int)actualSounds.size();
 			for (auto i = 0; i < size; ++i) {
 				if (actualSounds[i].sound != "" && aniP->getAnimationElapsed() > actualSounds[i].time){
-					char* cstr = (char*)actualSounds[i].sound.c_str();
-					if (actualSounds[i].numsounds > 0){
-						int randomV = rand_uniform(actualSounds[i].numsounds, 1);
-						char randomC[32] = "";
-						sprintf(randomC, "%d", randomV);
-						strcat(cstr, randomC);
-					}
-					//dbg("playing: %s at %f\n", cstr, actualSounds[i].time);
+					//dbg("playing: %s at %f\n", actualSounds[i].sound.c_str(), actualSounds[i].time);
 					if (Handle(this).hasBrother<CPlayerMov>()){
-						fmodUser::fmodUserClass::playSound(cstr, actualSounds[i].volume, 0.0f);
+						fmodUser::FmodStudio::playEvent(fmodUser::FmodStudio::getEventInstance("SFX/" + actualSounds[i].sound));
 					}
 					else{
 						CTransform* meT = Handle(this).getBrother<CTransform>();
-						fmodUser::fmodUserClass::play3DSingleSound(cstr, meT->getPosition(), actualSounds[i].volume, 0.0f);
+						fmodUser::FmodStudio::play3DSingleEvent(
+							fmodUser::FmodStudio::getEventInstance("SFX/" + actualSounds[i].sound),
+							meT->getPosition());
 					}
 					actualSounds[i] = sounds_t();
 					size--;
