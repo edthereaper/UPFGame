@@ -28,6 +28,7 @@ void renderUtilsDestroy();
 // Procedural meshes
 bool createGrid(Mesh& mesh, int nsamples);
 bool createAxis(Mesh& mesh, float length = 1.0);
+bool createStar(Mesh& mesh, float length = 1.0);
 bool createWiredUnitCube(Mesh& mesh);
 bool createWiredCube(Mesh& mesh);
 bool createWiredCubeSplit(Mesh& mesh);

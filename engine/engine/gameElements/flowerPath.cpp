@@ -8,6 +8,7 @@
 using namespace DirectX;
 using namespace utils;
 using namespace render;
+using namespace component;
 
 using namespace physx;
 using namespace physX_user;
@@ -16,7 +17,8 @@ using namespace physX_user;
 
 namespace gameElements {
 
-const float FlowerGroup::QUAD_SIZE = 0.5f;
+const float FlowerGroup::QUAD_SIZE = 0.4f;
+const float FlowerPathManager::COS_ANGLE_THRESHOLD = std::cos(deg2rad(10));
 
 FlowerPathManager::sproutCoordV_t FlowerPathManager::xCoords;
 FlowerPathManager::sproutCoordV_t FlowerPathManager::yCoords;
@@ -96,33 +98,33 @@ void FlowerPathManager::plantCyllinder(const XMVECTOR& pos, float radius, float 
 
     FlowerGroup* group = nullptr;
     for(auto& i : range_t<flowers_t::iterator>(flowers.equal_range(spatialIndex))) {
-        if (i.second.getSize() + newSize < FlowerGroup::MAX_SIZE) {
+        if (i.second.getSize() + newSize < MAX_GROUP_SIZE) {
             group = &i.second;
             break;
         }
     }
     if (group == nullptr) {
-        group = &flowers.emplace(spatialIndex, FlowerGroup())->second;
+        group = &flowers.emplace(spatialIndex, FlowerGroup(MAX_GROUP_SIZE))->second;
     }
 
     group->add(newFlowers);
 }
 
 
-inline float yScaBreath(float t)
+inline float yScaFlowerBreath(float t)
 {
     return std::sin(t*2.5f+1.04f)*.023f;
 }
-inline float xScaBreath(float t)
+inline float xScaFlowerBreath(float t)
 {
     return std::cos(t*2.0f+2.3f)*.02f;
 }
-inline float yScaGrow(float t)
+inline float yScaFlowerGrow(float t)
 {
     return t >= (1.f/3.f) ? 1 :
         std::sin(t*(1.f/3.f)*M_PI_2f)+0.45f*std::sin(t*(1.f/3.f)*M_PIf);
 }
-inline float xScaGrow(float t)
+inline float xScaFlowerGrow(float t)
 {
     return t >= (1.f/3.f) ? 1 :
         std::sin(t*(1.f/3.f)*M_PI_2f);
@@ -132,8 +134,8 @@ void FlowerGroup::update(float elapsed)
 {
     for(auto& f : flowers) {
         f.life += elapsed;
-        f.sca.x = (xScaGrow(f.life) + xScaBreath(f.life))*QUAD_SIZE;
-        f.sca.y = (yScaGrow(f.life) + yScaBreath(f.life))*QUAD_SIZE;
+        f.sca.x = (xScaFlowerGrow(f.life) + xScaFlowerBreath(f.life))*QUAD_SIZE;
+        f.sca.y = (yScaFlowerGrow(f.life) + yScaFlowerBreath(f.life))*QUAD_SIZE;
     }
     dirty=true;
 }
@@ -155,12 +157,12 @@ void FlowerGroup::updateInstanceData()
     dirty = false;
 }
 
-FlowerGroup::FlowerGroup()
+FlowerGroup::FlowerGroup(size_t maxSize)
 {
     instanceData = new Mesh;
-    flowers.resize(MAX_SIZE);
+    flowers.resize(maxSize);
     bool isOK = instanceData->create(
-        unsigned(MAX_SIZE), flowers.data(), 0, nullptr,
+        unsigned(maxSize), flowers.data(), 0, nullptr,
         Mesh::POINTS, getVertexDecl<VertexFlowerData>(), 1 /*instance stream*/,
         utils::zero_v, utils::zero_v, true);
     assert(isOK);
@@ -195,12 +197,78 @@ FlowerPathManager::simulation_t FlowerPathManager::simulate(
             PxVec3 p(rand_uniform(xMax, xMin), y, rand_uniform(zMax, zMin));
             if (PHYSX.raycast(p, PxVec3(0,-1, 0), step, hit, filter)) {
                 filter_t hitFilter = hit.block.shape->getSimulationFilterData();
-                if (!((hitFilter.is & ignore) != 0)) {
+                if (!((hitFilter.is & ignore) != 0) && 
+                    (hit.block.normal.dot(PxVec3(0,1,0)) < COS_ANGLE_THRESHOLD)) {
                     ret.push_back(toXMVECTOR(hit.block.position));
                 }
             }
         }
     }
+    return ret;
+}
+
+void FlowerPathManager::buildSimulationData(Handle levelE, float density, float step)
+{
+    dbg("buildSimulationData start\n");
+    CStaticBody* scene = levelE.getSon<CStaticBody>();
+    physx::PxTriangleMeshGeometry geo;
+    bool ok = scene->getShape()->getTriangleMeshGeometry(geo);
+    assert(ok);
+    auto pxaabb = geo.triangleMesh->getLocalBounds();
+    //TODO: get simulated points from a file if it exists
+    auto points = simulate(AABB(toXMVECTOR(pxaabb.minimum), toXMVECTOR(pxaabb.maximum)),
+        density, step);
+    auto nPoints = points.size();
+    dbg("Simulation yielded %d points\n", nPoints);
+    xCoords.resize(nPoints);
+    yCoords.resize(nPoints);
+    zCoords.resize(nPoints);
+    active.resize(nPoints, false);
+    for(uint32_t i = 0; i < nPoints; ++i) {
+        const auto& p(points[i]);
+        xCoords[i] = sproutCoord(XMVectorGetX(p), i);
+        yCoords[i] = sproutCoord(XMVectorGetY(p), i);
+        zCoords[i] = sproutCoord(XMVectorGetZ(p), i);
+    }
+    dbg("buildSimulationData end\n");
+}
+
+void FlowerGroup::drawPoints(const component::Color& color)
+{
+    if (flowers.size() > 0) {
+        if (dirty) {updateInstanceData();}
+
+        static Mesh* const star = new Mesh;
+        static const bool ok = createStar(*star, QUAD_SIZE);
+        assert(ok);
+
+        setObjectConstants(XMMatrixIdentity(), color);
+        star->renderInstanced(*instanceData, flowers.size());
+    }
+}
+
+FlowerGroup* FlowerPathManager::simulationHolder = nullptr;
+
+FlowerGroup* FlowerPathManager::generateSimulationHolder()
+{
+    if (simulationHolder != nullptr) {delete simulationHolder;}
+    simulationHolder = new FlowerGroup(active.size());
+    std::vector<XMVECTOR> points;
+    points.reserve(active.size());
+    for(size_t i = 0; i < active.size(); ++i) {
+        if (!active[i]) {
+            points.push_back(XMVectorSet(xCoords[i].val,
+                yCoords[i].val, zCoords[i].val, 1.f));
+        }
+    }
+    simulationHolder->add(points);
+    return simulationHolder;
+}
+
+void FlowerPathManager::drawSimulation(const component::Color& color)
+{
+    if (simulationHolder == nullptr) {generateSimulationHolder();}
+    simulationHolder->drawPoints(Color::RED);
 }
 
 }

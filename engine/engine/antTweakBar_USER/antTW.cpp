@@ -221,6 +221,8 @@ void AntTWManager::createDebugTweak()
         "label=`Instances AABBs` group='DebugLayer'");
     TwAddVarRW(bar, "aabbL", TW_TYPE_BOOLCPP, &app.renderLightAABBs,
         "label=`Lights AABBs` group='DebugLayer'");
+    TwAddVarRW(bar, "flowerPoints", TW_TYPE_BOOLCPP, &app.renderFlowerSimulation,
+        "label=`Flower points` group='DebugLayer'");
     TwAddVarRW(bar, "fonts", TW_TYPE_BOOLCPP, &app.printFonts,
         "label=`Text` group='DebugLayer'");
     TwAddSeparator(bar, nullptr, "");

@@ -6,6 +6,7 @@
 #include "utils/random.h"
 #include "render/mesh/mesh.h"
 #include "render/shader/vertex_declarations.h"
+#include "level/level.h"
 
 namespace gameElements {
     
@@ -14,11 +15,11 @@ class FlowerGroup {
     private:
         typedef render::VertexFlowerData::instance_t instance_t;
     public:
-        static const size_t MAX_SIZE = 2048;
         static const size_t MAX_FRAMES = 16;
         static const float QUAD_SIZE;
 
         struct flower_t : public instance_t {
+            flower_t() : instance_t(utils::zero_v, 0) {}
             flower_t(const XMVECTOR& p) :
                 instance_t(p, utils::die(MAX_FRAMES), DirectX::XMFLOAT2(0,0)) {}
         };
@@ -34,7 +35,7 @@ class FlowerGroup {
         void updateInstanceData();
 
     public:
-        FlowerGroup();
+        FlowerGroup(size_t maxSize);
 
         inline size_t getSize() const {
             return flowers.size();
@@ -42,13 +43,13 @@ class FlowerGroup {
 
         inline void add(const std::vector<XMVECTOR>& v) {
             const size_t size(flowers.size() + v.size());
-            assert(size < MAX_SIZE);
             flowers.reserve(size);
             flowers.insert(flowers.end(), v.begin(), v.end());
             dirty = true;
         }
 
         void draw();
+        void drawPoints(const component::Color& color = component::Color::YELLOW);
         void update(float elapsed);
 };
 
@@ -58,6 +59,9 @@ class FlowerPathManager {
         /* spatial index -> FlowerGroup */
         typedef std::multimap<int, FlowerGroup> flowers_t;
         static flowers_t flowers;
+        static const float COS_ANGLE_THRESHOLD;
+        static FlowerGroup* simulationHolder ;
+        static const size_t MAX_GROUP_SIZE = 2048;
 
     public:
         struct sproutCoord {
@@ -92,11 +96,15 @@ class FlowerPathManager {
         static std::vector<bool> active;
         
     private:
+        static FlowerGroup* generateSimulationHolder();
         static std::vector<XMVECTOR> getNewInCyllinder(const XMVECTOR& pos, float radius, float h);
         static simulation_t simulate(const component::AABB& aabb, float density, float step);
 
     public:
         static void plantCyllinder(const XMVECTOR& pos, float radius, float h, int spatialIndex);
+        static void buildSimulationData(Handle levelE, float density, float step);
+
+        static void drawSimulation(const component::Color& color = component::Color::YELLOW);
 };
 
 inline bool operator<(float a, const FlowerPathManager::sproutCoord& b){

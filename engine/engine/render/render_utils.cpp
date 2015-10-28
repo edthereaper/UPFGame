@@ -50,6 +50,7 @@ Mesh    mesh_icosahedron;
 Mesh    mesh_line;
 Mesh    mesh_grid;
 Mesh    mesh_axis;
+Mesh    mesh_star;
 Mesh    mesh_icosahedron_wire;
 
 Texture*     whiteTexture;
@@ -536,6 +537,7 @@ bool renderUtilsCreate()
     is_ok &= createTexturedQuadXY(mesh_textured_quad_xy);
     is_ok &= createLine(mesh_line);
     is_ok &= createAxis(mesh_axis);
+    is_ok &= createStar(mesh_star, 0.1f);
     is_ok &= createGrid(mesh_grid, 10);
     is_ok &= createTexturedQuadXYCentered(mesh_textured_quad_xy_centered);
     is_ok &= createTexturedQuadXZCentered(mesh_textured_quad_xz_centered);
@@ -595,6 +597,7 @@ void renderUtilsDestroy()
     mesh_cube_wire_split.destroy();
     mesh_axis.destroy();
     mesh_grid.destroy();
+    mesh_star.destroy();
 }
 
 void setTextureData(uint32_t nFrames, uint32_t framesPerRow, float elapsed)
@@ -754,6 +757,34 @@ bool createAxis(Mesh& mesh, float length)
 
   return mesh.create((unsigned)vtxs.size(), &vtxs[0], 0, nullptr, Mesh::LINE_LIST, utils::zero_v, utils::zero_v);
 }
+
+bool createStar(Mesh& mesh, float len)
+{
+    std::vector< VertexPosColor > vtxs;
+    vtxs.resize(14);
+    VertexPosColor *v = &vtxs[0];
+
+    auto lc = std::sqrt(2)*.5f*len;
+
+    v->Pos = XMFLOAT3( len,  0.f,  0.f);  v->Color = XMFLOAT4(1,1,1,1); ++v;
+    v->Pos = XMFLOAT3(-len,  0.f,  0.f);  v->Color = XMFLOAT4(1,1,1,1); ++v;
+    v->Pos = XMFLOAT3( 0.f,  len,  0.f);  v->Color = XMFLOAT4(1,1,1,1); ++v;
+    v->Pos = XMFLOAT3( 0.f, -len,  0.f);  v->Color = XMFLOAT4(1,1,1,1); ++v;
+    v->Pos = XMFLOAT3( 0.f,  0.f,  len);  v->Color = XMFLOAT4(1,1,1,1); ++v;
+    v->Pos = XMFLOAT3( 0.f,  0.f, -len);  v->Color = XMFLOAT4(1,1,1,1); ++v;
+    v->Pos = XMFLOAT3(  lc,   lc,   lc);  v->Color = XMFLOAT4(1,1,1,1); ++v;
+    v->Pos = XMFLOAT3( -lc,  -lc,  -lc);  v->Color = XMFLOAT4(1,1,1,1); ++v;
+    v->Pos = XMFLOAT3(  lc,   lc,  -lc);  v->Color = XMFLOAT4(1,1,1,1); ++v;
+    v->Pos = XMFLOAT3( -lc,  -lc,   lc);  v->Color = XMFLOAT4(1,1,1,1); ++v;
+    v->Pos = XMFLOAT3( -lc,   lc,   lc);  v->Color = XMFLOAT4(1,1,1,1); ++v;
+    v->Pos = XMFLOAT3(  lc,  -lc,  -lc);  v->Color = XMFLOAT4(1,1,1,1); ++v;
+    v->Pos = XMFLOAT3( -lc,   lc,  -lc);  v->Color = XMFLOAT4(1,1,1,1); ++v;
+    v->Pos = XMFLOAT3(  lc,  -lc,   lc);  v->Color = XMFLOAT4(1,1,1,1); ++v;
+
+    return mesh.create((unsigned)vtxs.size(), &vtxs[0], 0, nullptr,
+        Mesh::LINE_LIST, utils::zero_v, utils::zero_v);
+}
+
 bool createPlanePUNT(Mesh& mesh, float xl, float zf, float xr, float zb, float y, float texSize)
 {
     std::vector< VertexPosUVNormalTangent > vertices;

@@ -13,6 +13,7 @@
 
 #include "gameElements/smoketower.h"
 #include "gameElements/PaintManager.h"
+#include "gameElements/flowerPath.h"
 using namespace gameElements;
 
 #ifdef _DEBUG
@@ -407,6 +408,12 @@ void DeferredRender::renderDebug() const
             getManager<CVolPtLight>()->forall(&CVolPtLight::drawVolume);
 			getManager<CMist>()->forall(&CMist::drawMarker);
 			getManager<CEmitter>()->forall(&CEmitter::drawMarker);
+        }
+    #endif
+        
+    #if defined(_DEBUG)
+        if (app.renderFlowerSimulation) {
+            FlowerPathManager::drawSimulation();
         }
     #endif
     
