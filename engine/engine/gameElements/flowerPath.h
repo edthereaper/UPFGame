@@ -99,6 +99,8 @@ class FlowerPathManager {
         static FlowerGroup* generateSimulationHolder();
         static std::vector<XMVECTOR> getNewInCyllinder(const XMVECTOR& pos, float radius, float h);
         static simulation_t simulate(const component::AABB& aabb, float density, float step);
+        static simulation_t loadSimulationFile(const std::string& name);
+        static void writeSimulationFile(const std::string& name, const simulation_t&);
 
     public:
         static void plantCyllinder(const XMVECTOR& pos, float radius, float h, int spatialIndex);

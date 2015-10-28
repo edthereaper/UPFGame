@@ -189,6 +189,8 @@ const VertexDecl* Technique::getVertexDeclaration(std::string vdName)
 	  decl = getVertexDecl<VertexParticleUData>();
     } else if (vdName == "vdcl_paint") {
 	  decl = getVertexDecl<VertexPaintData>();
+    } else if (vdName == "vdcl_flowers") {
+	  decl = getVertexDecl<VertexFlowerData>();
     } else {
         assert(!fatal("Unsupported vertex declaration %s", vdName.c_str()));
     }

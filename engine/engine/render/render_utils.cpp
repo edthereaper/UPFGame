@@ -760,26 +760,16 @@ bool createAxis(Mesh& mesh, float length)
 
 bool createStar(Mesh& mesh, float len)
 {
-    std::vector< VertexPosColor > vtxs;
-    vtxs.resize(14);
-    VertexPosColor *v = &vtxs[0];
+    std::vector< VertexPosUV > vtxs;
+    vtxs.resize(6);
+    VertexPosUV *v = &vtxs[0];
 
-    auto lc = std::sqrt(2)*.5f*len;
-
-    v->Pos = XMFLOAT3( len,  0.f,  0.f);  v->Color = XMFLOAT4(1,1,1,1); ++v;
-    v->Pos = XMFLOAT3(-len,  0.f,  0.f);  v->Color = XMFLOAT4(1,1,1,1); ++v;
-    v->Pos = XMFLOAT3( 0.f,  len,  0.f);  v->Color = XMFLOAT4(1,1,1,1); ++v;
-    v->Pos = XMFLOAT3( 0.f, -len,  0.f);  v->Color = XMFLOAT4(1,1,1,1); ++v;
-    v->Pos = XMFLOAT3( 0.f,  0.f,  len);  v->Color = XMFLOAT4(1,1,1,1); ++v;
-    v->Pos = XMFLOAT3( 0.f,  0.f, -len);  v->Color = XMFLOAT4(1,1,1,1); ++v;
-    v->Pos = XMFLOAT3(  lc,   lc,   lc);  v->Color = XMFLOAT4(1,1,1,1); ++v;
-    v->Pos = XMFLOAT3( -lc,  -lc,  -lc);  v->Color = XMFLOAT4(1,1,1,1); ++v;
-    v->Pos = XMFLOAT3(  lc,   lc,  -lc);  v->Color = XMFLOAT4(1,1,1,1); ++v;
-    v->Pos = XMFLOAT3( -lc,  -lc,   lc);  v->Color = XMFLOAT4(1,1,1,1); ++v;
-    v->Pos = XMFLOAT3( -lc,   lc,   lc);  v->Color = XMFLOAT4(1,1,1,1); ++v;
-    v->Pos = XMFLOAT3(  lc,  -lc,  -lc);  v->Color = XMFLOAT4(1,1,1,1); ++v;
-    v->Pos = XMFLOAT3( -lc,   lc,  -lc);  v->Color = XMFLOAT4(1,1,1,1); ++v;
-    v->Pos = XMFLOAT3(  lc,  -lc,   lc);  v->Color = XMFLOAT4(1,1,1,1); ++v;
+    v->Pos = XMFLOAT3( len,  0.f,  0.f); ++v;
+    v->Pos = XMFLOAT3(-len,  0.f,  0.f); ++v;
+    v->Pos = XMFLOAT3( 0.f,  len,  0.f); ++v;
+    v->Pos = XMFLOAT3( 0.f, -len,  0.f); ++v;
+    v->Pos = XMFLOAT3( 0.f,  0.f,  len); ++v;
+    v->Pos = XMFLOAT3( 0.f,  0.f, -len); ++v;
 
     return mesh.create((unsigned)vtxs.size(), &vtxs[0], 0, nullptr,
         Mesh::LINE_LIST, utils::zero_v, utils::zero_v);

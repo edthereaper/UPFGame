@@ -316,7 +316,7 @@ void LevelImport::onStartElement(const std::string &elem, utils::MKeyValue &atts
         lvl->add(getManager<CTransform>()->createObj());
         lvl->add(getManager<CLevelData>()->createObj());
         CName* name = getManager<CName>()->createObj();
-        name->setName("LVL:"+atts.getString("name","<no-name>"));
+        name->setName("LVL_"+atts.getString("name","<no-name>"));
         lvl->add(name);
         instancedPieces.clear();
 	} else if (elem == "collision") {
@@ -927,7 +927,7 @@ void LevelImport::onEndElement (const std::string &elem)
         }
 
         currentLevel_h.init();
-        FlowerPathManager::buildSimulationData(currentLevel_h, 6.f, 1.f);
+        FlowerPathManager::buildSimulationData(currentLevel_h, 1.f, 2.f);
 
         instancedPieces.clear();
         pieces.clear();

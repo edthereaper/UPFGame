@@ -2,11 +2,15 @@
 #include "flowerPath.h"
 
 #include "utils/utils.h"
+#include "utils/data_provider.h"
+#include "utils/data_saver.h"
+#include "level/level.h"
 #include "render/render_utils.h"
 #include "PhysX_USER/PhysicsManager.h"
 
 using namespace DirectX;
 using namespace utils;
+using namespace level;
 using namespace render;
 using namespace component;
 
@@ -18,7 +22,7 @@ using namespace physX_user;
 namespace gameElements {
 
 const float FlowerGroup::QUAD_SIZE = 0.4f;
-const float FlowerPathManager::COS_ANGLE_THRESHOLD = std::cos(deg2rad(10));
+const float FlowerPathManager::COS_ANGLE_THRESHOLD = std::cos(deg2rad(20));
 
 FlowerPathManager::sproutCoordV_t FlowerPathManager::xCoords;
 FlowerPathManager::sproutCoordV_t FlowerPathManager::yCoords;
@@ -160,9 +164,11 @@ void FlowerGroup::updateInstanceData()
 FlowerGroup::FlowerGroup(size_t maxSize)
 {
     instanceData = new Mesh;
-    flowers.resize(maxSize);
+    flowers.reserve(maxSize);
+    decltype(flowers) zeroes;
+    zeroes.resize(maxSize);
     bool isOK = instanceData->create(
-        unsigned(maxSize), flowers.data(), 0, nullptr,
+        unsigned(maxSize), zeroes.data(), 0, nullptr,
         Mesh::POINTS, getVertexDecl<VertexFlowerData>(), 1 /*instance stream*/,
         utils::zero_v, utils::zero_v, true);
     assert(isOK);
@@ -172,6 +178,7 @@ FlowerGroup::FlowerGroup(size_t maxSize)
 FlowerPathManager::simulation_t FlowerPathManager::simulate(
     const component::AABB& aabb, float density, float step)
 {
+    dbg("flower simulation start\n");
     const XMVECTOR min = aabb.getMin();
     const XMVECTOR max = aabb.getMax();
     float xMin = XMVectorGetX(min);
@@ -186,40 +193,81 @@ FlowerPathManager::simulation_t FlowerPathManager::simulate(
 
     FlowerPathManager::simulation_t ret;
 
+    uintmax_t nTestTotal = 0;
+
     float yPrev = yMin;
     for(float y=yPrev; yPrev<yMax; y+=step) {
         yPrev = y;
         PxRaycastBuffer hit;
         for(unsigned i=0; i<nTests; i++) {
+
             static const auto ignore = filter_t::TOOL | filter_t::PROP;
             static const auto f = filter_t::SCENE | filter_t::TOOL | filter_t::PROP;
-            static const auto filter = filter_t(filter_t::NONE, ~f, f);
+            static const auto filter = filter_t(filter_t::NONE, ~f, filter_t::SCENE);
             PxVec3 p(rand_uniform(xMax, xMin), y, rand_uniform(zMax, zMin));
+            ++nTestTotal;
             if (PHYSX.raycast(p, PxVec3(0,-1, 0), step, hit, filter)) {
-                filter_t hitFilter = hit.block.shape->getSimulationFilterData();
-                if (!((hitFilter.is & ignore) != 0) && 
-                    (hit.block.normal.dot(PxVec3(0,1,0)) < COS_ANGLE_THRESHOLD)) {
+                filter_t hitFilter = hit.block.shape->getQueryFilterData();
+                if (((hitFilter.is & ignore) == 0) && 
+                    (hit.block.normal.dot(PxVec3(0,1,0)) >= COS_ANGLE_THRESHOLD)) {
                     ret.push_back(toXMVECTOR(hit.block.position));
                 }
             }
         }
     }
+    dbg("flower simulation ended (%lld/%lld)\n", ret.size(), nTestTotal);
     return ret;
+}
+
+FlowerPathManager::simulation_t FlowerPathManager::loadSimulationFile(const std::string& name)
+{
+    FlowerPathManager::simulation_t ret;
+    FileDataProvider file("data/flowerSim/"+name+".points");
+    if (file.isValid()) {
+        size_t nPoints;
+        file.readVal(nPoints);
+        ret.resize(nPoints);
+        for (size_t i=0;i<nPoints;++i) {
+            float x, y, z;
+            file.readVal(x);
+            file.readVal(y);
+            file.readVal(z);
+            ret[i] = XMVectorSet(x,y,z,1);
+        }
+    }
+    return ret;
+}
+
+void FlowerPathManager::writeSimulationFile(const std::string& name, const simulation_t& sim)
+{
+    FlowerPathManager::simulation_t ret;
+    MemoryDataSaver file;
+    size_t nPoints = sim.size();
+    file.writePOD(nPoints);
+    for (auto& p : sim) {
+        file.writePOD(XMVectorGetX(p));
+        file.writePOD(XMVectorGetY(p));
+        file.writePOD(XMVectorGetZ(p));
+    }
+    file.saveToFile(("data/flowerSim/"+name+".points").c_str());
 }
 
 void FlowerPathManager::buildSimulationData(Handle levelE, float density, float step)
 {
-    dbg("buildSimulationData start\n");
-    CStaticBody* scene = levelE.getSon<CStaticBody>();
+    Entity* level(levelE);
+    CStaticBody* scene = level->get<CStaticBody>();
     physx::PxTriangleMeshGeometry geo;
     bool ok = scene->getShape()->getTriangleMeshGeometry(geo);
     assert(ok);
     auto pxaabb = geo.triangleMesh->getLocalBounds();
-    //TODO: get simulated points from a file if it exists
-    auto points = simulate(AABB(toXMVECTOR(pxaabb.minimum), toXMVECTOR(pxaabb.maximum)),
-        density, step);
+    std::string name = level->getName();
+    auto points = loadSimulationFile(name);
+    if (points.size() == 0) {
+        points = simulate(AABB(toXMVECTOR(pxaabb.minimum), toXMVECTOR(pxaabb.maximum)), density, step);
+        writeSimulationFile(name, points);
+    }
     auto nPoints = points.size();
-    dbg("Simulation yielded %d points\n", nPoints);
+    dbg("flower loading start (%lld points)\n", nPoints);
     xCoords.resize(nPoints);
     yCoords.resize(nPoints);
     zCoords.resize(nPoints);
@@ -230,7 +278,7 @@ void FlowerPathManager::buildSimulationData(Handle levelE, float density, float 
         yCoords[i] = sproutCoord(XMVectorGetY(p), i);
         zCoords[i] = sproutCoord(XMVectorGetZ(p), i);
     }
-    dbg("buildSimulationData end\n");
+    dbg("flower loading end\n");
 }
 
 void FlowerGroup::drawPoints(const component::Color& color)

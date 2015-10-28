@@ -410,12 +410,6 @@ void DeferredRender::renderDebug() const
 			getManager<CEmitter>()->forall(&CEmitter::drawMarker);
         }
     #endif
-        
-    #if defined(_DEBUG)
-        if (app.renderFlowerSimulation) {
-            FlowerPathManager::drawSimulation();
-        }
-    #endif
     
     #if defined(_DEBUG) && !defined(_PARTICLES)
         if (app.renderAABBs) {
@@ -441,6 +435,12 @@ void DeferredRender::renderDebug() const
         activateBlendConfig(BLEND_CFG_COMBINATIVE);
         paintTech->activate();
         paints->forall(&CPaintGroup::drawVolume);
+    }
+
+    if (app.renderFlowerSimulation) {
+        static const Technique* flowerTech = Technique::getManager().getByName("flowerBasic");
+        flowerTech->activate();
+        FlowerPathManager::drawSimulation();
     }
 }
 #endif
