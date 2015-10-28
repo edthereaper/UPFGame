@@ -34,4 +34,6 @@
 	<texture name="smoke3" />
 	<texture name="snow1" />
 	<texture name="snow2" />
+	<texture name="shiny1" />
+	<texture name="shiny3" />
 </files>

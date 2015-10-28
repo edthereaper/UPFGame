@@ -1113,6 +1113,7 @@ void CBoss::setMarks(
 void CBoss::reset()
 {
 
+#if !defined(_PARTICLES)
     Entity *me = Handle(this).getOwner();
     if (me->has<CEmitter>()){
         CEmitter *em = me->get<CEmitter>();
@@ -1121,6 +1122,7 @@ void CBoss::reset()
             ps->postMsg(MsgDeleteSelf());
         }
     }
+#endif
 
     auto& bte(bt.getExecutor());
     for(auto& system : bte.hammers) {
