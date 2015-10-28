@@ -282,7 +282,7 @@
 		</Camera>
 		<Culling/>
 		<CullingAABBSpecial type="dirLight"/>
-		<DirLight spotlight="yes" spotDecay="0.15" decay="1" radius="12.8" color="0xffff00ff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="1" export="true" />
+		<DirLight spotlight="yes" spotDecay="0.15" decay="1" radius="12.8" color="0xffff00ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="1" export="true" />
 	</Entity>
 	<Entity init="true">
 		<Name name="ire04"/>
@@ -304,7 +304,7 @@
 		</Camera>
 		<Culling/>
 		<CullingAABBSpecial type="dirLight"/>
-		<DirLight spotlight="yes" spotDecay="0.15" decay="1" radius="12.8" color="0xffff00ff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="1" export="true" />
+		<DirLight spotlight="yes" spotDecay="0.15" decay="1" radius="12.8" color="0xffff00ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="1" export="true" />
 	</Entity>
 	<Entity init="true">
 		<Name name="ire06"/>
@@ -315,7 +315,7 @@
 		</Camera>
 		<Culling/>
 		<CullingAABBSpecial type="dirLight"/>
-		<DirLight spotlight="yes" spotDecay="0.15" decay="1" radius="12.8" color="0xffff00ff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="1" export="true" />
+		<DirLight spotlight="yes" spotDecay="0.15" decay="1" radius="12.8" color="0xffff00ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="1" export="true" />
 	</Entity>
 	<Entity init="true">
 		<Name name="ire07"/>
@@ -337,7 +337,7 @@
 		</Camera>
 		<Culling/>
 		<CullingAABBSpecial type="dirLight"/>
-		<DirLight spotlight="yes" spotDecay="0.15" decay="1" radius="12.8" color="0xffff00ff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="1" export="true" />
+		<DirLight spotlight="yes" spotDecay="0.15" decay="1" radius="12.8" color="0xffff00ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="1" export="true" />
 	</Entity>
 	<Entity init="true">
 		<Name name="ire09"/>
@@ -348,7 +348,7 @@
 		</Camera>
 		<Culling/>
 		<CullingAABBSpecial type="dirLight"/>
-		<DirLight spotlight="yes" spotDecay="0.15" decay="1" radius="48.75" color="0xffff00ff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="1" export="true" />
+		<DirLight spotlight="yes" spotDecay="0.15" decay="1" radius="48.75" color="0xffff00ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="1" export="true" />
 	</Entity>
 	<Entity init="true">
 		<Name name="ire0A"/>
@@ -359,7 +359,7 @@
 		</Camera>
 		<Culling/>
 		<CullingAABBSpecial type="dirLight"/>
-		<DirLight spotlight="yes" spotDecay="0.15" decay="1" radius="48.75" color="0xffff00ff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="1" export="true" />
+		<DirLight spotlight="yes" spotDecay="0.15" decay="1" radius="48.75" color="0xffff00ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="1" export="true" />
 	</Entity>
 	<Entity init="true">
 		<Name name="ire0B"/>
@@ -370,7 +370,7 @@
 		</Camera>
 		<Culling/>
 		<CullingAABBSpecial type="dirLight"/>
-		<DirLight spotlight="yes" spotDecay="0.15" decay="1" radius="48.75" color="0xffff00ff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="1" export="true" />
+		<DirLight spotlight="yes" spotDecay="0.15" decay="1" radius="48.75" color="0xffff00ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="1" export="true" />
 	</Entity>
 	<Entity init="true">
 		<Name name="ire0C"/>
@@ -381,7 +381,7 @@
 		</Camera>
 		<Culling/>
 		<CullingAABBSpecial type="dirLight"/>
-		<DirLight spotlight="yes" spotDecay="0.15" decay="1" radius="128.731" color="0xffff00ff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.5" export="true" />
+		<DirLight spotlight="yes" spotDecay="0.15" decay="1" radius="128.731" color="0xffff00ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.5" export="true" />
 	</Entity>
 	<Entity init="true">
 		<Name name="ire0D"/>
@@ -392,7 +392,7 @@
 		</Camera>
 		<Culling/>
 		<CullingAABBSpecial type="dirLight"/>
-		<DirLight spotlight="yes" spotDecay="0.05" decay="1" radius="128.731" color="0xffff00ff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.2" export="true" />
+		<DirLight spotlight="yes" spotDecay="0.05" decay="1" radius="128.731" color="0xffff00ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.2" export="true" />
 	</Entity>
 	<Entity init="true">
 		<Name name="ire0E"/>
@@ -414,7 +414,7 @@
 		</Camera>
 		<Culling/>
 		<CullingAABBSpecial type="dirLight"/>
-		<DirLight spotlight="yes" spotDecay="0.15" decay="1" radius="128.731" color="0xffff00ff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.2" export="true" />
+		<DirLight spotlight="yes" spotDecay="0.15" decay="1" radius="128.731" color="0xffff00ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.2" export="true" />
 	</Entity>
 	<Entity init="true">
 		<Name name="ire10"/>
@@ -425,7 +425,7 @@
 		</Camera>
 		<Culling/>
 		<CullingAABBSpecial type="dirLight"/>
-		<DirLight spotlight="yes" spotDecay="0.05" decay="1" radius="128.731" color="0xffff00ff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.5" export="true" />
+		<DirLight spotlight="yes" spotDecay="0.05" decay="1" radius="128.731" color="0xffff00ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.5" export="true" />
 	</Entity>
 	<Entity init="true">
 		<Name name="ire11"/>
@@ -447,7 +447,7 @@
 		</Camera>
 		<Culling/>
 		<CullingAABBSpecial type="dirLight"/>
-		<DirLight spotlight="yes" spotDecay="0.05" decay="1" radius="128.731" color="0xffff00ff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.5" export="true" />
+		<DirLight spotlight="yes" spotDecay="0.05" decay="1" radius="128.731" color="0xffff00ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.5" export="true" />
 	</Entity>
 	<Entity init="true">
 		<Name name="ire13"/>
@@ -458,7 +458,7 @@
 		</Camera>
 		<Culling/>
 		<CullingAABBSpecial type="dirLight"/>
-		<DirLight spotlight="yes" spotDecay="0.15" decay="1" radius="128.731" color="0xffff00ff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.2" export="true" />
+		<DirLight spotlight="yes" spotDecay="0.15" decay="1" radius="128.731" color="0xffff00ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.2" export="true" />
 	</Entity>
 	<Entity init="true">
 		<Name name="ire14"/>
@@ -523,7 +523,7 @@
 		</Camera>
 		<Culling/>
 		<CullingAABBSpecial type="dirLight"/>
-		<DirLight spotlight="yes" spotDecay="0.7" decay="0.05" radius="257.359" color="0x923232ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.7" export="true" />
+		<DirLight lockSpatialIndex="yes" spotlight="yes" spotDecay="0.7" decay="0.05" radius="257.359" color="0x923232ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.7" export="true" />
 	</Entity>
 	<Entity init="yes" >
 		<Name name="mist_lianas" />

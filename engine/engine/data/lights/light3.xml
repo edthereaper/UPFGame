@@ -230,7 +230,7 @@
 		</Camera>
 		<Culling/>
 		<CullingAABBSpecial type="dirLight"/>
-		<DirLight spotlight="yes" spotDecay="0.7" decay="0.2" radius="7.8" color="0xfafa00ff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.7" export="true" />
+		<DirLight spotlight="yes" spotDecay="0.7" decay="0.2" radius="7.8" color="0xfafa00ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.7" export="true" />
 	</Entity>
 	<Entity init="true">
 		<Name name="dirLight-11"/>
@@ -241,7 +241,7 @@
 		</Camera>
 		<Culling/>
 		<CullingAABBSpecial type="dirLight"/>
-		<DirLight spotlight="yes" spotDecay="0.7" decay="0.2" radius="7.8" color="0xfafa00ff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.7" export="true" />
+		<DirLight spotlight="yes" spotDecay="0.7" decay="0.2" radius="7.8" color="0xfafa00ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.7" export="true" />
 	</Entity>
 	<Entity init="true">
 		<Name name="dirLight-12"/>
@@ -252,7 +252,7 @@
 		</Camera>
 		<Culling/>
 		<CullingAABBSpecial type="dirLight"/>
-		<DirLight spotlight="yes" spotDecay="0.7" decay="0.2" radius="7.8" color="0xfafa00ff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.7" export="true" />
+		<DirLight spotlight="yes" spotDecay="0.7" decay="0.2" radius="7.8" color="0xfafa00ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.7" export="true" />
 	</Entity>
 	<Entity init="true">
 		<Name name="dirLight-13"/>
@@ -263,7 +263,7 @@
 		</Camera>
 		<Culling/>
 		<CullingAABBSpecial type="dirLight"/>
-		<DirLight spotlight="yes" spotDecay="0.7" decay="0.2" radius="7.8" color="0xfafa00ff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.7" export="true" />
+		<DirLight spotlight="yes" spotDecay="0.7" decay="0.2" radius="7.8" color="0xfafa00ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.7" export="true" />
 	</Entity>
 	<Entity init="true">
 		<Name name="dirLight-14"/>
@@ -274,7 +274,7 @@
 		</Camera>
 		<Culling/>
 		<CullingAABBSpecial type="dirLight"/>
-		<DirLight spotlight="yes" spotDecay="0.7" decay="0.2" radius="7.8" color="0xfafa00ff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.7" export="true" />
+		<DirLight spotlight="yes" spotDecay="0.7" decay="0.2" radius="7.8" color="0xfafa00ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.7" export="true" />
 	</Entity>
 	<Entity init="true">
 		<Name name="dirLight-15"/>
@@ -285,7 +285,7 @@
 		</Camera>
 		<Culling/>
 		<CullingAABBSpecial type="dirLight"/>
-		<DirLight spotlight="yes" spotDecay="0.7" decay="0.2" radius="7.8" color="0xfafa00ff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.7" export="true" />
+		<DirLight spotlight="yes" spotDecay="0.7" decay="0.2" radius="7.8" color="0xfafa00ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.7" export="true" />
 	</Entity>
 	<Entity init="true">
 		<Name name="dirLight-16"/>
@@ -296,7 +296,7 @@
 		</Camera>
 		<Culling/>
 		<CullingAABBSpecial type="dirLight"/>
-		<DirLight spotlight="yes" spotDecay="0.7" decay="0.2" radius="7.8" color="0xfafa00ff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.7" export="true" />
+		<DirLight spotlight="yes" spotDecay="0.7" decay="0.2" radius="7.8" color="0xfafa00ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.7" export="true" />
 	</Entity>
 	<Entity init="true">
 		<Name name="dirLight-17"/>
@@ -307,7 +307,7 @@
 		</Camera>
 		<Culling/>
 		<CullingAABBSpecial type="dirLight"/>
-		<DirLight spotlight="yes" spotDecay="0.7" decay="0.2" radius="7.8" color="0xfafa00ff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.7" export="true" />
+		<DirLight spotlight="yes" spotDecay="0.7" decay="0.2" radius="7.8" color="0xfafa00ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.7" export="true" />
 	</Entity>
 	<Entity init="true">
 		<Name name="dirLight-18"/>
@@ -318,7 +318,7 @@
 		</Camera>
 		<Culling/>
 		<CullingAABBSpecial type="dirLight"/>
-		<DirLight spotlight="yes" spotDecay="0.7" decay="0.2" radius="7.8" color="0xfafa00ff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.7" export="true" />
+		<DirLight spotlight="yes" spotDecay="0.7" decay="0.2" radius="7.8" color="0xfafa00ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.7" export="true" />
 	</Entity>
 	<Entity init="true">
 		<Name name="dirLight-19"/>
@@ -329,7 +329,7 @@
 		</Camera>
 		<Culling/>
 		<CullingAABBSpecial type="dirLight"/>
-		<DirLight spotlight="yes" spotDecay="0.7" decay="0.2" radius="7.8" color="0xfafa00ff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.7" export="true" />
+		<DirLight spotlight="yes" spotDecay="0.7" decay="0.2" radius="7.8" color="0xfafa00ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.7" export="true" />
 	</Entity>
 	<Entity init="true">
 		<Name name="dirLight-1A"/>
@@ -340,7 +340,7 @@
 		</Camera>
 		<Culling/>
 		<CullingAABBSpecial type="dirLight"/>
-		<DirLight spotlight="yes" spotDecay="0.7" decay="0.2" radius="7.8" color="0xfafa00ff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.7" export="true" />
+		<DirLight spotlight="yes" spotDecay="0.7" decay="0.2" radius="7.8" color="0xfafa00ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.7" export="true" />
 	</Entity>
 	<Entity init="true">
 		<Name name="dirLight-1B"/>
@@ -351,7 +351,7 @@
 		</Camera>
 		<Culling/>
 		<CullingAABBSpecial type="dirLight"/>
-		<DirLight spotlight="yes" spotDecay="0.7" decay="0.2" radius="7.8" color="0xfafa00ff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.7" export="true" />
+		<DirLight spotlight="yes" spotDecay="0.7" decay="0.2" radius="7.8" color="0xfafa00ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.7" export="true" />
 	</Entity>
 	<Entity init="true">
 		<Name name="dirLight-1C"/>
@@ -362,7 +362,7 @@
 		</Camera>
 		<Culling/>
 		<CullingAABBSpecial type="dirLight"/>
-		<DirLight spotlight="yes" spotDecay="0.7" decay="0.2" radius="7.8" color="0xfafa00ff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.7" export="true" />
+		<DirLight spotlight="yes" spotDecay="0.7" decay="0.2" radius="7.8" color="0xfafa00ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.7" export="true" />
 	</Entity>
 	<Entity init="true">
 		<Name name="dirLight-1D"/>
@@ -373,7 +373,7 @@
 		</Camera>
 		<Culling/>
 		<CullingAABBSpecial type="dirLight"/>
-		<DirLight spotlight="yes" spotDecay="0.7" decay="0.2" radius="7.8" color="0xfafa00ff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.7" export="true" />
+		<DirLight spotlight="yes" spotDecay="0.7" decay="0.2" radius="7.8" color="0xfafa00ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.7" export="true" />
 	</Entity>
 	<Entity init="true">
 		<Name name="orthoLight-02"/>
@@ -1038,4 +1038,50 @@
 		<Transform pos="-1.335553 44.496964 -21.310001" rot="0.000000 0.000000 0.000000 0.000000"/>
 		<Emitter name="caldera_smoke" position="-1.335553 44.496964 -21.310001" rotation="0.000000 0.000000 0.000000 0.000000" count="1" export="true"  particles0="emitter_0"/>
 		</Entity>
+		<Entity init="true">
+		<Name name="emitter-02"/>
+		<Transform pos="-0.437775 -10.444488 -6.792939" rot="0.000000 0.000000 0.000000 0.000000"/>
+		<Emitter name="lava_smok" position="-0.437775 -10.444488 -6.792939" rotation="0.000000 0.000000 0.000000 0.000000" count="1" particles0="emitter_0"/>
+	</Entity>
+	<Entity init="true">
+		<Name name="emitter-03"/>
+		<Transform pos="-1.570323 -10.389903 -7.092942" rot="0.000000 0.000000 0.000000 0.000000"/>
+		<Emitter name="ceniza" position="-1.570323 -10.389903 -7.092942" rotation="0.000000 0.000000 0.000000 0.000000" count="2" particles0="emitter_0" particles1="emitter_1"/>
+	</Entity>
+	<Entity init="true">
+		<Name name="emitter-04"/>
+		<Transform pos="4.419724 -10.532158 1.696520" rot="0.000000 0.000000 0.000000 0.000000"/>
+		<Emitter name="lava_smok" position="4.419724 -10.532158 1.696520" rotation="0.000000 0.000000 0.000000 0.000000" count="1" particles0="emitter_0"/>
+	</Entity>
+	<Entity init="true">
+		<Name name="emitter-05"/>
+		<Transform pos="3.175307 -10.637136 4.003386" rot="0.000000 0.000000 0.000000 0.000000"/>
+		<Emitter name="ceniza" position="3.175307 -10.637136 4.003386" rotation="0.000000 0.000000 0.000000 0.000000" count="0"/>
+	</Entity>
+	<Entity init="true">
+		<Name name="emitter-06"/>
+		<Transform pos="2.920260 -10.464851 4.353061" rot="0.000000 0.000000 0.000000 0.000000"/>
+		<Emitter name="lava_smok" position="2.920260 -10.464851 4.353061" rotation="0.000000 0.000000 0.000000 0.000000" count="1" particles0="emitter_0"/>
+	</Entity>
+	<Entity init="true">
+		<Name name="emitter-07"/>
+		<Transform pos="3.513269 -10.062618 3.171252" rot="0.000000 0.000000 0.000000 0.000000"/>
+		<Emitter name="ceniza" position="3.513269 -10.062618 3.171252" rotation="0.000000 0.000000 0.000000 0.000000" count="2" particles0="emitter_0" particles1="emitter_1"/>
+	</Entity>
+	<Entity init="true">
+		<Name name="emitter-08"/>
+		<Transform pos="-7.315405 -10.861646 4.382705" rot="0.000000 0.000000 0.000000 0.000000"/>
+		<Emitter name="lava_smok" position="-7.315405 -10.861646 4.382705" rotation="0.000000 0.000000 0.000000 0.000000" count="1" particles0="emitter_0"/>
+		</Entity>
+	<Entity init="true">
+		<Name name="emitter-09"/>
+		<Transform pos="-8.462751 -10.778660 1.946324" rot="0.000000 0.000000 0.000000 0.000000"/>
+		<Emitter name="lava_smok" position="-8.462751 -10.778660 1.946324" rotation="0.000000 0.000000 0.000000 0.000000" count="1" particles0="emitter_0"/>
+		</Entity>
+	<Entity init="true">
+		<Name name="emitter-0A"/>
+		<Transform pos="-7.478054 -10.530725 2.961931" rot="0.000000 0.000000 0.000000 0.000000"/>
+		<Emitter name="ceniza" position="-7.478054 -10.530725 2.961931" rotation="0.000000 0.000000 0.000000 0.000000" count="2" particles0="emitter_0" particles1="emitter_1"/>
+		</Entity>
+	<Entity init="true">
 </scene>

@@ -466,6 +466,9 @@ void CParticleSystem::sortParticlesZ()
         
 
 		
+		if (elapsed < 0.01)
+			elapsed = 0.01;
+
 
 		fsm.update(elapsed);
 		valid();

@@ -971,8 +971,8 @@ bool App::waitVideo(){
 		break;
 	}
 #if !defined(_PARTICLES) && !defined(_LIGHTTOOL)
-	CLevelData* levelData = levelE->get<CLevelData>();
-	levelData->playSong();
+	//CLevelData* levelData = levelE->get<CLevelData>();
+	//levelData->playSong();
 #endif
 	return false;
 }

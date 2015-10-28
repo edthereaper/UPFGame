@@ -9,7 +9,7 @@
 	
     <WeakSpot/>
 	<StaticBody>
-		<shape skin="1"
+		<shape scale="1.05"
 			is		="weak-spot|boss|scene"
 			supress	="all"
 			supress_not ="player|player-cannon"
