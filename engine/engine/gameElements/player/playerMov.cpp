@@ -23,6 +23,7 @@ using namespace render;
 #include "bullet.h"
 #include "cannonPath.h"
 #include "../PaintManager.h"
+#include "../flowerPath.h"
 using namespace component;
 
 #include "animation/animationPlugger.h"
@@ -37,6 +38,9 @@ using namespace gameElements;
 
 #include "Cinematic/camera_manager.h"
 using namespace cinematic;
+
+#include "level/spatialIndex.h"
+using namespace level;
 
 namespace behavior {
 PlayerMovBt::nodeId_t PlayerMovBt::rootNode = INVALID_NODE;
@@ -1648,19 +1652,29 @@ void CPlayerMov::update(float elapsed)
 
 
 #define PAINT_DELAY 0.01f
+#define PAINT_OFFSET 0.35f
+#define FLOWER_YRANGE 0.3f
+#define FLOWER_PAINTOFFSET 0.5f
 
     if (paintDelay.count(elapsed) >= PAINT_DELAY) {
         paintDelay.reset();
         bool mega = mePS->hasMegashot();
         CPaintGroup* paint = PaintManager::getBrush(mega?0:1);
+        float megaShotFactor = mega?mePS->getMegashotFactor():0;
+        auto paintSize = megaShotFactor * megaPaintSize + (1-megaShotFactor)*regularPaintSize;
         if (paint != nullptr) {
-            float megaShotFactor = mega?mePS->getMegashotFactor():0;
-            auto pos = meT->getPosition() + meT->getPivot()-meT->getFront()*0.35f;
-            paint->addInstance(pos,
-                megaShotFactor * megaPaintSize +
-                (1-megaShotFactor)*regularPaintSize);
+            auto pos = meT->getPosition() + meT->getPivot()-meT->getFront()*PAINT_OFFSET;
+            paint->addInstance(pos, paintSize);
+        }
+        if((currentAction &  PlayerMovBtExecutor::COD_FLOWERPATH) != 0) {
+            float flowerCenter = (-paintSize+FLOWER_PAINTOFFSET-PAINT_OFFSET)*.5f;
+            float flowerGrowSize = -flowerCenter;
+            FlowerPathManager::plantCyllinder(
+                meT->getPosition()+meT->getFront()*flowerCenter+XMVectorSet(0,-FLOWER_YRANGE*.5f, 0, 0),
+                flowerGrowSize, FLOWER_YRANGE, SpatiallyIndexed::getCurrentSpatialIndex());
         }
     }
+
 
 	bool nowOnCannonAir = (currentAction & PlayerMovBtExecutor::COD_CANNON_AIR) != 0;
 	if (!onCannonAir && nowOnCannonAir) {

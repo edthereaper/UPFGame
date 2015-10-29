@@ -22,11 +22,13 @@ using namespace physX_user;
 namespace gameElements {
 
 const float FlowerGroup::QUAD_SIZE = 0.4f;
-const float FlowerPathManager::COS_ANGLE_THRESHOLD = std::cos(deg2rad(20));
+const float FlowerPathManager::COS_ANGLE_THRESHOLD = std::cos(deg2rad(10));
 
 FlowerPathManager::sproutCoordV_t FlowerPathManager::xCoords;
 FlowerPathManager::sproutCoordV_t FlowerPathManager::yCoords;
 FlowerPathManager::sproutCoordV_t FlowerPathManager::zCoords;
+Transform FlowerPathManager::lastTest;
+bool FlowerPathManager::lastTestActive = false;
 FlowerPathManager::flowers_t FlowerPathManager::flowers;
 std::vector<bool> FlowerPathManager::active;
 
@@ -67,7 +69,7 @@ std::vector<XMVECTOR> FlowerPathManager::getNewInCyllinder(const XMVECTOR& pos, 
     unsigned k=0;
     size_t xSize = xRange.size(); 
     size_t ySize = yRange.size(); 
-    size_t zSize = zRange.size(); 
+    size_t zSize = zRange.size();
 
     std::vector<XMVECTOR> ret;
 
@@ -83,15 +85,19 @@ std::vector<XMVECTOR> FlowerPathManager::getNewInCyllinder(const XMVECTOR& pos, 
         //We either got a match or not. Also test for already active sprouts
         if (yRange[j].id == xId && zRange[k].id == xId && !active[xId]) {
             //index is in all three vectors => it's within the cyllinder's AABB
-
             float xVal = xRange[i].val;
             float zVal = zRange[k].val;
             //test circle radius
             if (sq(xVal-x) + sq(zVal-z) <= sq(radius)) {
                 ret.push_back(XMVectorSet(xVal, yRange[j].val, zVal, 1.f));
+                active[xId] = true;
             }
         }
     }
+
+    lastTest.setPosition(pos);
+    lastTest.setScale(XMVectorSet(radius, h, radius, 1));
+    lastTestActive = true;
     return ret;
 }
 
@@ -99,6 +105,11 @@ void FlowerPathManager::plantCyllinder(const XMVECTOR& pos, float radius, float 
 {
     auto newFlowers = getNewInCyllinder(pos, radius, h);
     auto newSize = newFlowers.size();
+#ifdef _DEBUG
+    if (newSize > 0) {
+        dbg("%d new flowers\n", newSize);
+    }
+#endif
 
     FlowerGroup* group = nullptr;
     for(auto& i : range_t<flowers_t::iterator>(flowers.equal_range(spatialIndex))) {
@@ -278,6 +289,9 @@ void FlowerPathManager::buildSimulationData(Handle levelE, float density, float 
         yCoords[i] = sproutCoord(XMVectorGetY(p), i);
         zCoords[i] = sproutCoord(XMVectorGetZ(p), i);
     }
+    std::sort(xCoords.begin(), xCoords.end());
+    std::sort(yCoords.begin(), yCoords.end());
+    std::sort(zCoords.begin(), zCoords.end());
     dbg("flower loading end\n");
 }
 
@@ -303,6 +317,9 @@ FlowerGroup* FlowerPathManager::generateSimulationHolder()
     simulationHolder = new FlowerGroup(active.size());
     std::vector<XMVECTOR> points;
     points.reserve(active.size());
+    std::sort(xCoords.begin(), xCoords.end(), &sproutCoord::compById);
+    std::sort(yCoords.begin(), yCoords.end(), &sproutCoord::compById);
+    std::sort(zCoords.begin(), zCoords.end(), &sproutCoord::compById);
     for(size_t i = 0; i < active.size(); ++i) {
         if (!active[i]) {
             points.push_back(XMVectorSet(xCoords[i].val,
@@ -310,13 +327,36 @@ FlowerGroup* FlowerPathManager::generateSimulationHolder()
         }
     }
     simulationHolder->add(points);
+    std::sort(xCoords.begin(), xCoords.end());
+    std::sort(yCoords.begin(), yCoords.end());
+    std::sort(zCoords.begin(), zCoords.end());
     return simulationHolder;
 }
 
 void FlowerPathManager::drawSimulation(const component::Color& color)
 {
     if (simulationHolder == nullptr) {generateSimulationHolder();}
-    simulationHolder->drawPoints(Color::RED);
+    simulationHolder->drawPoints(color);
+}
+
+void FlowerPathManager::drawLastTest(const component::Color& color)
+{
+    if (lastTestActive || App::get().isDebugPaused()) {
+        static Mesh* const star = new Mesh;
+        static const bool ok = createStar(*star, 0.2f);
+        setObjectConstants(lastTest.getWorld(), color);
+        mesh_cyllinder.activateAndRender();
+        setObjectConstants(lastTest.getWorld(), color);
+        star->activateAndRender();
+        lastTestActive = false;
+    }
+}
+
+void FlowerPathManager::drawSproutedPoints(const component::Color& color)
+{
+    for(auto& i : flowers) {
+        i.second.drawPoints(color);
+    }
 }
 
 }

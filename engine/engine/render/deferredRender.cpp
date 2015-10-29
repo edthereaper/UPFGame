@@ -441,6 +441,9 @@ void DeferredRender::renderDebug() const
         static const Technique* flowerTech = Technique::getManager().getByName("flowerBasic");
         flowerTech->activate();
         FlowerPathManager::drawSimulation();
+        FlowerPathManager::drawSproutedPoints();
+        tech->activate();
+        FlowerPathManager::drawLastTest();
     }
 }
 #endif

@@ -1160,7 +1160,6 @@ bool App::doGameOver()
 
 bool App::doFrame()
 {
-	static bool debugPause = false;
     if (exit || pad.getState(APP_QUIT).isHit()) {return false;}
 
 	if (xboxController.is_connected()){

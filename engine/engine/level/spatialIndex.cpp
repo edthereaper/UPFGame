@@ -27,6 +27,12 @@ void SpatiallyIndexed::findSpatialIndexAux(Handle h)
     }
 }
 
+int SpatiallyIndexed::getCurrentSpatialIndex()
+{
+    return (!CLevelData::currentLevel.isValid()) ? -1 :
+        ((CLevelData*)CLevelData::currentLevel)->getSpatialIndex();
+}
+
 bool SpatiallyIndexed::isSpatiallyGood(int threshold) const
 {
     if (!CLevelData::currentLevel.isValid()) {return false;}

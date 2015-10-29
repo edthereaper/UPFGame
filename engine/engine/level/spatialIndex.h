@@ -7,6 +7,9 @@ namespace level {
 
 class SpatiallyIndexed
 {
+    public:
+        static int getCurrentSpatialIndex();
+
     private:
         void findSpatialIndexAux(component::Handle);
 

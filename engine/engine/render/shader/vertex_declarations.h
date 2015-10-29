@@ -38,7 +38,7 @@ struct VertexPosColor {
     XMFLOAT3 Pos;
     XMFLOAT4 Color;
     VertexPosColor()=default;
-    VertexPosColor(XMFLOAT3 Pos, XMFLOAT4 Color) : Pos(Pos), Color(Color) {}
+    VertexPosColor(XMFLOAT3 Pos, XMFLOAT4 Color=XMFLOAT4(1,1,1,1)) : Pos(Pos), Color(Color) {}
 };
 struct VertexPosUV {
     XMFLOAT3 Pos;

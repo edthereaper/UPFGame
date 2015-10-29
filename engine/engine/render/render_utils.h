@@ -49,6 +49,7 @@ bool createViewVolumeWire(Mesh& mesh);
 bool createViewVolume(Mesh& mesh);
 bool createIcosahedron(Mesh& mesh, float size=1.f);
 bool createIcosahedronWireFrame(Mesh& mesh, float size=1.f);
+bool createCyllinder(Mesh& mesh, float r, unsigned divisions, float h);
 
 void drawViewVolume(const render::Camera& camera, const XMVECTOR& color = utils::zero_v);
 void drawLine(XMVECTOR src, XMVECTOR target);
@@ -192,6 +193,7 @@ void activateBlendConfig(enum BlendConfig cfg);
 // Shared meshes
 extern Mesh mesh_grid;
 extern Mesh mesh_axis;
+extern Mesh mesh_star;
 extern Mesh mesh_icosahedron;
 extern Mesh mesh_icosahedron_wire;
 extern Mesh mesh_line;
@@ -204,6 +206,7 @@ extern Mesh mesh_textured_quad_xy_centered;
 extern Mesh mesh_textured_quad_xz_centered;
 extern Mesh mesh_stacked_quad_xz_centered;
 extern Mesh mesh_cube_wire_unit;
+extern Mesh mesh_cyllinder;
 
 extern Texture*     whiteTexture;
 extern TextureCube* whiteTextureCube;

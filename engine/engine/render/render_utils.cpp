@@ -52,6 +52,7 @@ Mesh    mesh_grid;
 Mesh    mesh_axis;
 Mesh    mesh_star;
 Mesh    mesh_icosahedron_wire;
+Mesh    mesh_cyllinder;
 
 Texture*     whiteTexture;
 TextureCube* whiteTextureCube;
@@ -544,6 +545,7 @@ bool renderUtilsCreate()
     is_ok &= createStackedQuadXZCentered(mesh_stacked_quad_xz_centered);
     is_ok &= createIcosahedron(mesh_icosahedron);
     is_ok &= createIcosahedronWireFrame(mesh_icosahedron_wire);
+    is_ok &= createCyllinder(mesh_cyllinder, 1.f, 12, 1.f);
 
     //global textures: buffers t16 through t63
     Texture::getManager().getByName("grass")->activate(16);
@@ -554,6 +556,7 @@ bool renderUtilsCreate()
     Texture::getManager().getByName("flowers1_normals")->activate(21);
     Texture::getManager().getByName("flowers2")->activate(22);
     Texture::getManager().getByName("flowers2_normals")->activate(23);
+    Texture::getManager().getByName("flowerPath")->activate(24);
 
     //auxiliary textures: buffers t64 onwards
     Texture::getManager().getByName("whiteNoise")->activate(64);
@@ -598,6 +601,7 @@ void renderUtilsDestroy()
     mesh_axis.destroy();
     mesh_grid.destroy();
     mesh_star.destroy();
+    mesh_cyllinder.destroy();
 }
 
 void setTextureData(uint32_t nFrames, uint32_t framesPerRow, float elapsed)
@@ -1118,6 +1122,36 @@ bool createRay(Mesh& meshRay, float longitude, XMFLOAT4 colorRGB){
 	return meshRay.create((unsigned)vtxs.size(), &vtxs[0], 0,
         nullptr, Mesh::LINE_LIST, utils::zero_v, utils::zero_v) ;
 
+}
+
+bool createCyllinder(Mesh& mesh, float r, unsigned divisions, float h){
+	std::vector< VertexPosColor > vertices;
+    std::vector< Mesh::index_t > indices;
+    vertices.reserve(2*divisions);
+    indices.reserve(6*divisions);
+
+    float delta = M_2_PIf/float(divisions);
+    for (unsigned i=0; i<divisions; ++i) {
+        Mesh::index_t n = Mesh::index_t(vertices.size());
+        vertices.push_back(XMFLOAT3(r*std::cos(i*delta), 0, r*std::sin(i*delta)));
+        vertices.push_back(XMFLOAT3(r*std::cos(i*delta), h, r*std::sin(i*delta)));
+        indices.push_back(n);
+        indices.push_back(n+1);
+        if (i!=0) {
+            indices.push_back(n-2);
+            indices.push_back(n);
+            indices.push_back(n-1);
+            indices.push_back(n+1);
+        }
+    }
+    Mesh::index_t n = Mesh::index_t(vertices.size());
+    indices.push_back(n-2);
+    indices.push_back(0);
+    indices.push_back(n-1);
+    indices.push_back(1);
+	
+	return mesh.create(unsigned(vertices.size()), vertices.data(), unsigned(indices.size()), indices.data(),
+        Mesh::LINE_LIST, XMVectorSet(-r,0,-r,0), XMVectorSet(r,h,r,0));
 }
 
 bool createIcosahedronWireFrame(Mesh& mesh, float size)

@@ -94,7 +94,9 @@ class FlowerPathManager {
         static sproutCoordV_t yCoords;
         static sproutCoordV_t zCoords;
         static std::vector<bool> active;
-        
+        static Transform lastTest;
+        static bool lastTestActive;
+
     private:
         static FlowerGroup* generateSimulationHolder();
         static std::vector<XMVECTOR> getNewInCyllinder(const XMVECTOR& pos, float radius, float h);
@@ -106,7 +108,9 @@ class FlowerPathManager {
         static void plantCyllinder(const XMVECTOR& pos, float radius, float h, int spatialIndex);
         static void buildSimulationData(Handle levelE, float density, float step);
 
-        static void drawSimulation(const component::Color& color = component::Color::YELLOW);
+        static void drawSimulation(const component::Color& color = component::Color::RED);
+        static void drawLastTest(const component::Color& color = component::Color::STEEL_BLUE);
+        static void drawSproutedPoints(const component::Color& color= component::Color::YELLOW);
 };
 
 inline bool operator<(float a, const FlowerPathManager::sproutCoord& b){
