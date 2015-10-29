@@ -162,4 +162,8 @@
 	<plug id="59" anim="shooting" unplug="true" type="action" delayOut="0.0">
 		<on key="0xd0c4"/>	
 	</plug>
+	<!-- "UNPLUG" CASE:  stop run sound when enter in canon, for unpluging sounds we plug an animation that doesn't have sound  -->
+	<plug id="60" anim="idle_nd" type="cycle" delayOut="0.0">
+		<on key="0x111D"/>	
+	</plug>
 </archetype>
