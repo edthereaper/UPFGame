@@ -53,6 +53,7 @@ Mesh    mesh_axis;
 Mesh    mesh_star;
 Mesh    mesh_icosahedron_wire;
 Mesh    mesh_cyllinder;
+Mesh    mesh_textured_quad_xy_bottomcentered;
 
 Texture*     whiteTexture;
 TextureCube* whiteTextureCube;
@@ -543,6 +544,7 @@ bool renderUtilsCreate()
     is_ok &= createTexturedQuadXYCentered(mesh_textured_quad_xy_centered);
     is_ok &= createTexturedQuadXZCentered(mesh_textured_quad_xz_centered);
     is_ok &= createStackedQuadXZCentered(mesh_stacked_quad_xz_centered);
+    is_ok &= createTexturedQuadXYCenteredX(mesh_textured_quad_xy_bottomcentered);
     is_ok &= createIcosahedron(mesh_icosahedron);
     is_ok &= createIcosahedronWireFrame(mesh_icosahedron_wire);
     is_ok &= createCyllinder(mesh_cyllinder, 1.f, 12, 1.f);
@@ -879,6 +881,18 @@ bool createTexturedQuadXZCentered(Mesh& mesh) {
     v->Pos = XMFLOAT3( 0.5f, 0.f,  0.5f); v->UV = XMFLOAT2(1, 1); ++v;
     return mesh.create((unsigned)vtxs.size(), &vtxs[0], 0, nullptr, Mesh::TRIANGLE_STRIP);
 }
+
+bool createTexturedQuadXYCenteredX(Mesh& mesh) {
+    std::vector< VertexPosUV > vtxs;
+    vtxs.resize(4);
+    VertexPosUV *v = &vtxs[0];
+    v->Pos = XMFLOAT3(-0.5f, 0.f, 0.f); v->UV = XMFLOAT2(0, 0); ++v;
+    v->Pos = XMFLOAT3( 0.5f, 0.f, 0.f); v->UV = XMFLOAT2(1, 0); ++v;
+    v->Pos = XMFLOAT3(-0.5f, 1.f, 0.f); v->UV = XMFLOAT2(0, 1); ++v;
+    v->Pos = XMFLOAT3( 0.5f, 1.f, 0.f); v->UV = XMFLOAT2(1, 1); ++v;
+    return mesh.create((unsigned)vtxs.size(), &vtxs[0], 0, nullptr, Mesh::TRIANGLE_STRIP);
+}
+
 bool createTexturedQuadXYCentered(Mesh& mesh) {
     std::vector< VertexPosUV > vtxs;
     vtxs.resize(4);

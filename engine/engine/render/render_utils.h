@@ -40,6 +40,7 @@ bool createPlane(Mesh& mesh);
 bool createTexturedQuadXZCentered(Mesh& mesh);
 bool createTexturedQuadXYCentered(Mesh& mesh);
 bool createStackedQuadXZCentered(Mesh& mesh);
+bool createTexturedQuadXYCenteredX(Mesh& mesh);
 bool createVolumeCube(Mesh &mesh);
 bool createDownPointer(Mesh &mesh, float w, float h);
 bool createRay(Mesh& meshRay, float longitude);
@@ -207,6 +208,7 @@ extern Mesh mesh_textured_quad_xz_centered;
 extern Mesh mesh_stacked_quad_xz_centered;
 extern Mesh mesh_cube_wire_unit;
 extern Mesh mesh_cyllinder;
+extern Mesh mesh_textured_quad_xy_bottomcentered;
 
 extern Texture*     whiteTexture;
 extern TextureCube* whiteTextureCube;

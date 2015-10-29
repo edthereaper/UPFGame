@@ -211,7 +211,7 @@ class App {
         bool infiniteEnergy = false;
         bool drawPaintVolume = false;
         bool drawPaint = true;
-        bool renderFlowerSimulation = true;
+        bool renderFlowerSimulation = false;
 
 		component::Handle playerModelEntity_h;
 

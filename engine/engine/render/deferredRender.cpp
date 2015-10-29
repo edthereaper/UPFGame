@@ -256,6 +256,17 @@ void DeferredRender::renderParticles()
     getManager<CParticleSystem>()->forall(&CParticleSystem::render);
 }
 
+void DeferredRender::renderFlowers()
+{
+    TraceScoped _("flowers");
+    static const auto tech = Technique::getManager().getByName("flower");
+    tech->activate();
+    activateRSConfig(RSCFG_DEFAULT);
+    activateZConfig(ZCFG_TEST_LT);
+    activateBlendConfig(BLEND_CFG_COMBINATIVE);
+    FlowerPathManager::drawFlowers();
+}
+
 void DeferredRender::drawPaint()
 {
 #if defined(_DEBUG)
@@ -317,6 +328,7 @@ void DeferredRender::operator()(component::Handle camera_h)
     if (b && (c == App::ALBEDO_PLUS_PARTICLES)) {
         initGBuffer(ALBEDO);
         renderParticles();
+        renderFlowers();
         if (debugLayer) {
             renderDebug();
         }
@@ -354,6 +366,7 @@ void DeferredRender::operator()(component::Handle camera_h)
     screenEffects();
     drawVolumetricLights();
     renderParticles();
+    renderFlowers();
 #ifdef _DEBUG
     if (b && (c == App::FINAL)) {return;}
 #endif

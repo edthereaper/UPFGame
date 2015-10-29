@@ -21,7 +21,9 @@ class FlowerGroup {
         struct flower_t : public instance_t {
             flower_t() : instance_t(utils::zero_v, 0) {}
             flower_t(const XMVECTOR& p) :
-                instance_t(p, utils::die(MAX_FRAMES), DirectX::XMFLOAT2(0,0)) {}
+                instance_t(p, utils::die(MAX_FRAMES), DirectX::XMFLOAT2(0,0)) {
+                life = rand_uniform(0.0f, -0.35f);
+            }
         };
         static_assert(sizeof(flower_t) == sizeof(render::VertexFlowerData::instance_t),
             "flower_t can't declare new member objects");
@@ -94,7 +96,7 @@ class FlowerPathManager {
         static sproutCoordV_t yCoords;
         static sproutCoordV_t zCoords;
         static std::vector<bool> active;
-        static Transform lastTest;
+        static component::Transform lastTest;
         static bool lastTestActive;
 
     private:
@@ -111,6 +113,9 @@ class FlowerPathManager {
         static void drawSimulation(const component::Color& color = component::Color::RED);
         static void drawLastTest(const component::Color& color = component::Color::STEEL_BLUE);
         static void drawSproutedPoints(const component::Color& color= component::Color::YELLOW);
+        
+        static void updateFlowers(float elapsed);
+        static void drawFlowers();
 };
 
 inline bool operator<(float a, const FlowerPathManager::sproutCoord& b){

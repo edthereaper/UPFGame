@@ -60,6 +60,7 @@ using namespace cinematic;
 #include "gameElements/player/cannonPath.h"
 #include "gameElements/module.h"
 #include "gameElements/PaintManager.h"
+#include "gameElements/FlowerPath.h"
 using namespace gameElements;
 
 #include "level\importLevel.h"
@@ -1646,6 +1647,8 @@ bool App::update(float elapsed)
 	
 	getManager<CLua>()->update(elapsed);
 #endif
+
+    FlowerPathManager::updateFlowers(elapsed);
 
     component::MessageManager::dispatchPosts();
     updateGlobalConstants(elapsed);

@@ -21,7 +21,7 @@ using namespace physX_user;
 
 namespace gameElements {
 
-const float FlowerGroup::QUAD_SIZE = 0.4f;
+const float FlowerGroup::QUAD_SIZE = 0.5f;
 const float FlowerPathManager::COS_ANGLE_THRESHOLD = std::cos(deg2rad(10));
 
 FlowerPathManager::sproutCoordV_t FlowerPathManager::xCoords;
@@ -128,29 +128,30 @@ void FlowerPathManager::plantCyllinder(const XMVECTOR& pos, float radius, float 
 
 inline float yScaFlowerBreath(float t)
 {
-    return std::sin(t*2.5f+1.04f)*.023f;
+    return std::sin(t*2.5f+1.04f)*.065f;
 }
 inline float xScaFlowerBreath(float t)
 {
-    return std::cos(t*2.0f+2.3f)*.02f;
+    return std::cos(t*2.0f+2.6f)*.045f;
 }
 inline float yScaFlowerGrow(float t)
 {
-    return t >= (1.f/3.f) ? 1 :
-        std::sin(t*(1.f/3.f)*M_PI_2f)+0.45f*std::sin(t*(1.f/3.f)*M_PIf);
+    return (t < 0) ? 0 : (t >= 1) ? 1 :
+        std::sin(t*M_PI_2f)+0.85f*sq(std::sin(t*M_PIf));
 }
 inline float xScaFlowerGrow(float t)
 {
-    return t >= (1.f/3.f) ? 1 :
-        std::sin(t*(1.f/3.f)*M_PI_2f);
+    return (t < 0) ? 0 : (t >= 1) ? 1 : std::sin(t*M_PI_2f);
 }
+
+#define GROW_TIME 0.45f
 
 void FlowerGroup::update(float elapsed)
 {
     for(auto& f : flowers) {
         f.life += elapsed;
-        f.sca.x = (xScaFlowerGrow(f.life) + xScaFlowerBreath(f.life))*QUAD_SIZE;
-        f.sca.y = (yScaFlowerGrow(f.life) + yScaFlowerBreath(f.life))*QUAD_SIZE;
+        f.sca.x = (xScaFlowerGrow(f.life/GROW_TIME) + xScaFlowerBreath(f.life))*QUAD_SIZE;
+        f.sca.y = (yScaFlowerGrow(f.life/GROW_TIME) + yScaFlowerBreath(f.life))*QUAD_SIZE;
     }
     dirty=true;
 }
@@ -159,7 +160,7 @@ void FlowerGroup::draw()
 {
     if (flowers.size() > 0) {
         if (dirty) {updateInstanceData();}
-        mesh_textured_quad_xy.renderInstanced(*instanceData, flowers.size());
+        mesh_textured_quad_xy_bottomcentered.renderInstanced(*instanceData, flowers.size());
     }
 }
 
@@ -356,6 +357,29 @@ void FlowerPathManager::drawSproutedPoints(const component::Color& color)
 {
     for(auto& i : flowers) {
         i.second.drawPoints(color);
+    }
+}
+
+void FlowerPathManager::updateFlowers(float elapsed)
+{
+    auto spatialIndex = SpatiallyIndexed::getCurrentSpatialIndex();
+    for(auto& f : range_t<flowers_t::iterator>(
+        flowers.lower_bound(spatialIndex-1),
+        flowers.upper_bound(spatialIndex+2))
+        ) {
+        f.second.update(elapsed);
+    }
+}
+
+void FlowerPathManager::drawFlowers()
+{
+    CTransform* camT = App::get().getCamera().getSon<CTransform>();
+    Transform t(*camT);
+    straighten(&t);
+    setObjectConstants(t.getWorld());
+    auto spatialIndex = SpatiallyIndexed::getCurrentSpatialIndex();
+    for(auto& f : flowers) {
+        f.second.draw();
     }
 }
 
