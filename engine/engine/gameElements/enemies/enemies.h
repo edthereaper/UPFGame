@@ -195,6 +195,7 @@ class EnemyBtExecutor {
 
         inline bool wasCelebrate(float) const {return lastEvent == E_CELEBRATE;}
         inline bool isAngry(float) const {	return angerTime >= ANGER_THRESHOLD;}
+		void transformEffect();
 
         //actions
         inline ret_e stay(float) { return STAY; }

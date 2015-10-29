@@ -314,7 +314,10 @@ ret_e EnemyBtExecutor::treatEvents(float elapsed)
 		Entity* me = meEntity;
 		CTransform* ctransf = me->get<CTransform>();
 		originScaleV = ctransf->getScale();
+
+		transformEffect();
 		me->sendMsg(MsgTransform());
+
 	}
 	else if (inbox.tackled) {
 		lastEvent = E_TACKLED;
@@ -330,20 +333,10 @@ ret_e EnemyBtExecutor::treatEvents(float elapsed)
 		Entity* me = meEntity;
 		CTransform* ctransf = me->get<CTransform>();
 		originScaleV = ctransf->getScale();
+	
+		transformEffect();
+
 		me->sendMsg(MsgTransform());
-
-		CEmitter *emitter = me->get<CEmitter>();
-		auto key0 = emitter->getKey("emitter_0");
-		auto key1 = emitter->getKey("emitter_1");
-		auto key2 = emitter->getKey("emitter_2");
-
-		ParticleUpdaterManager::get().sendActive(key0);
-		ParticleUpdaterManager::get().sendActive(key1);
-		ParticleUpdaterManager::get().sendActive(key2);
-
-		ParticleUpdaterManager::get().sendMsgKillByTimer(key0,0.5f);
-		ParticleUpdaterManager::get().sendMsgKillByTimer(key1,0.5f);
-		ParticleUpdaterManager::get().sendMsgKillByTimer(key2,0.5f);
 
 
 	}
@@ -355,6 +348,7 @@ ret_e EnemyBtExecutor::treatEvents(float elapsed)
 				Entity* me = meEntity;
 				CTransform* ctransf = me->get<CTransform>();
 				originScaleV = ctransf->getScale();
+				transformEffect();
 				me->sendMsg(MsgTransform());
 			}
 			else{
@@ -525,6 +519,27 @@ void EnemyBtExecutor::updatePosition(float elapsed)
         inbox.megashot = true;
         lastEvent = E_TRANSFORMED;
     }
+}
+
+void EnemyBtExecutor::transformEffect(){
+
+		Entity* me = meEntity;
+		CEmitter *emitter = me->get<CEmitter>();
+
+		auto key0 = emitter->getKey("emitter_0");
+		auto key1 = emitter->getKey("emitter_1");
+		auto key2 = emitter->getKey("emitter_2");
+
+		ParticleUpdaterManager::get().sendActive(key0);
+		ParticleUpdaterManager::get().sendActive(key1);
+		ParticleUpdaterManager::get().sendActive(key2);
+
+		ParticleUpdaterManager::get().setDeleteSelf(key0);
+		ParticleUpdaterManager::get().setDeleteSelf(key1);
+		ParticleUpdaterManager::get().setDeleteSelf(key2);
+
+		me->sendMsg(MsgTransform());
+
 }
 
 void CEnemy::update(float elapsed)

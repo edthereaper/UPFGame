@@ -833,9 +833,6 @@ void App::loadlvl()
 
 #endif
 
-#if defined(_DEBUG)
-    lvlT->playSong();
-#endif
 
     assert(lvlT != nullptr);
     if (lvlT->isBossLevel()) {
@@ -988,8 +985,8 @@ bool App::waitVideo(){
 		break;
 	}
 #if !defined(_PARTICLES) && !defined(_LIGHTTOOL)
-	//CLevelData* levelData = levelE->get<CLevelData>();
-	//levelData->playSong();
+	CLevelData* levelData = levelE->get<CLevelData>();
+	levelData->playSong();
 #endif
 	return false;
 }
