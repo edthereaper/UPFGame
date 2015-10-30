@@ -1,4 +1,4 @@
-#include "mcv_platform.h"
+﻿#include "mcv_platform.h"
 #include "ParticleSystem.h"
 #include "handles/message.h"
 #include "handles/handle.h"
@@ -178,14 +178,25 @@ namespace particles {
 
 					XMVECTOR random = t->getPosition();
 
-				if (!emitter.rangeYEnable)
-					random = t->getPosition() + emitter.localposition + (xAxis_v * utils::rand_uniform(emitter.rangeDistance, -emitter.rangeDistance)) +
-					(zAxis_v * utils::rand_uniform(emitter.rangeDistance, -emitter.rangeDistance));
-				else
-					random = t->getPosition() + emitter.localposition + 
-						(xAxis_v * utils::rand_uniform(emitter.rangeDistance, -emitter.rangeDistance)) +
-						(yAxis_v * utils::rand_uniform(emitter.rangeDistance, -emitter.rangeDistance)) +
-						(zAxis_v * utils::rand_uniform(emitter.rangeDistance, -emitter.rangeDistance));
+					if (emitter.type == ParticlesType::BUTTERFLY){
+
+						float angle =  utils::rand_uniform(360, 0);
+					
+						XMVectorSetX(random, emitter.rangeDistance + sin(angle));
+						XMVectorSetY(random, emitter.rangeDistance + cos(angle));
+
+					}else{
+
+						if (!emitter.rangeYEnable)
+							random = t->getPosition() + emitter.localposition + (xAxis_v * utils::rand_uniform(emitter.rangeDistance, -emitter.rangeDistance)) +
+							(zAxis_v * utils::rand_uniform(emitter.rangeDistance, -emitter.rangeDistance));
+						else
+							random = t->getPosition() + emitter.localposition + 
+								(xAxis_v * utils::rand_uniform(emitter.rangeDistance, -emitter.rangeDistance)) +
+								(yAxis_v * utils::rand_uniform(emitter.rangeDistance, -emitter.rangeDistance)) +
+								(zAxis_v * utils::rand_uniform(emitter.rangeDistance, -emitter.rangeDistance));
+					}
+
 
                 p.scale = emitter.scale;
 				p.pos = toXMFloat3(random);
@@ -501,7 +512,7 @@ void CParticleSystem::sortParticlesZ()
 						if (emitter.type == ParticlesType::RANDOM)
 							polutionSimulator(p,velocity, current);
 						else if (emitter.type == ParticlesType::BUTTERFLY)
-							butterflySimulator(p,velocity, current, elapsed);
+							butterflySimulator(p,velocity, current + emitter.localposition, elapsed);
                         else {
 							current = velocity.currentVelocity * emitter.speed;
 
@@ -592,15 +603,8 @@ void CParticleSystem::sortParticlesZ()
 
 		accumulated += elapsed;
 
-		XMVectorSetX(velocity.currentVelocity, (sin(deg2rad(accumulated)) * emitter.speed + emitter.rangeDistance));
-		XMVectorSetZ(velocity.currentVelocity, (cos(deg2rad(accumulated)) * emitter.speed + emitter.rangeDistance));
-
-		currentPosition = velocity.currentVelocity;
-
-		p.pos.x = meter2Cm(XMVectorGetX(currentPosition));
-		p.pos.z = meter2Cm(XMVectorGetZ(currentPosition));
-
-		//velocity.currentVelocity = currentPosition;
+		p.pos.x = p.pos.x * meter2Cm(emitter.rangeDistance) + sin(accumulated * emitter.speed);
+		p.pos.z = p.pos.z * meter2Cm(emitter.rangeDistance) + cos(accumulated * emitter.speed); 
 
 	}
 

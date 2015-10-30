@@ -398,7 +398,17 @@ namespace particles {
 		inline void setSemisphere(bool type_){ if (type_) if (emitter.type != ParticlesType::SEMISPHERE){ emitter.type = ParticlesType::SEMISPHERE; emitter.rangeDistance = 0.01f; setShapesVelocity(); } }
 		inline void setEdge(bool type_){ if (type_) if (emitter.type != ParticlesType::EDGE){			  emitter.type = ParticlesType::EDGE; emitter.rangeDistance = 0.01f; setShapesVelocity(); } }
 		inline void setRandom(bool type_){ if (type_) if (emitter.type != ParticlesType::RANDOM){		  emitter.type = ParticlesType::RANDOM; emitter.rangeDistance = 100.f;  setShapesVelocity(); } }
-		inline void setButterfly(bool type_){ if (type_) if (emitter.type != ParticlesType::BUTTERFLY){   emitter.type = ParticlesType::BUTTERFLY; emitter.rangeDistance = 2;  setShapesVelocity(); } }
+		inline void setButterfly(bool type_){ 
+			if (type_) 
+				if (emitter.type != ParticlesType::BUTTERFLY){   
+					emitter.type = ParticlesType::BUTTERFLY;
+					emitter.lifeTimeRate = 200.f;
+					emitter.speed = 1.0; 
+					emitter.rangeDistance = 0.2; 
+					setMaxParticleTWEAK(3);
+					setShapesVelocity(); 
+				}
+		}
 		inline void setDisk(bool type_){ if (type_) if (emitter.type != ParticlesType::DISK){			  emitter.type = ParticlesType::DISK; emitter.rangeDistance = 0.01f; setShapesVelocity(); } }
 
 		//----------------------------- Physx ----------------------------------//

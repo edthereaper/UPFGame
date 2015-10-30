@@ -18,7 +18,7 @@ namespace utils {
 #define USER_VK_WHEELUP   0xBA200001
 #define USER_VK_WHEELDOWN 0xBA200002
 
-//#define _PARTICLES
+#define _PARTICLES
 //#define _CINEMATIC_
 //#define _LUA_CONSOLE_
 
