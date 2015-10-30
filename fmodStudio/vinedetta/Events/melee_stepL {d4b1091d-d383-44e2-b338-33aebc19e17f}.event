@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.01.05.00">
     <object class="Event" id="{d4b1091d-d383-44e2-b338-33aebc19e17f}">
         <property name="name">
-            <value>melee_steoL</value>
+            <value>melee_stepL</value>
         </property>
         <relationship name="mixer">
             <destination>{bc361c4d-0d05-447e-b215-d749d77e2ff8}</destination>
