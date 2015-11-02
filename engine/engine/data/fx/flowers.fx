@@ -32,7 +32,10 @@ DATA VSFlower(float3 vPos : POSITION0,
 	ret.wPos = iPos + sca.xyx * ( up * vPos.y + left * vPos.x);
 	ret.sPos = mul(float4( ret.wPos, 1 ), ViewProjection);
 	
-	uint frame = user.y;
+	uint frame = user.y % 16;
+	uint reflex = user.y / 16;
+	uv.x = uv.x * (1-reflex) + (1-uv.x) * reflex;
+	
 	// UV for frame
 	ret.UV = (float2(uint(frame % 4), uint(frame / 4)) + uv)/4;
 	return ret;
@@ -40,6 +43,8 @@ DATA VSFlower(float3 vPos : POSITION0,
 float4 PSFlower(DATA data) : SV_Target
 {
 	float4 color = txFlowers.Sample(samClampLinear, data.UV);
+	//TODO: change to clip(all(color.a == 0))
+	clip(-all(color.rgb == 0));
 	color.a = data.sPos.z*data.sPos.w;
 	return color;
 }

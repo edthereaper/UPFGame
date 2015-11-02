@@ -144,11 +144,6 @@ void FlowerPathManager::plantCyllinder(const XMVECTOR& pos, float radius, float 
 {
     auto newFlowers = getNewInCyllinder(pos, radius, h, spatialIndex);
     auto newSize = newFlowers.size();
-#ifdef _DEBUG
-    if (newSize > 0) {
-        dbg("%d new flowers\n", newSize);
-    }
-#endif
 
     FlowerGroup* group = nullptr;
     for(auto& i : range_t<flowers_t::iterator>(flowers.equal_range(spatialIndex))) {
@@ -224,6 +219,14 @@ FlowerGroup::FlowerGroup(size_t maxSize)
         utils::zero_v, utils::zero_v, true);
     assert(isOK);
     dirty = false;
+}
+
+FlowerGroup::~FlowerGroup()
+{
+    if (instanceData != nullptr) {
+        instanceData->destroy();
+        delete instanceData;
+    }
 }
 
 FlowerPathManager::simulation_t FlowerPathManager::simulate(
@@ -357,6 +360,22 @@ void FlowerGroup::drawPoints(const component::Color& color)
 }
 
 FlowerGroup* FlowerPathManager::simulationHolder = nullptr;
+
+void FlowerPathManager::removeFlowers()
+{
+    flowers.clear();
+    for(auto& b : active) {
+        b = false;
+    }
+}
+
+void FlowerPathManager::clear()
+{
+    SAFE_DELETE(simulationHolder);
+    flowers.clear();
+    active.clear();
+    coords.clear();
+}
 
 FlowerGroup* FlowerPathManager::generateSimulationHolder()
 {

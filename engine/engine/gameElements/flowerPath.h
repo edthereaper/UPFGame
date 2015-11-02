@@ -26,7 +26,7 @@ class FlowerGroup {
             public:
                 flower_t() : instance_t(utils::zero_v, ~0, 0) {}
                 flower_t(const XMVECTOR& p) :
-                    instance_t(p, index++, utils::die(MAX_FRAMES), DirectX::XMFLOAT2(0,0)) {
+                    instance_t(p, index++, utils::die(MAX_FRAMES*2), DirectX::XMFLOAT2(0,0)) {
                     life = rand_uniform(GROW_VAR, -GROW_VAR);
                 }
                 friend FlowerGroup;
@@ -44,6 +44,14 @@ class FlowerGroup {
 
     public:
         FlowerGroup(size_t maxSize);
+        FlowerGroup(FlowerGroup&& move) : 
+            instanceData(move.instanceData), flowers(std::move(move.flowers)),
+            dirty(move.dirty)
+        {
+            move.instanceData = nullptr;
+        }
+
+        ~FlowerGroup();
 
         inline size_t getSize() const {
             return flowers.size();
@@ -66,11 +74,7 @@ class FlowerGroup {
 //Manager that creates the new flowers and organizes their operations
 class FlowerPathManager {
     private:
-        /* spatial index -> FlowerGroup */
-        typedef std::multimap<int, FlowerGroup> flowers_t;
-        static flowers_t flowers;
         static const float COS_ANGLE_THRESHOLD;
-        static FlowerGroup* simulationHolder ;
         static const size_t MAX_GROUP_SIZE = 2048;
 
     public:
@@ -117,6 +121,11 @@ class FlowerPathManager {
         static component::Transform lastTest;
         static bool lastTestActive;
 
+        /* spatial index -> FlowerGroup */
+        typedef std::multimap<int, FlowerGroup> flowers_t;
+        static flowers_t flowers;
+        static FlowerGroup* simulationHolder;
+
     private:
         static FlowerGroup* generateSimulationHolder();
         static std::vector<XMVECTOR> getNewInCyllinder(const XMVECTOR& pos, float radius, float h,
@@ -132,11 +141,14 @@ class FlowerPathManager {
         static void buildSimulationData(Handle levelE, float density, float step);
 
         static void drawSimulation(const component::Color& color = component::Color::RED);
-        static void drawLastTest(const component::Color& color = component::Color::STEEL_BLUE);
+        static void drawLastTest(const component::Color& color = component::Color::CYAN);
         static void drawSproutedPoints(const component::Color& color= component::Color::YELLOW);
         
         static void updateFlowers(float elapsed);
         static void drawFlowers();
+
+        static void clear();
+        static void removeFlowers();
 };
 
 inline bool operator<(float a, const FlowerPathManager::sproutCoord& b){

@@ -702,6 +702,7 @@ void App::loadlvl()
 
     Handle::setCleanup(false);
     PaintManager::load();
+    FlowerPathManager::clear();
 
 	char level[20];
 	sprintf(level,"%s%i", "level", gamelvl);

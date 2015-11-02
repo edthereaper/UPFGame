@@ -328,7 +328,7 @@ CPaintGroup::rayTestResult_e CPaintGroup::testDirection(
     assert(dir.isNormalized());
 
     physx.gScene->raycast(toPxVec3(pos), dir, radius+RADIUS_TOLERANCE, hits,
-        PxHitFlag::eDISTANCE | PxHitFlag::ePOSITION | PxHitFlag::eMESH_MULTIPLE, qfd);
+        PxHitFlag::eDISTANCE | PxHitFlag::ePOSITION, qfd);
     
     bool gotStatic = false;
     PxVec3 paintPos(0);

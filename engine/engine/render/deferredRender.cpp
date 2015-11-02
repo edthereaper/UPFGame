@@ -262,7 +262,7 @@ void DeferredRender::renderFlowers()
     static const auto tech = Technique::getManager().getByName("flower");
     tech->activate();
     activateRSConfig(RSCFG_DEFAULT);
-    activateZConfig(ZCFG_TEST_LT);
+    activateZConfig(ZCFG_LT);
     activateBlendConfig(BLEND_CFG_COMBINATIVE);
     FlowerPathManager::drawFlowers();
 }
@@ -327,8 +327,8 @@ void DeferredRender::operator()(component::Handle camera_h)
     if (b && (c == App::ALBEDO || c == App::SELFILL || c == App::DATA)) {return;}
     if (b && (c == App::ALBEDO_PLUS_PARTICLES)) {
         initGBuffer(ALBEDO);
-        renderParticles();
         renderFlowers();
+        renderParticles();
         if (debugLayer) {
             renderDebug();
         }
@@ -365,8 +365,8 @@ void DeferredRender::operator()(component::Handle camera_h)
     resolve();
     screenEffects();
     drawVolumetricLights();
-    renderParticles();
     renderFlowers();
+    renderParticles();
 #ifdef _DEBUG
     if (b && (c == App::FINAL)) {return;}
 #endif

@@ -134,7 +134,7 @@ void PlayerMovBt::initType()
 #define TIME_DASH_ANIM				0.82f	
 #define TIME_ANIM_MUSHROOM_GROUND	0.035f
 #define TIME_CANNON_ENTER			0.2f
-#define TIME_ANIM_JUMP_IMPULSE		0.1f
+#define TIME_ANIM_JUMP_IMPULSE		0.01f
 #define TIME_CLIMB_ANIM				1.15f
 #define TIME_SPAWN_ANIM				5.5f
 #define TIME_IDLE_ANIM				10.f		//Double than the time we want (5s)
@@ -1612,6 +1612,11 @@ void CPlayerMov::update(float elapsed)
 	CPlayerStats* mePS = me->get<CPlayerStats>();
 	bt.update(elapsed);
 
+    CLevelData* level = CLevelData::currentLevel;
+    if (level) {
+        level->setSpatialIndex(SpatiallyIndexed::findSpatialIndex(meT->getPosition()));
+    }
+
     //update velocity every few frames to make sure physx has updated
     static float velocity = 0;
     static float accElapsed = 0;
@@ -1654,7 +1659,7 @@ void CPlayerMov::update(float elapsed)
 #define PAINT_DELAY 0.01f
 #define PAINT_OFFSET 0.35f
 #define FLOWER_YRANGE 0.3f
-#define FLOWER_YRANGE_PLUSDASH 0.15f
+#define FLOWER_YRANGE_PLUSDASH 0.4f
 #define FLOWER_PAINTOFFSET 0.75f
 
     if (paintDelay.count(elapsed) >= PAINT_DELAY) {
@@ -1662,21 +1667,21 @@ void CPlayerMov::update(float elapsed)
         bool mega = mePS->hasMegashot();
         CPaintGroup* paint = PaintManager::getBrush(mega?0:1);
         float megaShotFactor = mega?mePS->getMegashotFactor():0;
-        auto paintSize = megaShotFactor * megaPaintSize + (1-megaShotFactor)*regularPaintSize;
         if (paint != nullptr) {
+            auto paintSize = megaShotFactor * megaPaintSize + (1-megaShotFactor)*regularPaintSize;
             auto pos = meT->getPosition() + meT->getPivot()-meT->getFront()*PAINT_OFFSET;
             paint->addInstance(pos, paintSize);
-        }
-        if((currentAction &  PlayerMovBtExecutor::COD_FLOWERPATH) != 0) {
-            float flowerCenter = (-paintSize+FLOWER_PAINTOFFSET-PAINT_OFFSET)*.5f;
-            float flowerGrowSize = -flowerCenter;
-            float yOff = FLOWER_YRANGE*.5f;
-            if((currentAction &  PlayerMovBtExecutor::COD_DASHING) != 0) {
-                yOff += FLOWER_YRANGE_PLUSDASH;
+            if((currentAction &  PlayerMovBtExecutor::COD_FLOWERPATH) != 0) {
+                float flowerCenter = (-paintSize+FLOWER_PAINTOFFSET-PAINT_OFFSET)*.5f;
+                float flowerGrowSize = -flowerCenter;
+                float yOff = FLOWER_YRANGE*.5f;
+                if((currentAction &  PlayerMovBtExecutor::COD_DASHING) != 0) {
+                    yOff += FLOWER_YRANGE_PLUSDASH;
+                }
+                FlowerPathManager::plantCyllinder(
+                    meT->getPosition()+meT->getFront()*flowerCenter+XMVectorSet(0,-yOff, 0, 0),
+                    flowerGrowSize, yOff, SpatiallyIndexed::getCurrentSpatialIndex());
             }
-            FlowerPathManager::plantCyllinder(
-                meT->getPosition()+meT->getFront()*flowerCenter+XMVectorSet(0,-yOff, 0, 0),
-                flowerGrowSize, yOff, SpatiallyIndexed::getCurrentSpatialIndex());
         }
     }
 
