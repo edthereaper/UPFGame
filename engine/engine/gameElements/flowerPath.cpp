@@ -6,6 +6,7 @@
 #include "utils/data_saver.h"
 #include "level/level.h"
 #include "render/render_utils.h"
+#include "render/camera/component.h"
 #include "PhysX_USER/PhysicsManager.h"
 
 using namespace DirectX;
@@ -22,17 +23,55 @@ using namespace physX_user;
 namespace gameElements {
 
 const float FlowerGroup::QUAD_SIZE = 0.5f;
+const float FlowerGroup::GROW_TIME = 0.25f;
+const float FlowerGroup::GROW_VAR = 0.15f;
 const float FlowerPathManager::COS_ANGLE_THRESHOLD = std::cos(deg2rad(10));
+uint16_t FlowerGroup::flower_t::index = 0;
 
-FlowerPathManager::sproutCoordV_t FlowerPathManager::xCoords;
-FlowerPathManager::sproutCoordV_t FlowerPathManager::yCoords;
-FlowerPathManager::sproutCoordV_t FlowerPathManager::zCoords;
+std::map<int, FlowerPathManager::parallelCoord_t> FlowerPathManager::coords;
 Transform FlowerPathManager::lastTest;
 bool FlowerPathManager::lastTestActive = false;
 FlowerPathManager::flowers_t FlowerPathManager::flowers;
 std::vector<bool> FlowerPathManager::active;
 
-std::vector<XMVECTOR> FlowerPathManager::getNewInCyllinder(const XMVECTOR& pos, float radius, float h)
+void FlowerGroup::zSort()
+{
+    auto size = flowers.size();
+    if (size <= 1) {return;}
+    CCamera* cam = App::get().getCamera().getSon<CCamera>();
+    XMMATRIX cam_vp = cam->getViewProjection();
+
+    std::vector<float> keys;
+    keys.resize(size);
+    for(auto i = 0 ; i<size; ++i) {
+        auto& f(flowers[i]);
+        auto& k = keys[f.user];
+        k = XMVectorGetZ( XMVector3Transform(XMLoadFloat3(&f.pos), cam_vp) );
+    }
+    const auto sortFN = [&keys]
+        (const flower_t& a, const flower_t& b) -> bool {
+        return keys[a.user] > keys[b.user];
+    };
+
+    std::stable_sort(flowers.begin(), flowers.end(), sortFN);
+    dirty = true;
+}
+
+std::vector<XMVECTOR> FlowerPathManager::getNewInCyllinder(const XMVECTOR& pos, float radius, float h,
+    int spatialIndex)
+{
+    std::vector<XMVECTOR> ret;
+    for (auto i : {-1, 0, 1}) {
+        auto res = getNewInCyllinder(pos, radius,h, coords[spatialIndex+i]);
+        auto size = ret.size();
+        ret.resize(size + res.size());
+        std::move(res.begin(), res.end(), ret.begin()+size);
+    }
+    return ret;
+}
+
+std::vector<XMVECTOR> FlowerPathManager::getNewInCyllinder(const XMVECTOR& pos, float radius, float h,
+    const parallelCoord_t& c)
 {
     float x = XMVectorGetX(pos);
     float y = XMVectorGetY(pos);
@@ -47,16 +86,16 @@ std::vector<XMVECTOR> FlowerPathManager::getNewInCyllinder(const XMVECTOR& pos, 
     
     //Find range in each coordinate
     sproutCoordV_t xRange(
-        std::lower_bound(xCoords.begin(), xCoords.end(), xMin),
-        std::upper_bound(xCoords.begin(), xCoords.end(), xMax)
+        std::lower_bound(c.xCoords.begin(), c.xCoords.end(), xMin),
+        std::upper_bound(c.xCoords.begin(), c.xCoords.end(), xMax)
     );
     sproutCoordV_t yRange(
-        std::lower_bound(yCoords.begin(), yCoords.end(), yMin),
-        std::upper_bound(yCoords.begin(), yCoords.end(), yMax)
+        std::lower_bound(c.yCoords.begin(), c.yCoords.end(), yMin),
+        std::upper_bound(c.yCoords.begin(), c.yCoords.end(), yMax)
     );
     sproutCoordV_t zRange(
-        std::lower_bound(zCoords.begin(), zCoords.end(), zMin),
-        std::upper_bound(zCoords.begin(), zCoords.end(), zMax)
+        std::lower_bound(c.zCoords.begin(), c.zCoords.end(), zMin),
+        std::upper_bound(c.zCoords.begin(), c.zCoords.end(), zMax)
     );
 
     //Sort ranges by id
@@ -103,7 +142,7 @@ std::vector<XMVECTOR> FlowerPathManager::getNewInCyllinder(const XMVECTOR& pos, 
 
 void FlowerPathManager::plantCyllinder(const XMVECTOR& pos, float radius, float h, int spatialIndex)
 {
-    auto newFlowers = getNewInCyllinder(pos, radius, h);
+    auto newFlowers = getNewInCyllinder(pos, radius, h, spatialIndex);
     auto newSize = newFlowers.size();
 #ifdef _DEBUG
     if (newSize > 0) {
@@ -144,8 +183,6 @@ inline float xScaFlowerGrow(float t)
     return (t < 0) ? 0 : (t >= 1) ? 1 : std::sin(t*M_PI_2f);
 }
 
-#define GROW_TIME 0.45f
-
 void FlowerGroup::update(float elapsed)
 {
     for(auto& f : flowers) {
@@ -159,7 +196,9 @@ void FlowerGroup::update(float elapsed)
 void FlowerGroup::draw()
 {
     if (flowers.size() > 0) {
-        if (dirty) {updateInstanceData();}
+        if (dirty) {
+            updateInstanceData();
+        }
         mesh_textured_quad_xy_bottomcentered.renderInstanced(*instanceData, flowers.size());
     }
 }
@@ -222,7 +261,11 @@ FlowerPathManager::simulation_t FlowerPathManager::simulate(
                 filter_t hitFilter = hit.block.shape->getQueryFilterData();
                 if (((hitFilter.is & ignore) == 0) && 
                     (hit.block.normal.dot(PxVec3(0,1,0)) >= COS_ANGLE_THRESHOLD)) {
-                    ret.push_back(toXMVECTOR(hit.block.position));
+                    auto pos(toXMVECTOR(hit.block.position));
+                    auto index = SpatiallyIndexed::findSpatialIndex(pos);
+                    if (index != -1) {
+                        ret.emplace_back(pos, index);
+                    }
                 }
             }
         }
@@ -241,10 +284,12 @@ FlowerPathManager::simulation_t FlowerPathManager::loadSimulationFile(const std:
         ret.resize(nPoints);
         for (size_t i=0;i<nPoints;++i) {
             float x, y, z;
+            int index;
             file.readVal(x);
             file.readVal(y);
             file.readVal(z);
-            ret[i] = XMVectorSet(x,y,z,1);
+            file.readVal(index);
+            ret[i] = point_t(XMVectorSet(x,y,z,1), index);
         }
     }
     return ret;
@@ -257,9 +302,10 @@ void FlowerPathManager::writeSimulationFile(const std::string& name, const simul
     size_t nPoints = sim.size();
     file.writePOD(nPoints);
     for (auto& p : sim) {
-        file.writePOD(XMVectorGetX(p));
-        file.writePOD(XMVectorGetY(p));
-        file.writePOD(XMVectorGetZ(p));
+        file.writePOD(XMVectorGetX(p.pos));
+        file.writePOD(XMVectorGetY(p.pos));
+        file.writePOD(XMVectorGetZ(p.pos));
+        file.writePOD(p.spatialIndex);
     }
     file.saveToFile(("data/flowerSim/"+name+".points").c_str());
 }
@@ -280,19 +326,19 @@ void FlowerPathManager::buildSimulationData(Handle levelE, float density, float 
     }
     auto nPoints = points.size();
     dbg("flower loading start (%lld points)\n", nPoints);
-    xCoords.resize(nPoints);
-    yCoords.resize(nPoints);
-    zCoords.resize(nPoints);
     active.resize(nPoints, false);
     for(uint32_t i = 0; i < nPoints; ++i) {
         const auto& p(points[i]);
-        xCoords[i] = sproutCoord(XMVectorGetX(p), i);
-        yCoords[i] = sproutCoord(XMVectorGetY(p), i);
-        zCoords[i] = sproutCoord(XMVectorGetZ(p), i);
+        auto& c = coords[p.spatialIndex];
+        c.xCoords.push_back(sproutCoord(XMVectorGetX(p.pos), i));
+        c.yCoords.push_back(sproutCoord(XMVectorGetY(p.pos), i));
+        c.zCoords.push_back(sproutCoord(XMVectorGetZ(p.pos), i));
     }
-    std::sort(xCoords.begin(), xCoords.end());
-    std::sort(yCoords.begin(), yCoords.end());
-    std::sort(zCoords.begin(), zCoords.end());
+    for(auto& i : coords) {
+        std::sort(i.second.xCoords.begin(), i.second.xCoords.end());
+        std::sort(i.second.yCoords.begin(), i.second.yCoords.end());
+        std::sort(i.second.zCoords.begin(), i.second.zCoords.end());
+    }
     dbg("flower loading end\n");
 }
 
@@ -318,19 +364,20 @@ FlowerGroup* FlowerPathManager::generateSimulationHolder()
     simulationHolder = new FlowerGroup(active.size());
     std::vector<XMVECTOR> points;
     points.reserve(active.size());
-    std::sort(xCoords.begin(), xCoords.end(), &sproutCoord::compById);
-    std::sort(yCoords.begin(), yCoords.end(), &sproutCoord::compById);
-    std::sort(zCoords.begin(), zCoords.end(), &sproutCoord::compById);
-    for(size_t i = 0; i < active.size(); ++i) {
-        if (!active[i]) {
-            points.push_back(XMVectorSet(xCoords[i].val,
-                yCoords[i].val, zCoords[i].val, 1.f));
+    for(const auto& i : coords) {
+        auto c(i.second);
+        std::sort(c.xCoords.begin(), c.xCoords.end(), &sproutCoord::compById);
+        std::sort(c.yCoords.begin(), c.yCoords.end(), &sproutCoord::compById);
+        std::sort(c.zCoords.begin(), c.zCoords.end(), &sproutCoord::compById);
+        for(size_t i = 0; i < c.xCoords.size(); ++i) {
+            assert(c.xCoords[i].id == c.yCoords[i].id && c.xCoords[i].id == c.zCoords[i].id);
+            if (!active[c.xCoords[i].id]) {
+                auto pos = XMVectorSet(c.xCoords[i].val, c.yCoords[i].val, c.zCoords[i].val, 1.f);
+                points.push_back(pos);
+            }
         }
     }
     simulationHolder->add(points);
-    std::sort(xCoords.begin(), xCoords.end());
-    std::sort(yCoords.begin(), yCoords.end());
-    std::sort(zCoords.begin(), zCoords.end());
     return simulationHolder;
 }
 
@@ -368,6 +415,9 @@ void FlowerPathManager::updateFlowers(float elapsed)
         flowers.upper_bound(spatialIndex+2))
         ) {
         f.second.update(elapsed);
+        if (f.first == spatialIndex) {
+            f.second.zSort();
+        }
     }
 }
 
@@ -378,7 +428,14 @@ void FlowerPathManager::drawFlowers()
     straighten(&t);
     setObjectConstants(t.getWorld());
     auto spatialIndex = SpatiallyIndexed::getCurrentSpatialIndex();
-    for(auto& f : flowers) {
+    for(auto& f : utils::range_t<flowers_t::iterator>(flowers.equal_range(spatialIndex-1))) {
+        f.second.draw();
+    }
+    for(auto& f : utils::range_t<flowers_t::iterator>(flowers.equal_range(spatialIndex+1))) {
+        f.second.draw();
+    }
+    //Current last( on top )
+    for(auto& f : utils::range_t<flowers_t::iterator>(flowers.equal_range(spatialIndex))) {
         f.second.draw();
     }
 }

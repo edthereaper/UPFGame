@@ -1654,7 +1654,8 @@ void CPlayerMov::update(float elapsed)
 #define PAINT_DELAY 0.01f
 #define PAINT_OFFSET 0.35f
 #define FLOWER_YRANGE 0.3f
-#define FLOWER_PAINTOFFSET 0.5f
+#define FLOWER_YRANGE_PLUSDASH 0.15f
+#define FLOWER_PAINTOFFSET 0.75f
 
     if (paintDelay.count(elapsed) >= PAINT_DELAY) {
         paintDelay.reset();
@@ -1669,9 +1670,13 @@ void CPlayerMov::update(float elapsed)
         if((currentAction &  PlayerMovBtExecutor::COD_FLOWERPATH) != 0) {
             float flowerCenter = (-paintSize+FLOWER_PAINTOFFSET-PAINT_OFFSET)*.5f;
             float flowerGrowSize = -flowerCenter;
+            float yOff = FLOWER_YRANGE*.5f;
+            if((currentAction &  PlayerMovBtExecutor::COD_DASHING) != 0) {
+                yOff += FLOWER_YRANGE_PLUSDASH;
+            }
             FlowerPathManager::plantCyllinder(
-                meT->getPosition()+meT->getFront()*flowerCenter+XMVectorSet(0,-FLOWER_YRANGE*.5f, 0, 0),
-                flowerGrowSize, FLOWER_YRANGE, SpatiallyIndexed::getCurrentSpatialIndex());
+                meT->getPosition()+meT->getFront()*flowerCenter+XMVectorSet(0,-yOff, 0, 0),
+                flowerGrowSize, yOff, SpatiallyIndexed::getCurrentSpatialIndex());
         }
     }
 

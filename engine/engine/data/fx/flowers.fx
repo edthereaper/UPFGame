@@ -11,7 +11,7 @@ struct DATA
 };
 
 DATA VSBasic(float3 vPos : POSITION0,
-	float3 iPos : POSITION1, float2 uv : TEXCOORD0, float2 sca : SCALE, uint frame : FRAME)
+	float3 iPos : POSITION1, float2 uv : TEXCOORD0, float2 sca : SCALE)
 {
 	DATA ret = (DATA)0;
 	ret.wPos = iPos + vPos;
@@ -24,7 +24,7 @@ float4 PSBasic(DATA data) : SV_Target
 }
 
 DATA VSFlower(float3 vPos : POSITION0,
-	float3 iPos : POSITION1, float2 uv : TEXCOORD0, float2 sca : SCALE, uint frame : FRAME)
+	float3 iPos : POSITION1, float2 uv : TEXCOORD0, float2 sca : SCALE, uint2 user : USER)
 {
 	DATA ret = (DATA)0;
 	float3 up = float3(World._21, World._22, World._23);
@@ -32,6 +32,7 @@ DATA VSFlower(float3 vPos : POSITION0,
 	ret.wPos = iPos + sca.xyx * ( up * vPos.y + left * vPos.x);
 	ret.sPos = mul(float4( ret.wPos, 1 ), ViewProjection);
 	
+	uint frame = user.y;
 	// UV for frame
 	ret.UV = (float2(uint(frame % 4), uint(frame / 4)) + uv)/4;
 	return ret;

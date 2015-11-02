@@ -175,7 +175,8 @@ struct VertexFlowerData {
     struct instance_t {
         public:
             XMFLOAT3 pos;
-            uint32_t frame=0;
+            uint16_t user=0;
+            int16_t frame=0;
             XMFLOAT2 sca = XMFLOAT2(1,1);
             float life = 0;
             
@@ -183,8 +184,9 @@ struct VertexFlowerData {
             inline void setPos(const XMVECTOR& v) {DirectX::XMStoreFloat3(&pos, v);}
 
             instance_t()=default;
-            instance_t(const XMVECTOR& v, int frame, const XMFLOAT2& sca = XMFLOAT2(1,1)) :
-                frame(frame), sca(sca) {
+            instance_t(const XMVECTOR& v, uint16_t user, int16_t frame,
+                const XMFLOAT2& sca = XMFLOAT2(1,1)) :
+                user(user), frame(frame), sca(sca) {
                 setPos(v);
             }
     };

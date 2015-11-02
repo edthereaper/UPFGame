@@ -17,13 +17,19 @@ class FlowerGroup {
     public:
         static const size_t MAX_FRAMES = 16;
         static const float QUAD_SIZE;
+        static const float GROW_TIME;
+        static const float GROW_VAR;
 
         struct flower_t : public instance_t {
-            flower_t() : instance_t(utils::zero_v, 0) {}
-            flower_t(const XMVECTOR& p) :
-                instance_t(p, utils::die(MAX_FRAMES), DirectX::XMFLOAT2(0,0)) {
-                life = rand_uniform(0.0f, -0.35f);
-            }
+            private:
+                static uint16_t index;
+            public:
+                flower_t() : instance_t(utils::zero_v, ~0, 0) {}
+                flower_t(const XMVECTOR& p) :
+                    instance_t(p, index++, utils::die(MAX_FRAMES), DirectX::XMFLOAT2(0,0)) {
+                    life = rand_uniform(GROW_VAR, -GROW_VAR);
+                }
+                friend FlowerGroup;
         };
         static_assert(sizeof(flower_t) == sizeof(render::VertexFlowerData::instance_t),
             "flower_t can't declare new member objects");
@@ -45,6 +51,7 @@ class FlowerGroup {
 
         inline void add(const std::vector<XMVECTOR>& v) {
             const size_t size(flowers.size() + v.size());
+            flower_t::index = uint16_t(flowers.size());
             flowers.reserve(size);
             flowers.insert(flowers.end(), v.begin(), v.end());
             dirty = true;
@@ -53,6 +60,7 @@ class FlowerGroup {
         void draw();
         void drawPoints(const component::Color& color = component::Color::YELLOW);
         void update(float elapsed);
+        void zSort();
 };
 
 //Manager that creates the new flowers and organizes their operations
@@ -87,21 +95,34 @@ class FlowerPathManager {
         };
 
     private:
+        struct point_t {
+            XMVECTOR pos = utils::zero_v;
+            int spatialIndex = -1;
+            point_t()=default;
+            point_t(XMVECTOR pos, int spatialIndex) : pos(pos), spatialIndex(spatialIndex) {}
+        };
         typedef std::vector<sproutCoord> sproutCoordV_t;
-        typedef std::vector<XMVECTOR> simulation_t;
+        typedef std::vector<point_t> simulation_t;
 
     private:
         //Optimization: separate into coordinates so we can use lower_bound and upper_bound
-        static sproutCoordV_t xCoords;
-        static sproutCoordV_t yCoords;
-        static sproutCoordV_t zCoords;
+        struct parallelCoord_t {
+            sproutCoordV_t xCoords;
+            sproutCoordV_t yCoords;
+            sproutCoordV_t zCoords;
+        };
+        //Optimization: separate per spatial index.
+        static std::map<int, parallelCoord_t> coords;
         static std::vector<bool> active;
         static component::Transform lastTest;
         static bool lastTestActive;
 
     private:
         static FlowerGroup* generateSimulationHolder();
-        static std::vector<XMVECTOR> getNewInCyllinder(const XMVECTOR& pos, float radius, float h);
+        static std::vector<XMVECTOR> getNewInCyllinder(const XMVECTOR& pos, float radius, float h,
+            int spatialIndex);
+        static std::vector<XMVECTOR> getNewInCyllinder(const XMVECTOR& pos, float radius, float h,
+            const parallelCoord_t& c);
         static simulation_t simulate(const component::AABB& aabb, float density, float step);
         static simulation_t loadSimulationFile(const std::string& name);
         static void writeSimulationFile(const std::string& name, const simulation_t&);
