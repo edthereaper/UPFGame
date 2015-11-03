@@ -1097,6 +1097,7 @@ void App::retry()
     if (!levelData->isBossLevel()) {
         PaintManager::reset();
     }
+    FlowerPathManager::removeFlowers();
     MessageManager::dispatchPosts();
 
     EntityListManager::cleanupLists();

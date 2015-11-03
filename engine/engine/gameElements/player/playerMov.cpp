@@ -148,7 +148,7 @@ namespace gameElements {
 const float PlayerMovBtExecutor::MASS_PLAYER = 55.0;  //kg
 const float PlayerMovBtExecutor::MAX_SPEED = 10.f;
 const float PlayerMovBtExecutor::ACCELERATION = MAX_SPEED/0.1f;
-const float PlayerMovBtExecutor::GROUND_DECEL = MAX_SPEED*3.5f;
+const float PlayerMovBtExecutor::GROUND_DECEL = MAX_SPEED*5.0f;
 const float PlayerMovBtExecutor::WALL_DECEL = GROUND_DECEL+ACCELERATION*0.9f;
 const float PlayerMovBtExecutor::LAND_FRICTION_FACTOR = 3.5f;
 const float PlayerMovBtExecutor::DEATH_FRICTION_FACTOR = 1000000;
@@ -1659,7 +1659,7 @@ void CPlayerMov::update(float elapsed)
 #define PAINT_DELAY 0.01f
 #define PAINT_OFFSET 0.35f
 #define FLOWER_YRANGE 0.3f
-#define FLOWER_YRANGE_PLUSDASH 0.4f
+#define FLOWER_YRANGE_PLUSDASH 0.5f
 #define FLOWER_PAINTOFFSET 0.75f
 
     if (paintDelay.count(elapsed) >= PAINT_DELAY) {
@@ -1680,7 +1680,7 @@ void CPlayerMov::update(float elapsed)
                 }
                 FlowerPathManager::plantCyllinder(
                     meT->getPosition()+meT->getFront()*flowerCenter+XMVectorSet(0,-yOff, 0, 0),
-                    flowerGrowSize, yOff, SpatiallyIndexed::getCurrentSpatialIndex());
+                    flowerGrowSize, yOff*2, SpatiallyIndexed::getCurrentSpatialIndex());
             }
         }
     }

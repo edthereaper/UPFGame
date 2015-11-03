@@ -927,7 +927,7 @@ void LevelImport::onEndElement (const std::string &elem)
         }
 
         currentLevel_h.init();
-        FlowerPathManager::buildSimulationData(currentLevel_h, 2.5f, 2.f);
+        FlowerPathManager::buildSimulationData(currentLevel_h, 1.5f, 2.f);
 
         instancedPieces.clear();
         pieces.clear();

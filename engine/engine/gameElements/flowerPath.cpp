@@ -171,11 +171,11 @@ inline float xScaFlowerBreath(float t)
 inline float yScaFlowerGrow(float t)
 {
     return (t < 0) ? 0 : (t >= 1) ? 1 :
-        std::sin(t*M_PI_2f)+0.85f*sq(std::sin(t*M_PIf));
+        std::pow(std::sin(t*M_PI_2f)+0.85f*sq(std::sin(t*M_PIf)), 1.35f);
 }
 inline float xScaFlowerGrow(float t)
 {
-    return (t < 0) ? 0 : (t >= 1) ? 1 : std::sin(t*M_PI_2f);
+    return (t < 0) ? 0 : (t >= 1) ? 1 : sq(std::sin(t*M_PI_2f));
 }
 
 void FlowerGroup::update(float elapsed)
@@ -317,6 +317,7 @@ void FlowerPathManager::buildSimulationData(Handle levelE, float density, float 
 {
     Entity* level(levelE);
     CStaticBody* scene = level->get<CStaticBody>();
+    if (scene == nullptr) {return;}
     physx::PxTriangleMeshGeometry geo;
     bool ok = scene->getShape()->getTriangleMeshGeometry(geo);
     assert(ok);
@@ -379,7 +380,11 @@ void FlowerPathManager::clear()
 
 FlowerGroup* FlowerPathManager::generateSimulationHolder()
 {
-    if (simulationHolder != nullptr) {delete simulationHolder;}
+    if (simulationHolder != nullptr) {
+        delete simulationHolder;
+        simulationHolder = nullptr;
+    }
+    if (active.size() == 0) {return nullptr;}
     simulationHolder = new FlowerGroup(active.size());
     std::vector<XMVECTOR> points;
     points.reserve(active.size());
@@ -402,8 +407,12 @@ FlowerGroup* FlowerPathManager::generateSimulationHolder()
 
 void FlowerPathManager::drawSimulation(const component::Color& color)
 {
-    if (simulationHolder == nullptr) {generateSimulationHolder();}
-    simulationHolder->drawPoints(color);
+    if (simulationHolder == nullptr) {
+        generateSimulationHolder();
+    }
+    if (simulationHolder != nullptr) {
+        simulationHolder->drawPoints(color);
+    }
 }
 
 void FlowerPathManager::drawLastTest(const component::Color& color)
@@ -429,12 +438,17 @@ void FlowerPathManager::drawSproutedPoints(const component::Color& color)
 void FlowerPathManager::updateFlowers(float elapsed)
 {
     auto spatialIndex = SpatiallyIndexed::getCurrentSpatialIndex();
-    for(auto& f : range_t<flowers_t::iterator>(
-        flowers.lower_bound(spatialIndex-1),
-        flowers.upper_bound(spatialIndex+2))
-        ) {
-        f.second.update(elapsed);
-        if (f.first == spatialIndex) {
+    if (spatialIndex < 0) {
+        for(auto& f : flowers) {
+            f.second.update(elapsed);
+            f.second.zSort();
+        }
+    } else {
+        for(auto& f : range_t<flowers_t::iterator>(
+            flowers.lower_bound(spatialIndex-1),
+            flowers.upper_bound(spatialIndex+2))
+            ) {
+            f.second.update(elapsed);
             f.second.zSort();
         }
     }
@@ -447,15 +461,21 @@ void FlowerPathManager::drawFlowers()
     straighten(&t);
     setObjectConstants(t.getWorld());
     auto spatialIndex = SpatiallyIndexed::getCurrentSpatialIndex();
-    for(auto& f : utils::range_t<flowers_t::iterator>(flowers.equal_range(spatialIndex-1))) {
-        f.second.draw();
-    }
-    for(auto& f : utils::range_t<flowers_t::iterator>(flowers.equal_range(spatialIndex+1))) {
-        f.second.draw();
-    }
-    //Current last( on top )
-    for(auto& f : utils::range_t<flowers_t::iterator>(flowers.equal_range(spatialIndex))) {
-        f.second.draw();
+    if (spatialIndex < 0) {
+        for(auto& f : flowers) {
+            f.second.draw();
+        }
+    } else {
+        for(auto& f : utils::range_t<flowers_t::iterator>(flowers.equal_range(spatialIndex-1))) {
+            f.second.draw();
+        }
+        for(auto& f : utils::range_t<flowers_t::iterator>(flowers.equal_range(spatialIndex+1))) {
+            f.second.draw();
+        }
+        //Current last( on top )
+        for(auto& f : utils::range_t<flowers_t::iterator>(flowers.equal_range(spatialIndex))) {
+            f.second.draw();
+        }
     }
 }
 

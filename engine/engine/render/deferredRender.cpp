@@ -262,7 +262,7 @@ void DeferredRender::renderFlowers()
     static const auto tech = Technique::getManager().getByName("flower");
     tech->activate();
     activateRSConfig(RSCFG_DEFAULT);
-    activateZConfig(ZCFG_LT);
+    activateZConfig(ZCFG_TEST_LT);
     activateBlendConfig(BLEND_CFG_COMBINATIVE);
     FlowerPathManager::drawFlowers();
 }
@@ -363,10 +363,10 @@ void DeferredRender::operator()(component::Handle camera_h)
     if (b && (c == App::FXSELFILL)) {return;}
 #endif 
     resolve();
-    screenEffects();
     drawVolumetricLights();
     renderFlowers();
     renderParticles();
+    screenEffects();
 #ifdef _DEBUG
     if (b && (c == App::FINAL)) {return;}
 #endif
