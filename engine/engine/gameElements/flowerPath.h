@@ -69,6 +69,8 @@ class FlowerGroup {
         void drawPoints(const component::Color& color = component::Color::YELLOW);
         void update(float elapsed);
         void zSort();
+
+        void killFlowersUnder(float y);
 };
 
 //Manager that creates the new flowers and organizes their operations
@@ -149,6 +151,8 @@ class FlowerPathManager {
 
         static void clear();
         static void removeFlowers();
+
+        static void killFlowersUnder(float y);
 };
 
 inline bool operator<(float a, const FlowerPathManager::sproutCoord& b){

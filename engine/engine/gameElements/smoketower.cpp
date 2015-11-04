@@ -116,7 +116,9 @@ void CSmokeTower::update(float elapsed)
 	fsm.update(elapsed);
     Entity* e(Handle(this).getOwner());
     CTransform* t(e->get<CTransform>());
-	PaintManager::setFireLevel(XMVectorGetY(t->getPosition()));
+    auto fireLevel(XMVectorGetY(t->getPosition()));
+	PaintManager::setFireLevel(fireLevel);
+    FlowerPathManager::killFlowersUnder(fireLevel);
 }
 
 void CSmokeTower::init()

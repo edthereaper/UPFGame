@@ -45,12 +45,12 @@ void FlowerGroup::zSort()
     keys.resize(size);
     for(auto i = 0 ; i<size; ++i) {
         auto& f(flowers[i]);
-        auto& k = keys[f.user];
+        auto& k = keys[f.user&0x7FFF];
         k = XMVectorGetZ( XMVector3Transform(XMLoadFloat3(&f.pos), cam_vp) );
     }
     const auto sortFN = [&keys]
         (const flower_t& a, const flower_t& b) -> bool {
-        return keys[a.user] > keys[b.user];
+        return keys[a.user&0x7FFF] > keys[b.user&0x7FFF];
     };
 
     std::stable_sort(flowers.begin(), flowers.end(), sortFN);
@@ -182,8 +182,13 @@ void FlowerGroup::update(float elapsed)
 {
     for(auto& f : flowers) {
         f.life += elapsed;
-        f.sca.x = (xScaFlowerGrow(f.life/GROW_TIME) + xScaFlowerBreath(f.life))*QUAD_SIZE;
-        f.sca.y = (yScaFlowerGrow(f.life/GROW_TIME) + yScaFlowerBreath(f.life))*QUAD_SIZE;
+        if ((f.user & 0x8000) == 0) {
+            f.sca.x = (xScaFlowerGrow(f.life/GROW_TIME) + xScaFlowerBreath(f.life))*QUAD_SIZE;
+            f.sca.y = (yScaFlowerGrow(f.life/GROW_TIME) + yScaFlowerBreath(f.life))*QUAD_SIZE;
+        } else {
+            f.sca.x = xScaFlowerGrow(1-(f.life/GROW_TIME));
+            f.sca.y = yScaFlowerGrow(1-(f.life/GROW_TIME));
+        }
     }
     dirty=true;
 }
@@ -475,6 +480,23 @@ void FlowerPathManager::drawFlowers()
         //Current last( on top )
         for(auto& f : utils::range_t<flowers_t::iterator>(flowers.equal_range(spatialIndex))) {
             f.second.draw();
+        }
+    }
+}
+
+void FlowerPathManager::killFlowersUnder(float y)
+{
+    for(auto& f : flowers) {
+        f.second.killFlowersUnder(y);
+    }
+}
+
+void FlowerGroup::killFlowersUnder(float y)
+{
+    for(auto& f : flowers) {
+        if (f.pos.y <= y && (f.user & 0x8000) == 0) {
+            f.user |= 0x8000;
+            f.life = 0;
         }
     }
 }
