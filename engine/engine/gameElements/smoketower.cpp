@@ -4,6 +4,7 @@
 #include "player/playerStats.h"
 
 #include "particles/ParticlesManager.h"
+#include "flowerPath.h"
 #include "paintManager.h"
 
 #define DISTANCE_CHECKPOINT_SMOKE       5.0f
@@ -91,6 +92,7 @@ void SmokeTowerFSMExecutor::update(float elapsed)
 		if (playerS->getHealth() > 30){
 			app.spawn();
 			PaintManager::reset(); //Delete all paint spheres
+            FlowerPathManager::removeFlowers();
 		}
 		playerS->damage(30);
 	} else if (diff > FX_THRESHOLD){
@@ -114,7 +116,9 @@ void CSmokeTower::update(float elapsed)
 	fsm.update(elapsed);
     Entity* e(Handle(this).getOwner());
     CTransform* t(e->get<CTransform>());
-	PaintManager::setFireLevel(XMVectorGetY(t->getPosition()));
+    auto fireLevel(XMVectorGetY(t->getPosition()));
+	PaintManager::setFireLevel(fireLevel);
+    FlowerPathManager::killFlowersUnder(fireLevel);
 }
 
 void CSmokeTower::init()

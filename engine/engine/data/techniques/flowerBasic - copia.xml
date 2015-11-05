@@ -1,0 +1,6 @@
+<technique 
+	fx="flowers.fx"
+	vs="VSBasic"
+	vs_decl="vdcl_flowers"
+	ps="PSBasic"
+	/>

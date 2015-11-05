@@ -60,6 +60,7 @@ using namespace cinematic;
 #include "gameElements/player/cannonPath.h"
 #include "gameElements/module.h"
 #include "gameElements/PaintManager.h"
+#include "gameElements/FlowerPath.h"
 using namespace gameElements;
 
 #include "level\importLevel.h"
@@ -709,6 +710,7 @@ void App::loadlvl()
 
     Handle::setCleanup(false);
     PaintManager::load();
+    FlowerPathManager::clear();
 
 	char level[20];
 	sprintf(level,"%s%i", "level", gamelvl);
@@ -1103,6 +1105,7 @@ void App::retry()
     if (!levelData->isBossLevel()) {
         PaintManager::reset();
     }
+    FlowerPathManager::removeFlowers();
     MessageManager::dispatchPosts();
 
     EntityListManager::cleanupLists();
@@ -1168,7 +1171,6 @@ bool App::doGameOver()
 
 bool App::doFrame()
 {
-	static bool debugPause = false;
     if (exit || pad.getState(APP_QUIT).isHit()) {return false;}
 
 	if (xboxController.is_connected()){
@@ -1655,6 +1657,8 @@ bool App::update(float elapsed)
 	
 	getManager<CLua>()->update(elapsed);
 #endif
+
+    FlowerPathManager::updateFlowers(elapsed);
 
     component::MessageManager::dispatchPosts();
     updateGlobalConstants(elapsed);

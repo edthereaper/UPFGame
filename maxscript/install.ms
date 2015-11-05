@@ -18,7 +18,7 @@ struct Vinedetta_Installation (
 		"exportProperties.ms",
 		"batchExportMesh.ms",
 		"export_mesh.ms",
-		"export_camera.ms"
+		"export_camera.ms",
 		"export_anim.ms"
 	),
 	iconFiles = #(

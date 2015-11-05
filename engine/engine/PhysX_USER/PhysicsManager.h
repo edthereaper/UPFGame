@@ -16,6 +16,7 @@ struct MsgCollisionEvent {
     bool enter;
     filter_t filter;
     PxShape* shape;
+    MsgCollisionEvent()=default;
     MsgCollisionEvent(component::Handle entity, filter_t filter, PxShape* shape, bool enter) :
         entity(entity), filter(filter), shape(shape), enter(enter) {}
 };

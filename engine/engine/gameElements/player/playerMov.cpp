@@ -23,6 +23,7 @@ using namespace render;
 #include "bullet.h"
 #include "cannonPath.h"
 #include "../PaintManager.h"
+#include "../flowerPath.h"
 using namespace component;
 
 #include "animation/animationPlugger.h"
@@ -37,6 +38,9 @@ using namespace gameElements;
 
 #include "Cinematic/camera_manager.h"
 using namespace cinematic;
+
+#include "level/spatialIndex.h"
+using namespace level;
 
 namespace behavior {
 PlayerMovBt::nodeId_t PlayerMovBt::rootNode = INVALID_NODE;
@@ -130,7 +134,7 @@ void PlayerMovBt::initType()
 #define TIME_DASH_ANIM				0.82f	
 #define TIME_ANIM_MUSHROOM_GROUND	0.035f
 #define TIME_CANNON_ENTER			0.2f
-#define TIME_ANIM_JUMP_IMPULSE		0.1f
+#define TIME_ANIM_JUMP_IMPULSE		0.01f
 #define TIME_CLIMB_ANIM				1.15f
 #define TIME_SPAWN_ANIM				5.5f
 #define TIME_IDLE_ANIM				10.f		//Double than the time we want (5s)
@@ -144,7 +148,7 @@ namespace gameElements {
 const float PlayerMovBtExecutor::MASS_PLAYER = 55.0;  //kg
 const float PlayerMovBtExecutor::MAX_SPEED = 10.f;
 const float PlayerMovBtExecutor::ACCELERATION = MAX_SPEED/0.1f;
-const float PlayerMovBtExecutor::GROUND_DECEL = MAX_SPEED*3.5f;
+const float PlayerMovBtExecutor::GROUND_DECEL = MAX_SPEED*5.0f;
 const float PlayerMovBtExecutor::WALL_DECEL = GROUND_DECEL+ACCELERATION*0.9f;
 const float PlayerMovBtExecutor::LAND_FRICTION_FACTOR = 3.5f;
 const float PlayerMovBtExecutor::DEATH_FRICTION_FACTOR = 1000000;
@@ -1608,6 +1612,11 @@ void CPlayerMov::update(float elapsed)
 	CPlayerStats* mePS = me->get<CPlayerStats>();
 	bt.update(elapsed);
 
+    CLevelData* level = CLevelData::currentLevel;
+    if (level) {
+        level->setSpatialIndex(SpatiallyIndexed::findSpatialIndex(meT->getPosition()));
+    }
+
     //update velocity every few frames to make sure physx has updated
     static float velocity = 0;
     static float accElapsed = 0;
@@ -1648,19 +1657,34 @@ void CPlayerMov::update(float elapsed)
 
 
 #define PAINT_DELAY 0.01f
+#define PAINT_OFFSET 0.35f
+#define FLOWER_YRANGE 0.3f
+#define FLOWER_YRANGE_PLUSDASH 0.5f
+#define FLOWER_PAINTOFFSET 0.75f
 
     if (paintDelay.count(elapsed) >= PAINT_DELAY) {
         paintDelay.reset();
         bool mega = mePS->hasMegashot();
         CPaintGroup* paint = PaintManager::getBrush(mega?0:1);
+        float megaShotFactor = mega?mePS->getMegashotFactor():0;
         if (paint != nullptr) {
-            float megaShotFactor = mega?mePS->getMegashotFactor():0;
-            auto pos = meT->getPosition() + meT->getPivot()-meT->getFront()*0.35f;
-            paint->addInstance(pos,
-                megaShotFactor * megaPaintSize +
-                (1-megaShotFactor)*regularPaintSize);
+            auto paintSize = megaShotFactor * megaPaintSize + (1-megaShotFactor)*regularPaintSize;
+            auto pos = meT->getPosition() + meT->getPivot()-meT->getFront()*PAINT_OFFSET;
+            paint->addInstance(pos, paintSize);
+            if((currentAction &  PlayerMovBtExecutor::COD_FLOWERPATH) != 0) {
+                float flowerCenter = (-paintSize+FLOWER_PAINTOFFSET-PAINT_OFFSET)*.5f;
+                float flowerGrowSize = -flowerCenter;
+                float yOff = FLOWER_YRANGE*.5f;
+                if((currentAction &  PlayerMovBtExecutor::COD_DASHING) != 0) {
+                    yOff += FLOWER_YRANGE_PLUSDASH;
+                }
+                FlowerPathManager::plantCyllinder(
+                    meT->getPosition()+meT->getFront()*flowerCenter+XMVectorSet(0,-yOff, 0, 0),
+                    flowerGrowSize, yOff*2, SpatiallyIndexed::getCurrentSpatialIndex());
+            }
         }
     }
+
 
 	bool nowOnCannonAir = (currentAction & PlayerMovBtExecutor::COD_CANNON_AIR) != 0;
 	if (!onCannonAir && nowOnCannonAir) {
@@ -1817,7 +1841,9 @@ void CPlayerMov::resetCamSpawn()
 	Entity* me = btEx.meEntity;
 	CTransform* meT = me->get<CTransform>();
 	auto euler = quaternionToEuler(meT->getRotation());
-	btEx.cam3P.setEye(XMVectorSet(-3.65f * sin(euler.yaw), 1.85f, -3.65f * cos(euler.yaw), 0));
+#define CAM_BEHIND -3.2f
+#define CAM_ABOVE  1.55f
+	btEx.cam3P.setEye(XMVectorSet(CAM_BEHIND * sin(euler.yaw), CAM_ABOVE , CAM_BEHIND * cos(euler.yaw), 0));
 	btEx.cam3P.setTarget(XMVectorSet(0, 1.5f, 0, 0));
 }
 
@@ -1827,7 +1853,8 @@ void CPlayerMov::init()
     Handle meEntity = h.getOwner();
     PlayerMovBtExecutor& btEx = bt.getExecutor();
     btEx.meEntity = meEntity;
-    btEx.cam3P.setEye(XMVectorSet(0, 1.85f, -3.65f, 0));
+    //btEx.cam3P.setEye(XMVectorSet(0, 1.85f, -3.65f, 0));
+    btEx.cam3P.setEye(XMVectorSet(0, CAM_ABOVE, CAM_BEHIND, 0));
     btEx.cam3P.setTarget(XMVectorSet(0, 1.5f, 0, 0));
 
 	Entity* me = btEx.meEntity;

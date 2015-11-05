@@ -228,14 +228,16 @@ void lookAtXZ(Transform* t, const XMVECTOR& target)
 }
 
 
-void straighten(Transform* t, const XMVECTOR& newUP)
+void straighten(Transform* t, const XMVECTOR& newUp)
 {
-	float al = angleBetweenVectors(t->getUp(), newUP);
-	const XMVECTOR qL = XMQuaternionRotationAxis(t->getLeft(), al);
-    t->applyRotation(qL);
-	float af = angleBetweenVectors(t->getLeft(), newUP) - deg2rad(90);
-	const XMVECTOR qF = XMQuaternionRotationAxis(t->getFront(), af);
-    t->applyRotation(qF);
+    XMVECTOR leftRef = XMVector3Cross(t->getUp(), newUp);
+    XMVECTOR frontRef = XMVector3Cross(newUp, leftRef);
+
+    XMVECTOR left = XMVector3Normalize(project(t->getLeft(), leftRef));
+    XMVECTOR front = XMVector3Normalize(project(t->getFront(), frontRef));
+
+    XMMATRIX newT = XMMATRIX(left, newUp, front, zero_v);
+    t->setRotation(XMQuaternionRotationMatrix(newT));
 }
 
 float angleBetweenVectors(XMVECTOR a, XMVECTOR b)

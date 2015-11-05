@@ -28,6 +28,7 @@ void renderUtilsDestroy();
 // Procedural meshes
 bool createGrid(Mesh& mesh, int nsamples);
 bool createAxis(Mesh& mesh, float length = 1.0);
+bool createStar(Mesh& mesh, float length = 1.0);
 bool createWiredUnitCube(Mesh& mesh);
 bool createWiredCube(Mesh& mesh);
 bool createWiredCubeSplit(Mesh& mesh);
@@ -39,6 +40,7 @@ bool createPlane(Mesh& mesh);
 bool createTexturedQuadXZCentered(Mesh& mesh);
 bool createTexturedQuadXYCentered(Mesh& mesh);
 bool createStackedQuadXZCentered(Mesh& mesh);
+bool createTexturedQuadXYCenteredX(Mesh& mesh);
 bool createVolumeCube(Mesh &mesh);
 bool createDownPointer(Mesh &mesh, float w, float h);
 bool createRay(Mesh& meshRay, float longitude);
@@ -48,6 +50,7 @@ bool createViewVolumeWire(Mesh& mesh);
 bool createViewVolume(Mesh& mesh);
 bool createIcosahedron(Mesh& mesh, float size=1.f);
 bool createIcosahedronWireFrame(Mesh& mesh, float size=1.f);
+bool createCyllinder(Mesh& mesh, float r, unsigned divisions, float h);
 
 void drawViewVolume(const render::Camera& camera, const XMVECTOR& color = utils::zero_v);
 void drawLine(XMVECTOR src, XMVECTOR target);
@@ -191,6 +194,7 @@ void activateBlendConfig(enum BlendConfig cfg);
 // Shared meshes
 extern Mesh mesh_grid;
 extern Mesh mesh_axis;
+extern Mesh mesh_star;
 extern Mesh mesh_icosahedron;
 extern Mesh mesh_icosahedron_wire;
 extern Mesh mesh_line;
@@ -203,6 +207,8 @@ extern Mesh mesh_textured_quad_xy_centered;
 extern Mesh mesh_textured_quad_xz_centered;
 extern Mesh mesh_stacked_quad_xz_centered;
 extern Mesh mesh_cube_wire_unit;
+extern Mesh mesh_cyllinder;
+extern Mesh mesh_textured_quad_xy_bottomcentered;
 
 extern Texture*     whiteTexture;
 extern TextureCube* whiteTextureCube;

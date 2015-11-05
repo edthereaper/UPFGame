@@ -38,7 +38,7 @@ struct VertexPosColor {
     XMFLOAT3 Pos;
     XMFLOAT4 Color;
     VertexPosColor()=default;
-    VertexPosColor(XMFLOAT3 Pos, XMFLOAT4 Color) : Pos(Pos), Color(Color) {}
+    VertexPosColor(XMFLOAT3 Pos, XMFLOAT4 Color=XMFLOAT4(1,1,1,1)) : Pos(Pos), Color(Color) {}
 };
 struct VertexPosUV {
     XMFLOAT3 Pos;
@@ -162,10 +162,32 @@ struct VertexPaintData {
             float radius = 0.f;
             
             inline XMVECTOR getPos() const {return DirectX::XMLoadFloat3(&pos);}
-            inline void setPos(XMVECTOR v) {DirectX::XMStoreFloat3(&pos, v);}
-            inline void set(XMVECTOR v, float r) {
+            inline void setPos(const XMVECTOR& v) {DirectX::XMStoreFloat3(&pos, v);}
+            inline void set(const XMVECTOR& v, float r) {
                 setPos(v);
                 radius = r;
+            }
+    };
+};
+
+struct VertexFlowerData {
+    typedef VertexPosUV vertex;
+    struct instance_t {
+        public:
+            XMFLOAT3 pos;
+            uint16_t user=0;
+            int16_t frame=0;
+            XMFLOAT2 sca = XMFLOAT2(1,1);
+            float life = 0;
+            
+            inline XMVECTOR getPos() const {return DirectX::XMLoadFloat3(&pos);}
+            inline void setPos(const XMVECTOR& v) {DirectX::XMStoreFloat3(&pos, v);}
+
+            instance_t()=default;
+            instance_t(const XMVECTOR& v, uint16_t user, int16_t frame,
+                const XMFLOAT2& sca = XMFLOAT2(1,1)) :
+                user(user), frame(frame), sca(sca) {
+                setPos(v);
             }
     };
 };
