@@ -113,7 +113,7 @@ HICON hMyIcon;
 //
 ATOM MyRegisterClass(HINSTANCE hInstance)
 {
-	hMyIcon = (HICON) LoadImage(hInstance, MAKEINTRESOURCE(IDI_MAIN_ICON), IMAGE_ICON, 256, 256, LR_SHARED);	
+	hMyIcon = (HICON) LoadImage(hInstance, MAKEINTRESOURCE(IDI_MAIN_ICON), IMAGE_ICON, 32, 32, LR_SHARED);	
 	WNDCLASSEX wcex;
 
 	wcex.cbSize = sizeof(WNDCLASSEX);
