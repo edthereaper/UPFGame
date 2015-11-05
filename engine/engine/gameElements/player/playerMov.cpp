@@ -1841,7 +1841,9 @@ void CPlayerMov::resetCamSpawn()
 	Entity* me = btEx.meEntity;
 	CTransform* meT = me->get<CTransform>();
 	auto euler = quaternionToEuler(meT->getRotation());
-	btEx.cam3P.setEye(XMVectorSet(-3.65f * sin(euler.yaw), 1.85f, -3.65f * cos(euler.yaw), 0));
+#define CAM_BEHIND -3.2f
+#define CAM_ABOVE  1.55f
+	btEx.cam3P.setEye(XMVectorSet(CAM_BEHIND * sin(euler.yaw), CAM_ABOVE , CAM_BEHIND * cos(euler.yaw), 0));
 	btEx.cam3P.setTarget(XMVectorSet(0, 1.5f, 0, 0));
 }
 
@@ -1851,7 +1853,8 @@ void CPlayerMov::init()
     Handle meEntity = h.getOwner();
     PlayerMovBtExecutor& btEx = bt.getExecutor();
     btEx.meEntity = meEntity;
-    btEx.cam3P.setEye(XMVectorSet(0, 1.85f, -3.65f, 0));
+    //btEx.cam3P.setEye(XMVectorSet(0, 1.85f, -3.65f, 0));
+    btEx.cam3P.setEye(XMVectorSet(0, CAM_ABOVE, CAM_BEHIND, 0));
     btEx.cam3P.setTarget(XMVectorSet(0, 1.5f, 0, 0));
 
 	Entity* me = btEx.meEntity;

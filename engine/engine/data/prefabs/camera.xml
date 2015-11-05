@@ -1,6 +1,6 @@
 <Entity init="yes">
 	<Name name="camera"/>
-	<Camera fov="45" znear="5e-2f" zfar="200" >
+	<Camera fov="60" znear="5e-2f" zfar="200" >
 		<lookAt eye="10 8 2" target="0 0 0" up="0 1 0"/>
 	</Camera>
 	<CameraAnim/>
