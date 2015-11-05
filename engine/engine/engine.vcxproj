@@ -586,6 +586,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="animation\animation_max.h" />
+    <ClInclude Include="animation\animation_max_importer.h" />
     <ClInclude Include="fmod_User\fmodStudio.h" />
     <ClInclude Include="gameElements\Ambientsound.h" />
     <ClInclude Include="Cinematic\animation_camera.h" />
@@ -736,6 +737,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="animation\animation_max.cpp" />
+    <ClCompile Include="animation\animation_max_importer.cpp" />
     <ClCompile Include="fmod_User\fmodStudio.cpp" />
     <ClCompile Include="gameElements\Ambientsound.cpp" />
     <ClCompile Include="animation\animationplugger.cpp" />

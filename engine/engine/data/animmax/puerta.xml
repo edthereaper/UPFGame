@@ -1,0 +1,6 @@
+<anim>
+<!--Edit type: POS(just position motion), ROT(just rotation motion), POS_ROT(position and rotation motion)-->
+<!--Edit loop: 1 to  make it autoplay loop, 0 just run once-->
+<!--Edit isOn: 1 to when enter level start animating, 0 make the event decide when animating-->
+	<MaxAnim name="puerta" max="136f" type="POS" loop="0" isOn="0"/>
+</anim>

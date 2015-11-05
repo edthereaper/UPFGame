@@ -127,6 +127,7 @@
     <ClCompile Include="gameElements\PaintManager.cpp" />
     <ClCompile Include="gameElements\textHelper.cpp" />
     <ClCompile Include="animation\animation_max.cpp" />
+    <ClCompile Include="animation\animation_max_importer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animation\cbonelookat.h" />
@@ -278,6 +279,7 @@
     <ClInclude Include="PhysX_USER\BitUtils_.h" />
     <ClInclude Include="gameElements\textHelper.h" />
     <ClInclude Include="animation\animation_max.h" />
+    <ClInclude Include="animation\animation_max_importer.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="font\FW1FontWrapper.lib" />

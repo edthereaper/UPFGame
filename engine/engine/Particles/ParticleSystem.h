@@ -403,8 +403,8 @@ namespace particles {
 				if (emitter.type != ParticlesType::BUTTERFLY){   
 					emitter.type = ParticlesType::BUTTERFLY;
 					emitter.lifeTimeRate = 200.f;
-					emitter.speed = 1.0; 
-					emitter.rangeDistance = 0.2; 
+					emitter.speed = 1.0f; 
+					emitter.rangeDistance = 0.2f; 
 					setMaxParticleTWEAK(3);
 					setShapesVelocity(); 
 				}

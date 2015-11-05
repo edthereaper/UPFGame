@@ -20,6 +20,8 @@ using namespace physX_user;
 using namespace render;
 
 #include "animation/cskeleton.h"
+#include "animation/animation_max.h"
+#include "animation/animation_max_importer.h"
 using namespace animation;
 
 #include "logic/trigger.h"
@@ -347,6 +349,7 @@ void LevelImport::onStartElement(const std::string &elem, utils::MKeyValue &atts
         if (atts.has("weak_spot")) {special.setString("weak_spot", atts.getString("weak_spot"));}
         if (atts.has("spin")) {special.setString("spin", atts.getString("spin"));}
         if (atts.has("id")) {special.setString("id", atts.getString("id"));}
+		if (atts.has("animName")){ special.setString("animation", atts.getString("animName")); }
 
         std::string transformation = 
             atts.has("transformation2") ? atts["transformation2"] :
@@ -860,6 +863,17 @@ void LevelImport::onEndElement (const std::string &elem)
             Entity* e = createPiece(p);
 
             //Do special things
+
+			//Do special things
+			if (p.special.has("animation")){
+
+				Handle animation_h = getManager<CMaxAnim>()->createObj();
+				CMaxAnim *animation = animation_h;
+				e->add(animation);
+				animation->setPiece(true);
+				init();
+
+			}
             if (p.special.getString("special") == "weak spot") {
                 int n = p.special.getInt("id");
                 assert(n > 0 && n <= 3);
