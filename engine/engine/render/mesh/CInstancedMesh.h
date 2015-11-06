@@ -62,6 +62,7 @@ class CInstancedMesh {
                                 aabb.cullerMask |= cullerMask;
                                 return true;
                             } else {
+                                aabb.cullerMask &= ~cullerMask;
                                 return false;
                             }
                         } else {
