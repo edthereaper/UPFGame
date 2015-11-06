@@ -438,6 +438,7 @@ void saveMist(const CMist* cmist)
         MKeyValue transform;
         CTransform* ctransform = e->get<CTransform>();
         transform.setPoint("pos", ctransform->getPosition());
+        transform.setQuat("rot", ctransform->getRotation());
         transform.writeSingle(myfile, "Transform", "\t\t");
 
         MKeyValue mist;
@@ -1531,6 +1532,43 @@ static void TW_CALL CallbackAlignZNeg(void *clientData)
 	transform->lookAt(transform->getPosition() - zAxis_v);
 }
 
+static void TW_CALL CallbackAlignUpXPos(void *clientData)
+{
+    CTransform* transform(static_cast<CTransform*>(clientData));
+    transform->setRotation(one_q);
+    straighten(transform, xAxis_v);
+}
+static void TW_CALL CallbackAlignUpXNeg(void *clientData)
+{
+    CTransform* transform(static_cast<CTransform*>(clientData));
+    transform->setRotation(one_q);
+    straighten(transform, -xAxis_v);
+}
+static void TW_CALL CallbackAlignUpYPos(void *clientData)
+{
+    CTransform* transform(static_cast<CTransform*>(clientData));
+    transform->setRotation(one_q);
+    straighten(transform, yAxis_v);
+}
+static void TW_CALL CallbackAlignUpYNeg(void *clientData)
+{
+    CTransform* transform(static_cast<CTransform*>(clientData));
+    transform->setRotation(one_q);
+    straighten(transform, -yAxis_v);
+}
+static void TW_CALL CallbackAlignUpZPos(void *clientData)
+{
+    CTransform* transform(static_cast<CTransform*>(clientData));
+    transform->setRotation(one_q);
+    straighten(transform, zAxis_v);
+}
+static void TW_CALL CallbackAlignUpZNeg(void *clientData)
+{
+    CTransform* transform(static_cast<CTransform*>(clientData));
+    transform->setRotation(one_q);
+    straighten(transform, -zAxis_v);
+}
+
 static void TW_CALL updateFront(const void *value, void *clientData)
 {
     CTransform* camT = App::get().getCamera().getSon<CTransform>();
@@ -2118,6 +2156,13 @@ DECLARE_UPDATE_MIST(SqSqrt, float)
 DECLARE_UPDATE_MIST(DepthTolerance, float)
 DECLARE_UPDATE_MIST(Spin, float)
 
+void TW_CALL mistResetRotation(void* clientData)
+{
+    Entity* e = Handle::fromRaw(clientData);
+    CTransform* t = e->get<CTransform>();
+    t->setRotation(one_q);
+}
+
 void TW_CALL mistCopyBottomToTop(void* clientData)
 {
     Entity* e = Handle::fromRaw(clientData);
@@ -2182,6 +2227,16 @@ void AntTWManager::selectMistTweak(CMist* mist)
         "min=0.001 step=0.001 group='Dimensions'");
 	TwAddVarCB(bar2, "Texture size", TW_TYPE_FLOAT, updateMistUnitWorldSize, readMistUnitWorldSize, ePtr,
         "min=0.01 step=0.01 group='Dimensions'");
+	TwAddVarRW(bar2, "rot", TW_TYPE_QUAT4F, &currentTransform_h->refRotation(),
+        "label='Rotation' opened=true axisx=-x axisz=-z arrow='0 1 0' "
+        "arrowcolor=\"255 0 0\" group='Dimensions'");
+    
+    TwAddButton(bar2, "+X", CallbackAlignUpXPos, currentTransform_h, " group=align ");
+    TwAddButton(bar2, "-X", CallbackAlignUpXNeg, currentTransform_h, " group=align ");
+    TwAddButton(bar2, "+Z", CallbackAlignUpZPos, currentTransform_h, " group=align ");
+    TwAddButton(bar2, "-Z", CallbackAlignUpZNeg, currentTransform_h, " group=align ");
+    TwAddButton(bar2, "+Y", CallbackAlignUpYPos, currentTransform_h, " group=align ");
+    TwAddButton(bar2, "-Y", CallbackAlignUpYNeg, currentTransform_h, " group=align ");
 
 	TwAddSeparator(bar2, NULL, NULL);
 	TwAddVarCB(bar2, "Top", TW_TYPE_COLOR32, updateMistColorTop, readMistColorTop, ePtr,
