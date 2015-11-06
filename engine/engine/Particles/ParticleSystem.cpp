@@ -558,7 +558,7 @@ void CParticleSystem::sortParticlesZ()
 		rand = XMVector3Cross(velocity.currentVelocity, rand);
 		XMVECTOR drunkVector2 = XMVector3Normalize(rand);
 
-		currentPosition = velocity.currentVelocity + (drunkVector1 + drunkVector2) * emitter.speed * elapsed;
+		currentPosition = velocity.currentVelocity * emitter.speed + (drunkVector1 + drunkVector2)  *  emitter.speed * elapsed;
 
 		p.pos.x += XMVectorGetX(currentPosition);
 		p.pos.y += XMVectorGetY(currentPosition);
