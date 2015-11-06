@@ -25,7 +25,7 @@ namespace animation{
 	void CMaxAnim::init(){
 	
 		if (isPiece()){
-			animExporter = new AnimationMaxImporter(anim);
+			animExporter = new AnimationMaxImporter();
 		}
 		setPivot(XMVectorSet(0,1,0,0));
 	}

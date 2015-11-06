@@ -34,15 +34,6 @@ namespace animation{
 			else
 				animationData_t.type = CMaxAnim::MaxAnim::PROP_POS_ROT;
 
-			if (atts.has("tag1"))
-				animationData_t.tag1 = atts.getString("tag1", "INVALID");
-
-			if (atts.has("tag2"))
-				animationData_t.tag2 = atts.getString("tag2", "INVALID");
-
-			if (atts.has("tag3"))
-				animationData_t.tag3 = atts.getString("tag3", "INVALID");
-
 			success = true;
 		}
 	}

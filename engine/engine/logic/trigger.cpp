@@ -171,6 +171,7 @@ void CScriptTrigger::initType()
     SUBSCRIBE_MSG_TO_MEMBER(CScriptTrigger, gameElements::MsgSetPlayer, receive);
 }
 
+/*
 void CSpatialIndex::onEnter(float)
 {
     if (CLevelData::currentLevel.isValid()) {
@@ -178,5 +179,6 @@ void CSpatialIndex::onEnter(float)
         level->setSpatialIndex(spatialIndex);
     }
 }
+*/
 
 }

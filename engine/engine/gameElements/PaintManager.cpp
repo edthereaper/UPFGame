@@ -288,6 +288,7 @@ CPaintGroup::rayTestResult_e CPaintGroup::testRays(const XMVECTOR& pos, float ra
 
 CPaintGroup::rayTestResult_e CPaintGroup::testInstance(const XMVECTOR& pos, float radius)
 {
+    if (radius <= 0.f) {return NO_PAINTABLE;}
     static const PxMaterial*const PHYSIX_MAT = PHYSX->createMaterial(0.5,0.5,0.5);
     
     static const auto QUERY =  PxQueryFilterData(
@@ -327,7 +328,7 @@ CPaintGroup::rayTestResult_e CPaintGroup::testDirection(
     assert(dir.isNormalized());
 
     physx.gScene->raycast(toPxVec3(pos), dir, radius+RADIUS_TOLERANCE, hits,
-        PxHitFlag::eDISTANCE | PxHitFlag::ePOSITION | PxHitFlag::eMESH_MULTIPLE, qfd);
+        PxHitFlag::eDISTANCE | PxHitFlag::ePOSITION, qfd);
     
     bool gotStatic = false;
     PxVec3 paintPos(0);

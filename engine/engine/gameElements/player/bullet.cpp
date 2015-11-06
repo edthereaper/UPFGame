@@ -10,6 +10,8 @@ using namespace physX_user;
 
 #include "../module.h"
 
+#include "../PaintManager.h"
+
 using namespace utils;
 using namespace DirectX;
 
@@ -23,6 +25,11 @@ const float CBullet::BULLET_SPEED_MEGA = 90.f;
 
 void CBullet::update(float elapsed)
 {
+    if (collided) {
+        collided = false;
+        treatCollision();
+    }
+
 	Entity* me = Handle(this).getOwner();
 	CTransform* meT = me->get<CTransform>();
 	
@@ -73,11 +80,19 @@ void CBullet::initType()
     SUBSCRIBE_MSG_TO_MEMBER(CBullet, MsgCollisionEvent, receive);
 }
 
-void CBullet::receive(const MsgCollisionEvent& msg)
+void CBullet::treatCollision()
 {
-    Entity* e(msg.entity);
+    Entity* e(collision.entity);
 	Entity* owner = Handle(this).getOwner();
-	
+    
+    CTransform* meT = owner->get<CTransform>();
+
+    CPaintGroup* paint = PaintManager::getBrush(mega?0:1);
+    if (paint != nullptr) {
+        auto pos = meT->getPosition();
+        paint->addInstance(pos, paintSize);
+    }
+
     if (e->has<CTransformable>()) {
         CTransformable* transformable(e->get<CTransformable>());
         if ((!transformable->getInert() && !transformable->isTransformed())) {
@@ -86,8 +101,9 @@ void CBullet::receive(const MsgCollisionEvent& msg)
 		}
 		else{
 			if (!didSound){
-				CTransform* ownerT = owner->get<CTransform>();
-				fmodUser::FmodStudio::play3DSingleEvent(fmodUser::FmodStudio::getEventInstance("SFX/Bullet_bounce"), ownerT->getPosition());
+				fmodUser::FmodStudio::play3DSingleEvent(
+                    fmodUser::FmodStudio::getEventInstance("SFX/Bullet_bounce"),
+                    meT->getPosition());
 				didSound = true;
 				timer.reset();
 			}
@@ -137,6 +153,7 @@ void CBullet::loadFromProperties(const std::string& elem, utils::MKeyValue &atts
     ttl = atts.getFloat("ttl", 1.0f);
     ttlTimer.reset();
     ttlTimer.count(-ttl);
+    paintSize = atts.getFloat("paintSize", paintSize);
 }
 
 void CBullet::setup(XMVECTOR origin, XMVECTOR velocity, XMVECTOR rotQ)

@@ -65,6 +65,7 @@ class DeferredRender {
         void resolve();
         void postProcessOutput();
         void renderParticles();
+        void renderFlowers();
         void drawVolumetricLights();
         void drawMists();
         void drawPaint();

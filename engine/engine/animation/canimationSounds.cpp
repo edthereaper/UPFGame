@@ -36,8 +36,7 @@ namespace animation {
 					//dbg("playing: %s at %f\n", actualSounds[i].sound.c_str(), actualSounds[i].time);
 					if (Handle(this).hasBrother<CPlayerMov>()){
 						fmodUser::FmodStudio::playEvent(fmodUser::FmodStudio::getEventInstance("SFX/" + actualSounds[i].sound));
-					}
-					else{
+					} else {
 						CTransform* meT = Handle(this).getBrother<CTransform>();
 						fmodUser::FmodStudio::play3DSingleEvent(
 							fmodUser::FmodStudio::getEventInstance("SFX/" + actualSounds[i].sound),

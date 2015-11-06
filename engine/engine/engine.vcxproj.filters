@@ -127,7 +127,11 @@
     <ClCompile Include="gameElements\PaintManager.cpp" />
     <ClCompile Include="gameElements\textHelper.cpp" />
     <ClCompile Include="animation\animation_max.cpp" />
+<<<<<<< HEAD
     <ClCompile Include="animation\animation_max_importer.cpp" />
+=======
+    <ClCompile Include="gameElements\flowerPath.cpp" />
+>>>>>>> d2c986283a643deafb8d84a7eabc841cb4f08691
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animation\cbonelookat.h" />
@@ -279,7 +283,11 @@
     <ClInclude Include="PhysX_USER\BitUtils_.h" />
     <ClInclude Include="gameElements\textHelper.h" />
     <ClInclude Include="animation\animation_max.h" />
+<<<<<<< HEAD
     <ClInclude Include="animation\animation_max_importer.h" />
+=======
+    <ClInclude Include="gameElements\flowerPath.h" />
+>>>>>>> d2c986283a643deafb8d84a7eabc841cb4f08691
   </ItemGroup>
   <ItemGroup>
     <Library Include="font\FW1FontWrapper.lib" />

@@ -28,12 +28,11 @@ using namespace animation;
 using namespace logic;
 
 #include "gameElements/paintManager.h"
+#include "gameElements/flowerPath.h"
 using namespace gameElements;
 
 #include "Particles/ParticlesManager.h"
 using namespace particles;
-
-#include "level.h"
 
 #if !defined(_LIGHTTOOL)
 #define ENABLE_ENEMIES
@@ -319,7 +318,7 @@ void LevelImport::onStartElement(const std::string &elem, utils::MKeyValue &atts
         lvl->add(getManager<CTransform>()->createObj());
         lvl->add(getManager<CLevelData>()->createObj());
         CName* name = getManager<CName>()->createObj();
-        name->setName("LVL:"+atts.getString("name","<no-name>"));
+        name->setName("LVL_"+atts.getString("name","<no-name>"));
         lvl->add(name);
         instancedPieces.clear();
 	} else if (elem == "collision") {
@@ -941,14 +940,17 @@ void LevelImport::onEndElement (const std::string &elem)
             EntityListManager::get(TAG_SCENE).add(instancedEntity);
         }
 
+        currentLevel_h.init();
+        FlowerPathManager::buildSimulationData(currentLevel_h, 1.5f, 2.f);
+
         instancedPieces.clear();
         pieces.clear();
         wildcards.clear();
         instancedPieceCount.clear();
         
-        currentLevel_h.init();
         previousLevel_h = currentLevel_h;
         currentLevel_h = Handle();
+
     }
     
 #ifdef ENABLE_ENEMIES
@@ -997,7 +999,6 @@ component::Handle LevelImport::load(const char* name, Handle player_h)
     LevelImport importer;
     bool isOk = importer.xmlParseFile(ss.str());
     assert(isOk && previousLevel_h.isValid());
-    ((Entity*) previousLevel_h)->init();
     MessageManager::dispatchPosts();
     CLevelData* ld = previousLevel_h.getSon<CLevelData>();
     assert(ld != nullptr);

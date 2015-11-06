@@ -17,6 +17,10 @@ public:
   void read(TPOD& pod) {
     read(&pod, sizeof(TPOD));
   }
+  template< class TPOD >
+  void readVal(TPOD& pod) {
+    read(&pod, sizeof(TPOD));
+  }
 };
 
 class FileDataProvider : public DataProvider {

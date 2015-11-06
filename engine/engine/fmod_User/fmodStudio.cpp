@@ -50,7 +50,7 @@ namespace fmodUser {
 
 	FMOD::Studio::EventInstance* FmodStudio::getEventInstance(FMOD::Studio::EventDescription* ev)
 	{
-		assert(ev != nullptr);
+        if(ev != nullptr) {return nullptr;}
 		FMOD::Studio::EventInstance* in;
 		CHECKED(ev->createInstance(&in));
 		return in;
@@ -58,7 +58,7 @@ namespace fmodUser {
 
 	FMOD::Studio::EventInstance* FmodStudio::play3DSingleEvent(FMOD::Studio::EventInstance* in, XMVECTOR posSource)
 	{
-		assert(in != nullptr);
+        if(in != nullptr) {return nullptr;}
 		CTransform* playerT = App::get().getPlayer().getSon<CTransform>();
 		FMOD_3D_ATTRIBUTES attributes = { { 0 } };
 		XMVECTOR relative = posSource - playerT->getPosition();
@@ -70,7 +70,7 @@ namespace fmodUser {
 
 	FMOD::Studio::EventInstance* FmodStudio::play3DAmbientEvent(FMOD::Studio::EventInstance* in, XMVECTOR posSource)
 	{
-		assert(in != nullptr);
+        if(in != nullptr) {return nullptr;}
 		CTransform* playerT = App::get().getPlayer().getSon<CTransform>();
 		FMOD_3D_ATTRIBUTES attributes = { { 0 } };
 		XMVECTOR relative = posSource - playerT->getPosition();
@@ -82,7 +82,7 @@ namespace fmodUser {
 
 	FMOD::Studio::EventInstance* FmodStudio::update3DAmbientEvent(FMOD::Studio::EventInstance* in, XMVECTOR posSource)
 	{
-		assert(in != nullptr);
+        if(in != nullptr) {return nullptr;}
 		CTransform* playerT = App::get().getPlayer().getSon<CTransform>();
 		FMOD_3D_ATTRIBUTES attributes = { { 0 } };
 		XMVECTOR relative = posSource - playerT->getPosition();
@@ -93,28 +93,28 @@ namespace fmodUser {
 
 	FMOD::Studio::EventInstance* FmodStudio::playEvent(FMOD::Studio::EventInstance* in)
 	{
-		assert(in != nullptr);
+        if(in != nullptr) {return nullptr;}
 		CHECKED(in->start());
 		return in;
 	}
 
 	FMOD::Studio::EventInstance* FmodStudio::stopEvent(FMOD::Studio::EventInstance* in)
 	{
-		assert(in != nullptr);
+        if(in != nullptr) {return nullptr;}
 		CHECKED(in->stop(FMOD_STUDIO_STOP_ALLOWFADEOUT));
 		return in;
 	}
 
 	FMOD::Studio::EventInstance* FmodStudio::pauseEvent(FMOD::Studio::EventInstance* in)
 	{
-		assert(in != nullptr);
+        if(in != nullptr) {return nullptr;}
 		CHECKED(in->setPaused(true));
 		return in;
 	}
 
 	FMOD::Studio::EventInstance* FmodStudio::resumeEvent(FMOD::Studio::EventInstance* in)
 	{
-		assert(in != nullptr);
+        if(in != nullptr) {return nullptr;}
 		CHECKED(in->setPaused(false));
 		return in;
 	}

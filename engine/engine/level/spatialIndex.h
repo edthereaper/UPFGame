@@ -7,6 +7,10 @@ namespace level {
 
 class SpatiallyIndexed
 {
+    public:
+        static int getCurrentSpatialIndex();
+        static int findSpatialIndex(XMVECTOR pos);
+
     private:
         void findSpatialIndexAux(component::Handle);
 

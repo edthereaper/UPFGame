@@ -115,8 +115,7 @@ class CSpatialIndex : public Trigger_AABB<CSpatialIndex>, public level::Spatiall
         inline void onStay(float) {/*Do nothing*/}
         inline void onAbsent(float) {/*Do nothing*/}
         inline void onExit(float) {/*Do nothing*/}
-
-        void onEnter(float);
+        inline void onEnter(float) {/*Do nothing*/}
 
         void loadFromProperties(const std::string& elem, utils::MKeyValue &atts){}
         inline void receive (const gameElements::MsgSetPlayer& msg) {setPlayer(msg.playerEntity);}

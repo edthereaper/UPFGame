@@ -24,8 +24,16 @@ class CBullet {
 
 		float gravity = 0.0f;
 		bool once = true;
-		float ttl;
+		float ttl = 4.f;
 		float life = 0.0f;
+        float paintSize = 1.f;
+
+        bool collided = false;
+        physX_user::MsgCollisionEvent collision;
+
+    private:
+        void treatCollision();    
+
     public:
 		void removeFromScene(); //TODO: private
 
@@ -42,7 +50,10 @@ class CBullet {
         inline void init() {}
 		void finishEffect();
 
-        void receive(const physX_user::MsgCollisionEvent&);
+        inline void receive(const physX_user::MsgCollisionEvent& msg) {
+            collided = true;
+            collision = msg;
+        }
 };
 
 }

@@ -10,13 +10,9 @@ using namespace utils;
 
 namespace animation{
 
-	class AnimationMaxImporter;
-
 	class CMaxAnim{
 
 	public:
-
-		friend AnimationMaxImporter;
 
 		typedef enum MAXANIMTAG{
 
@@ -57,6 +53,7 @@ namespace animation{
 			float       curr_time = 0;
 			int			max = 0;
 			bool		play;
+			bool		loop;
 			bool		finish = false;	
 			bool		postfinish = false;
 			float		timing = 1;
@@ -78,7 +75,7 @@ namespace animation{
 		std::vector<Key>  keys;
 
 		DataAnim_t anim;
-		AnimationMaxImporter *animExporter;
+		AnimationMaxImporter *animExporter = nullptr;
 
 		bool load(DataProvider& fdp);
 		bool load(const char* name);
@@ -102,7 +99,7 @@ namespace animation{
 		
 		void init();
 
-		bool pieceSecure(){ return (isPiece() && animExporter != nullptr); };
+		bool pieceSecure(){ return (isPiece() && animExporter != nullptr); }
 		
 		void setPiece(bool piece){anim.isPiece = piece; }
 		bool isPiece() { return anim.isPiece;}

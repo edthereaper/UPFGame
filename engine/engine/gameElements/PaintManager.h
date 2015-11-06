@@ -184,6 +184,15 @@ class PaintManager : private utils::XMLParser {
 
         static inline void setFireLevel(float f) {fireLevel = f;}
         static inline float getFireLevel() {return fireLevel;}
+
+        static inline void drawAll() {
+            //Traverse in inverse order (i.e. mega < regular so it's drawn on top)
+            for(auto& i : utils::range_t<decltype(brushes.rbegin())>
+                (brushes.rbegin(), brushes.rend())) {
+                CPaintGroup* pg(i.second.getSon<CPaintGroup>());
+                pg->drawChain();
+            }
+        }
 };
 
 

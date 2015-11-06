@@ -71,7 +71,7 @@ namespace behavior {
 }
 
 #define TIME_SHOOT_COOLDOWN 0.4f
-#define TIME_CHARGE 0.1f
+#define TIME_CHARGE 0.01f
 #define TIME_RECOIL 0.1f
 #define MARKER_HEIGHT 1.00f
 

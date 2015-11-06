@@ -211,6 +211,7 @@ class App {
         bool infiniteEnergy = false;
         bool drawPaintVolume = false;
         bool drawPaint = true;
+        bool renderFlowerSimulation = false;
 
 		component::Handle playerModelEntity_h;
 
@@ -272,6 +273,7 @@ class App {
     public:
 #endif
 		bool enableShadows = true;
+	    bool debugPause = false;
 
 	public:
 		bool isLoadingThreadActve = false;
@@ -342,6 +344,8 @@ class App {
 
         inline void setFocus(bool b) {focus=b;}
         inline bool hasFocus() const {return focus;}
+        
+        inline bool isDebugPaused() const {return debugPause;}
 
 #ifdef _DEBUG
         //for anttw purposes

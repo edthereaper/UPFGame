@@ -599,6 +599,7 @@
     <ClInclude Include="fmod_User\fmodUser.h" />
     <ClInclude Include="gameElements\bichito\bichito.h" />
     <ClInclude Include="gameElements\boss\boss.h" />
+    <ClInclude Include="gameElements\flowerPath.h" />
     <ClInclude Include="gameElements\flyingMobile.h" />
     <ClInclude Include="gameElements\boss\smokePanel.h" />
     <ClInclude Include="gameElements\boss\weakSpot.h" />
@@ -751,6 +752,7 @@
     <ClCompile Include="fmod_User\fmodUser.cpp" />
     <ClCompile Include="gameElements\bichito\bichito.cpp" />
     <ClCompile Include="gameElements\boss\boss.cpp" />
+    <ClCompile Include="gameElements\flowerPath.cpp" />
     <ClCompile Include="gameElements\flyingMobile.cpp" />
     <ClCompile Include="gameElements\boss\smokePanel.cpp" />
     <ClCompile Include="gameElements\boss\weakSpot.cpp" />

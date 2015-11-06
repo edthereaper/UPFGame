@@ -13,6 +13,7 @@
 
 #include "gameElements/smoketower.h"
 #include "gameElements/PaintManager.h"
+#include "gameElements/flowerPath.h"
 using namespace gameElements;
 
 #ifdef _DEBUG
@@ -255,6 +256,17 @@ void DeferredRender::renderParticles()
     getManager<CParticleSystem>()->forall(&CParticleSystem::render);
 }
 
+void DeferredRender::renderFlowers()
+{
+    TraceScoped _("flowers");
+    static const auto tech = Technique::getManager().getByName("flower");
+    tech->activate();
+    activateRSConfig(RSCFG_DEFAULT);
+    activateZConfig(ZCFG_TEST_LT);
+    activateBlendConfig(BLEND_CFG_COMBINATIVE);
+    FlowerPathManager::drawFlowers();
+}
+
 void DeferredRender::drawPaint()
 {
 #if defined(_DEBUG)
@@ -282,7 +294,7 @@ void DeferredRender::drawPaint()
     activateZConfig(ZCFG_TEST_GT);
     activateBlendConfig(BLEND_CFG_PAINT);
 
-    getManager<CPaintGroup>()->forall(&CPaintGroup::draw);
+    PaintManager::drawAll();
 }
 
 void DeferredRender::screenEffects()
@@ -315,6 +327,7 @@ void DeferredRender::operator()(component::Handle camera_h)
     if (b && (c == App::ALBEDO || c == App::SELFILL || c == App::DATA)) {return;}
     if (b && (c == App::ALBEDO_PLUS_PARTICLES)) {
         initGBuffer(ALBEDO);
+        renderFlowers();
         renderParticles();
         if (debugLayer) {
             renderDebug();
@@ -350,9 +363,10 @@ void DeferredRender::operator()(component::Handle camera_h)
     if (b && (c == App::FXSELFILL)) {return;}
 #endif 
     resolve();
-    screenEffects();
     drawVolumetricLights();
+    renderFlowers();
     renderParticles();
+    screenEffects();
 #ifdef _DEBUG
     if (b && (c == App::FINAL)) {return;}
 #endif
@@ -434,6 +448,15 @@ void DeferredRender::renderDebug() const
         activateBlendConfig(BLEND_CFG_COMBINATIVE);
         paintTech->activate();
         paints->forall(&CPaintGroup::drawVolume);
+    }
+
+    if (app.renderFlowerSimulation) {
+        static const Technique* flowerTech = Technique::getManager().getByName("flowerBasic");
+        flowerTech->activate();
+        FlowerPathManager::drawSimulation();
+        FlowerPathManager::drawSproutedPoints();
+        tech->activate();
+        FlowerPathManager::drawLastTest();
     }
 }
 #endif

@@ -1191,11 +1191,11 @@
 		<trigger pos="-3.9716 40.0642 84.6079" spatialIndex="5" width="9.04315" length="4.13869" height="7.97198" script="tolevel2" args=""/>
 	</triggers>
 	<spatials count="5">
-		<spatial spatialIndex="1" pos="-167.882 5.85841e-006 134.025" width="78.0379" length="103.389" height="97.5728"/>
-		<spatial spatialIndex="2" pos="-89.4634 6.30487e-006 144.239" width="78.7988" length="82.9614" height="97.5728"/>
-		<spatial spatialIndex="3" pos="-38.9748 7.0027e-006 160.203" width="22.1782" length="114.89" height="97.5728"/>
-		<spatial spatialIndex="4" pos="-7.13076 7.88571e-006 180.404" width="41.5099" length="74.4882" height="97.5728"/>
-		<spatial spatialIndex="5" pos="-7.13076 4.95086e-006 113.262" width="41.5099" length="59.7948" height="97.5728"/>
+		<spatial spatialIndex="1" pos="-167.882 5.85841e-006 134.025" width="78.0379" length="103.389" height="30.0"/>
+		<spatial spatialIndex="2" pos="-89.4634 6.30487e-006 144.239" width="78.7988" length="82.9614" height="30.0"/>
+		<spatial spatialIndex="3" pos="-38.9748 7.0027e-006 160.203" width="23.7782" length="114.89" height="30.0"/>
+		<spatial spatialIndex="4" pos="-7.13076 21.3218 180.404" width="44.5099" length="78.2882" height="30.0"/>
+		<spatial spatialIndex="5" pos="-7.13076 4.95086e-006 113.262" width="41.3099" length="64.3948" height="30.0"/>
 	</spatials>
 	<destructibles count="1">
 		<destructible pos="-3.86746 42.1598 86.113" rot="0.0 0.0 0.0 1.0" spatialIndex="5" width="3.5" length="0.753984" height="3.7314"/>
