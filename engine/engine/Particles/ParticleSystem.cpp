@@ -499,9 +499,9 @@ void CParticleSystem::sortParticlesZ()
                         else {
 							current = velocity.currentVelocity * emitter.speed * elapsed;
 
-							p.pos.x += meter2Cm(XMVectorGetX(current));
-							p.pos.y += meter2Cm(XMVectorGetY(current));
-							p.pos.z += meter2Cm(XMVectorGetZ(current));
+							p.pos.x += XMVectorGetX(current);
+							p.pos.y += XMVectorGetY(current);
+							p.pos.z += XMVectorGetZ(current);
 
 						}
 
@@ -560,9 +560,9 @@ void CParticleSystem::sortParticlesZ()
 
 		currentPosition = velocity.currentVelocity + (drunkVector1 + drunkVector2) * emitter.speed * elapsed;
 
-		p.pos.x += meter2Cm(XMVectorGetX(currentPosition));
-		p.pos.y += meter2Cm(XMVectorGetY(currentPosition));
-		p.pos.z += meter2Cm(XMVectorGetZ(currentPosition));
+		p.pos.x += XMVectorGetX(currentPosition);
+		p.pos.y += XMVectorGetY(currentPosition);
+		p.pos.z += XMVectorGetZ(currentPosition);
 
 		velocity.currentVelocity = currentPosition;
 	}
@@ -576,8 +576,8 @@ void CParticleSystem::sortParticlesZ()
 
 		currentPosition = velocity.currentVelocity;
 
-		p.pos.x = meter2Cm(XMVectorGetX(currentPosition));
-		p.pos.z = meter2Cm(XMVectorGetZ(currentPosition));
+		p.pos.x = XMVectorGetX(currentPosition);
+		p.pos.z = XMVectorGetZ(currentPosition);
 
 		//velocity.currentVelocity = currentPosition;
 
