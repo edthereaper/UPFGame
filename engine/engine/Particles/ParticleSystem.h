@@ -301,7 +301,7 @@ namespace particles {
 		void setShapesVelocity();
 		XMVECTOR setVelocityParticle();
 		void setColors();
-		void polutionSimulator(ParticleData& p, VelocityData &velocity, XMVECTOR currentPosition);
+		void polutionSimulator(ParticleData& p, VelocityData &velocity, XMVECTOR currentPosition, float elapsed);
 		void butterflySimulator(ParticleData& p, VelocityData &velocity, XMVECTOR currentPosition, float elapsed);
 		ParticlesEmitter emitter;
 		utils::Counter<float> timer;

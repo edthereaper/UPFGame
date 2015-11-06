@@ -25,7 +25,7 @@ struct culling_t
     public:
         culling_t()=default;
         culling_t(const culling_t&)=default;
-        inline void setScale(float s) {scale = s; dirty=true;}
+        inline void setScale(float s) {scale = s; dirty=true; }
         inline float getScale() const {return scale;}
         inline void setSkin(float s) {skin = s; dirty=true;}
         inline float getSkin() const {return skin;}

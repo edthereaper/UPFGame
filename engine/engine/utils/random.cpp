@@ -1,5 +1,6 @@
 #include "mcv_platform.h"
 #include "random.h"
+#include "app.h"
 
 #include <random>
 #include <array>
@@ -8,6 +9,10 @@
 namespace utils {
 
 std::mt19937 _rEngine;
+
+std::map<std::pair<float, float>, std::uniform_real_distribution<float>> _m_Uf;
+std::map<std::pair<float, float>, std::uniform_real_distribution<float>> _m_Nf;
+std::map<std::pair<int, int>, std::uniform_int_distribution<int>> _m_Ui;
 
 void seedRand()
 {
@@ -31,6 +36,24 @@ float rand_normal(float mean, float deviation)
 float rand_uniform(float max, float min)
 {
     return std::uniform_real_distribution<float>(min, max)(_rEngine);
+}
+
+XMVECTOR rand_vectorXZ(float max, float min, float y, float w)
+{
+    auto gen =std::uniform_real_distribution<float>(min, max);
+    return DirectX::XMVectorSet(gen(_rEngine), y, gen(_rEngine), w);
+}
+
+XMVECTOR rand_vector3(float max, float min, float w)
+{
+    auto gen =std::uniform_real_distribution<float>(min, max);
+    return DirectX::XMVectorSet(gen(_rEngine), gen(_rEngine), gen(_rEngine), w);
+}
+
+XMVECTOR rand_vector4(float max, float min)
+{
+    auto gen =std::uniform_real_distribution<float>(min, max);
+    return DirectX::XMVectorSet(gen(_rEngine), gen(_rEngine), gen(_rEngine), gen(_rEngine));
 }
 
 int rand_uniform(int max, int min)

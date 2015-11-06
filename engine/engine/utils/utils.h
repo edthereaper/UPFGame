@@ -275,8 +275,6 @@ inline void safe_delete(T*& a) {
 template<typename T> 
 inline void identity_pair(const T&, const T&) {}
 
-XMFLOAT3 toXMFloat3(XMVECTOR v);
-XMFLOAT4 toXMFloat4(XMVECTOR v);
 #define CHARACTER_HEIGHT 1.65f
 #define CHARACTER_HEIGHTS(x) (CHARACTER_HEIGHT*(x))
 
