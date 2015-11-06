@@ -10,6 +10,7 @@
 #include "components/color.h"
 
 #include "../shader/vertex_declarations.h"
+#include "app.h"
 
 namespace render {
 
@@ -22,6 +23,7 @@ class CInstancedMesh {
             bool used = false;
             unsigned instanceIndex = ~0;
             using CullingAABB::dirty;
+            Culling::mask_t cullerMask;
         };
 
         CullingAABB aabb;
@@ -36,18 +38,40 @@ class CInstancedMesh {
                 const component::AABB baseAABB;
                 bool ignoreWorldChange;
                 Culling::mask_t cullerMask;
+                bool dirty;
 
             public:
                 Culler(CInstancedMesh*const& self, const Culling::CullerDelegate& culling,
                     const component::AABB& baseAABB, bool ignoreWorldChange) :
                     self(self), culling(culling),
                     baseAABB(baseAABB),
-                    ignoreWorldChange(ignoreWorldChange) {}
+                    ignoreWorldChange(ignoreWorldChange),
+                    cullerMask(culling.getMask()),
+                    dirty(culling.hasChanged()) {}
 
-                bool operator()(const instance_t& instance) const{
+                bool operator()(instance_t& instance) const{
                     auto& aabb = (*self->instanceExtraData)[instance.userDataB];
-                    aabb.update(baseAABB, instance.world, ignoreWorldChange);   
-                    return culling.cull(aabb);
+                    bool aabbDirty = aabb.dirty;
+                    aabb.update(baseAABB, instance.world, ignoreWorldChange);
+#ifdef _DEBUG
+                    if (App::get().useMaskForInstanceCulling) {
+#endif
+                        if (dirty || aabbDirty) {
+                            bool b = culling.cull(aabb);
+                            if (b) {
+                                aabb.cullerMask |= cullerMask;
+                                return true;
+                            } else {
+                                return false;
+                            }
+                        } else {
+                            return (aabb.cullerMask & cullerMask) != 0;
+                        }
+#ifdef _DEBUG
+                    } else {
+                        return culling.cull(aabb);
+                    }
+#endif
                 }
         };
         friend Culler;

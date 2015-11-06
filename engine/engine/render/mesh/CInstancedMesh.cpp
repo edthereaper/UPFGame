@@ -38,6 +38,7 @@ uint32_t CInstancedMesh::getFreshDataIndex(unsigned index)
             d.setScale(aabbScale);
             d.setSkin(aabbSkin);
             d.dirty = true;
+            d.cullerMask.reset();
             d.used = true;
             d.instanceIndex = index;
             return (uint32_t)i;
@@ -47,6 +48,7 @@ uint32_t CInstancedMesh::getFreshDataIndex(unsigned index)
     d.setScale(aabbScale);
     d.setSkin(aabbSkin);
     d.dirty = true;
+    d.cullerMask.reset();
     d.used = true;
     d.instanceIndex = index;
     instanceExtraData->push_back(std::move(d));
@@ -332,12 +334,13 @@ void CInstancedMesh::drawAABBs(const Color& c)
     }
 }
 
-#define ALL_INSTANCES_SAME_AABB_COLOR
+//#define DIFFERENT_COLOR_PER_MESH
+#define DIFFERENT_COLOR_PER_INSTANCE
 void CInstancedMesh::drawAABBs()
 {
     if (dataBuffer == nullptr) {return;}
 
-#if defined(ALL_INSTANCES_SAME_AABB_COLOR) && defined(_DEBUG)
+#if defined(DIFFERENT_COLOR_PER_MESH) && defined(_DEBUG)
     const auto color = dbgColor;
 #else
     const auto color = Color::MAGENTA;
@@ -345,10 +348,13 @@ void CInstancedMesh::drawAABBs()
 
     if (usesGlobalAABB) {
         CullingAABB aabbCopy(aabb);
-        aabbCopy.draw(XMVECTOR(color) + one_v*0.45f);
+        aabbCopy.draw(XMVECTOR( Color(color).setAf(0)) + one_v*0.45f);
     }
 
     for (const auto& i : *dataBuffer) {
+        #if defined(DIFFERENT_COLOR_PER_INSTANCE) && defined(_DEBUG)
+            const auto color = (*instanceExtraData)[i.userDataB].dbgColor;
+        #endif
         instanceExtraData->at(i.userDataB).draw(color);
     }
 }

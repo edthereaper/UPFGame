@@ -245,12 +245,14 @@ void AntTWManager::createDebugTweak()
 
     TwAddVarRW(bar, "culling", TW_TYPE_BOOLCPP, &app.instanceCulling,
         "label=`Instance culling` group='Performance'");
+    TwAddVarRW(bar, "maskICulling", TW_TYPE_BOOLCPP, &app.useMaskForInstanceCulling,
+        "label=`Use mask for culling` group='Performance'");
     TwAddVarRW(bar, "paint", TW_TYPE_BOOLCPP, &app.drawPaint,
         "label=`Paint scenery` group='Performance'");
     TwAddVarRW(bar, "shadows", TW_TYPE_BOOLCPP, &app.enableShadows,
         "label=`Shadows` group='Performance'");
     TwAddSeparator(bar, nullptr, "");
-        
+
     TwAddVarRW(bar, "HighlightTransformables", TW_TYPE_BOOLCPP, &app.highlightTransformables,
         "label=`Highlight transformables` group='Others'");
     TwAddVarRW(bar, "transformClick", TW_TYPE_BOOLCPP, &app.clickToTransform,

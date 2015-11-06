@@ -176,19 +176,15 @@ namespace particles {
 			for (auto& p : vectors->particlesDatas) {
                 p.index = i++;
 
-					XMVECTOR random = t->getPosition();
-
-				if (!emitter.rangeYEnable)
-					random = t->getPosition() + emitter.localposition + (xAxis_v * utils::rand_uniform(emitter.rangeDistance, -emitter.rangeDistance)) +
-					(zAxis_v * utils::rand_uniform(emitter.rangeDistance, -emitter.rangeDistance));
-				else
-					random = t->getPosition() + emitter.localposition + 
-						(xAxis_v * utils::rand_uniform(emitter.rangeDistance, -emitter.rangeDistance)) +
-						(yAxis_v * utils::rand_uniform(emitter.rangeDistance, -emitter.rangeDistance)) +
-						(zAxis_v * utils::rand_uniform(emitter.rangeDistance, -emitter.rangeDistance));
+				XMVECTOR random = (!emitter.rangeYEnable) ?
+                        t->getPosition() + emitter.localposition +
+                        utils::rand_vectorXZ(emitter.rangeDistance, -emitter.rangeDistance)
+                        :
+                        t->getPosition() + emitter.localposition + 
+                        utils::rand_vector3(emitter.rangeDistance, -emitter.rangeDistance);
 
                 p.scale = emitter.scale;
-				p.pos = toXMFloat3(random);
+                XMStoreFloat3(&p.pos, random);
 
 				p.frame = float(utils::rand_uniform(emitter.numberOfFrames, 0));
 				p.setAngle(utils::rand_uniform(M_2_PIf, 0.f));
@@ -394,14 +390,12 @@ void CParticleSystem::sortParticlesZ()
 						vectors->physx_indices_updates.push_back((PxU32)idx);
 						vectors->indicesUpdate.push_back(idx);
 
-						XMVECTOR random = XMVectorZero();
-						if (emitter.rangeYEnable)
-							random = t->getPosition() + emitter.localposition + (xAxis_v * utils::rand_uniform(emitter.rangeDistance / 2, -emitter.rangeDistance / 2)) +
-							(zAxis_v * utils::rand_uniform(emitter.rangeDistance / 2, -emitter.rangeDistance / 2)) +
-							(yAxis_v * utils::rand_uniform(emitter.rangeDistance / 2, -emitter.rangeDistance / 2));
-						else
-							random = t->getPosition() + emitter.localposition + (xAxis_v * utils::rand_uniform(emitter.rangeDistance / 2, -emitter.rangeDistance / 2)) +
-							(zAxis_v * utils::rand_uniform(emitter.rangeDistance / 2, -emitter.rangeDistance / 2));
+						XMVECTOR random = (!emitter.rangeYEnable) ?
+                                t->getPosition() + emitter.localposition +
+                                utils::rand_vectorXZ(emitter.rangeDistance, -emitter.rangeDistance)*.5f
+                                :
+                                t->getPosition() + emitter.localposition + 
+                                utils::rand_vector3(emitter.rangeDistance, -emitter.rangeDistance)*.5f;
 						
 						vectors->physx_positions_updates.push_back(toPxVec3(random));
 
@@ -409,7 +403,7 @@ void CParticleSystem::sortParticlesZ()
 						vectors->physx_velocitys_updates.push_back(toPxVec3(speed));
 
 						if (getRandomRevive()) {
-							lifeTime.setLifeTime(utils::rand_uniform(emitter.lifeTimeRate, emitter.lifeTimeRate / 2));
+							lifeTime.setLifeTime(utils::rand_uniform(emitter.lifeTimeRate, emitter.lifeTimeRate *.5f));
                         } else {
 							lifeTime.setLifeTime(emitter.lifeTimeRate);
                         }
@@ -496,11 +490,11 @@ void CParticleSystem::sortParticlesZ()
 						XMVECTOR current = t->getPosition();
 
 						if (emitter.type == ParticlesType::RANDOM)
-							polutionSimulator(p,velocity, current);
+							polutionSimulator(p,velocity, current, elapsed);
 						else if (emitter.type == ParticlesType::BUTTERFLY)
 							butterflySimulator(p,velocity, current, elapsed);
                         else {
-							current = velocity.currentVelocity * emitter.speed;
+							current = velocity.currentVelocity * emitter.speed * elapsed;
 
 							p.pos.x += meter2Cm(XMVectorGetX(current));
 							p.pos.y += meter2Cm(XMVectorGetY(current));
@@ -516,22 +510,13 @@ void CParticleSystem::sortParticlesZ()
                         lifeTime.reset();
 					    vectors->indicesUpdate.push_back(indexParticle);
 
-					    XMVECTOR random = XMVectorZero();
-					    if (emitter.rangeYEnable) {
-
-					    	random = t->getPosition() + emitter.localposition +
-                                (xAxis_v * utils::rand_uniform(
-                                    emitter.rangeDistance / 2, -emitter.rangeDistance / 2)) +
-					    	    (zAxis_v * utils::rand_uniform(
-                                    emitter.rangeDistance / 2, -emitter.rangeDistance / 2)) +
-					    	    (yAxis_v * utils::rand_uniform(
-                                    emitter.rangeDistance / 2, -emitter.rangeDistance / 2));
-                         } else {
-					    	
-							random = t->getPosition() + emitter.localposition + (xAxis_v * utils::rand_uniform(emitter.rangeDistance / 2, -emitter.rangeDistance / 2)) +
-					    	    (zAxis_v * utils::rand_uniform(emitter.rangeDistance / 2, -emitter.rangeDistance / 2));
-                         }
-					    p.pos = toXMFloat3(random);
+					    XMVECTOR random = (!emitter.rangeYEnable) ?
+                                t->getPosition() + emitter.localposition +
+                                utils::rand_vectorXZ(emitter.rangeDistance, -emitter.rangeDistance)*.5f
+                                :
+                                t->getPosition() + emitter.localposition + 
+                                utils::rand_vector3(emitter.rangeDistance, -emitter.rangeDistance)*.5f;
+					    XMStoreFloat3(&p.pos, random);
 					    velocity.currentVelocity = velocity.startVelocity;
 
 					    lifeTime.setLifeTime(utils::rand_uniform(emitter.lifeTimeRate, emitter.lifeTimeRate / 2));
@@ -562,21 +547,15 @@ void CParticleSystem::sortParticlesZ()
 		}
 	}
 
-	void CParticleSystem::polutionSimulator(ParticleData& p, VelocityData &velocity, XMVECTOR currentPosition){
+	void CParticleSystem::polutionSimulator(ParticleData& p, VelocityData &velocity, XMVECTOR currentPosition, float elapsed){
 	
-		XMVECTOR rand = XMVectorSet(utils::rand_uniform(1.f, -1.f),
-			utils::rand_uniform(1.f, -1.f),
-			utils::rand_uniform(1.f, -1.f),
-			0);
+		XMVECTOR rand = rand_vector3(1, -1);
 		rand = XMVector3Cross(velocity.currentVelocity, rand);
-
 		XMVECTOR drunkVector1 = XMVector3Normalize(rand);
-
 		rand = XMVector3Cross(velocity.currentVelocity, rand);
-
 		XMVECTOR drunkVector2 = XMVector3Normalize(rand);
 
-		currentPosition = velocity.currentVelocity + (drunkVector1 + drunkVector2) * emitter.speed;
+		currentPosition = velocity.currentVelocity + (drunkVector1 + drunkVector2) * emitter.speed * elapsed;
 
 		p.pos.x += meter2Cm(XMVectorGetX(currentPosition));
 		p.pos.y += meter2Cm(XMVectorGetY(currentPosition));
@@ -971,10 +950,7 @@ void CParticleSystem::sortParticlesZ()
 
 			psData.setColorA(
 				emitter.multicolor ?
-				ColorV(utils::rand_uniform(0.50f, 0.0f),
-				utils::rand_uniform(0.50f, 0.0f),
-				utils::rand_uniform(0.50f, 0.0f),
-				1.f) : emitter.colorBeginGlobal);
+				ColorV(utils::rand_vector3(0.50f, 0.0f, 1.f)) : emitter.colorBeginGlobal);
 			psData.setColorB(emitter.colorEndingGlobal);
             psData.colorWeight = 0;
 		}

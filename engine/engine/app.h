@@ -212,6 +212,7 @@ class App {
         bool drawPaintVolume = false;
         bool drawPaint = true;
         bool renderFlowerSimulation = false;
+        bool useMaskForInstanceCulling = true;
 
 		component::Handle playerModelEntity_h;
 

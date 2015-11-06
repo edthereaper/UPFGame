@@ -52,16 +52,4 @@ bool dbg_release(const char* fmt, ...) {
 	return false;
 }
 
-XMFLOAT3 toXMFloat3(XMVECTOR v){
-	return (XMFLOAT3(XMVectorGetX(v),
-		XMVectorGetY(v),
-		XMVectorGetZ(v)));
-}
-XMFLOAT4 toXMFloat4(XMVECTOR v){
-	return (XMFLOAT4(XMVectorGetX(v),
-		XMVectorGetY(v),
-		XMVectorGetZ(v),
-		XMVectorGetW(v)));
-}
-
 }
