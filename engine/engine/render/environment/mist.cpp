@@ -91,6 +91,7 @@ void CMist::draw() const
 
     Entity* e = Handle(this).getOwner();
     CTransform* ct = e->get<CTransform>();
+    auto up = ct->getUp();
 
     Transform t(*ct);
     auto cam = App::get().getCamera();
@@ -100,14 +101,14 @@ void CMist::draw() const
     if (XMVectorGetY(camT->getPosition()) > XMVectorGetY(t.getPosition())-h) {
         t.refPosition() -= yAxis_v*h;
         for(int i=4; i>=0; --i) {
-            t.setPosition(pos - XMVectorSet(0, i * h/4.f, 0, 0));
+            t.setPosition(pos - up * (i * h/4.f));
             setObjectConstants(DirectX::XMMatrixScaling(w,1,l)*t.getWorld());
             activateMist(this, unsigned(i));
             mesh_textured_quad_xz_centered.activateAndRender();
         }
     } else {
         for(int i=0; i<5; ++i) {
-            t.setPosition(pos - XMVectorSet(0, i * h/4.f, 0, 0));
+            t.setPosition(pos - up * (i * h/4.f));
             setObjectConstants(DirectX::XMMatrixScaling(w,1,l)*t.getWorld());
             activateMist(this, unsigned(i));
             mesh_textured_quad_xz_centered.activateAndRender();
