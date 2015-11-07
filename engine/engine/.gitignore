@@ -5,3 +5,10 @@ log.txt
 *.map
 *.exp
 *.lib
+data/textures
+data/meshes
+data/videos
+data/sounds
+data/sounds-studio
+data/local
+data/cookedMesh
