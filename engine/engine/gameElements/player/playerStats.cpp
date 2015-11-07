@@ -15,7 +15,7 @@ using namespace animation;
 #define TIME_MOVING_LEAF			0.5f
 #define DISTANCE_FALL_LEAF			60
 #define SPEED_SIN_MOVING_LEAF		31.4f
-#define FORCE_SIN_MOVING_LEAF		10
+#define FORCE_SIN_MOVING_LEAF		30
 #define SPEED_SPIN_FALLING_LEAF		480
 
 namespace behavior {
@@ -377,7 +377,8 @@ namespace gameElements {
 
 		App &app = App::get();
 
-		std::string strPoints;
+		//This code is used to show points collected
+		/*std::string strPoints;
 		int first = points / 100 % 10;
 		int second =  points / 10 % 10;
 		int third = points % 10;
@@ -399,13 +400,15 @@ namespace gameElements {
 		app.getImgValues(imgPosX, imgPosY, imgWidth, imgHeight, 1163, 18, 25, 25);
 
 		drawText(pixelRect(int(imgPosX), int(imgPosY), int(imgWidth), int(imgHeight)),
-            pixelRect(app.config.xres, app.config.yres), strPoints);
+            pixelRect(app.config.xres, app.config.yres), strPoints);*/
 
-		drawEnergyBar(pixelRect(5, 5, 250, 250), pixelRect(app.config.xres, app.config.yres), float(energy));
-		drawTexture2D(pixelRect(5, 5, 250, 250), pixelRect(app.config.xres, app.config.yres), 
+		//Reduits un 20%
+		app.getImgValuesX(imgPosX, imgPosY, imgWidth, imgHeight, 5, 5, 200, 200);
+		drawEnergyBar(pixelRect(imgPosX, imgPosY, imgWidth, imgHeight), pixelRect(app.config.xres, app.config.yres), float(energy));
+		drawTexture2D(pixelRect(imgPosX, imgPosY, imgWidth, imgHeight), pixelRect(app.config.xres, app.config.yres),
 					Texture::getManager().getByName("static_life"), nullptr, true);
 		if (hudEarthquake>0.0f)
-			drawTextureFadeOut(pixelRect(5, 5, 250, 250), pixelRect(app.config.xres, app.config.yres),
+			drawTextureFadeOut(pixelRect(imgPosX, imgPosY, imgWidth, imgHeight), pixelRect(app.config.xres, app.config.yres),
 				Texture::getManager().getByName("static_life_earthquake"), hudEarthquake);
 
 		if(playerDamaged){
@@ -605,54 +608,59 @@ namespace gameElements {
 				totalTimeMove += elapsed;		
 				angleLeaf = sin(totalTimeMove * SPEED_SIN_MOVING_LEAF) * FORCE_SIN_MOVING_LEAF;
 				if(playAnimation5Move){
-					if(health > 140)		drawLeafHUD(pixelRect(192, 50, 128, 128), 
+					app.getImgValuesX(imgPosX, imgPosY, imgWidth, imgHeight, 154, 40, 102, 102);
+					if (health > 140)		drawLeafHUD(pixelRect(imgPosX, imgPosY, imgWidth, imgHeight),
 													pixelRect(app.config.xres, app.config.yres), 
 													deg2rad(angleLeaf),Texture::getManager().getByName("1g"));
-					else if(health >= 130)	drawLeafHUD(pixelRect(192, 50, 128, 128), 
+					else if (health >= 130)	drawLeafHUD(pixelRect(imgPosX, imgPosY, imgWidth, imgHeight),
 													pixelRect(app.config.xres, app.config.yres), deg2rad(angleLeaf),
 													Texture::getManager().getByName("1y"));
-					else if(health >= 120)	drawLeafHUD(pixelRect(192, 50, 128, 128), 
+					else if (health >= 120)	drawLeafHUD(pixelRect(imgPosX, imgPosY, imgWidth, imgHeight),
 													pixelRect(app.config.xres, app.config.yres), deg2rad(angleLeaf),
 													Texture::getManager().getByName("1r"));
 				}
 				if(playAnimation4Move){
-					if(health > 110)		drawLeafHUD(pixelRect(65, 113, 128, 128), 
+					app.getImgValuesX(imgPosX, imgPosY, imgWidth, imgHeight, 54, 90, 102, 102);
+					if (health > 110)		drawLeafHUD(pixelRect(imgPosX, imgPosY, imgWidth, imgHeight),
 													pixelRect(app.config.xres, app.config.yres), 
 													deg2rad(angleLeaf),Texture::getManager().getByName("2g"));
-					else if(health >= 100)	drawLeafHUD(pixelRect(65, 113, 128, 128), 
+					else if (health >= 100)	drawLeafHUD(pixelRect(imgPosX, imgPosY, imgWidth, imgHeight),
 													pixelRect(app.config.xres, app.config.yres),
 													deg2rad(angleLeaf),Texture::getManager().getByName("2y"));
-					else if(health >= 90)	drawLeafHUD(pixelRect(65, 113, 128, 128), 
+					else if (health >= 90)	drawLeafHUD(pixelRect(imgPosX, imgPosY, imgWidth, imgHeight),
 													pixelRect(app.config.xres, app.config.yres),
 													deg2rad(angleLeaf),Texture::getManager().getByName("2r"));
 				}
 				if(playAnimation3Move){
-					if(health > 80)			drawLeafHUD(pixelRect(198, 106, 128, 128), 
+					app.getImgValuesX(imgPosX, imgPosY, imgWidth, imgHeight, 160, 85, 102, 102);
+					if (health > 80)		drawLeafHUD(pixelRect(imgPosX, imgPosY, imgWidth, imgHeight),
 													pixelRect(app.config.xres, app.config.yres), 
 													deg2rad(angleLeaf),Texture::getManager().getByName("3g"));
-					else if(health >= 70)	drawLeafHUD(pixelRect(198, 106, 128, 128), 
+					else if (health >= 70)	drawLeafHUD(pixelRect(imgPosX, imgPosY, imgWidth, imgHeight),
 													pixelRect(app.config.xres, app.config.yres), 
 													deg2rad(angleLeaf),Texture::getManager().getByName("3y"));
-					else if(health >= 60)	drawLeafHUD(pixelRect(198, 106, 128, 128), 
+					else if (health >= 60)	drawLeafHUD(pixelRect(imgPosX, imgPosY, imgWidth, imgHeight),
 													pixelRect(app.config.xres, app.config.yres), 
 													deg2rad(angleLeaf),Texture::getManager().getByName("3r"));
 				}
 				if(playAnimation2Move){
-					if(health > 50)			drawLeafHUD(pixelRect(68, 68, 128, 128), 
+					app.getImgValuesX(imgPosX, imgPosY, imgWidth, imgHeight, 56, 54, 102, 102);
+					if (health > 50)		drawLeafHUD(pixelRect(imgPosX, imgPosY, imgWidth, imgHeight),
 													pixelRect(app.config.xres, app.config.yres),
 													deg2rad(angleLeaf),Texture::getManager().getByName("4g"));
-					else if(health >= 40)	drawLeafHUD(pixelRect(68, 68, 128, 128), 
+					else if (health >= 40)	drawLeafHUD(pixelRect(imgPosX, imgPosY, imgWidth, imgHeight),
 													pixelRect(app.config.xres, app.config.yres),
 													deg2rad(angleLeaf),Texture::getManager().getByName("4y"));
-					else if(health >= 30)	drawLeafHUD(pixelRect(68, 68, 128, 128), 
+					else if (health >= 30)	drawLeafHUD(pixelRect(imgPosX, imgPosY, imgWidth, imgHeight),
 													pixelRect(app.config.xres, app.config.yres),
 													deg2rad(angleLeaf),Texture::getManager().getByName("4r"));
 				}
 				if(playAnimation1Move){
-					if(health > 20)			drawLeafHUD(pixelRect(130, 161, 128, 128), 
+					app.getImgValuesX(imgPosX, imgPosY, imgWidth, imgHeight, 104, 130, 102, 102);
+					if (health > 20)		drawLeafHUD(pixelRect(imgPosX, imgPosY, imgWidth, imgHeight),
 													pixelRect(app.config.xres, app.config.yres),
 													deg2rad(angleLeaf),Texture::getManager().getByName("5g"));
-					else if(health >= 10)	drawLeafHUD(pixelRect(130, 161, 128, 128), 
+					else if (health >= 10)	drawLeafHUD(pixelRect(imgPosX, imgPosY, imgWidth, imgHeight),
 													pixelRect(app.config.xres, app.config.yres),
 													deg2rad(angleLeaf),Texture::getManager().getByName("5y"));
 				}
@@ -672,26 +680,31 @@ namespace gameElements {
 				angleLeaf = totalTimeFall * SPEED_SPIN_FALLING_LEAF;
 				float tim = totalTimeFall / TIME_FALLING_LEAF;
 				fallLeafHeight = int(DISTANCE_FALL_LEAF * tim);
-				int LeafHW = (int)(128 * (1 - tim));
+				int LeafHW = (int)(102 * (1 - tim));
                 pixelRect screen(app.config.xres, app.config.yres);
 				if(playAnimation5Fall) {
-                    drawLeafHUD(pixelRect(192, 50 + fallLeafHeight, LeafHW, LeafHW), screen,
+					app.getImgValuesX(imgPosX, imgPosY, imgWidth, imgHeight, 154, 40 + fallLeafHeight, LeafHW, LeafHW);
+					drawLeafHUD(pixelRect(imgPosX, imgPosY, imgWidth, imgHeight), screen,
                         deg2rad(angleLeaf), Texture::getManager().getByName("1r"));
                 }
 				if(playAnimation4Fall) {
-                    drawLeafHUD(pixelRect(65, 113 + fallLeafHeight, LeafHW, LeafHW), screen,
+					app.getImgValuesX(imgPosX, imgPosY, imgWidth, imgHeight, 54, 90 + fallLeafHeight, LeafHW, LeafHW);
+					drawLeafHUD(pixelRect(imgPosX, imgPosY, imgWidth, imgHeight), screen,
                         deg2rad(angleLeaf),Texture::getManager().getByName("2r"));
                 }
 				if(playAnimation3Fall) {
-                    drawLeafHUD(pixelRect(198, 106 + fallLeafHeight, LeafHW, LeafHW), screen,
+					app.getImgValuesX(imgPosX, imgPosY, imgWidth, imgHeight, 160, 85 + fallLeafHeight, LeafHW, LeafHW);
+					drawLeafHUD(pixelRect(imgPosX, imgPosY, imgWidth, imgHeight), screen,
                         deg2rad(angleLeaf),Texture::getManager().getByName("3r"));
                 }
 				if(playAnimation2Fall) {
-                    drawLeafHUD(pixelRect(68, 68 + fallLeafHeight, LeafHW, LeafHW), screen,
+					app.getImgValuesX(imgPosX, imgPosY, imgWidth, imgHeight, 56, 54 + fallLeafHeight, LeafHW, LeafHW);
+					drawLeafHUD(pixelRect(imgPosX, imgPosY, imgWidth, imgHeight), screen,
                         deg2rad(angleLeaf),Texture::getManager().getByName("4r"));
                 }
 				if(playAnimation1Fall) {
-                    drawLeafHUD(pixelRect(130, 161 + fallLeafHeight, LeafHW, LeafHW), screen,
+					app.getImgValuesX(imgPosX, imgPosY, imgWidth, imgHeight, 104, 130 + fallLeafHeight, LeafHW, LeafHW);
+					drawLeafHUD(pixelRect(imgPosX, imgPosY, imgWidth, imgHeight), screen,
                         deg2rad(angleLeaf),Texture::getManager().getByName("5r"));
                 }
 			}
@@ -708,75 +721,91 @@ namespace gameElements {
 				totalTimeHeal += elapsed;		
 				angleLeaf = sin(totalTimeHeal * SPEED_SIN_MOVING_LEAF) * FORCE_SIN_MOVING_LEAF;
 				float tim = totalTimeHeal / TIME_HEALING_LEAF;
-				int LeafHW = (int)(128 * tim);
-				if(playAnimation5Heal)		drawLeafHUD(pixelRect(192, 50, LeafHW, LeafHW), 
-													pixelRect(app.config.xres, app.config.yres),
-													deg2rad(angleLeaf),Texture::getManager().getByName("1r"));
-				if(playAnimation4Heal)		drawLeafHUD(pixelRect(65, 113, LeafHW, LeafHW), 
-													pixelRect(app.config.xres, app.config.yres),
-													deg2rad(angleLeaf),Texture::getManager().getByName("2r"));
-				if(playAnimation3Heal)		drawLeafHUD(pixelRect(198, 106, LeafHW, LeafHW), 
-													pixelRect(app.config.xres, app.config.yres),
-													deg2rad(angleLeaf),Texture::getManager().getByName("3r"));
-				if(playAnimation2Heal)		drawLeafHUD(pixelRect(68, 68, LeafHW, LeafHW), 
-													pixelRect(app.config.xres, app.config.yres), 
-													deg2rad(angleLeaf),Texture::getManager().getByName("4r"));
+				int LeafHW = (int)(102 * tim);
+				if (playAnimation5Heal){
+					app.getImgValuesX(imgPosX, imgPosY, imgWidth, imgHeight, 154, 40, LeafHW, LeafHW);
+					drawLeafHUD(pixelRect(imgPosX, imgPosY, imgWidth, imgHeight),
+						pixelRect(app.config.xres, app.config.yres),
+						deg2rad(angleLeaf), Texture::getManager().getByName("1r"));
+				}
+				if (playAnimation4Heal){
+					app.getImgValuesX(imgPosX, imgPosY, imgWidth, imgHeight, 54, 90, LeafHW, LeafHW);
+					drawLeafHUD(pixelRect(imgPosX, imgPosY, imgWidth, imgHeight),
+						pixelRect(app.config.xres, app.config.yres),
+						deg2rad(angleLeaf), Texture::getManager().getByName("2r"));
+				}
+				if (playAnimation3Heal){					
+					app.getImgValuesX(imgPosX, imgPosY, imgWidth, imgHeight, 160, 85, LeafHW, LeafHW);
+					drawLeafHUD(pixelRect(imgPosX, imgPosY, imgWidth, imgHeight),
+						pixelRect(app.config.xres, app.config.yres),
+						deg2rad(angleLeaf), Texture::getManager().getByName("3r"));
+				}
+				if (playAnimation2Heal){
+					app.getImgValuesX(imgPosX, imgPosY, imgWidth, imgHeight, 56, 54, LeafHW, LeafHW);
+					drawLeafHUD(pixelRect(imgPosX, imgPosY, imgWidth, imgHeight),
+						pixelRect(app.config.xres, app.config.yres),
+						deg2rad(angleLeaf), Texture::getManager().getByName("4r"));
+				}
 			}
 		}
 		if(!playerDamaged && !playerHealed){
 			if (!playAnimation5Fall && !playAnimation5Move && !playAnimation5Heal){
-				//dbg("%f %f %f %f\n", imgPosX1, imgPosY1, imgLeafW, imgLeafH);
-				if(health > 140)					drawLeafHUD(pixelRect(192, 50, 128, 128), 
+				app.getImgValuesX(imgPosX, imgPosY, imgWidth, imgHeight, 154, 40, 102, 102);
+				if (health > 140)					drawLeafHUD(pixelRect(imgPosX, imgPosY, imgWidth, imgHeight),
 														pixelRect(app.config.xres, app.config.yres), 0, 
 														Texture::getManager().getByName("1g"));
-				if(health > 130 && health <= 140)	drawLeafHUD(pixelRect(192, 50, 128, 128), 
+				if (health > 130 && health <= 140)	drawLeafHUD(pixelRect(imgPosX, imgPosY, imgWidth, imgHeight),
 														pixelRect(app.config.xres, app.config.yres), 0,
 														Texture::getManager().getByName("1y"));
-				if(health > 120 && health <= 130)	drawLeafHUD(pixelRect(192, 50, 128, 128), 
+				if (health > 120 && health <= 130)	drawLeafHUD(pixelRect(imgPosX, imgPosY, imgWidth, imgHeight),
 														pixelRect(app.config.xres, app.config.yres), 0, 
 														Texture::getManager().getByName("1r"));
 			}
 			if (!playAnimation4Fall && !playAnimation4Move && !playAnimation4Heal){
-				if(health > 110)					drawLeafHUD(pixelRect(65, 113, 128, 128), 
+				app.getImgValuesX(imgPosX, imgPosY, imgWidth, imgHeight, 54, 90, 102, 102);
+				if (health > 110)					drawLeafHUD(pixelRect(imgPosX, imgPosY, imgWidth, imgHeight),
 														pixelRect(app.config.xres, app.config.yres), 0, 
 														Texture::getManager().getByName("2g"));
-				if(health > 100 && health <= 110)	drawLeafHUD(pixelRect(65, 113, 128, 128), 
+				if (health > 100 && health <= 110)	drawLeafHUD(pixelRect(imgPosX, imgPosY, imgWidth, imgHeight),
 														pixelRect(app.config.xres, app.config.yres), 0,
 														Texture::getManager().getByName("2y"));
-				if(health > 90 && health <= 100)	drawLeafHUD(pixelRect(65, 113, 128, 128), 
+				if (health > 90 && health <= 100)	drawLeafHUD(pixelRect(imgPosX, imgPosY, imgWidth, imgHeight),
 														pixelRect(app.config.xres, app.config.yres), 0,
 														Texture::getManager().getByName("2r"));
 			}
 			if (!playAnimation3Fall && !playAnimation3Move && !playAnimation3Heal){
-				if(health > 80)						drawLeafHUD(pixelRect(198, 106, 128, 128), 
+				app.getImgValuesX(imgPosX, imgPosY, imgWidth, imgHeight, 160, 85, 102, 102);
+				if (health > 80)					drawLeafHUD(pixelRect(imgPosX, imgPosY, imgWidth, imgHeight),
 														pixelRect(app.config.xres, app.config.yres), 0,
 														Texture::getManager().getByName("3g"));
-				if(health > 70 && health <= 80)		drawLeafHUD(pixelRect(198, 106, 128, 128), 
+				if (health > 70 && health <= 80)	drawLeafHUD(pixelRect(imgPosX, imgPosY, imgWidth, imgHeight),
 														pixelRect(app.config.xres, app.config.yres), 0,
 														Texture::getManager().getByName("3y"));
-				if(health > 60 && health <= 70)		drawLeafHUD(pixelRect(198, 106, 128, 128), 
+				if (health > 60 && health <= 70)	drawLeafHUD(pixelRect(imgPosX, imgPosY, imgWidth, imgHeight),
 														pixelRect(app.config.xres, app.config.yres), 0,
 														Texture::getManager().getByName("3r"));
 			}
 			if (!playAnimation2Fall && !playAnimation2Move && !playAnimation2Heal){
-				if(health > 50)						drawLeafHUD(pixelRect(68, 68, 128, 128), 
+				app.getImgValuesX(imgPosX, imgPosY, imgWidth, imgHeight, 56, 54, 102, 102);
+				if (health > 50)					drawLeafHUD(pixelRect(imgPosX, imgPosY, imgWidth, imgHeight),
 														pixelRect(app.config.xres, app.config.yres), 0,
 														Texture::getManager().getByName("4g"));
-				if(health > 40 && health <= 50)		drawLeafHUD(pixelRect(68, 68, 128, 128), 
+				if (health > 40 && health <= 50)	drawLeafHUD(pixelRect(imgPosX, imgPosY, imgWidth, imgHeight),
 														pixelRect(app.config.xres, app.config.yres), 0,
 														Texture::getManager().getByName("4y"));
-				if(health > 30 && health <= 40)		drawLeafHUD(pixelRect(68, 68, 128, 128), 
+				if (health > 30 && health <= 40)	drawLeafHUD(pixelRect(imgPosX, imgPosY, imgWidth, imgHeight),
 														pixelRect(app.config.xres, app.config.yres), 0,
 														Texture::getManager().getByName("4r"));
 			}
 			if (!playAnimation1Fall && !playAnimation1Move && !playAnimation1Heal){
-				if(health > 20)						drawLeafHUD(pixelRect(130, 161, 128, 128), 
+				app.getImgValuesX(imgPosX, imgPosY, imgWidth, imgHeight, 104, 130, 102, 102);
+				if (health > 20)					drawLeafHUD(pixelRect(imgPosX, imgPosY, imgWidth, imgHeight),
 														pixelRect(app.config.xres, app.config.yres), 0,
 														Texture::getManager().getByName("5g"));
-				if(health > 10 && health <= 20)		drawLeafHUD(pixelRect(130, 161, 128, 128), 
+				if (health > 10 && health <= 20)	drawLeafHUD(pixelRect(imgPosX, imgPosY, imgWidth, imgHeight),
 														pixelRect(app.config.xres, app.config.yres), 0,
 														Texture::getManager().getByName("5y"));
-				if(health > 0 && health <= 10)		drawLeafHUD(pixelRect(130, 161, 128, 128), 
+				if (health > 0 && health <= 10)		drawLeafHUD(pixelRect(imgPosX, imgPosY, imgWidth, imgHeight),
 														pixelRect(app.config.xres, app.config.yres), 0,
 														Texture::getManager().getByName("5r"));
 			}

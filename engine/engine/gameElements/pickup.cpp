@@ -266,7 +266,7 @@ void CThrowsPickups::activate()
 	float velX, velY, velZ;
 	for (unsigned i = 0; i != nPickups; i++){
 		Entity* entity;
-		unsigned pickupType = utils::die(3);
+		unsigned pickupType = utils::die(2);
         switch (pickupType) {
             default:
             case 0:
@@ -275,9 +275,6 @@ void CThrowsPickups::activate()
             case 1:
                 entity = PrefabManager::get().prefabricate("pickup/energy-dynamic");
                 break;
-			case 2:
-				entity = PrefabManager::get().prefabricate("pickup/coin-dynamic");
-				break;
         }
 		EntityListManager::get(CPickup::TAG).add(entity);
         // Set random speed

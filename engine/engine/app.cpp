@@ -492,6 +492,14 @@ void App::getImgValues(float& posX, float& posY, float& imgW, float& imgH, float
 	imgH = ((float)(config.yres) / 720) * originH;
 }
 
+void App::getImgValuesX(float& posX, float& posY, float& imgW, float& imgH, float originX, float originY, float originW, float originH){
+	float value = (float)(config.xres) / 1280;
+	posX = value * originX;
+	posY = value * originY;
+	imgW = value * originW;
+	imgH = value * originH;
+}
+
 void App::xboxControllerKeys()
 {
 	if (xboxController.State._buttons[GamePadXBOXController::GamePad_Button_A].isHit())						App::get().getPad().onKey(XINPUT_GAMEPAD_A, true);
