@@ -160,11 +160,13 @@ ret_e EnemyBtExecutor::transform(float elapsed)
 			filter_t(filter_t::NONE, ~(filter_t::STATIC), filter_t::STATIC))){
 			meTransform->setPosition(XMVectorSet(XMVectorGetX(meTransform->getPosition()), XMVectorGetY(meTransform->getPosition()) - hit.block.distance + 1.0f, XMVectorGetZ(meTransform->getPosition()), XMVectorGetW(meTransform->getPosition())));
 		}
+        meTransform->applyRotation(
+            XMQuaternionRotationAxis(meTransform->getUp(), rand_uniform(M_2_PIf)));
+
 		me->get<CCharacterController>().destroy();
         static const char* transformMesh[] {
             "enemies_flor"
         };
-
 		CMesh::load(transformMesh[utils::die(ARRAYSIZE(transformMesh))], Handle(me));
 		CMesh* cmesh = me->get<CMesh>();
 		CTint* self = me->get<CTint>();
