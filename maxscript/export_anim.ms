@@ -105,4 +105,4 @@ fn TEST_VINE_AnimExport object1 = (
 		OK
 )
 
-TEST_VINE_AnimExport($)
+--TEST_VINE_AnimExport($)

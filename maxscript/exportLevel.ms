@@ -28,7 +28,7 @@ struct VINE_exportLevel (
 	),
 	
 	fn isSpecialCollisionable col = (
-		if col.parent == undefined then return true
+		if col.parent == undefined then return false
 		else (
 			for obj in col.parent where classof obj == VINE_Piece do (
 				return isTransformablePiece obj or isSpecialPiece obj
