@@ -311,6 +311,7 @@ class App {
 		bool renderVideo();
 		
 		void getImgValues(float& posX, float& posY, float& imgW, float& imgH, float originX, float originY, float originW, float originH);
+		void getImgValuesX(float& posX, float& posY, float& imgW, float& imgH, float originX, float originY, float originW, float originH);
 	    void loadConfig();
 	    bool create();
 	    bool doFrame(); /* returns false on exit */

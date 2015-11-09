@@ -1475,6 +1475,7 @@ void drawEnergyBar(pixelRect src, pixelRect dst, float energy)
 	auto& ctesObject = ctes_object.get();
 	ctesObject.World = XMMatrixScaling(float(src.w), float(src.h), 1.0f) *
         XMMatrixTranslation(float(src.x), float(src.y), 0.f);
+	if (energy >= 100.0f)	energy = 99.0f;
 	ctesObject.Tint = XMVectorSet(0, 0, 0, energy/100);
 	ctes_object.uploadToGPU();
 	mesh_textured_quad_xy.activateAndRender();

@@ -28,11 +28,11 @@ namespace gameElements {
 		float imgPosX		= 0;
 		float imgPosY		= 0;				 
 			
-		if(hintIn)			animX = 800 * (timeIn - (timer.count(elapsed) / timeIn));
-		if(hintOut)			animX = 800 * (timer.count(elapsed)/timeOut);
+		if(hintIn)			animX = 640 * (timeIn - (timer.count(elapsed) / timeIn));
+		if(hintOut)			animX = 640 * (timer.count(elapsed)/timeOut);
 
-		float posBocadilloX = 480 + animX;
-		app.getImgValues(imgPosX, imgPosY, imgWidth, imgHeight, posBocadilloX, 508, 800, 212);
+		float posBocadilloX = 640 + animX;
+		app.getImgValues(imgPosX, imgPosY, imgWidth, imgHeight, posBocadilloX, 550, 640, 170);
 		drawTexture2D(
             pixelRect(int(imgPosX), int(imgPosY), int(imgWidth), int(imgHeight)),
             pixelRect(app.config.xres, app.config.yres),
@@ -56,18 +56,18 @@ namespace gameElements {
 			}
 			mS.push_back(auxS);		
 			for (int i = 0; i != mS.size(); i++){
-				float posSentenceX = 880 - ((actualSize/2) * mS[i].size());
+				float posSentenceX = 960 - ((actualSize/2) * mS[i].size());
 				posSentenceX += animX;
 				float posSentenceY;
-				if (mS.size() == 1)	posSentenceY = 600;
+				if (mS.size() == 1)	posSentenceY = 625;
 				if(mS.size() == 2){
-					if (i == 0)		posSentenceY = 570;
-					if (i == 1)		posSentenceY = 600;
+					if (i == 0)		posSentenceY = 595;
+					if (i == 1)		posSentenceY = 625;
 				}
 				if(mS.size() == 3){
-					if(i == 0)		posSentenceY = 570;
-					if(i == 1)		posSentenceY = 600;
-					if(i == 2)		posSentenceY = 630;
+					if(i == 0)		posSentenceY = 595;
+					if(i == 1)		posSentenceY = 625;
+					if(i == 2)		posSentenceY = 655;
 				}
 				app.getImgValues(imgPosX, imgPosY, imgWidth, imgHeight, posSentenceX, posSentenceY, actualSize, actualSize);
 				drawText(
