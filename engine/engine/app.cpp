@@ -1445,6 +1445,8 @@ bool App::updatePaused(float elapsed)
     skelManager->forall(&CSkeleton::testAndAddBonesToBuffer);
 	getManager<CAnimationSounds>()->update(0);
     
+	getManager<CInstancedMesh>()->update(elapsed);
+
     updateGlobalConstants(elapsed);
 	return true;
 }
@@ -1669,8 +1671,9 @@ bool App::update(float elapsed)
     FlowerPathManager::updateFlowers(elapsed);
 
     component::MessageManager::dispatchPosts();
-    updateGlobalConstants(elapsed);
     Material::updateAnimatedMaterials(elapsed);
+	getManager<CInstancedMesh>()->update(elapsed);
+    updateGlobalConstants(elapsed);
     return true;
 }
 

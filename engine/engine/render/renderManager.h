@@ -74,6 +74,7 @@ class RenderManager {
                 component::Handle transform;
                 specialKey_e specialClass;
                 component::Handle special;
+                bool nonStatic = false;
 
             public:
                 shadowKey_t(component::Handle entity, component::Handle mesh,
@@ -109,6 +110,19 @@ class RenderManager {
             const Technique*& technique_prev, const Mesh*& mesh_prev,
             const Material*& material_prev,
             bool& bones, bool& first, std::vector<key_t>* alphaKeys = nullptr);
+
+        static void renderShadowKeys(
+            component::Handle light_h,
+            Culling::cullDirection_e cullingType,
+            const Culling::CullerDelegate& culler,
+            shadowKeyContainer_t keys,
+            Technique* normalTech,
+            Technique* skinnedTech,
+            Technique* instancedTech);
+
+        static bool testShadowKeys(
+            const Culling::CullerDelegate& culler,
+            shadowKeyContainer_t& returnKeys);
     public:
         static void init();
         static void renderAll(component::Handle cameraE_h,

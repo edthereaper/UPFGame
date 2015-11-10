@@ -22,6 +22,7 @@ class CInstancedMesh {
         struct  instanceData_t : public CullingAABB {
             bool used = false;
             unsigned instanceIndex = ~0;
+            unsigned cleanTimestamp = 0;
             using CullingAABB::dirty;
             Culling::mask_t cullerMask;
         };
@@ -29,6 +30,7 @@ class CInstancedMesh {
         CullingAABB aabb;
         bool doRecalculateAABB = false;
         bool usesGlobalAABB = true;
+        unsigned cleanTimestamp=0;
         void recalculateAABB();
 
         class Culler {
@@ -39,6 +41,7 @@ class CInstancedMesh {
                 bool ignoreWorldChange;
                 Culling::mask_t cullerMask;
                 bool dirty;
+                unsigned cleanTimestamp;
 
             public:
                 Culler(CInstancedMesh*const& self, const Culling::CullerDelegate& culling,
@@ -47,35 +50,46 @@ class CInstancedMesh {
                     baseAABB(baseAABB),
                     ignoreWorldChange(ignoreWorldChange),
                     cullerMask(culling.getMask()),
-                    dirty(culling.hasChanged()) {}
+                    dirty(culling.hasChanged()),
+                    cleanTimestamp(self->cleanTimestamp) {}
 
                 bool operator()(instance_t& instance) const{
                     auto& aabb = (*self->instanceExtraData)[instance.userDataB];
                     bool aabbDirty = aabb.dirty;
                     aabb.update(baseAABB, instance.world, ignoreWorldChange);
-#ifdef _DEBUG
-                    if (App::get().useMaskForInstanceCulling) {
-#endif
-                        if (dirty || aabbDirty) {
-                            bool b = culling.cull(aabb);
-                            if (b) {
-                                aabb.cullerMask |= cullerMask;
-                                return true;
-                            } else {
-                                aabb.cullerMask &= ~cullerMask;
-                                return false;
-                            }
+                    if (dirty || aabbDirty || aabb.cleanTimestamp == cleanTimestamp) {
+                        aabb.cleanTimestamp = cleanTimestamp;
+                        bool b = culling.cull(aabb);
+                        if (b) {
+                            aabb.cullerMask |= cullerMask;
+                            return true;
                         } else {
-                            return (aabb.cullerMask & cullerMask) != 0;
+                            aabb.cullerMask &= ~cullerMask;
+                            return false;
                         }
-#ifdef _DEBUG
                     } else {
-                        return culling.cull(aabb);
+                        return (aabb.cullerMask & cullerMask) != 0;
                     }
-#endif
                 }
         };
         friend Culler;
+
+        class BitMaskChecker {
+            private:
+                CInstancedMesh* self;
+                Culling::mask_t cullerMask;
+
+            public:
+                BitMaskChecker(CInstancedMesh*const& self,
+                    const Culling::CullerDelegate& culling) :
+                    self(self), cullerMask(culling.getMask()) {}
+
+                bool operator()(instance_t& instance) const{
+                    auto& aabb = (*self->instanceExtraData)[instance.userDataB];
+                    return (aabb.cullerMask & cullerMask) != 0;
+                }
+        };
+        friend BitMaskChecker;
 
         class Swapper {
             private:
@@ -100,7 +114,9 @@ class CInstancedMesh {
         size_t nCulled = 0;
         size_t maxInstances = 0;
         bool created = false;
-        bool dirty = false;
+        bool dirty = true;
+        bool worldDirty = true;
+        bool updateCulled = false;
         bool culled = false;
         bool instancesWillMove = true;
         bool changed = true;
@@ -114,6 +130,7 @@ class CInstancedMesh {
     private:
         bool createInstanceData();
         uint32_t getFreshDataIndex(unsigned index);
+        instance_t& getInstance_p(unsigned i);
 
     public:
         ~CInstancedMesh(){SAFE_DELETE(instanceData); SAFE_DELETE(dataBuffer);}
@@ -164,25 +181,39 @@ class CInstancedMesh {
         }
 
         inline void init(){}
-        inline void update(float){}
+        inline void update(float){++cleanTimestamp;}
         void loadFromProperties(std::string elem, utils::MKeyValue& atts);
         void load(std::string name);
         
-        void updateInstanceData();
+        void updateInstanceData(size_t count);
 
         inline Mesh* getData() {
-            if (dirty || culled) {updateInstanceData();}
+            if (culled && (dirty || updateCulled)) {
+                updateInstanceData(nCulled);
+            } else if (dirty) {
+                updateInstanceData(nInstances);
+            }
             return instanceData;
         }
         inline Mesh* getDirtyData() const {return instanceData;}
         inline size_t getNInstances() const {return nInstances;}
         inline size_t getNCulled() const {return nCulled;}
-
-        //returns nCulled
-        size_t cull(const Culling::CullerDelegate&);
+        
+        //partitions according to culler and returns nCulled
+        size_t cull(const Culling::CullerDelegate& culler);
+        //partitions according to bit masks
+        size_t partitionOnBitMask(const Culling::CullerDelegate&);
+        //tests the culling withut doing a partition and returns nCulled
+        size_t testCull(const Culling::CullerDelegate&);
+        //tests culling against the AABB that encapsulates all instances
+        bool cullHighLevel(const Culling::CullerDelegate& cullerDelegate);
 
         inline bool hasChanged() const {
             return changed || (dirty && !instancesWillMove);
+        }
+        
+        inline bool isWorldDirty() const {
+            return worldDirty;
         }
 
         inline bool getInstancesWillMove() const { return instancesWillMove;}

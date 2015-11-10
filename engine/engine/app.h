@@ -198,7 +198,12 @@ class App {
         bool renderInstanceMeshAABBs = INIT_RENDERINSTANCEMESHAABB;
         bool renderLightAABBs = INIT_RENDERLIGHTAABB;
         bool drawSkyBox = INIT_DRAWSKYBOX;
-        bool instanceCulling = true;
+        enum {
+            IC_NO,
+            IC_BEFORE_W_PARTITION,
+            IC_BEFORE_W_O_PARTITION,
+            IC_AFTER
+        } instanceCulling = IC_BEFORE_W_PARTITION;
         bool useCullF = false;
         bool godMode = INIT_GODMODE;
         bool animOff = false;
@@ -212,7 +217,6 @@ class App {
         bool drawPaintVolume = false;
         bool drawPaint = true;
         bool renderFlowerSimulation = false;
-        bool useMaskForInstanceCulling = true;
 
 		component::Handle playerModelEntity_h;
 

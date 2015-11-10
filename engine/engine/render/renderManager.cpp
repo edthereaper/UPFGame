@@ -172,9 +172,7 @@ void RenderManager::renderKey(const key_t& k,
                 CInstancedMesh* instances = k.special;
                 assert(instances != nullptr);
 #ifdef _DEBUG
-                //Enable performance test (by the way, this proves culling is a good idea,
-                // despite being a costly operation)
-                if (!App::get().instanceCulling) {
+                if (App::get().instanceCulling == App::IC_NO) {
                     mesh->renderInstanced(k.group0, k.groupf,
                         *instances->getData(), instances->getNInstances());
                 } else
@@ -353,8 +351,11 @@ void RenderManager::addKeys(Handle entity_h)
     }
 }
 
-void RenderManager::renderShadows(component::Handle light_h,
+void RenderManager::renderShadowKeys(
+    component::Handle light_h,
     Culling::cullDirection_e cullingType,
+    const Culling::CullerDelegate& culler,
+    shadowKeyContainer_t keys,
     Technique* normalTech,
     Technique* skinnedTech,
     Technique* instancedTech)
@@ -365,31 +366,114 @@ void RenderManager::renderShadows(component::Handle light_h,
         Technique::getManager().getByName("gen_shadows_skinned");
     static Technique*const defInstancedTech =
         Technique::getManager().getByName("gen_shadows_instanced");
-
-    if (shadowsSortRequired) {
-        std::sort(shadowKeys.begin(), shadowKeys.end(), compTechMesh);
-        shadowsSortRequired = false;
-    }
+    if (normalTech == nullptr) {normalTech = defNormalTech;}
+    if (skinnedTech == nullptr) {skinnedTech = defSkinnedTech;}
+    if (instancedTech == nullptr) {instancedTech = defInstancedTech;}
+    
     Entity* light_e(light_h);
     CCamera* light = light_e->get<CCamera>();
     
+    //Setup camera and culler
     if (cullingType != Culling::NORMAL) {
         CCubeShadow* shadow = light_e->get<CCubeShadow>();
         auto data(shadow->getCachedCamData(cullingType));
         light->setup(data.view, data.viewProjection, data.front, data.right, data.up);
     }
-    Culling::CullerDelegate culler(light_h, cullingType);
-
+    
     activateLight(*light);
     activateCamera(*light);
-
-    if (normalTech == nullptr) {normalTech = defNormalTech;}
-    if (skinnedTech == nullptr) {skinnedTech = defSkinnedTech;}
-    if (instancedTech == nullptr) {instancedTech = defInstancedTech;}
 
     Technique* currentTech = normalTech;
     currentTech->activate();
     bool skinned = false;
+    for (auto k : keys) {
+        CTransform* t = k.transform;
+        assert(t != nullptr);
+        CMesh* mesh(k.mesh);
+        switch (k.specialClass) {
+            case SKINNED: {
+                    const CSkeleton* skeleton = k.special;
+                    if (currentTech != skinnedTech) {
+                        skinnedTech->activate();
+                        currentTech = skinnedTech;
+                    }
+                    assert(skeleton != nullptr);
+                    setObjectConstants(t->getWorld(),0,0,nullptr,skeleton->getBone0());
+                    const auto m(mesh->getMesh());
+                    if (m != Mesh::current_active_mesh) {m->activate();}
+                    m->render();
+                } break;
+            default:
+            case NORMAL: {
+                    Entity* e(k.entity);
+                    if (currentTech != normalTech) {
+                        normalTech->activate();
+                        currentTech = normalTech;
+                    }
+                    setObjectConstants(t->getWorld());
+                    const auto m(mesh->getMesh());
+                    if (m != Mesh::current_active_mesh) {m->activate();}
+                    m->render();
+                } break;
+            case INSTANCED: {
+                    setObjectConstants(t->getWorld());
+                    CInstancedMesh* instances = k.special;
+                    const auto m(mesh->getMesh());
+                    assert(instances != nullptr);
+#ifdef _DEBUG
+                    switch (App::get().instanceCulling) {
+                        case App::IC_BEFORE_W_O_PARTITION:
+                            instances->partitionOnBitMask(culler);
+                            // fall thru
+                        case App::IC_BEFORE_W_PARTITION:
+#endif
+                            m->renderInstanced(*instances->getData(), instances->getNCulled());
+#ifdef _DEBUG
+                            break;
+                        case App::IC_AFTER : {
+                                size_t nCulled = instances->cull(culler);
+                                if (nCulled > 0) {
+                                    m->renderInstanced(*instances->getData(), nCulled);
+                                }
+                            } break;
+                        default:
+                        case App::IC_NO :
+                            m->renderInstanced(*instances->getData(), instances->getNInstances());
+                            break;
+                    }
+#endif
+                } break;
+        }
+        
+    }
+
+}
+
+void RenderManager::renderShadows(component::Handle light_h,
+    Culling::cullDirection_e cullingType,
+    Technique* normalTech,
+    Technique* skinnedTech,
+    Technique* instancedTech)
+{
+    if (shadowsSortRequired) {
+        std::sort(shadowKeys.begin(), shadowKeys.end(), compTechMesh);
+        shadowsSortRequired = false;
+    }
+    Culling::CullerDelegate culler(light_h, cullingType);
+    shadowKeyContainer_t keys;
+    bool changed = testShadowKeys(culler, keys);
+    if (changed && !keys.empty()) {
+        renderShadowKeys(light_h, cullingType, culler, keys,
+            normalTech, skinnedTech, instancedTech);
+    }
+}
+
+bool RenderManager::testShadowKeys(
+    const Culling::CullerDelegate& culler,
+    shadowKeyContainer_t& renderKeys)
+{
+    bool changed = culler.hasChanged();
+
     for (auto k : shadowKeys) {
         CTransform* t = k.transform;
         assert(t != nullptr);
@@ -398,17 +482,10 @@ void RenderManager::renderShadows(component::Handle light_h,
             switch (k.specialClass) {
                 case SKINNED: {
                         const CSkeleton* skeleton = k.special;
-                        if (skeleton->disabled()) {continue;}
-                        if ((skeleton->getCullingMask() & culler.getMask())!=0) {
-                            if (currentTech != skinnedTech) {
-                                skinnedTech->activate();
-                                currentTech = skinnedTech;
-                            }
-                            assert(skeleton != nullptr);
-                            setObjectConstants(t->getWorld(),0,0,nullptr,skeleton->getBone0());
-                            const auto m(mesh->getMesh());
-                            if (m != Mesh::current_active_mesh) {m->activate();}
-                            m->render();
+                        if (!skeleton->disabled() &&
+                            (skeleton->getCullingMask() & culler.getMask())!=0) {
+                            changed |= k.nonStatic;
+                            renderKeys.push_back(k);
                         }
                     }
                     break;
@@ -417,46 +494,45 @@ void RenderManager::renderShadows(component::Handle light_h,
                         Entity* e(k.entity);
                         CCullingAABB* aabb = e->get<CCullingAABB>();
                         if (aabb==nullptr || culler.cull(*aabb)) {
-                            if (currentTech != normalTech) {
-                                normalTech->activate();
-                                currentTech = normalTech;
-                            }
-                            setObjectConstants(t->getWorld());
-                            const auto m(mesh->getMesh());
-                            if (m != Mesh::current_active_mesh) {m->activate();}
-                            m->render();
+                            changed |= k.nonStatic;
+                            renderKeys.push_back(k);
                         }
                     }
                     break;
                 case INSTANCED: {
-                        setObjectConstants(t->getWorld());
                         CInstancedMesh* instances = k.special;
-                        size_t nInstances(instances->getNInstances());
-                        if (nInstances > 0) {
-                            if (currentTech != instancedTech) {
-                                instancedTech->activate();
-                                currentTech = instancedTech;
-                            } 
-                            const auto m(mesh->getMesh());
-                            if (m != Mesh::current_active_mesh) {m->activate();}
-                            assert(instances != nullptr);
-                            
+                        assert(instances != nullptr);
+                        if (instances->getNInstances() > 0 && instances->cullHighLevel(culler) ) {
 #ifdef _DEBUG
-                            if (!App::get().instanceCulling) {
-                                m->renderInstanced(*instances->getData(), instances->getNInstances());
-                            } else
+                            switch (App::get().instanceCulling) {
+                                case App::IC_BEFORE_W_PARTITION:
 #endif
-                            {
-                                size_t nCulled = instances->cull(culler);
-                                if (nCulled > 0) {
-                                    m->renderInstanced(*instances->getDirtyData(), nCulled);
-                                }
+                                    if (instances->cull(culler) > 0) {
+                                        changed |= k.nonStatic || instances->isWorldDirty();
+                                        renderKeys.push_back(k);
+                                    }
+#ifdef _DEBUG
+                                    break;
+                                case App::IC_BEFORE_W_O_PARTITION:
+                                    if (instances->testCull(culler) > 0) {
+                                        changed |= k.nonStatic || instances->isWorldDirty();
+                                        renderKeys.push_back(k);
+                                    }
+                                    break;
+                                case App::IC_NO :
+                                case App::IC_AFTER :
+                                default:
+                                    changed |= k.nonStatic || instances->isWorldDirty();
+                                    renderKeys.push_back(k);
+                                    break;
                             }
+#endif
                         }
                     } break;
             }
         }
     }
+    return changed;
 }
 
 const Technique* RenderManager::techniqueOf(const shadowKey_t& k)
