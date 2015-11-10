@@ -640,9 +640,6 @@ namespace gameElements {
 
 	void CBichito::renderHelpers()
 	{
-
-		return;
-
 		CPlayerStats* playerS = ((Entity*)bt.getExecutor().playerEntity)->get<CPlayerStats>();
 		CPlayerMov* playerM = ((Entity*)bt.getExecutor().playerEntity)->get<CPlayerMov>();
 		if (!playerS->isPlayerDead() || playerM->isOnCannon()){

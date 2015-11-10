@@ -50,7 +50,6 @@ namespace fmodUser {
 
 	FMOD::Studio::EventInstance* FmodStudio::getEventInstance(FMOD::Studio::EventDescription* ev)
 	{
-        if(ev != nullptr) {return nullptr;}
 		FMOD::Studio::EventInstance* in;
 		CHECKED(ev->createInstance(&in));
 		return in;
