@@ -706,6 +706,7 @@ void App::loadlvl()
 
 
     Handle::setCleanup(true);
+    Culling::resetMasks();
     PaintManager::clear();
 	ParticleUpdaterManager::get().deleteAll();
 	CSmokeTower::resetFX();

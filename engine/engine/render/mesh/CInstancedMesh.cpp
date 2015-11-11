@@ -26,6 +26,7 @@ void CInstancedMesh::updateInstanceData(size_t count)
     worldDirty = false;
     updateCulled = false;
     changed = false;
+    isComplete = count == nInstances;
 }
 
 uint32_t CInstancedMesh::getFreshDataIndex(unsigned index)

@@ -363,8 +363,8 @@ CPaintGroup::rayTestResult_e CPaintGroup::testDirection(
             if (e != nullptr){
                 CPaintGroup* paintGroup = e->get<CPaintGroup>();
                 unsigned instanceN = unsigned(hit.shape->userData);
-                bool ignored = instanceN == ignore && paintGroup == this;
-                if (paintGroup != nullptr && !ignored) {
+                bool ignored = instanceN == ignore;
+                if (paintGroup != nullptr && paintGroup == this && !ignored) {
                     const auto& buffer = paintGroup->buffer;
                     if (buffer != nullptr && instanceN < paintGroup->nInstances) {
                         auto s = (*buffer)[instanceN];

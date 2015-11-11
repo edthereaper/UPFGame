@@ -43,6 +43,8 @@ class RenderedTextureCube : private Texture {
         void activateViewport();
         void clearRenderTargetViews(const float color[4]);
         void clearDepthBuffers();
+        void clearRenderTargetView(size_t i, const float color[4]);
+        void clearDepthBuffer(size_t i);
         
         inline ID3D11DepthStencilView* getDepthStencilView(size_t i) const {
             assert(i<6);

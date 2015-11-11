@@ -4,6 +4,8 @@
 #include "handles/handle.h"
 #include "components/color.h"
 #include "texture/material.h"
+#include "texture/renderedTexture.h"
+#include "texture/renderedTextureCube.h"
 #include "mesh/component.h"
 #include "mesh/mesh.h"
 #include "camera/culling.h"
@@ -74,7 +76,7 @@ class RenderManager {
                 component::Handle transform;
                 specialKey_e specialClass;
                 component::Handle special;
-                bool nonStatic = false;
+                bool nonStatic = true;
 
             public:
                 shadowKey_t(component::Handle entity, component::Handle mesh,
@@ -127,7 +129,14 @@ class RenderManager {
         static void init();
         static void renderAll(component::Handle cameraE_h,
             const DeferredRender& renderer, Culling::cullDirection_e dir=Culling::NORMAL);
-        static void renderShadows(component::Handle light_h,
+        static bool renderShadows(component::Handle light_h,
+            RenderedTexture& shadowMap,
+            Culling::cullDirection_e cullingType = Culling::NORMAL,
+            Technique* normalTech = nullptr,
+            Technique* skinnedTech = nullptr,
+            Technique* instancedTech = nullptr);
+        static bool renderShadows(component::Handle light_h,
+            RenderedTextureCube& shadowCubeMap,
             Culling::cullDirection_e cullingType = Culling::NORMAL,
             Technique* normalTech = nullptr,
             Technique* skinnedTech = nullptr,

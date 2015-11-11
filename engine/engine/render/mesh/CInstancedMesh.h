@@ -35,30 +35,30 @@ class CInstancedMesh {
 
         class Culler {
             private:
-                CInstancedMesh* self;
+                CInstancedMesh*const self;
                 const Culling::CullerDelegate& culling;
                 const component::AABB baseAABB;
-                bool ignoreWorldChange;
-                Culling::mask_t cullerMask;
-                bool dirty;
-                unsigned cleanTimestamp;
+                const bool ignoreWorldChange;
+                const Culling::mask_t cullerMask;
+                const bool dirty;
+                const unsigned cleanTimestamp;
 
             public:
                 Culler(CInstancedMesh*const& self, const Culling::CullerDelegate& culling,
                     const component::AABB& baseAABB, bool ignoreWorldChange) :
-                    self(self), culling(culling),
-                    baseAABB(baseAABB),
-                    ignoreWorldChange(ignoreWorldChange),
-                    cullerMask(culling.getMask()),
-                    dirty(culling.hasChanged()),
-                    cleanTimestamp(self->cleanTimestamp) {}
+                    self(self), culling(culling), baseAABB(baseAABB),
+                    ignoreWorldChange(ignoreWorldChange), cullerMask(culling.getMask()),
+                    dirty(culling.hasChanged()), cleanTimestamp(self->cleanTimestamp) {}
 
                 bool operator()(instance_t& instance) const{
                     auto& aabb = (*self->instanceExtraData)[instance.userDataB];
                     bool aabbDirty = aabb.dirty;
                     aabb.update(baseAABB, instance.world, ignoreWorldChange);
-                    if (dirty || aabbDirty || aabb.cleanTimestamp == cleanTimestamp) {
+                    if (dirty || aabbDirty) {
                         aabb.cleanTimestamp = cleanTimestamp;
+                        aabb.cullerMask.reset();
+                    }
+                    if (aabb.cleanTimestamp == cleanTimestamp) {
                         bool b = culling.cull(aabb);
                         if (b) {
                             aabb.cullerMask |= cullerMask;
@@ -120,6 +120,7 @@ class CInstancedMesh {
         bool culled = false;
         bool instancesWillMove = true;
         bool changed = true;
+        bool isComplete = false;
         float aabbSkin = 0, aabbScale = 1;
         
 #ifdef _DEBUG
@@ -187,10 +188,10 @@ class CInstancedMesh {
         
         void updateInstanceData(size_t count);
 
-        inline Mesh* getData() {
-            if (culled && (dirty || updateCulled)) {
+        inline Mesh* getData(bool complete = false) {
+            if (!complete && culled && (dirty || updateCulled)) {
                 updateInstanceData(nCulled);
-            } else if (dirty) {
+            } else if (dirty || (complete && !isComplete)) {
                 updateInstanceData(nInstances);
             }
             return instanceData;

@@ -174,7 +174,7 @@ void RenderManager::renderKey(const key_t& k,
 #ifdef _DEBUG
                 if (App::get().instanceCulling == App::IC_NO) {
                     mesh->renderInstanced(k.group0, k.groupf,
-                        *instances->getData(), instances->getNInstances());
+                        *instances->getData(true), instances->getNInstances());
                 } else
 #endif
                 {    
@@ -449,7 +449,8 @@ void RenderManager::renderShadowKeys(
 
 }
 
-void RenderManager::renderShadows(component::Handle light_h,
+bool RenderManager::renderShadows(component::Handle light_h,
+    RenderedTextureCube& shadowCubeMap,
     Culling::cullDirection_e cullingType,
     Technique* normalTech,
     Technique* skinnedTech,
@@ -463,14 +464,45 @@ void RenderManager::renderShadows(component::Handle light_h,
     shadowKeyContainer_t keys;
     bool changed = testShadowKeys(culler, keys);
     if (changed && !keys.empty()) {
+        // Start rendering in the rt of the depth buffer
+        auto face = cullingType;
+        assert(face>=0);
+        shadowCubeMap.clearRenderTargetView(face, utils::BLACK);
+        shadowCubeMap.clearDepthBuffer(face);
+        shadowCubeMap.activateFace(face);
         renderShadowKeys(light_h, cullingType, culler, keys,
             normalTech, skinnedTech, instancedTech);
     }
+    return changed;
+}
+
+bool RenderManager::renderShadows(component::Handle light_h,
+    RenderedTexture& shadowMap,
+    Culling::cullDirection_e cullingType,
+    Technique* normalTech,
+    Technique* skinnedTech,
+    Technique* instancedTech)
+{
+    if (shadowsSortRequired) {
+        std::sort(shadowKeys.begin(), shadowKeys.end(), compTechMesh);
+        shadowsSortRequired = false;
+    }
+    Culling::CullerDelegate culler(light_h, cullingType);
+    shadowKeyContainer_t keys;
+    bool changed = testShadowKeys(culler, keys);
+    if (changed && !keys.empty()) {
+        // Start rendering in the rt of the depth buffer
+        shadowMap.clearDepthBuffer();
+        shadowMap.activate();
+        renderShadowKeys(light_h, cullingType, culler, keys,
+            normalTech, skinnedTech, instancedTech);
+    }
+    return changed;
 }
 
 bool RenderManager::testShadowKeys(
     const Culling::CullerDelegate& culler,
-    shadowKeyContainer_t& renderKeys)
+    shadowKeyContainer_t& keys)
 {
     bool changed = culler.hasChanged();
 
@@ -485,7 +517,7 @@ bool RenderManager::testShadowKeys(
                         if (!skeleton->disabled() &&
                             (skeleton->getCullingMask() & culler.getMask())!=0) {
                             changed |= k.nonStatic;
-                            renderKeys.push_back(k);
+                            keys.push_back(k);
                         }
                     }
                     break;
@@ -495,7 +527,7 @@ bool RenderManager::testShadowKeys(
                         CCullingAABB* aabb = e->get<CCullingAABB>();
                         if (aabb==nullptr || culler.cull(*aabb)) {
                             changed |= k.nonStatic;
-                            renderKeys.push_back(k);
+                            keys.push_back(k);
                         }
                     }
                     break;
@@ -509,21 +541,21 @@ bool RenderManager::testShadowKeys(
 #endif
                                     if (instances->cull(culler) > 0) {
                                         changed |= k.nonStatic || instances->isWorldDirty();
-                                        renderKeys.push_back(k);
+                                        keys.push_back(k);
                                     }
 #ifdef _DEBUG
                                     break;
                                 case App::IC_BEFORE_W_O_PARTITION:
                                     if (instances->testCull(culler) > 0) {
                                         changed |= k.nonStatic || instances->isWorldDirty();
-                                        renderKeys.push_back(k);
+                                        keys.push_back(k);
                                     }
                                     break;
                                 case App::IC_NO :
                                 case App::IC_AFTER :
                                 default:
                                     changed |= k.nonStatic || instances->isWorldDirty();
-                                    renderKeys.push_back(k);
+                                    keys.push_back(k);
                                     break;
                             }
 #endif

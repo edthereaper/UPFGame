@@ -202,24 +202,28 @@ class Culling {
         typedef std::vector<CullerDelegate> cullers_t;
         static cullers_t cullers;
         static unsigned currentCuller;
-        static bool cullerListChanged;
-
-        static mask_t addDelegate(CullerDelegate&& del);
 
     protected:
-        static inline mask_t addCCulling(component::Handle e_h) {
-            return addDelegate(CullerDelegate(e_h, NORMAL));
+        static inline void addCCulling(component::Handle e_h) {
+            cullers.push_back(CullerDelegate(e_h, NORMAL));
         }
-        static inline mask_t addCCullingCube(component::Handle e_h, cullDirection_e dir){
-            return addDelegate(CullerDelegate(e_h, dir));
+        static inline void addCCullingCube(component::Handle e_h, cullDirection_e dir){
+            cullers.push_back(CullerDelegate(e_h, dir));
+        }
+        static inline mask_t newMask() {
+            assert(currentCuller < MAX_CULLERS);
+            return 1<<(currentCuller++);
         }
 
     public:
         static inline void rewindCullers() {
-            currentCuller = 0;
-            cullerListChanged = false;
+            cullers.clear();
         }
-        static inline bool hasCullerListChanged() {return cullerListChanged;}
+        
+        static inline void resetMasks() {
+            currentCuller = 0;
+        }
+
         static inline utils::range_t<cullers_t::const_iterator> iterateCullers() {
             return utils::range_t<cullers_t::const_iterator>(cullers.begin(), cullers.end());
         }
@@ -230,11 +234,11 @@ class CCulling : public Culling {
     private:
         XMMATRIX previousViewProjection;
         planes_t planes;
-        mask_t mask;
+        mask_t mask = 0;
         bool changed = true;
 
     public:
-        inline void init() {}
+        inline void init() {mask = newMask();}
         inline void loadFromProperties(const std::string& what, const utils::MKeyValue&) {}
 
         void update(float);
@@ -249,11 +253,11 @@ class CCullingCube : public Culling {
     private:
         XMMATRIX previousViewProjection[6];
         planes_t planes[6];
-        mask_t mask[6];
+        mask_t mask[6] {};
         bool changed = true;
 
     public:
-        inline void init() {}
+        inline void init() {for (auto& m : mask) {m = newMask();}}
         inline void loadFromProperties(const std::string& what, const utils::MKeyValue&) {}
 
         void update(float);
