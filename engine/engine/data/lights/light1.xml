@@ -320,13 +320,13 @@
 		</Entity>
 	<Entity init="true">
 		<Name name="emitter-07"/>
-		<Transform pos="-59.345760 13.630100 137.873383" rot="0.000000 0.000000 0.000000 0.000000"/>
-		<Emitter name="fuego" position="-59.345760 13.630100 137.873383" rotation="0.000000 0.000000 0.000000 0.000000" count="2" export="true"  particles0="emitter_0" particles1="emitter_1"/>
+		<Transform pos="-59.315762 14.080100 137.643387" rot="0.000000 0.000000 0.000000 0.000000"/>
+		<Emitter name="fuego" position="-59.315762 14.080100 137.643387" rotation="0.000000 0.000000 0.000000 0.000000" count="2" export="true"  particles0="emitter_0" particles1="emitter_1"/>
 		</Entity>
 	<Entity init="true">
 		<Name name="emitter-0D"/>
-		<Transform pos="-59.367519 12.830682 134.730042" rot="0.000000 0.000000 0.000000 0.000000"/>
-		<Emitter name="fuego" position="-59.367519 12.830682 134.730042" rotation="0.000000 0.000000 0.000000 0.000000" count="2" export="true"  particles0="emitter_0" particles1="emitter_1"/>
+		<Transform pos="-59.567516 13.420682 135.830048" rot="0.000000 0.000000 0.000000 0.000000"/>
+		<Emitter name="fuego" position="-59.567516 13.420682 135.830048" rotation="0.000000 0.000000 0.000000 0.000000" count="2" export="true"  particles0="emitter_0" particles1="emitter_1"/>
 		</Entity>
 	<Entity init="true">
 		<Name name="emitter-08"/>

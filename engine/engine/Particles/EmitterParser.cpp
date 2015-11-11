@@ -71,6 +71,7 @@ namespace particles{
 	bool EmitterParser::load(std::string owner){
 		char full_name[100];
 		sprintf(full_name, "%s%s", EMITTERS_PATH, owner.c_str());
+		dbg("%s\n", full_name);
 		return xmlParseFile(full_name);
 	}
 
@@ -79,7 +80,7 @@ namespace particles{
 		bool success = true;
 		auto fileList = utils::DirLister::listDir(EMITTERS_PATH);
 		for (auto i : fileList){
-			dbg("i = %s\n", i.c_str());
+			
 			if (success)
 				success = load(i);
 			else break;
