@@ -307,18 +307,21 @@ fsmState_t AppFSMExecutor::waitvideo(float elapsed)
 
 fsmState_t AppFSMExecutor::credits(float elapsed)
 {
-	App &app = App::get();
-	app.videoEndsTo = 0;
-	app.loadVideo("eyes.ogv", "");
-    
-    Handle::setCleanup(true);
-    auto entityMan = component::getManager<Entity>();
-    entityMan->forall<void>([](Entity* e) {e->postMsg(MsgDeleteSelf());});
-    MessageManager::dispatchPosts();
-    Handle::setCleanup(false);
-    app.setWinGame(false);
-
-	return STATE_playvideo;
+#if defined(DISPLAY_VIDEO_AND_MENUS)
+	App &app = App::get();	
+	if (app.updateCreditsMenu()){
+		Handle::setCleanup(true);
+		auto entityMan = component::getManager<Entity>();
+		entityMan->forall<void>([](Entity* e) {e->postMsg(MsgDeleteSelf()); });
+		MessageManager::dispatchPosts();
+		Handle::setCleanup(false);
+		app.setWinGame(false);
+		return STATE_mainmenu;
+	}
+	return STATE_credits;
+#else
+	return STATE_quit;
+#endif	
 }
 
 fsmState_t AppFSMExecutor::win(float elapsed)
@@ -2434,6 +2437,34 @@ void App::renderChapterSelectionMenu()
 			Texture::getManager().getByName("chapter_selection_option5"), nullptr, true);
 		break;
 	}
+	Render::getSwapChain()->Present(0, 0);
+}
+
+bool App::updateCreditsMenu(){
+	pad.update();
+	if (xboxController.is_connected()){
+		xboxControllerKeys();
+		xboxController.update();
+		xboxPad.update();
+		if (pad.getState(CONTROLS_JUMP).isHit()){
+			fmodUser::FmodStudio::playEvent(fmodUser::FmodStudio::getEventInstance("MenuVideos/Menu_enter"));
+			return true;
+		}
+	}
+	if (pad.getState(APP_ENTER).isHit()){
+		fmodUser::FmodStudio::playEvent(fmodUser::FmodStudio::getEventInstance("MenuVideos/Menu_enter"));
+		return true;
+	}
+	renderCreditsMenu();
+	return false;
+}
+
+void App::renderCreditsMenu()
+{
+	Render::getContext()->ClearRenderTargetView(Render::getRenderTargetView(), utils::BLACK);
+	Render::getContext()->ClearDepthStencilView(Render::getDepthStencilView(), D3D11_CLEAR_DEPTH, 1.0f, 0);
+	drawTexture2D(pixelRect(config.xres, config.yres), pixelRect(config.xres, config.yres),
+		Texture::getManager().getByName("credits"));
 	Render::getSwapChain()->Present(0, 0);
 }
 
