@@ -173,7 +173,7 @@ class EnemyBtExecutor {
         bool isDetected(float) const;
 		bool onGround(float) const;
 		bool onWall(float) const;
-
+		void transformEffect();
 		bool playerAchiable(float) const;
 
         bool hasEvents(float) const;

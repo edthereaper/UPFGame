@@ -18,7 +18,7 @@ using namespace animation;
 #include "gameElements/enemies/melee.h"
 using namespace gameElements;
 
-#include "Particles/ParticleSystem.h"
+#include "Particles/ParticlesManager.h"
 using namespace particles;
 
 #define TIME_TRANSFORM		2.f
@@ -309,14 +309,17 @@ ret_e EnemyBtExecutor::treatEvents(float elapsed)
 	lastEvent = E_NOTHING;
 	if (inbox.flyer) {
 		lastEvent = E_SENDFLYING;
-        return DONE;
+		return DONE;
 	}
 	if (inbox.megashot || (stun && inbox.shot)) {
 		lastEvent = E_TRANSFORMED;
 		Entity* me = meEntity;
 		CTransform* ctransf = me->get<CTransform>();
 		originScaleV = ctransf->getScale();
+
+		transformEffect();
 		me->sendMsg(MsgTransform());
+
 	}
 	else if (inbox.tackled) {
 		lastEvent = E_TACKLED;
@@ -332,7 +335,12 @@ ret_e EnemyBtExecutor::treatEvents(float elapsed)
 		Entity* me = meEntity;
 		CTransform* ctransf = me->get<CTransform>();
 		originScaleV = ctransf->getScale();
+
+		transformEffect();
+
 		me->sendMsg(MsgTransform());
+
+
 	}
 	else if (inbox.shot) {
 		if (!defensive){
@@ -342,6 +350,7 @@ ret_e EnemyBtExecutor::treatEvents(float elapsed)
 				Entity* me = meEntity;
 				CTransform* ctransf = me->get<CTransform>();
 				originScaleV = ctransf->getScale();
+				transformEffect();
 				me->sendMsg(MsgTransform());
 			}
 			else{
@@ -491,6 +500,27 @@ bool EnemyBtExecutor::onWall(float) const
     return Physics.raycast(t->getPosition(), dir, rayLength, hit, filter)
         || Physics.raycast(t->getPosition()+yAxis_v*aabbHeight*.5f, dir, rayLength, hit, filter)
         || Physics.raycast(t->getPosition()+yAxis_v*aabbHeight, dir, rayLength, hit, filter);
+}
+
+void EnemyBtExecutor::transformEffect(){
+
+	Entity* me = meEntity;
+	CEmitter *emitter = me->get<CEmitter>();
+
+	auto key0 = emitter->getKey("emitter_0");
+	auto key1 = emitter->getKey("emitter_1");
+	auto key2 = emitter->getKey("emitter_2");
+
+	ParticleUpdaterManager::get().sendActive(key0);
+	ParticleUpdaterManager::get().sendActive(key1);
+	ParticleUpdaterManager::get().sendActive(key2);
+
+	ParticleUpdaterManager::get().setDeleteSelf(key0);
+	ParticleUpdaterManager::get().setDeleteSelf(key1);
+	ParticleUpdaterManager::get().setDeleteSelf(key2);
+
+	me->sendMsg(MsgTransform());
+
 }
 
 
