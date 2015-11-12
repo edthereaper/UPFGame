@@ -22,9 +22,9 @@ class CInstancedMesh {
         struct  instanceData_t : public CullingAABB {
             bool used = false;
             unsigned instanceIndex = ~0;
-            unsigned cleanTimestamp = 0;
             using CullingAABB::dirty;
-            Culling::mask_t cullerMask;
+            Culling::mask_t cullerMask = 0;
+            Culling::mask_t testedMask = 0;
         };
 
         CullingAABB aabb;
@@ -41,26 +41,24 @@ class CInstancedMesh {
                 const bool ignoreWorldChange;
                 const Culling::mask_t cullerMask;
                 const bool dirty;
-                const unsigned cleanTimestamp;
 
             public:
                 Culler(CInstancedMesh*const& self, const Culling::CullerDelegate& culling,
                     const component::AABB& baseAABB, bool ignoreWorldChange) :
                     self(self), culling(culling), baseAABB(baseAABB),
                     ignoreWorldChange(ignoreWorldChange), cullerMask(culling.getMask()),
-                    dirty(culling.hasChanged()), cleanTimestamp(self->cleanTimestamp) {}
+                    dirty(culling.hasChanged()){
+                }
 
                 bool operator()(instance_t& instance) const{
                     auto& aabb = (*self->instanceExtraData)[instance.userDataB];
-                    bool aabbDirty = aabb.dirty;
-                    aabb.update(baseAABB, instance.world, ignoreWorldChange);
-                    if (dirty || aabbDirty) {
-                        aabb.cleanTimestamp = cleanTimestamp;
+                    if (aabb.dirty && aabb.update(baseAABB, instance.world, ignoreWorldChange)) {
+                        aabb.testedMask.reset();
                         aabb.cullerMask.reset();
                     }
-                    if (aabb.cleanTimestamp == cleanTimestamp) {
-                        bool b = culling.cull(aabb);
-                        if (b) {
+                    if (dirty || ((aabb.testedMask & cullerMask) == 0)) {
+                        aabb.testedMask |= cullerMask;
+                        if (culling.cull(aabb)) {
                             aabb.cullerMask |= cullerMask;
                             return true;
                         } else {
@@ -182,7 +180,7 @@ class CInstancedMesh {
         }
 
         inline void init(){}
-        inline void update(float){++cleanTimestamp;}
+        inline void update(float){}
         void loadFromProperties(std::string elem, utils::MKeyValue& atts);
         void load(std::string name);
         

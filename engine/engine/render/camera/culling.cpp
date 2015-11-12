@@ -17,7 +17,7 @@ using namespace utils;
 
 namespace render {
 
-void CullingAABB::update(const AABB& aabb, const XMMATRIX& world, bool ignoreWorldChange)
+bool CullingAABB::update(const AABB& aabb, const XMMATRIX& world, bool ignoreWorldChange)
 {
     if(dirty || (!ignoreWorldChange && prevWorld != world)){
         dirty = false;
@@ -25,6 +25,9 @@ void CullingAABB::update(const AABB& aabb, const XMMATRIX& world, bool ignoreWor
         operator=(bakeCulling(aabb, world));
         if (scale != 1){scaleAABB(scale);}
         if (skin != 0) {skinAABB(skin);}
+        return true;
+    } else {
+        return false;
     }
 }
 

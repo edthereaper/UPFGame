@@ -364,6 +364,7 @@ void App::loadConfig()
 {
 	char windowedStr[32] {};
 	char shadowsStr[32] {};
+	char icStr[32] {};
 #ifdef _DEBUG
 	config.xres = GetPrivateProfileInt("display_debug", "x", defConfig.xres, ".\\config.ini");
 	config.yres = GetPrivateProfileInt("display_debug", "y", defConfig.yres, ".\\config.ini");
@@ -376,6 +377,8 @@ void App::loadConfig()
 	char channelStr[32] {};
     GetPrivateProfileString("debug", "initChannel", "FX_FINAL",
         channelStr, ARRAYSIZE(channelStr)-1, ".\\config.ini");
+    GetPrivateProfileString("debug", "instanceculling", "off",
+        icStr, ARRAYSIZE(icStr)-1, ".\\config.ini");
 
 #define IF_CASE_CONFIG_CHANNEL(name) if (!strcmp(channelStr, #name)) {selectedChannel = name;}
 #define ELIF_CASE_CONFIG_CHANNEL(name) else if (!strcmp(channelStr, #name)) {selectedChannel = name;}
@@ -407,6 +410,8 @@ void App::loadConfig()
         windowedStr, ARRAYSIZE(windowedStr)-1, ".\\config.ini");
     GetPrivateProfileString("display", "shadows", "true",
         shadowsStr, ARRAYSIZE(shadowsStr)-1, ".\\config.ini");
+    GetPrivateProfileString("display", "instanceculling", "off",
+        icStr, ARRAYSIZE(icStr)-1, ".\\config.ini");
 #endif
 	xboxPadSensiblity = GetPrivateProfileInt("sensibility", "xbox", 5, ".\\config.ini");
 	if (xboxPadSensiblity < 1)	xboxPadSensiblity = 1;
@@ -419,6 +424,18 @@ void App::loadConfig()
 	if (config.yres > desktop.bottom)	config.yres = desktop.bottom - desktop.top;
 	config.windowed = !strcmp(windowedStr, "true");
     enableShadows = !strcmp(shadowsStr, "true");
+
+    if (!strcmp(windowedStr, "off")) {
+        instanceCulling = IC_NO;
+    } else if (!strcmp(windowedStr, "highlevel")) {
+        instanceCulling = IC_HIGHLEVEL;
+    } else if (!strcmp(windowedStr, "before")) {
+        instanceCulling = IC_BEFORE_W_O_PARTITION;
+    } else if (!strcmp(windowedStr, "before-late-partition")) {
+        instanceCulling = IC_BEFORE_W_O_PARTITION;
+    } else if (!strcmp(windowedStr, "after")) {
+        instanceCulling = IC_AFTER;
+    };
 }
 
 CamCannonController cam1P;
@@ -594,17 +611,18 @@ void App::addMappings()
 bool App::create()
 {
 	seedRand();
-
-	
-
-	//mistEffect(true);
-
 	if (!Render::createDevice()) { return false; }
 
     EffectLibrary::init();
     
 #ifdef _DEBUG
 	antTw_user::AntTWManager::init(config.xres, config.yres);
+
+    // Setup renderDocCapture()
+    HMODULE renderdoc = GetModuleHandle("renderdoc.dll");
+    renderDocCapture = (pRENDERDOC_TriggerCapture)GetProcAddress(
+        renderdoc, "RENDERDOC_TriggerCapture");
+
 #endif
 
 	component::init();
@@ -1445,8 +1463,6 @@ bool App::updatePaused(float elapsed)
     getManager<CArmPoint>()->update(0);
     skelManager->forall(&CSkeleton::testAndAddBonesToBuffer);
 	getManager<CAnimationSounds>()->update(0);
-    
-	getManager<CInstancedMesh>()->update(elapsed);
 
     updateGlobalConstants(elapsed);
 	return true;
@@ -1673,7 +1689,6 @@ bool App::update(float elapsed)
 
     component::MessageManager::dispatchPosts();
     Material::updateAnimatedMaterials(elapsed);
-	getManager<CInstancedMesh>()->update(elapsed);
     updateGlobalConstants(elapsed);
     return true;
 }

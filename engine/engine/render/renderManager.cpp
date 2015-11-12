@@ -171,17 +171,18 @@ void RenderManager::renderKey(const key_t& k,
                     k.tint, k.selfIllumination, cmesh, 0, material);
                 CInstancedMesh* instances = k.special;
                 assert(instances != nullptr);
-#ifdef _DEBUG
-                if (App::get().instanceCulling == App::IC_NO) {
-                    mesh->renderInstanced(k.group0, k.groupf,
-                        *instances->getData(true), instances->getNInstances());
-                } else
-#endif
-                {    
-                    size_t nCulled = instances->cull(culler);
-                    if (nCulled > 0) {
-                        mesh->renderInstanced(k.group0, k.groupf, *instances->getData(), nCulled);
-                    }
+
+                switch (App::get().instanceCulling) {
+                    case App::IC_NO:
+                    case App::IC_HIGHLEVEL:
+                        mesh->renderInstanced(k.group0, k.groupf,
+                            *instances->getData(true), instances->getNInstances());
+                        break;
+                    default:
+                        size_t nCulled = instances->cull(culler);
+                        if (nCulled > 0) {
+                            mesh->renderInstanced(k.group0, k.groupf, *instances->getData(), nCulled);
+                        }
                 }
             }
             break;
@@ -417,18 +418,20 @@ void RenderManager::renderShadowKeys(
                 } break;
             case INSTANCED: {
                     setObjectConstants(t->getWorld());
+                    if (currentTech != instancedTech) {
+                        instancedTech->activate();
+                        currentTech = instancedTech;
+                    }
                     CInstancedMesh* instances = k.special;
                     const auto m(mesh->getMesh());
                     assert(instances != nullptr);
-#ifdef _DEBUG
+
                     switch (App::get().instanceCulling) {
                         case App::IC_BEFORE_W_O_PARTITION:
                             instances->partitionOnBitMask(culler);
                             // fall thru
                         case App::IC_BEFORE_W_PARTITION:
-#endif
                             m->renderInstanced(*instances->getData(), instances->getNCulled());
-#ifdef _DEBUG
                             break;
                         case App::IC_AFTER : {
                                 size_t nCulled = instances->cull(culler);
@@ -437,11 +440,11 @@ void RenderManager::renderShadowKeys(
                                 }
                             } break;
                         default:
+                        case App::IC_HIGHLEVEL :
                         case App::IC_NO :
                             m->renderInstanced(*instances->getData(), instances->getNInstances());
                             break;
                     }
-#endif
                 } break;
         }
         
@@ -491,6 +494,10 @@ bool RenderManager::renderShadows(component::Handle light_h,
     shadowKeyContainer_t keys;
     bool changed = testShadowKeys(culler, keys);
     if (changed && !keys.empty()) {
+//#ifdef _DEBUG
+//        App::get().captureFrame();
+//#endif
+
         // Start rendering in the rt of the depth buffer
         shadowMap.clearDepthBuffer();
         shadowMap.activate();
@@ -547,6 +554,12 @@ bool RenderManager::testShadowKeys(
                                     break;
                                 case App::IC_BEFORE_W_O_PARTITION:
                                     if (instances->testCull(culler) > 0) {
+                                        changed |= k.nonStatic || instances->isWorldDirty();
+                                        keys.push_back(k);
+                                    }
+                                    break;
+                                case App::IC_HIGHLEVEL :
+                                    if (instances->cullHighLevel(culler)) {
                                         changed |= k.nonStatic || instances->isWorldDirty();
                                         keys.push_back(k);
                                     }

@@ -42,7 +42,7 @@ struct CullingAABB : public component::AABB, public culling_t {
 #endif
 
     public:
-        void update(const AABB& aabb, const XMMATRIX& world, bool ignoreWorldChange);
+        bool update(const AABB& aabb, const XMMATRIX& world, bool ignoreWorldChange);
         
         CullingAABB() = default;
         CullingAABB(const DirectX::XMVECTOR& min, const DirectX::XMVECTOR& max) : AABB(min, max) {}
@@ -212,7 +212,10 @@ class Culling {
         }
         static inline mask_t newMask() {
             assert(currentCuller < MAX_CULLERS);
-            return 1<<(currentCuller++);
+            mask_t ret;
+            ret.set(currentCuller);
+            currentCuller++;
+            return ret;
         }
 
     public:
@@ -238,13 +241,17 @@ class CCulling : public Culling {
         bool changed = true;
 
     public:
-        inline void init() {mask = newMask();}
+        inline void init() {
+            mask = newMask();
+        }
         inline void loadFromProperties(const std::string& what, const utils::MKeyValue&) {}
 
         void update(float);
         bool contains(XMVECTOR point)const;
         bool cull(const component::AABB&) const;
-        const mask_t& getMask() const {return mask;}
+        const mask_t& getMask() const {
+            return mask;
+        }
         
         inline bool hasChanged() const {return changed;}
 };
@@ -257,13 +264,19 @@ class CCullingCube : public Culling {
         bool changed = true;
 
     public:
-        inline void init() {for (auto& m : mask) {m = newMask();}}
+        inline void init() {
+            for (auto& m : mask) {
+                m = newMask();
+            }
+        }
         inline void loadFromProperties(const std::string& what, const utils::MKeyValue&) {}
 
         void update(float);
         bool contains(XMVECTOR point, Culling::cullDirection_e dir) const;
         bool cull(const component::AABB&, Culling::cullDirection_e dir) const;
-        inline const mask_t& getMask(Culling::cullDirection_e dir) const {return mask[dir];}
+        inline const mask_t& getMask(Culling::cullDirection_e dir) const {
+            return mask[dir];
+        }
         inline bool hasChanged() const {return changed;}
 };
 
