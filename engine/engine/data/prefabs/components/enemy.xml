@@ -20,5 +20,6 @@
 			report	="flare-shot"
 		/>
 	</CharacterController>
+	<TagNonStaticShadow/>
 	<Mesh motionBlur="0.3"/>
 </componentPrefab>

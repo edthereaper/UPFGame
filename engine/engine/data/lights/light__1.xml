@@ -265,54 +265,6 @@
 		<CullingAABBSpecial type="dirLight"/>
 		<DirLight spotlight="yes" spotDecay="0.7" decay="0.2" radius="9" color="0x82822aff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.7" export="true" />
 	</Entity>
-	<Entity init="yes" >
-		<Name name="mist-00" />
-		<Transform pos="-43.2386 6.00633 130.568" />
-		<Mist
-			chaotic="yes"
-			dX="1"
-			dZ="1"
-			darkenAlpha="0.4"
-			depthTolerance="200"
-			export="yes"
-			factor="1"
-			h="0.5"
-			intensity="1"
-			l="5000"
-			layerDecay="0.05"
-			minimun="0"
-			sqSqrt="0"
-			unitWorldSize="25"
-			w="5000"
-		>
-			<top color="160000cc" />
-			<bottom color="99" />
-		</Mist>
-	</Entity>
-	<Entity init="yes" >
-		<Name name="mist-02" />
-		<Transform pos="-43.2386 0.48633 130.568" />
-		<Mist
-			chaotic="yes"
-			dX="1"
-			dZ="1"
-			darkenAlpha="0.4"
-			depthTolerance="200"
-			export="yes"
-			factor="1"
-			h="7.223"
-			intensity="1"
-			l="5000"
-			layerDecay="0.05"
-			minimun="0"
-			sqSqrt="0"
-			unitWorldSize="25"
-			w="5000"
-		>
-			<top color="230b0bcc" />
-			<bottom color="4f4f4f99" />
-		</Mist>
-	</Entity>
 	<Entity init="true">
 		<Name name="emitter-0E"/>
 		<Transform pos="-23.799826 57.997715 161.926270" rot="0.000000 0.000000 0.000000 0.000000"/>

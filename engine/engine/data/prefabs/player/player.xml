@@ -38,5 +38,6 @@
 	
 	<prefab name="player/light"/>
 	<prefab name="player/textHelper"/>
-	<prefab name="../animationSounds/playerAnimationSounds"/>	
+	<prefab name="../animationSounds/playerAnimationSounds"/>
+	<TagNonStaticShadow/>	
 </Entity>

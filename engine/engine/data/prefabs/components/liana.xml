@@ -25,6 +25,7 @@
 			report	="player|player-cannon"
 			/>
 	</Liana>
+	<TagNonStaticShadow/>
 	<Transformable type="liana"
 		resource="liana" originalResource="chain" />
 	<ThrowsPickups/>

@@ -1,7 +1,7 @@
 #ifndef RENDER_RENDER_MANAGER_H_
 #define RENDER_RENDER_MANAGER_H_
 
-#include "handles/handle.h"
+#include "handles/entity.h"
 #include "components/color.h"
 #include "texture/material.h"
 #include "texture/renderedTexture.h"
@@ -14,6 +14,14 @@
 namespace render {
 
 class DeferredRender;
+
+struct CTagNonStaticShadow {
+    static void ensure(component::Handle e_h);
+
+    inline void init(){}
+    inline void update(float){}
+    inline void loadFromProperties(const std::string&, const utils::MKeyValue&){}
+};
 
 class RenderManager {
     public:
@@ -76,14 +84,16 @@ class RenderManager {
                 component::Handle transform;
                 specialKey_e specialClass;
                 component::Handle special;
-                bool nonStatic = true;
+                bool nonStatic = false;
 
             public:
                 shadowKey_t(component::Handle entity, component::Handle mesh,
                     component::Handle transform, specialKey_e specialClass,
                     component::Handle special) :
                     entity(entity), mesh(mesh), transform(transform),
-                    specialClass(specialClass), special(special) {}
+                    specialClass(specialClass), special(special),
+                    nonStatic(entity.hasSon<CTagNonStaticShadow>()) {
+                }
         };
     private:
         RenderManager()=delete;

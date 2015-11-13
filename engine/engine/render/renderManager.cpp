@@ -605,4 +605,11 @@ const Technique* RenderManager::instancedVersionOf(const Technique* technique)
     return it->second;
 }
 
+void CTagNonStaticShadow::ensure(component::Handle e_h) {
+    component::Entity* e(e_h);
+    if (!e->has<CTagNonStaticShadow>()) {
+        e->add(component::getManager<CTagNonStaticShadow>()->createObj());
+    }
+}
+
 }

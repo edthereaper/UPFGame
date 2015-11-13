@@ -25,6 +25,7 @@
 #include "animation/animation_max.h"							//animation max
 #include "gameElements/ambientSound.h"
 #include "gameElements/PaintManager.h"                          //CPaintGroup
+#include "render/renderManager.h"                          //CTagNonStaticShadow
 
 using namespace render;
 using namespace animation;
@@ -118,6 +119,7 @@ DECLARE_OBJECT_MANAGER(CMist, Mist,                                 N_ENTITIES);
 DECLARE_OBJECT_MANAGER(CAmbientSound, AmbientSound,					N_ENTITIES);
 DECLARE_OBJECT_MANAGER(CPaintGroup, PaintGroup, 					N_ENTITIES);
 DECLARE_OBJECT_MANAGER(CTextHelper, TextHelper,						1);
+DECLARE_OBJECT_MANAGER(CTagNonStaticShadow, TagNonStaticShadow,		N_ENTITIES);
 
 /* Used only for testing purposes */
 #ifdef _TEST
@@ -202,6 +204,7 @@ void init()
 	getManager<CPaintGroup>()->init();
 	getManager<CTextHelper>()->init();
 	getManager<CMaxAnim>()->init();
+	getManager<CTagNonStaticShadow>()->init();
     
     Entity::initType();
 
