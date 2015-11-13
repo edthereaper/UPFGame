@@ -152,16 +152,31 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	App& app = App::get();
 
 	// Define the client area
+
+	RECT desktop;
+	const HWND hDesktop = GetDesktopWindow();
+	GetWindowRect(hDesktop, &desktop);
+
+
+
 	RECT rc = { 0, 0, app.config.xres, app.config.yres };
 
 	// We need to tell windows the size of the full windows, including border
 	// so the rect is bigger
 	AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
 
+	float originX = 0;
+	float originY = 0;
+
+#if !defined(_DEBUG)
+	originX = ((desktop.right - desktop.left) / 2) - ((rc.right - rc.left) / 2);
+	originY = ((desktop.bottom - desktop.top) / 2) - ((rc.bottom - rc.top) / 2);
+#endif
+
 	// Create the actual window
 	hWnd = CreateWindow("Vinedetta", "Vinedetta"
 		, WS_OVERLAPPEDWINDOW
-		, 0, 0//, CW_USEDEFAULT, CW_USEDEFAULT		// Position
+		, originX, originY//, CW_USEDEFAULT, CW_USEDEFAULT		// Position
 		, rc.right - rc.left					// Width
 		, rc.bottom - rc.top					// Height
 		, NULL, NULL
