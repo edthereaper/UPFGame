@@ -201,8 +201,9 @@ class CRigidBody : public Shape {
                     if (rigidBody->getRigidBodyFlags() & PxRigidBodyFlag::eKINEMATIC) {
                         rigidBody->setKinematicTarget(toPxTransform(t->getWorld()));
                     } else {
-			            t->setPosition(toXMVECTOR(rigidBody->getGlobalPose().p));
-			            t->setRotation(toXMQuaternion(rigidBody->getGlobalPose().q));
+                        auto pose = rigidBody->getGlobalPose();
+			            t->setPosition(toXMVECTOR(pose.p));
+			            t->setRotation(toXMQuaternion(pose.q));
                     }
                 }
             }

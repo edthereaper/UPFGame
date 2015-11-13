@@ -84,7 +84,7 @@ class Entity {
 
 	    template< class TObj >
 	    inline bool del() {
-		    return components[getObjManager<TObj>()->getType()].destroy();
+		    return components[getManager<TObj>()->getType()].destroy();
 	    }
 
         void loadFromProperties(const std::string& elem, utils::MKeyValue& atts) {}

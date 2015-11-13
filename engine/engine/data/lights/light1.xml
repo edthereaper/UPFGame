@@ -39,78 +39,78 @@
 		<Name name="farola"/>
 		<Transform pos="-2.888962 27.795532 128.286667" lookAt="-2.890000 -1.000000 128.289993"/>
 		<Shadow resolution="256"/>
-		<Camera fov="86.000000" znear="0.300000" zfar="4.100000">
+		<Camera fov="130.000000" znear="0.300000" zfar="4.500000">
 			<viewport w="256" h="256"/>
 		</Camera>
 		<Culling/>
 		<CullingAABBSpecial type="dirLight"/>
-		<DirLight spotlight="yes" spotDecay="0.7" decay="0.3" radius="8.2" color="0xfbed64ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.509804" export="true" />
+		<DirLight spotlight="yes" spotDecay="0.7" decay="0.2" radius="9" color="0x82822aff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.7" export="true" />
 	</Entity>
 	<Entity init="true">
 		<Name name="faro02"/>
 		<Transform pos="-2.888962 27.795532 121.026665" lookAt="-2.907587 26.791155 120.971382"/>
 		<Shadow resolution="256"/>
-		<Camera fov="86.000000" znear="0.300000" zfar="4.100000">
+		<Camera fov="130.000000" znear="0.300000" zfar="4.500000">
 			<viewport w="256" h="256"/>
 		</Camera>
 		<Culling/>
 		<CullingAABBSpecial type="dirLight"/>
-		<DirLight spotlight="yes" spotDecay="0.7" decay="0.3" radius="8.2" color="0xfbed64ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.509804" export="true" />
+		<DirLight spotlight="yes" spotDecay="0.7" decay="0.2" radius="9" color="0x82822aff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.7" export="true" />
 	</Entity>
 	<Entity init="true">
 		<Name name="faro03"/>
 		<Transform pos="-12.858962 27.795532 104.906662" lookAt="-12.877586 26.791155 104.851379"/>
 		<Shadow resolution="256"/>
-		<Camera fov="86.000000" znear="0.300000" zfar="4.100000">
+		<Camera fov="130.000000" znear="0.300000" zfar="4.500000">
 			<viewport w="256" h="256"/>
 		</Camera>
 		<Culling/>
 		<CullingAABBSpecial type="dirLight"/>
-		<DirLight spotlight="yes" spotDecay="0.7" decay="0.3" radius="8.2" color="0xfbed64ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.509804" export="true" />
+		<DirLight spotlight="yes" spotDecay="0.7" decay="0.2" radius="9" color="0x82822aff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.7" export="true" />
 	</Entity>
 	<Entity init="true">
 		<Name name="faro04"/>
 		<Transform pos="-12.918962 27.795532 92.666664" lookAt="-12.937587 26.791155 92.611382"/>
 		<Shadow resolution="256"/>
-		<Camera fov="86.000000" znear="0.300000" zfar="4.100000">
+		<Camera fov="130.000000" znear="0.300000" zfar="4.500000">
 			<viewport w="256" h="256"/>
 		</Camera>
 		<Culling/>
 		<CullingAABBSpecial type="dirLight"/>
-		<DirLight spotlight="yes" spotDecay="0.7" decay="0.3" radius="8.2" color="0xfbed64ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.509804" export="true" />
+		<DirLight spotlight="yes" spotDecay="0.7" decay="0.2" radius="9" color="0x82822aff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.7" export="true" />
 	</Entity>
 	<Entity init="true">
 		<Name name="faro05"/>
 		<Transform pos="9.561037 27.795532 92.516670" lookAt="9.542413 26.791155 92.461388"/>
 		<Shadow resolution="256"/>
-		<Camera fov="86.000000" znear="0.300000" zfar="4.100000">
+		<Camera fov="130.000000" znear="0.300000" zfar="4.500000">
 			<viewport w="256" h="256"/>
 		</Camera>
 		<Culling/>
 		<CullingAABBSpecial type="dirLight"/>
-		<DirLight spotlight="yes" spotDecay="0.7" decay="0.3" radius="8.2" color="0xfbed64ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.509804" export="true" />
+		<DirLight spotlight="yes" spotDecay="0.7" decay="0.2" radius="9" color="0x82822aff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.7" export="true" />
 	</Entity>
 	<Entity init="true">
 		<Name name="faro06"/>
 		<Transform pos="-0.898963 27.795532 89.316673" lookAt="-0.917587 26.791155 89.261391"/>
 		<Shadow resolution="256"/>
-		<Camera fov="86.000000" znear="0.300000" zfar="4.100000">
+		<Camera fov="130.000000" znear="0.300000" zfar="4.500000">
 			<viewport w="256" h="256"/>
 		</Camera>
 		<Culling/>
 		<CullingAABBSpecial type="dirLight"/>
-		<DirLight spotlight="yes" spotDecay="0.7" decay="0.3" radius="8.2" color="0xfbed64ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.509804" export="true" />
+		<DirLight spotlight="yes" spotDecay="0.7" decay="0.2" radius="9" color="0x82822aff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.7" export="true" />
 	</Entity>
 	<Entity init="true">
 		<Name name="faro07"/>
 		<Transform pos="-6.538963 27.795532 89.316673" lookAt="-6.557587 26.791155 89.261391"/>
 		<Shadow resolution="256"/>
-		<Camera fov="86.000000" znear="0.300000" zfar="4.100000">
+		<Camera fov="130.000000" znear="0.300000" zfar="4.500000">
 			<viewport w="256" h="256"/>
 		</Camera>
 		<Culling/>
 		<CullingAABBSpecial type="dirLight"/>
-		<DirLight spotlight="yes" spotDecay="0.7" decay="0.3" radius="8.2" color="0xfbed64ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.509804" export="true" />
+		<DirLight spotlight="yes" spotDecay="0.7" decay="0.2" radius="9" color="0x82822aff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.7" export="true" />
 	</Entity>
 	<Entity init="true">
 		<Name name="lampa"/>
@@ -160,67 +160,67 @@
 		<Name name="faro08"/>
 		<Transform pos="-133.378708 14.191265 126.094116" lookAt="-133.369522 13.192547 126.096992"/>
 		<Shadow resolution="256"/>
-		<Camera fov="86.000000" znear="0.300000" zfar="8.100000">
+		<Camera fov="130.000000" znear="0.300000" zfar="4.500000">
 			<viewport w="256" h="256"/>
 		</Camera>
 		<Culling/>
 		<CullingAABBSpecial type="dirLight"/>
-		<DirLight spotlight="yes" spotDecay="0.7" decay="0.3" radius="16.2" color="0xfbed64ff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.509804" export="true" />
+		<DirLight spotlight="yes" spotDecay="0.7" decay="0.2" radius="9" color="0x82822aff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.7" export="true" />
 	</Entity>
 	<Entity init="true">
 		<Name name="faro09"/>
 		<Transform pos="-97.988716 14.191265 126.574120" lookAt="-97.979530 13.192547 126.576996"/>
 		<Shadow resolution="256"/>
-		<Camera fov="86.000000" znear="0.300000" zfar="4.900001">
+		<Camera fov="130.000000" znear="0.300000" zfar="4.500000">
 			<viewport w="256" h="256"/>
 		</Camera>
 		<Culling/>
 		<CullingAABBSpecial type="dirLight"/>
-		<DirLight spotlight="yes" spotDecay="0.7" decay="0.3" radius="9.8" color="0xfbed64ff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.509804" export="true" />
+		<DirLight spotlight="yes" spotDecay="0.7" decay="0.2" radius="9" color="0x82822aff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.7" export="true" />
 	</Entity>
 	<Entity init="true">
 		<Name name="faro0A"/>
 		<Transform pos="-88.698723 14.191265 126.574120" lookAt="-88.689537 13.192547 126.576996"/>
 		<Shadow resolution="256"/>
-		<Camera fov="86.000000" znear="0.300000" zfar="4.900001">
+		<Camera fov="130.000000" znear="0.300000" zfar="4.500000">
 			<viewport w="256" h="256"/>
 		</Camera>
 		<Culling/>
 		<CullingAABBSpecial type="dirLight"/>
-		<DirLight spotlight="yes" spotDecay="0.7" decay="0.3" radius="9.8" color="0xfbed64ff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.509804" export="true" />
+		<DirLight spotlight="yes" spotDecay="0.7" decay="0.2" radius="9" color="0x82822aff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.7" export="true" />
 	</Entity>
 	<Entity init="true">
 		<Name name="faro0B"/>
 		<Transform pos="-72.988724 14.191265 126.574120" lookAt="-72.979538 13.192547 126.576996"/>
 		<Shadow resolution="256"/>
-		<Camera fov="86.000000" znear="0.300000" zfar="4.900001">
+		<Camera fov="130.000000" znear="0.300000" zfar="4.500000">
 			<viewport w="256" h="256"/>
 		</Camera>
 		<Culling/>
 		<CullingAABBSpecial type="dirLight"/>
-		<DirLight spotlight="yes" spotDecay="0.7" decay="0.3" radius="9.8" color="0xfbed64ff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.509804" export="true" />
+		<DirLight spotlight="yes" spotDecay="0.7" decay="0.2" radius="9" color="0x82822aff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.7" export="true" />
 	</Entity>
 	<Entity init="true">
 		<Name name="faro0C"/>
 		<Transform pos="-57.358723 14.191265 126.574120" lookAt="-57.349537 13.192547 126.576996"/>
 		<Shadow resolution="256"/>
-		<Camera fov="86.000000" znear="0.300000" zfar="4.900001">
+		<Camera fov="130.000000" znear="0.300000" zfar="4.500000">
 			<viewport w="256" h="256"/>
 		</Camera>
 		<Culling/>
 		<CullingAABBSpecial type="dirLight"/>
-		<DirLight spotlight="yes" spotDecay="0.7" decay="0.3" radius="9.8" color="0xfbed64ff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.509804" export="true" />
+		<DirLight spotlight="yes" spotDecay="0.7" decay="0.2" radius="9" color="0x82822aff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.7" export="true" />
 	</Entity>
 	<Entity init="true">
 		<Name name="faro0D"/>
 		<Transform pos="-115.468712 14.191265 136.264130" lookAt="-115.459526 13.192547 136.266998"/>
 		<Shadow resolution="256"/>
-		<Camera fov="86.000000" znear="0.300000" zfar="4.900001">
+		<Camera fov="130.000000" znear="0.300000" zfar="4.500000">
 			<viewport w="256" h="256"/>
 		</Camera>
 		<Culling/>
 		<CullingAABBSpecial type="dirLight"/>
-		<DirLight spotlight="yes" spotDecay="0.7" decay="0.3" radius="9.8" color="0xfbed64ff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.509804" export="true" />
+		<DirLight spotlight="yes" spotDecay="0.7" decay="0.2" radius="9" color="0x82822aff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.7" export="true" />
 	</Entity>
 	<Entity init="true">
 		<Name name="Luz_gerenal"/>
@@ -230,18 +230,77 @@
 		</Camera>
 		<Culling/>
 		<CullingAABBSpecial type="dirLight"/>
-		<DirLight spotlight="yes" spotDecay="0.7" decay="0.05" radius="266.7" color="0x923232ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.7" export="true" />
+		<DirLight spotlight="yes" spotDecay="0.7" decay="0.05" radius="266.7" color="0x923232ff" shadowIntensity="0" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.3" export="true" />
 	</Entity>
 	<Entity init="true">
 		<Name name="faro0F"/>
 		<Transform pos="-83.398705 14.191265 136.264130" lookAt="-83.389519 13.192547 136.266998"/>
 		<Shadow resolution="256"/>
-		<Camera fov="86.000000" znear="0.300000" zfar="4.900001">
+		<Camera fov="130.000000" znear="0.300000" zfar="4.500000">
 			<viewport w="256" h="256"/>
 		</Camera>
 		<Culling/>
 		<CullingAABBSpecial type="dirLight"/>
-		<DirLight spotlight="yes" spotDecay="0.7" decay="0.3" radius="9.8" color="0xfbed64ff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.509804" export="true" />
+		<DirLight spotlight="yes" spotDecay="0.7" decay="0.2" radius="9" color="0x82822aff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.7" export="true" />
+	</Entity>
+	<Entity init="true">
+		<Name name="faro10"/>
+		<Transform pos="-127.687050 14.363577 136.084930" lookAt="-127.619835 13.211735 136.129089"/>
+		<Shadow resolution="256"/>
+		<Camera fov="130.000000" znear="0.300000" zfar="4.500000">
+			<viewport w="256" h="256"/>
+		</Camera>
+		<Culling/>
+		<CullingAABBSpecial type="dirLight"/>
+		<DirLight spotlight="yes" spotDecay="0.7" decay="0.2" radius="9" color="0x82822aff" shadowIntensity="0.65" shadowFocus="0" shadowJittering="1" specularAmountModifier="0" specularPowerFactor="1" intensity="0.7" export="true" />
+	</Entity>
+	<Entity init="yes" >
+		<Name name="mist-00" />
+		<Transform pos="-43.2386 6.00633 130.568" />
+		<Mist
+			chaotic="yes"
+			dX="1"
+			dZ="1"
+			darkenAlpha="0.4"
+			depthTolerance="200"
+			export="yes"
+			factor="1"
+			h="0.5"
+			intensity="1"
+			l="5000"
+			layerDecay="0.05"
+			minimun="0"
+			sqSqrt="0"
+			unitWorldSize="25"
+			w="5000"
+		>
+			<top color="160000cc" />
+			<bottom color="99" />
+		</Mist>
+	</Entity>
+	<Entity init="yes" >
+		<Name name="mist-02" />
+		<Transform pos="-43.2386 0.48633 130.568" />
+		<Mist
+			chaotic="yes"
+			dX="1"
+			dZ="1"
+			darkenAlpha="0.4"
+			depthTolerance="200"
+			export="yes"
+			factor="1"
+			h="7.223"
+			intensity="1"
+			l="5000"
+			layerDecay="0.05"
+			minimun="0"
+			sqSqrt="0"
+			unitWorldSize="25"
+			w="5000"
+		>
+			<top color="230b0bcc" />
+			<bottom color="4f4f4f99" />
+		</Mist>
 	</Entity>
 	<Entity init="true">
 		<Name name="emitter-0E"/>

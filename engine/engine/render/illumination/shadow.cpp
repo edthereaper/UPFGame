@@ -105,15 +105,8 @@ void CShadow::generate()
     std::stringstream ss;
     ss << "SPOTSM:" << ((Entity*)Handle(this).getOwner())->getName();
     TraceScoped s(ss.str().c_str());
-#else
-    TraceScoped s("SPOTSM");
 #endif
-
-    // Start rendering in the rt of the depth buffer
-    shadowMap.clearDepthBuffer();
-    shadowMap.activate();
-
-    RenderManager::renderShadows(Handle(this).getOwner());
+    RenderManager::renderShadows(Handle(this).getOwner(), shadowMap);
 }
 
 void CShadow::update(float)

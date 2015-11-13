@@ -151,8 +151,6 @@ void CCubeShadow::generate()
     TraceScoped s("OMNISM");
 #endif
 
-    shadowCubeMap.clearRenderTargetViews(utils::BLACK);
-    shadowCubeMap.clearDepthBuffers();
 
     Handle e_h = Handle(this).getOwner();
     Entity* e(e_h);
@@ -170,9 +168,8 @@ void CCubeShadow::generate()
                 ss << e->getName() << ".face:"<< i;
                 TraceScoped scope(ss.str().c_str());
             #endif
-            shadowCubeMap.activateFace(i);
 
-            RenderManager::renderShadows(e_h, Culling::cullDirection_e(i),
+            RenderManager::renderShadows(e_h, shadowCubeMap, Culling::cullDirection_e(i),
                 normalTech, skinnedTech, instancedTech);
         }
     }

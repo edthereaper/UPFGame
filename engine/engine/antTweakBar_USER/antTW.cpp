@@ -242,11 +242,17 @@ void AntTWManager::createDebugTweak()
     TwAddVarCB(bar, "pipelineEdit", enumFX, openPipelineEdit, returnZero,
         app.getDeferredRender(), "label=`Tweak FX` group='Render' ");
     TwAddSeparator(bar, nullptr, "");
-
-    TwAddVarRW(bar, "culling", TW_TYPE_BOOLCPP, &app.instanceCulling,
+    
+    static const TwEnumVal cullingType[] = {
+			{ App::IC_NO, "No" },
+			{ App::IC_BEFORE_W_PARTITION, "Before w/ partition" },
+			{ App::IC_BEFORE_W_O_PARTITION, "Before w/o partition" },
+			{ App::IC_AFTER, "After" },
+	};
+	static const TwType iCullEType = 
+        TwDefineEnum("icullType", cullingType, ARRAYSIZE(cullingType));
+    TwAddVarRW(bar, "culling", iCullEType, &app.instanceCulling,
         "label=`Instance culling` group='Performance'");
-    TwAddVarRW(bar, "maskICulling", TW_TYPE_BOOLCPP, &app.useMaskForInstanceCulling,
-        "label=`Use mask for culling` group='Performance'");
     TwAddVarRW(bar, "paint", TW_TYPE_BOOLCPP, &app.drawPaint,
         "label=`Paint scenery` group='Performance'");
     TwAddVarRW(bar, "shadows", TW_TYPE_BOOLCPP, &app.enableShadows,

@@ -6,6 +6,7 @@
 	<Tint color="brown" />
 	<SelfIllumination/>
 	
+	<TagNonStaticShadow/>
 	<prefab name="mesh/raiz_02" />
 	<Mesh visible="false" />
 </Entity>

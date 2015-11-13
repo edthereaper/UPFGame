@@ -212,6 +212,20 @@ void RenderedTextureCube::activateFace(size_t i)
     activateViewport();
 }
 
+void RenderedTextureCube::clearRenderTargetView(size_t i, const float color[4])
+{
+    assert(i<6);
+    auto rtv = renderTargetView[i];
+    assert(rtv);
+    Render::getContext()->ClearRenderTargetView(rtv, color);
+}
+void RenderedTextureCube::clearDepthBuffer(size_t i)
+{
+    assert(i<6);
+    auto dsv = depthStencilView[i];
+    assert(dsv);
+    Render::getContext()->ClearDepthStencilView(dsv, D3D11_CLEAR_DEPTH, 1.0f, 0);
+}
 
 void RenderedTextureCube::clearRenderTargetViews(const float color[4])
 {

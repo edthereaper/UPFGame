@@ -20,6 +20,7 @@
 			report	="flare-shot"
 		/>
 	</CharacterController>
+	<TagNonStaticShadow/>
 	<Mesh motionBlur="0.3"/>
 	<Emitter name="transform_enemy" position="0.000000 0.000000 0.000000" rotation="0.018028 -0.021893 -0.014354 0.999495" count="3" particles0="emitter_0" particles1="emitter_1" particles2="emitter_2"/>
 </componentPrefab>

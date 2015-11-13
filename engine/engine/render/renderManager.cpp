@@ -149,8 +149,10 @@ void RenderManager::renderKey(const key_t& k,
                 const CSkeleton* skeleton = k.special;
                 assert(skeleton != nullptr);
                 if ((skeleton->getCullingMask() & culler.getMask())!=0) {
+                    auto bone0 = skeleton->getBone0();
+                    assert(bone0 != CSkeleton::BAD_BONE);
                     setObjectConstants(transform->getWorld(), k.tint, k.selfIllumination,
-                        cmesh, skeleton->getBone0(), material);
+                        cmesh, bone0, material);
                     mesh->renderGroups(k.group0, k.groupf);
                 }
             } break;
@@ -171,19 +173,17 @@ void RenderManager::renderKey(const key_t& k,
                     k.tint, k.selfIllumination, cmesh, 0, material);
                 CInstancedMesh* instances = k.special;
                 assert(instances != nullptr);
-#ifdef _DEBUG
-                //Enable performance test (by the way, this proves culling is a good idea,
-                // despite being a costly operation)
-                if (!App::get().instanceCulling) {
-                    mesh->renderInstanced(k.group0, k.groupf,
-                        *instances->getData(), instances->getNInstances());
-                } else
-#endif
-                {    
-                    size_t nCulled = instances->cull(culler);
-                    if (nCulled > 0) {
-                        mesh->renderInstanced(k.group0, k.groupf, *instances->getData(), nCulled);
-                    }
+
+                switch (App::get().instanceCulling) {
+                    case App::IC_NO:
+                        mesh->renderInstanced(k.group0, k.groupf,
+                            *instances->getData(true), instances->getNInstances());
+                        break;
+                    default:
+                        size_t nCulled = instances->cull(culler);
+                        if (nCulled > 0) {
+                            mesh->renderInstanced(k.group0, k.groupf, *instances->getData(), nCulled);
+                        }
                 }
             }
             break;
@@ -353,8 +353,11 @@ void RenderManager::addKeys(Handle entity_h)
     }
 }
 
-void RenderManager::renderShadows(component::Handle light_h,
+void RenderManager::renderShadowKeys(
+    component::Handle light_h,
     Culling::cullDirection_e cullingType,
+    const Culling::CullerDelegate& culler,
+    shadowKeyContainer_t keys,
     Technique* normalTech,
     Technique* skinnedTech,
     Technique* instancedTech)
@@ -365,32 +368,147 @@ void RenderManager::renderShadows(component::Handle light_h,
         Technique::getManager().getByName("gen_shadows_skinned");
     static Technique*const defInstancedTech =
         Technique::getManager().getByName("gen_shadows_instanced");
-
-    if (shadowsSortRequired) {
-        std::sort(shadowKeys.begin(), shadowKeys.end(), compTechMesh);
-        shadowsSortRequired = false;
-    }
+    if (normalTech == nullptr) {normalTech = defNormalTech;}
+    if (skinnedTech == nullptr) {skinnedTech = defSkinnedTech;}
+    if (instancedTech == nullptr) {instancedTech = defInstancedTech;}
+    
     Entity* light_e(light_h);
     CCamera* light = light_e->get<CCamera>();
     
+    //Setup camera and culler
     if (cullingType != Culling::NORMAL) {
         CCubeShadow* shadow = light_e->get<CCubeShadow>();
         auto data(shadow->getCachedCamData(cullingType));
         light->setup(data.view, data.viewProjection, data.front, data.right, data.up);
     }
-    Culling::CullerDelegate culler(light_h, cullingType);
-
+    
     activateLight(*light);
     activateCamera(*light);
-
-    if (normalTech == nullptr) {normalTech = defNormalTech;}
-    if (skinnedTech == nullptr) {skinnedTech = defSkinnedTech;}
-    if (instancedTech == nullptr) {instancedTech = defInstancedTech;}
 
     Technique* currentTech = normalTech;
     currentTech->activate();
     bool skinned = false;
-    for (auto k : shadowKeys) {
+    for (const auto& k : keys) {
+        CTransform* t = k.transform;
+        assert(t != nullptr);
+        CMesh* cmesh(k.mesh);
+        Mesh* mesh = cmesh->getMesh();
+        if (mesh != Mesh::current_active_mesh) {mesh->activate();}
+        switch (k.specialClass) {
+            case SKINNED: {
+                    const CSkeleton* skeleton = k.special;
+                    if (currentTech != skinnedTech) {
+                        skinnedTech->activate();
+                        currentTech = skinnedTech;
+                    }
+                    assert(skeleton != nullptr);
+                    setObjectConstants(t->getWorld(),0,0,nullptr,skeleton->getBone0());
+                    mesh->render();
+                } break;
+            default:
+            case NORMAL: {
+                    Entity* e(k.entity);
+                    if (currentTech != normalTech) {
+                        normalTech->activate();
+                        currentTech = normalTech;
+                    }
+                    setObjectConstants(t->getWorld());
+                    mesh->render();
+                } break;
+            case INSTANCED: {
+                    setObjectConstants(t->getWorld());
+                    if (currentTech != instancedTech) {
+                        instancedTech->activate();
+                        currentTech = instancedTech;
+                    }
+                    CInstancedMesh* instances = k.special;
+                    assert(instances != nullptr);
+
+                    switch (App::get().instanceCulling) {
+                        case App::IC_BEFORE_W_O_PARTITION:
+                            instances->partitionOnBitMask(culler);
+                            // fall thru
+                        case App::IC_BEFORE_W_PARTITION:
+                            mesh->renderInstanced(*instances->getData(), instances->getNCulled());
+                            break;
+                        case App::IC_AFTER : {
+                                size_t nCulled = instances->cull(culler);
+                                if (nCulled > 0) {
+                                    mesh->renderInstanced(*instances->getData(), nCulled);
+                                }
+                            } break;
+                        default:
+                        case App::IC_NO :
+                            mesh->renderInstanced(*instances->getData(), instances->getNInstances());
+                            break;
+                    }
+                } break;
+        }
+    }
+}
+
+bool RenderManager::renderShadows(component::Handle light_h,
+    RenderedTextureCube& shadowCubeMap,
+    Culling::cullDirection_e cullingType,
+    Technique* normalTech,
+    Technique* skinnedTech,
+    Technique* instancedTech)
+{
+    if (shadowsSortRequired) {
+        std::sort(shadowKeys.begin(), shadowKeys.end(), compTechMesh);
+        shadowsSortRequired = false;
+    }
+    Culling::CullerDelegate culler(light_h, cullingType);
+    shadowKeyContainer_t keys;
+    bool changed = testShadowKeys(culler, keys);
+    if (changed && !keys.empty()) {
+        // Start rendering in the rt of the depth buffer
+        auto face = cullingType;
+        assert(face>=0);
+        shadowCubeMap.clearRenderTargetView(face, utils::BLACK);
+        shadowCubeMap.clearDepthBuffer(face);
+        shadowCubeMap.activateFace(face);
+        renderShadowKeys(light_h, cullingType, culler, keys,
+            normalTech, skinnedTech, instancedTech);
+    }
+    return changed;
+}
+
+bool RenderManager::renderShadows(component::Handle light_h,
+    RenderedTexture& shadowMap,
+    Culling::cullDirection_e cullingType,
+    Technique* normalTech,
+    Technique* skinnedTech,
+    Technique* instancedTech)
+{
+    if (shadowsSortRequired) {
+        std::sort(shadowKeys.begin(), shadowKeys.end(), compTechMesh);
+        shadowsSortRequired = false;
+    }
+    Culling::CullerDelegate culler(light_h, cullingType);
+    shadowKeyContainer_t keys;
+    bool changed = testShadowKeys(culler, keys);
+    if (changed && !keys.empty()) {
+//#ifdef _DEBUG
+//        App::get().captureFrame();
+//#endif
+
+        // Start rendering in the rt of the depth buffer
+        shadowMap.clearDepthBuffer();
+        shadowMap.activate();
+        renderShadowKeys(light_h, cullingType, culler, keys,
+            normalTech, skinnedTech, instancedTech);
+    }
+    return changed;
+}
+
+bool RenderManager::testShadowKeys(
+    const Culling::CullerDelegate& culler,
+    shadowKeyContainer_t& keys)
+{
+    bool changed = culler.hasChanged();
+
+    for (const auto& k : shadowKeys) {
         CTransform* t = k.transform;
         assert(t != nullptr);
         CMesh* mesh(k.mesh);
@@ -398,17 +516,11 @@ void RenderManager::renderShadows(component::Handle light_h,
             switch (k.specialClass) {
                 case SKINNED: {
                         const CSkeleton* skeleton = k.special;
-                        if (skeleton->disabled()) {continue;}
-                        if ((skeleton->getCullingMask() & culler.getMask())!=0) {
-                            if (currentTech != skinnedTech) {
-                                skinnedTech->activate();
-                                currentTech = skinnedTech;
-                            }
-                            assert(skeleton != nullptr);
-                            setObjectConstants(t->getWorld(),0,0,nullptr,skeleton->getBone0());
-                            const auto m(mesh->getMesh());
-                            if (m != Mesh::current_active_mesh) {m->activate();}
-                            m->render();
+                        auto mask = culler.getMask();
+                        if (!skeleton->disabled() &&
+                            (skeleton->getCullingMask() & mask)==mask) {
+                            changed |= k.nonStatic;
+                            keys.push_back(k);
                         }
                     }
                     break;
@@ -417,46 +529,41 @@ void RenderManager::renderShadows(component::Handle light_h,
                         Entity* e(k.entity);
                         CCullingAABB* aabb = e->get<CCullingAABB>();
                         if (aabb==nullptr || culler.cull(*aabb)) {
-                            if (currentTech != normalTech) {
-                                normalTech->activate();
-                                currentTech = normalTech;
-                            }
-                            setObjectConstants(t->getWorld());
-                            const auto m(mesh->getMesh());
-                            if (m != Mesh::current_active_mesh) {m->activate();}
-                            m->render();
+                            changed |= k.nonStatic;
+                            keys.push_back(k);
                         }
                     }
                     break;
                 case INSTANCED: {
-                        setObjectConstants(t->getWorld());
                         CInstancedMesh* instances = k.special;
-                        size_t nInstances(instances->getNInstances());
-                        if (nInstances > 0) {
-                            if (currentTech != instancedTech) {
-                                instancedTech->activate();
-                                currentTech = instancedTech;
-                            } 
-                            const auto m(mesh->getMesh());
-                            if (m != Mesh::current_active_mesh) {m->activate();}
-                            assert(instances != nullptr);
-                            
-#ifdef _DEBUG
-                            if (!App::get().instanceCulling) {
-                                m->renderInstanced(*instances->getData(), instances->getNInstances());
-                            } else
-#endif
-                            {
-                                size_t nCulled = instances->cull(culler);
-                                if (nCulled > 0) {
-                                    m->renderInstanced(*instances->getDirtyData(), nCulled);
-                                }
+                        assert(instances != nullptr);
+                        if (instances->getNInstances() > 0 && instances->cullHighLevel(culler) ) {
+                            switch (App::get().instanceCulling) {
+                                case App::IC_BEFORE_W_PARTITION:
+                                    if (instances->cull(culler) > 0) {
+                                        changed |= k.nonStatic || instances->isWorldDirty();
+                                        keys.push_back(k);
+                                    }
+                                    break;
+                                case App::IC_BEFORE_W_O_PARTITION:
+                                    if (instances->testCull(culler) > 0) {
+                                        changed |= k.nonStatic || instances->isWorldDirty();
+                                        keys.push_back(k);
+                                    }
+                                    break;
+                                case App::IC_NO :
+                                case App::IC_AFTER :
+                                default:
+                                    changed |= k.nonStatic || instances->isWorldDirty();
+                                    keys.push_back(k);
+                                    break;
                             }
                         }
                     } break;
             }
         }
     }
+    return changed;
 }
 
 const Technique* RenderManager::techniqueOf(const shadowKey_t& k)
@@ -482,6 +589,13 @@ const Technique* RenderManager::instancedVersionOf(const Technique* technique)
     auto it = instancedVersion.find(technique);
     assert(it != instancedVersion.end() &&"No instanced version of this technique!");
     return it->second;
+}
+
+void CTagNonStaticShadow::ensure(component::Handle e_h) {
+    component::Entity* e(e_h);
+    if (!e->has<CTagNonStaticShadow>()) {
+        e->add(component::getManager<CTagNonStaticShadow>()->createObj());
+    }
 }
 
 }

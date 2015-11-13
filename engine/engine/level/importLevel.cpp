@@ -17,6 +17,7 @@ using namespace physX_user;
 #include "render/render_utils.h"
 #include "render/mesh/CInstancedMesh.h"
 #include "render/environment/mist.h"
+#include "render/renderManager.h"
 using namespace render;
 
 #include "animation/cskeleton.h"
@@ -172,6 +173,7 @@ Entity* LevelImport::createInstancedTransformablePiece(const pieceData_t& p)
     }
     
     Entity* eYes = getInstancedMesh(p.transformation+nameSuffix+"#", p.transformation, true);
+    CTagNonStaticShadow::ensure(eYes);
     CInstancedMesh* instancedTransformedMesh = eYes->get<CInstancedMesh>();
     instancedTransformedMesh->setAABBScale(1.05f); //Room for the breathe effect
     

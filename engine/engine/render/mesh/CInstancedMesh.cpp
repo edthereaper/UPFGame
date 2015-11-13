@@ -15,16 +15,18 @@ using namespace utils;
 
 namespace render {
 
-void CInstancedMesh::updateInstanceData()
+void CInstancedMesh::updateInstanceData(size_t count)
 {
     assert(created);
-    nInstances = dataBuffer->size();
-    if (nInstances > 0) {
-        instanceData->updateFromCPU(dataBuffer->data(),
-            sizeof(instance_t) * nInstances);
+    assert(count <= nInstances);
+    if (count > 0) {
+        instanceData->updateFromCPU(dataBuffer->data(), sizeof(instance_t) * count);
     }
     dirty = false;
-    culled = false;
+    worldDirty = false;
+    updateCulled = false;
+    changed = false;
+    isComplete = count == nInstances;
 }
 
 uint32_t CInstancedMesh::getFreshDataIndex(unsigned index)
@@ -82,7 +84,10 @@ unsigned CInstancedMesh::addInstance(instance_t&& instance)
     instance.userDataB = getFreshDataIndex(unsigned(nInstances-1));
     dataBuffer->push_back(instance);
     dirty = true;
+    worldDirty = true;
     changed = true;
+    culled = false;
+    updateCulled = false;
 
     CAABB* baseAABB = Handle(this).getBrother<CAABB>();
     if (!usesGlobalAABB || baseAABB->isInvalid()) {
@@ -111,6 +116,7 @@ bool CInstancedMesh::createInstanceData()
         utils::zero_v, utils::zero_v, true);
     dataBuffer->resize(nInstances);
     dirty = false;
+    updateCulled = false;
     created = true;
     return b;
 }
@@ -166,11 +172,28 @@ bool CInstancedMesh::removeInstance(unsigned i)
 
     doRecalculateAABB = true;
     dirty = true;
+    worldDirty = true;
+    culled = false;
+    updateCulled = false;
     changed = true;
     return true;
 }
 
 CInstancedMesh::instance_t& CInstancedMesh::getInstance(unsigned i)
+{
+    assert(dataBuffer != nullptr);
+    assert(instanceExtraData != nullptr);
+    const auto& d = (*instanceExtraData)[i];
+    const auto& index = d.instanceIndex;
+    dirty = true;
+    worldDirty = true;
+    culled = false;
+    updateCulled = false;
+    assert(index < nInstances);
+    return (*dataBuffer)[index];
+}
+
+CInstancedMesh::instance_t& CInstancedMesh::getInstance_p(unsigned i)
 {
     assert(dataBuffer != nullptr);
     assert(instanceExtraData != nullptr);
@@ -186,7 +209,6 @@ void CInstancedMesh::setInstance(unsigned i, instance_t&& next)
     auto& item = getInstance(i);
     next.userDataB = item.userDataB;
     item = next;
-    dirty = true;
 }
 
 bool CInstancedMesh::changeInstanceTint(
@@ -194,7 +216,7 @@ bool CInstancedMesh::changeInstanceTint(
 {
     
     assert(dataBuffer != nullptr);
-    auto& item = getInstance(i);
+    auto& item = getInstance_p(i);
     item.setTint(c);
     dirty = true;
     return true;
@@ -206,7 +228,7 @@ bool CInstancedMesh::changeInstanceSelfIllumination(
 {
     
     assert(dataBuffer != nullptr);
-    auto& item = getInstance(i);
+    auto& item = getInstance_p(i);
     item.setSelfIllumination(c);
     dirty = true;
     return true;
@@ -223,6 +245,9 @@ bool CInstancedMesh::replaceInstance(
             next.userDataB = i->userDataB;
             *i = next;
             dirty = true;
+            worldDirty = true;
+            culled = false;
+            updateCulled = false;
             if (substantialChange) {
                 doRecalculateAABB = true;
                 changed = true;
@@ -239,7 +264,6 @@ bool CInstancedMesh::replaceInstanceWorld(
     assert(dataBuffer != nullptr);
     assert(index < nInstances);
     getInstance(index).world = next;
-    dirty = true;
     if (substantialChange) {
         doRecalculateAABB = true;
         changed = true;
@@ -247,13 +271,7 @@ bool CInstancedMesh::replaceInstanceWorld(
     return true;
 }
 
-#undef CULLING_METHOD_NEW_VECTOR
-#define CULLING_METHOD_PARTITION
-#undef CULLING_SKIP
-
-//#define CHECK_CHANGEDVECTOR
-
-size_t CInstancedMesh::cull(const Culling::CullerDelegate& cullerDelegate)
+bool CInstancedMesh::cullHighLevel(const Culling::CullerDelegate& cullerDelegate)
 {
     if (usesGlobalAABB) {
         if (doRecalculateAABB) {
@@ -262,67 +280,62 @@ size_t CInstancedMesh::cull(const Culling::CullerDelegate& cullerDelegate)
         AABB xaabb(aabb);
         xaabb.skinAABB(aabbSkin);
         xaabb.scaleAABB(aabbScale);
-        if (!cullerDelegate.cull(xaabb)) {
-            return 0;
-        }
+        return cullerDelegate.cull(xaabb);
+    } else {
+        return true;
     }
+}
 
-#if defined(CULLING_SKIP)
-    return dataBuffer->size();
-#endif
-
+size_t CInstancedMesh::testCull(const Culling::CullerDelegate& cullerDelegate)
+{
     Entity* me = Handle(this).getOwner();
     CAABB* aabb = me->get<CAABB>();
     auto culler = Culler(this, cullerDelegate, *aabb, !instancesWillMove);
 
-    
-#if defined(CULLING_METHOD_NEW_VECTOR)
-    std::vector<instance_t> culledDataBuffer;
-    culledDataBuffer.reserve(dataBuffer->size());
-    for(const auto& i : *dataBuffer) {
-        if (culler(i)) {
-            culledDataBuffer.push_back(i);
-        }
-    }
-    nCulled = culledDataBuffer.size();
-    if (nCulled > 0) {
-        instanceData->updateFromCPU(culledDataBuffer.data(), sizeof(instance_t) * nCulled);
-    }
-#elif defined(CULLING_METHOD_PARTITION)
     Swapper swapper(this);
     auto begin = dataBuffer->begin();
 
-#if defined(_DEBUG) && defined(CHECK_CHANGEDVECTOR)
-    auto dataBufferCopy(*dataBuffer);
-#endif
+    nCulled = 0;
+    for (auto& i : *dataBuffer) {
+        if (culler(i)) {
+            ++nCulled;
+        }
+    }
+    return nCulled;
+}
+
+
+size_t CInstancedMesh::cull(const Culling::CullerDelegate& cullerDelegate)
+{
+    Entity* me = Handle(this).getOwner();
+    CAABB* aabb = me->get<CAABB>();
+    auto culler = Culler(this, cullerDelegate, *aabb, !instancesWillMove);
+
+    Swapper swapper(this);
+    auto begin = dataBuffer->begin();
 
     auto prevNCulled = nCulled;
     bool changedVector = utils::partition_swap(begin, dataBuffer->end(), culler, swapper);
     nCulled = begin - dataBuffer->begin();
     changedVector |= (prevNCulled != nCulled);
-
-#if defined(_DEBUG) && defined(CHECK_CHANGEDVECTOR)
-    if (!changedVector && prevNCulled != 0) {
-        assert(nCulled == prevNCulled);
-        for (auto i = 0; i < nCulled; ++i) {
-            auto a = (*dataBuffer)[i];
-            auto b = dataBufferCopy[i];
-            assert(a == b);
-        }
-    }
-#endif
-
-    if (changedVector && nCulled > 0) {
-        instanceData->updateFromCPU(dataBuffer->data(), sizeof(instance_t) * nCulled);
-    }
-
-#elif !defined(CULLING_SKIP)
-#error No culling method!
-#endif
-
-    dirty = false;
     culled = true;
-    changed = false;
+    updateCulled = changedVector && nCulled > 0;
+    return nCulled;
+}
+
+size_t CInstancedMesh::partitionOnBitMask(const Culling::CullerDelegate& cullerDelegate)
+{
+    auto test = BitMaskChecker(this, cullerDelegate);
+
+    Swapper swapper(this);
+    auto begin = dataBuffer->begin();
+
+    auto prevNCulled = nCulled;
+    bool changedVector = utils::partition_swap(begin, dataBuffer->end(), test, swapper);
+    nCulled = begin - dataBuffer->begin();
+    changedVector |= (prevNCulled != nCulled);
+    culled = true;
+    updateCulled = changedVector && nCulled > 0;
     return nCulled;
 }
 

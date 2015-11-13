@@ -15,5 +15,5 @@
 		/>
 	</RigidBody>
 	<Emitter name="bullet_no_physx" position="0.00000 0.00000 0.00000" rotation="0.018028f -0.021893f -0.014354f 0.999495f" count="2" particles0="emitter_0" particles1="emitter_1"/>
-
+	<TagNonStaticShadow/>
 </Entity>
