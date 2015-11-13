@@ -430,8 +430,6 @@ void App::loadConfig()
 
     if (!strcmp(windowedStr, "off")) {
         instanceCulling = IC_NO;
-    } else if (!strcmp(windowedStr, "highlevel")) {
-        instanceCulling = IC_HIGHLEVEL;
     } else if (!strcmp(windowedStr, "before")) {
         instanceCulling = IC_BEFORE_W_O_PARTITION;
     } else if (!strcmp(windowedStr, "before-late-partition")) {

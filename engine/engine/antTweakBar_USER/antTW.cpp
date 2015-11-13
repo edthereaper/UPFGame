@@ -245,7 +245,6 @@ void AntTWManager::createDebugTweak()
     
     static const TwEnumVal cullingType[] = {
 			{ App::IC_NO, "No" },
-			{ App::IC_HIGHLEVEL, "High Level" },
 			{ App::IC_BEFORE_W_PARTITION, "Before w/ partition" },
 			{ App::IC_BEFORE_W_O_PARTITION, "Before w/o partition" },
 			{ App::IC_AFTER, "After" },

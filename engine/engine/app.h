@@ -285,7 +285,6 @@ class App {
             IC_BEFORE_W_PARTITION,
             IC_BEFORE_W_O_PARTITION,
             IC_AFTER,
-            IC_HIGHLEVEL,
         } instanceCulling = IC_NO;
 
 		bool isLoadingThreadActve = false;

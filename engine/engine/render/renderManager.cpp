@@ -174,7 +174,6 @@ void RenderManager::renderKey(const key_t& k,
 
                 switch (App::get().instanceCulling) {
                     case App::IC_NO:
-                    case App::IC_HIGHLEVEL:
                         mesh->renderInstanced(k.group0, k.groupf,
                             *instances->getData(true), instances->getNInstances());
                         break;
@@ -440,7 +439,6 @@ void RenderManager::renderShadowKeys(
                                 }
                             } break;
                         default:
-                        case App::IC_HIGHLEVEL :
                         case App::IC_NO :
                             m->renderInstanced(*instances->getData(), instances->getNInstances());
                             break;
@@ -521,8 +519,9 @@ bool RenderManager::testShadowKeys(
             switch (k.specialClass) {
                 case SKINNED: {
                         const CSkeleton* skeleton = k.special;
+                        auto mask = culler.getMask();
                         if (!skeleton->disabled() &&
-                            (skeleton->getCullingMask() & culler.getMask())!=0) {
+                            (skeleton->getCullingMask() & mask)==mask) {
                             changed |= k.nonStatic;
                             keys.push_back(k);
                         }
@@ -542,24 +541,15 @@ bool RenderManager::testShadowKeys(
                         CInstancedMesh* instances = k.special;
                         assert(instances != nullptr);
                         if (instances->getNInstances() > 0 && instances->cullHighLevel(culler) ) {
-#ifdef _DEBUG
                             switch (App::get().instanceCulling) {
                                 case App::IC_BEFORE_W_PARTITION:
-#endif
                                     if (instances->cull(culler) > 0) {
                                         changed |= k.nonStatic || instances->isWorldDirty();
                                         keys.push_back(k);
                                     }
-#ifdef _DEBUG
                                     break;
                                 case App::IC_BEFORE_W_O_PARTITION:
                                     if (instances->testCull(culler) > 0) {
-                                        changed |= k.nonStatic || instances->isWorldDirty();
-                                        keys.push_back(k);
-                                    }
-                                    break;
-                                case App::IC_HIGHLEVEL :
-                                    if (instances->cullHighLevel(culler)) {
                                         changed |= k.nonStatic || instances->isWorldDirty();
                                         keys.push_back(k);
                                     }
@@ -571,7 +561,6 @@ bool RenderManager::testShadowKeys(
                                     keys.push_back(k);
                                     break;
                             }
-#endif
                         }
                     } break;
             }

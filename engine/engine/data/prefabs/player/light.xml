@@ -1,7 +1,7 @@
 <components>
 	<Camera fov="90" znear="0.1" zfar="30.1" />
 	<CullingCube/>
-	<PtLight color="0xC9B6D9ff" intensity="0.7" decay="0.2" radius="5" offset="0 1.7 0.4" shadowIntensity="0" lockSpatialIndex="yes"/>
+	<PtLight color="0xC9B6D9ff" intensity="0.7" decay="0.2" radius="5" offset="0.1 1.7 0" shadowIntensity="0" lockSpatialIndex="yes"/>
 	<CubeShadow resolution="512" lockSpatialIndex="yes" />
 	
 	<Mesh diffuseAsSelfIllumination="0.07" />
