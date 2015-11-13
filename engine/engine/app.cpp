@@ -1429,6 +1429,7 @@ bool App::updateCinematic(float elapsed)
 	getManager<CSmokeTower>()->forall<void>(&CSmokeTower::updatePaused, elapsed);
 
 	// Skeletons
+    rewindBoneBuffer();
 	auto skelManager(getManager<CSkeleton>());
 	skelManager->update(0);
 	getManager<CBoneLookAt>()->update(0);
@@ -1458,6 +1459,7 @@ bool App::updatePaused(float elapsed)
     getManager<CSmokeTower>()->forall<void>(&CSmokeTower::updatePaused, elapsed);
 
     // Skeletons
+    rewindBoneBuffer();
     auto skelManager(getManager<CSkeleton>());
     skelManager->update(0);
     getManager<CBoneLookAt>()->update(0);
@@ -1653,6 +1655,7 @@ bool App::update(float elapsed)
 #endif
 
     getManager<CMist>()->update(elapsed);
+    rewindBoneBuffer();
 	
 #if !defined(_OBJECTTOOL) && !defined(_PARTICLES)
     // Skeletons
@@ -2170,9 +2173,6 @@ void App::render()
 #endif
 
     Render::getSwapChain()->Present(0, 0);
-    rewindBoneBuffer();
-
-	
 }
 
 void App::destroy()

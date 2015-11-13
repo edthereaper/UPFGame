@@ -149,8 +149,10 @@ void RenderManager::renderKey(const key_t& k,
                 const CSkeleton* skeleton = k.special;
                 assert(skeleton != nullptr);
                 if ((skeleton->getCullingMask() & culler.getMask())!=0) {
+                    auto bone0 = skeleton->getBone0();
+                    assert(bone0 != CSkeleton::BAD_BONE);
                     setObjectConstants(transform->getWorld(), k.tint, k.selfIllumination,
-                        cmesh, skeleton->getBone0(), material);
+                        cmesh, bone0, material);
                     mesh->renderGroups(k.group0, k.groupf);
                 }
             } break;
@@ -386,10 +388,12 @@ void RenderManager::renderShadowKeys(
     Technique* currentTech = normalTech;
     currentTech->activate();
     bool skinned = false;
-    for (auto k : keys) {
+    for (const auto& k : keys) {
         CTransform* t = k.transform;
         assert(t != nullptr);
-        CMesh* mesh(k.mesh);
+        CMesh* cmesh(k.mesh);
+        Mesh* mesh = cmesh->getMesh();
+        if (mesh != Mesh::current_active_mesh) {mesh->activate();}
         switch (k.specialClass) {
             case SKINNED: {
                     const CSkeleton* skeleton = k.special;
@@ -399,9 +403,7 @@ void RenderManager::renderShadowKeys(
                     }
                     assert(skeleton != nullptr);
                     setObjectConstants(t->getWorld(),0,0,nullptr,skeleton->getBone0());
-                    const auto m(mesh->getMesh());
-                    if (m != Mesh::current_active_mesh) {m->activate();}
-                    m->render();
+                    mesh->render();
                 } break;
             default:
             case NORMAL: {
@@ -411,9 +413,7 @@ void RenderManager::renderShadowKeys(
                         currentTech = normalTech;
                     }
                     setObjectConstants(t->getWorld());
-                    const auto m(mesh->getMesh());
-                    if (m != Mesh::current_active_mesh) {m->activate();}
-                    m->render();
+                    mesh->render();
                 } break;
             case INSTANCED: {
                     setObjectConstants(t->getWorld());
@@ -422,7 +422,6 @@ void RenderManager::renderShadowKeys(
                         currentTech = instancedTech;
                     }
                     CInstancedMesh* instances = k.special;
-                    const auto m(mesh->getMesh());
                     assert(instances != nullptr);
 
                     switch (App::get().instanceCulling) {
@@ -430,24 +429,22 @@ void RenderManager::renderShadowKeys(
                             instances->partitionOnBitMask(culler);
                             // fall thru
                         case App::IC_BEFORE_W_PARTITION:
-                            m->renderInstanced(*instances->getData(), instances->getNCulled());
+                            mesh->renderInstanced(*instances->getData(), instances->getNCulled());
                             break;
                         case App::IC_AFTER : {
                                 size_t nCulled = instances->cull(culler);
                                 if (nCulled > 0) {
-                                    m->renderInstanced(*instances->getData(), nCulled);
+                                    mesh->renderInstanced(*instances->getData(), nCulled);
                                 }
                             } break;
                         default:
                         case App::IC_NO :
-                            m->renderInstanced(*instances->getData(), instances->getNInstances());
+                            mesh->renderInstanced(*instances->getData(), instances->getNInstances());
                             break;
                     }
                 } break;
         }
-        
     }
-
 }
 
 bool RenderManager::renderShadows(component::Handle light_h,
@@ -511,7 +508,7 @@ bool RenderManager::testShadowKeys(
 {
     bool changed = culler.hasChanged();
 
-    for (auto k : shadowKeys) {
+    for (const auto& k : shadowKeys) {
         CTransform* t = k.transform;
         assert(t != nullptr);
         CMesh* mesh(k.mesh);
