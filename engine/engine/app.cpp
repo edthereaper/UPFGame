@@ -1418,9 +1418,10 @@ bool App::updateCinematic(float elapsed)
 	getManager<CArmPoint>()->update(0);
 	skelManager->forall(&CSkeleton::testAndAddBonesToBuffer);
 	
-	if (CameraManager::get().isPlayerCam())
+	if (CameraManager::get().isPlayerCam()){
 		getManager<CAnimationSounds>()->update(0);
-
+		
+	}
 	updateGlobalConstants(elapsed);
 	return true;
 }
@@ -1580,12 +1581,12 @@ bool App::update(float elapsed)
 
     // Enemies
 	if (CameraManager::get().isPlayerCam()){
-
 		getManager<CBoss>()->update(elapsed);
 		getManager<CWeakSpot>()->update(elapsed);
 		getManager<CSmokePanel>()->update(elapsed);
 		getManager<CEnemy>()->update(elapsed);
 	}
+
     getManager<CFlareShot>()->update(elapsed);
 	getManager<CBichito>()->update(elapsed);
     getManager<CMobile>()->update(elapsed);
@@ -1636,6 +1637,8 @@ bool App::update(float elapsed)
 #endif
 
     getManager<CMist>()->update(elapsed);
+
+	if (CameraManager::get().isPlayerCam()){
 	
 #if !defined(_OBJECTTOOL) && !defined(_PARTICLES)
     // Skeletons
@@ -1650,11 +1653,26 @@ bool App::update(float elapsed)
     skelManager->update(elapsed);
 	
 #endif
-	getManager<CBoneLookAt>()->update(elapsed);
-    getManager<CArmPoint>()->update(elapsed);
-    skelManager->forall(&CSkeleton::testAndAddBonesToBuffer);
-	getManager<CAnimationSounds>()->update(elapsed);
-	getManager<CMaxAnim>()->update(elapsed);
+
+
+		getManager<CBoneLookAt>()->update(elapsed);
+		getManager<CArmPoint>()->update(elapsed);
+		skelManager->forall(&CSkeleton::testAndAddBonesToBuffer);
+		getManager<CAnimationSounds>()->update(elapsed);
+		getManager<CMaxAnim>()->update(elapsed);
+
+	}
+	else{
+
+		auto skelManager(getManager<CSkeleton>());
+		skelManager->update(0.0f);
+		getManager<CBoneLookAt>()->update(0.0f);
+		getManager<CArmPoint>()->update(0.0f);
+		skelManager->forall(&CSkeleton::testAndAddBonesToBuffer);
+		getManager<CAnimationSounds>()->update(0.0f);
+		getManager<CMaxAnim>()->update(0.0f);
+	
+	}
 
 	// Level elements
 	getManager<CPickup>()->update(elapsed);

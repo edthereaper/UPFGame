@@ -1,0 +1,7 @@
+<camera>
+	<cinematic name="Camera1_1" level="1" max="95" idx="0" />
+	<cinematic name="Camera1_2" level="1" max="95" idx="1" />
+	<cinematic name="Camera1_3" level="1" max="95" idx="2" />
+	<cinematic name="Camera1_4" level="1" max="85" idx="3" />
+	<cinematic name="Camera1_5" level="1" max="85" idx="4" />
+</camera>

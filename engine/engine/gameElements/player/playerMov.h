@@ -480,6 +480,10 @@ namespace gameElements {
 			if (bt.getState() == PlayerMovBtExecutor::CANNON_AIM || bt.getState() == PlayerMovBtExecutor::CANNON_SHOOT) return true;
 			return false;
 		}
+
+		inline void setIdle(){
+			bt.changeState(PlayerMovBtExecutor::IDLE);
+		}
 		
 		inline bool isOnCreep(){
 			if (bt.getState() == PlayerMovBtExecutor::CREEP_CLIMB ||
