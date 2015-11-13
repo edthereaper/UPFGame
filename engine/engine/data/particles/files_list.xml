@@ -18,9 +18,11 @@
 	<texture name="ice2" />
 	<texture name="image_sequene_2x" />
 	<texture name="leaf1" />
+	<texture name="leaf2" />
 	<texture name="leaf3" />
 	<texture name="leaf4" />
 	<texture name="LightingRing" />
+	<texture name="pickups" />
 	<texture name="magic_001" />
 	<texture name="magic_002" />
 	<texture name="magic_003" />
@@ -36,4 +38,6 @@
 	<texture name="snow2" />
 	<texture name="shiny1" />
 	<texture name="shiny3" />
+	<texture name="transformation" />
+
 </files>
