@@ -388,7 +388,6 @@ void DeferredRender::renderGBuffer(component::Handle camera_h)
 
 void DeferredRender::destroy()
 {
-
     rt_lights->destroy();
     rt_albedo->destroy();
     rt_normals->destroy();
