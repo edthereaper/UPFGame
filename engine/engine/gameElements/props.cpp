@@ -713,7 +713,6 @@ void initPropTypes()
     SUBSCRIBE_MSG_TO_MEMBER(CTrampoline, MsgRevive, revive);
     SUBSCRIBE_MSG_TO_MEMBER(CCannon, MsgRevive, revive);
     SUBSCRIBE_MSG_TO_MEMBER(CCreep, MsgRevive, revive);
-    SUBSCRIBE_MSG_TO_MEMBER(CDestructibleRestorer, MsgRevive, revive);
 }
 
 void CTransformable::receive(const MsgShot& shot)

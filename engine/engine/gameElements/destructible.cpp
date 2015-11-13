@@ -86,7 +86,7 @@ CDestructible::~CDestructible()
 }
 
 
-void CDestructibleRestorer::revive(const MsgRevive&)
+void CDestructibleRestorer::revive()
 {
     Entity* e = PrefabManager::get().prefabricate("destructible");
     CTransform* t = e->get<CTransform>();
@@ -99,10 +99,11 @@ void CDestructibleRestorer::revive(const MsgRevive&)
     
     CDestructible* destructible = e->get<CDestructible>();
     destructible->createBox(boxSize);
-    e->init();
 
     Entity* me = Handle(this).getOwner();
-    me->postMsg(MsgDeleteSelf());
+    me->sendMsg(MsgDeleteSelf());
+
+    e->init();
 }
 
 }

@@ -1055,6 +1055,17 @@ void resetLiana(Entity* l, CLevelData* level)
     l->postMsg(MsgDeleteSelf());
 }
 
+void resetDestructibles()
+{
+    std::vector<Handle> v;
+    for(auto i : *getManager<CDestructibleRestorer>()) {
+        v.push_back(i);
+    }
+    for(CDestructibleRestorer* i : v) {
+        i->revive();
+    }
+}
+
 void resetEnemy(Entity* enemy, CLevelData* level)
 {
     CRestore* restore = enemy->get<CRestore>();
@@ -1110,6 +1121,7 @@ void App::retry()
 	getManager<CBullet>()->forall(&CBullet::removeFromScene);
 	getManager<CPickup>()->forall(&CPickup::removeFromScene);
 	getManager<CFlareShot>()->forall(&CFlareShot::removeFromScene);
+    resetDestructibles();
     component::getManager<Entity>()->forall<void>(sendRevive);
 
     EntityList(EntityListManager::get(CEnemy::TAG)).forall(

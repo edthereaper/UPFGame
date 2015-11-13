@@ -33,7 +33,7 @@ class CDestructibleRestorer : public component::Transform {
         inline void init(){}
         inline void update(float elapsed) {}
         inline void loadFromProperties(std::string, utils::MKeyValue) {}
-        void revive(const MsgRevive& m = MsgRevive());
+        void revive();
 };
 
 }
