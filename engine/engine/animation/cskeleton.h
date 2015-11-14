@@ -17,12 +17,14 @@ namespace animation {
     
 class CSkeleton : public level::SpatiallyIndexed {
     public:
+        static const unsigned BAD_BONE = ~0;
+    public:
         static float globalFactor;
     private:
 		CalModel*  model = nullptr;
         int currentMainCycle = -1;
         float animSpeed = 1;
-        unsigned bone0;
+        unsigned bone0 = BAD_BONE;
         render::CCulling::mask_t cullingMask;
 
 		XMVECTOR prev = zero_v;
@@ -55,7 +57,11 @@ class CSkeleton : public level::SpatiallyIndexed {
         inline unsigned getBone0() const {return bone0;}
 		void addBonesToBuffer();
         void testAndAddBonesToBuffer() {
-            if (isSpatiallyGood() && cullingMask.any()){addBonesToBuffer();}
+            if (isSpatiallyGood() && cullingMask.any()){
+                addBonesToBuffer();
+            } else {
+                bone0 = BAD_BONE;
+            }
         }
 
 		void stopAnimations();

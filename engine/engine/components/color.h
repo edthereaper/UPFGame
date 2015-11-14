@@ -100,6 +100,8 @@ struct Color {
         return set(v.x, v.y, v.z, v.w);
     }
     inline Color& operator=(const XMVECTOR& v) {return set(v);}
+    inline bool eq(const Color& b) {return rgba == b.rgba;}
+    inline bool ne(const Color& b) {return rgba != b.rgba;}
     
     Color blend(const Color& t, float f=0.5f);
 

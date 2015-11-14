@@ -34,5 +34,6 @@
 			report	="player|player-cannon"
 		/>
 	</Trigger>
+	<TagNonStaticShadow/>
 	<MaxAnim name="cannon" max="59f" type="PROP_POS_ROT" isOn="0" tag1="mark" tag2="cannon" tag3="1" />
 </Entity>

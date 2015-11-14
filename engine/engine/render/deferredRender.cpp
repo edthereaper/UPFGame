@@ -393,8 +393,11 @@ void DeferredRender::destroy()
     rt_normals->destroy();
     rt_space->destroy();
     rt_selfIllumination->destroy();
+    rt_paintGlow->destroy();
     rt_data1->destroy();
     rt_out->destroy();
+    rt_data2->destroy();
+    rt_normals_transform->destroy();
     postProcessSelfIll.retire();
     postProcessOut.retire();
     generateAmbientPPP.retire();

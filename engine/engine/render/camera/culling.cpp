@@ -17,7 +17,7 @@ using namespace utils;
 
 namespace render {
 
-void CullingAABB::update(const AABB& aabb, const XMMATRIX& world, bool ignoreWorldChange)
+bool CullingAABB::update(const AABB& aabb, const XMMATRIX& world, bool ignoreWorldChange)
 {
     if(dirty || (!ignoreWorldChange && prevWorld != world)){
         dirty = false;
@@ -25,6 +25,9 @@ void CullingAABB::update(const AABB& aabb, const XMMATRIX& world, bool ignoreWor
         operator=(bakeCulling(aabb, world));
         if (scale != 1){scaleAABB(scale);}
         if (skin != 0) {skinAABB(skin);}
+        return true;
+    } else {
+        return false;
     }
 }
 
@@ -240,23 +243,6 @@ void CCullingAABB::loadFromProperties(const std::string& elem, utils::MKeyValue 
 
 Culling::cullers_t Culling::cullers;
 unsigned Culling::currentCuller = 0;
-bool Culling::cullerListChanged = true;
-
-Culling::mask_t Culling::addDelegate(CullerDelegate&& delegate)
-{
-    if (cullers.size() > currentCuller && cullers[currentCuller] == delegate) {
-        ++currentCuller;
-        return 1<<(currentCuller-1);
-    } else {
-        if (!cullerListChanged) {cullers.erase(cullers.begin()+currentCuller, cullers.end());}
-        cullers.push_back(delegate);
-        size_t size = cullers.size();
-        assert(size < MAX_CULLERS);
-        ++currentCuller;
-        cullerListChanged = true;
-        return 1<<(currentCuller-1);
-    }
-}
 
 void CCulling::update(float)
 {
@@ -283,7 +269,7 @@ void CCulling::update(float)
     } else {
         changed = false;
     }
-    mask = addCCulling(me_h);
+    addCCulling(me_h);
 }
 
 bool CCulling::contains(XMVECTOR point) const
@@ -339,7 +325,7 @@ void CCullingCube::update(float)
             planes[i][5] = w - z;
             changed = true;
         }
-        mask[i] = addCCullingCube(me_h, Culling::cullDirection_e(i));
+        addCCullingCube(me_h, Culling::cullDirection_e(i));
     }
 }
 

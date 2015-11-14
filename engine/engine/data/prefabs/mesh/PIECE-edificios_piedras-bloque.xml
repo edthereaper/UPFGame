@@ -3,7 +3,5 @@
 	<submesh id="0" material="bloque04" maxMatId="1" />
 	<submesh id="1" material="bloque04" maxMatId="2" />
 	<submesh id="2" material="bloque04" maxMatId="3" />
-	<submesh id="3" material="bloque04" maxMatId="4" />
-	<submesh id="4" material="bloque04" maxMatId="5" />
-	<submesh id="5" material="bloque04" maxMatId="6" />
+	<submesh id="3" material="bloque04" maxMatId="6" />
 </Mesh>

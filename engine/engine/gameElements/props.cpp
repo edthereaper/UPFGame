@@ -265,6 +265,7 @@ fsmState_t TransformableFSMExecutor::hit(float elapsed)
 fsmState_t TransformableFSMExecutor::transforming(float elapsed)
 {
     Entity* me = meEntity;
+    CTagNonStaticShadow::ensure(meEntity);
     CTransform* t = me->get<CTransform>();
 
     switch (type) {
@@ -679,6 +680,7 @@ void TransformableFSMExecutor::revive(const MsgRevive&)
                 } else {
                     cmesh->setVisible(true);
                 }
+                me->del<CTagNonStaticShadow>();
 	        } break;
 	    case TRANSFORMABLE_MATERIAL: {
 			    CMesh* cmesh = me->get<CMesh>();
@@ -711,7 +713,6 @@ void initPropTypes()
     SUBSCRIBE_MSG_TO_MEMBER(CTrampoline, MsgRevive, revive);
     SUBSCRIBE_MSG_TO_MEMBER(CCannon, MsgRevive, revive);
     SUBSCRIBE_MSG_TO_MEMBER(CCreep, MsgRevive, revive);
-    SUBSCRIBE_MSG_TO_MEMBER(CDestructibleRestorer, MsgRevive, revive);
 }
 
 void CTransformable::receive(const MsgShot& shot)

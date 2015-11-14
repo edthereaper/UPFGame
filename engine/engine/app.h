@@ -198,7 +198,6 @@ class App {
         bool renderInstanceMeshAABBs = INIT_RENDERINSTANCEMESHAABB;
         bool renderLightAABBs = INIT_RENDERLIGHTAABB;
         bool drawSkyBox = INIT_DRAWSKYBOX;
-        bool instanceCulling = true;
         bool useCullF = false;
         bool godMode = INIT_GODMODE;
         bool animOff = false;
@@ -212,7 +211,6 @@ class App {
         bool drawPaintVolume = false;
         bool drawPaint = true;
         bool renderFlowerSimulation = false;
-        bool useMaskForInstanceCulling = true;
 
 		component::Handle playerModelEntity_h;
 
@@ -271,12 +269,24 @@ class App {
 		int mainMenuState = 0;
 
 #ifdef _DEBUG
+        typedef void (__cdecl *pRENDERDOC_TriggerCapture)();
+        pRENDERDOC_TriggerCapture renderDocCapture;
     public:
+        void captureFrame() {
+            if (renderDocCapture) {renderDocCapture();}
+        }
 #endif
 		bool enableShadows = true;
 	    bool debugPause = false;
 
 	public:
+        enum {
+            IC_NO,
+            IC_BEFORE_W_PARTITION,
+            IC_BEFORE_W_O_PARTITION,
+            IC_AFTER,
+        } instanceCulling = IC_NO;
+
 		bool isLoadingThreadActve = false;
 		bool loadingLevelComplete = false;
 		bool loadingthreadVar = true;

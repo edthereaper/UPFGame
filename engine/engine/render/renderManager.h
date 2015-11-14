@@ -1,9 +1,11 @@
 #ifndef RENDER_RENDER_MANAGER_H_
 #define RENDER_RENDER_MANAGER_H_
 
-#include "handles/handle.h"
+#include "handles/entity.h"
 #include "components/color.h"
 #include "texture/material.h"
+#include "texture/renderedTexture.h"
+#include "texture/renderedTextureCube.h"
 #include "mesh/component.h"
 #include "mesh/mesh.h"
 #include "camera/culling.h"
@@ -12,6 +14,14 @@
 namespace render {
 
 class DeferredRender;
+
+struct CTagNonStaticShadow {
+    static void ensure(component::Handle e_h);
+
+    inline void init(){}
+    inline void update(float){}
+    inline void loadFromProperties(const std::string&, const utils::MKeyValue&){}
+};
 
 class RenderManager {
     public:
@@ -74,13 +84,16 @@ class RenderManager {
                 component::Handle transform;
                 specialKey_e specialClass;
                 component::Handle special;
+                bool nonStatic = false;
 
             public:
                 shadowKey_t(component::Handle entity, component::Handle mesh,
                     component::Handle transform, specialKey_e specialClass,
                     component::Handle special) :
                     entity(entity), mesh(mesh), transform(transform),
-                    specialClass(specialClass), special(special) {}
+                    specialClass(specialClass), special(special),
+                    nonStatic(entity.hasSon<CTagNonStaticShadow>()) {
+                }
         };
     private:
         RenderManager()=delete;
@@ -109,11 +122,31 @@ class RenderManager {
             const Technique*& technique_prev, const Mesh*& mesh_prev,
             const Material*& material_prev,
             bool& bones, bool& first, std::vector<key_t>* alphaKeys = nullptr);
+
+        static void renderShadowKeys(
+            component::Handle light_h,
+            Culling::cullDirection_e cullingType,
+            const Culling::CullerDelegate& culler,
+            shadowKeyContainer_t keys,
+            Technique* normalTech,
+            Technique* skinnedTech,
+            Technique* instancedTech);
+
+        static bool testShadowKeys(
+            const Culling::CullerDelegate& culler,
+            shadowKeyContainer_t& returnKeys);
     public:
         static void init();
         static void renderAll(component::Handle cameraE_h,
             const DeferredRender& renderer, Culling::cullDirection_e dir=Culling::NORMAL);
-        static void renderShadows(component::Handle light_h,
+        static bool renderShadows(component::Handle light_h,
+            RenderedTexture& shadowMap,
+            Culling::cullDirection_e cullingType = Culling::NORMAL,
+            Technique* normalTech = nullptr,
+            Technique* skinnedTech = nullptr,
+            Technique* instancedTech = nullptr);
+        static bool renderShadows(component::Handle light_h,
+            RenderedTextureCube& shadowCubeMap,
             Culling::cullDirection_e cullingType = Culling::NORMAL,
             Technique* normalTech = nullptr,
             Technique* skinnedTech = nullptr,

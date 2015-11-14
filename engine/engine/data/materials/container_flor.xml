@@ -1,1 +1,1 @@
-<std_material name="container_flor" diffuse="container_flor_diffuse" normal="container_flor_normals" selfIllumination="container_flor_self"  />
+<std_material name="container_flor" diffuse="container_flor_diffuse" normal="container_flor_normals" selfIllumination="container_flor_self" random="true"  />

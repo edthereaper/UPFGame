@@ -367,6 +367,7 @@ void App::loadConfig()
 {
 	char windowedStr[32] {};
 	char shadowsStr[32] {};
+	char icStr[32] {};
 #ifdef _DEBUG
 	config.xres = GetPrivateProfileInt("display_debug", "x", defConfig.xres, ".\\config.ini");
 	config.yres = GetPrivateProfileInt("display_debug", "y", defConfig.yres, ".\\config.ini");
@@ -379,6 +380,8 @@ void App::loadConfig()
 	char channelStr[32] {};
     GetPrivateProfileString("debug", "initChannel", "FX_FINAL",
         channelStr, ARRAYSIZE(channelStr)-1, ".\\config.ini");
+    GetPrivateProfileString("debug", "instanceculling", "off",
+        icStr, ARRAYSIZE(icStr)-1, ".\\config.ini");
 
 #define IF_CASE_CONFIG_CHANNEL(name) if (!strcmp(channelStr, #name)) {selectedChannel = name;}
 #define ELIF_CASE_CONFIG_CHANNEL(name) else if (!strcmp(channelStr, #name)) {selectedChannel = name;}
@@ -410,6 +413,8 @@ void App::loadConfig()
         windowedStr, ARRAYSIZE(windowedStr)-1, ".\\config.ini");
     GetPrivateProfileString("display", "shadows", "true",
         shadowsStr, ARRAYSIZE(shadowsStr)-1, ".\\config.ini");
+    GetPrivateProfileString("display", "instanceculling", "off",
+        icStr, ARRAYSIZE(icStr)-1, ".\\config.ini");
 #endif
 	xboxPadSensiblity = GetPrivateProfileInt("sensibility", "xbox", 5, ".\\config.ini");
 	if (xboxPadSensiblity < 1)	xboxPadSensiblity = 1;
@@ -422,6 +427,16 @@ void App::loadConfig()
 	if (config.yres > desktop.bottom)	config.yres = desktop.bottom - desktop.top;
 	config.windowed = !strcmp(windowedStr, "true");
     enableShadows = !strcmp(shadowsStr, "true");
+
+    if (!strcmp(windowedStr, "off")) {
+        instanceCulling = IC_NO;
+    } else if (!strcmp(windowedStr, "before")) {
+        instanceCulling = IC_BEFORE_W_O_PARTITION;
+    } else if (!strcmp(windowedStr, "before-late-partition")) {
+        instanceCulling = IC_BEFORE_W_O_PARTITION;
+    } else if (!strcmp(windowedStr, "after")) {
+        instanceCulling = IC_AFTER;
+    };
 }
 
 CamCannonController cam1P;
@@ -597,17 +612,18 @@ void App::addMappings()
 bool App::create()
 {
 	seedRand();
-
-	
-
-	//mistEffect(true);
-
 	if (!Render::createDevice()) { return false; }
 
     EffectLibrary::init();
     
 #ifdef _DEBUG
 	antTw_user::AntTWManager::init(config.xres, config.yres);
+
+    // Setup renderDocCapture()
+    HMODULE renderdoc = GetModuleHandle("renderdoc.dll");
+    renderDocCapture = (pRENDERDOC_TriggerCapture)GetProcAddress(
+        renderdoc, "RENDERDOC_TriggerCapture");
+
 #endif
 
 	component::init();
@@ -709,6 +725,7 @@ void App::loadlvl()
 
 
     Handle::setCleanup(true);
+    Culling::resetMasks();
     PaintManager::clear();
 	ParticleUpdaterManager::get().deleteAll();
 	CSmokeTower::resetFX();
@@ -1038,6 +1055,17 @@ void resetLiana(Entity* l, CLevelData* level)
     l->postMsg(MsgDeleteSelf());
 }
 
+void resetDestructibles()
+{
+    std::vector<Handle> v;
+    for(auto i : *getManager<CDestructibleRestorer>()) {
+        v.push_back(i);
+    }
+    for(CDestructibleRestorer* i : v) {
+        i->revive();
+    }
+}
+
 void resetEnemy(Entity* enemy, CLevelData* level)
 {
     CRestore* restore = enemy->get<CRestore>();
@@ -1093,6 +1121,7 @@ void App::retry()
 	getManager<CBullet>()->forall(&CBullet::removeFromScene);
 	getManager<CPickup>()->forall(&CPickup::removeFromScene);
 	getManager<CFlareShot>()->forall(&CFlareShot::removeFromScene);
+    resetDestructibles();
     component::getManager<Entity>()->forall<void>(sendRevive);
 
     EntityList(EntityListManager::get(CEnemy::TAG)).forall(
@@ -1412,6 +1441,7 @@ bool App::updateCinematic(float elapsed)
 	getManager<CSmokeTower>()->forall<void>(&CSmokeTower::updatePaused, elapsed);
 
 	// Skeletons
+    rewindBoneBuffer();
 	auto skelManager(getManager<CSkeleton>());
 	skelManager->update(0);
 	getManager<CBoneLookAt>()->update(0);
@@ -1442,13 +1472,14 @@ bool App::updatePaused(float elapsed)
     getManager<CSmokeTower>()->forall<void>(&CSmokeTower::updatePaused, elapsed);
 
     // Skeletons
+    rewindBoneBuffer();
     auto skelManager(getManager<CSkeleton>());
     skelManager->update(0);
     getManager<CBoneLookAt>()->update(0);
     getManager<CArmPoint>()->update(0);
     skelManager->forall(&CSkeleton::testAndAddBonesToBuffer);
 	getManager<CAnimationSounds>()->update(0);
-    
+
     updateGlobalConstants(elapsed);
 	return true;
 }
@@ -1638,11 +1669,13 @@ bool App::update(float elapsed)
 
     getManager<CMist>()->update(elapsed);
 
+	rewindBoneBuffer();
+	auto skelManager(getManager<CSkeleton>());
+
 	if (CameraManager::get().isPlayerCam()){
-	
+		
 #if !defined(_OBJECTTOOL) && !defined(_PARTICLES)
     // Skeletons
-    auto skelManager(getManager<CSkeleton>());
 #ifdef _DEBUG
 
 	#if !defined(_LIGHTTOOL)
@@ -1664,7 +1697,6 @@ bool App::update(float elapsed)
 	}
 	else{
 
-		auto skelManager(getManager<CSkeleton>());
 		skelManager->update(0.0f);
 		getManager<CBoneLookAt>()->update(0.0f);
 		getManager<CArmPoint>()->update(0.0f);
@@ -1690,8 +1722,8 @@ bool App::update(float elapsed)
     FlowerPathManager::updateFlowers(elapsed);
 
     component::MessageManager::dispatchPosts();
-    updateGlobalConstants(elapsed);
     Material::updateAnimatedMaterials(elapsed);
+    updateGlobalConstants(elapsed);
     return true;
 }
 
@@ -2171,9 +2203,6 @@ void App::render()
 #endif
 
     Render::getSwapChain()->Present(0, 0);
-    rewindBoneBuffer();
-
-	
 }
 
 void App::destroy()
