@@ -614,7 +614,9 @@ void App::addMappings()
 bool App::create()
 {
 	seedRand();
-	if (!Render::createDevice()) { return false; }
+	if (!Render::createDevice()) { 
+		return false; 
+	}
 
     EffectLibrary::init();
     
@@ -725,6 +727,8 @@ void App::loadlvl()
 {
     dbg("Loading level %d...\n", gamelvl);
 
+	CameraManager::get().setFreeCam(false);
+	CameraManager::get().setPlayerActive(true);
 
     Handle::setCleanup(true);
     Culling::resetMasks();

@@ -63,7 +63,9 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance,
 
 #ifndef _TEST
 	// If the app can't start, exit
-	if (!app.create()) {
+	bool success = app.create();
+
+	if (!success) {
         app.destroy();
 		return FALSE;
     }
@@ -176,7 +178,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	// Create the actual window
 	hWnd = CreateWindow("Vinedetta", "Vinedetta"
 		, WS_OVERLAPPEDWINDOW
-		, originX, originY//, CW_USEDEFAULT, CW_USEDEFAULT		// Position
+		, 0, 0//, CW_USEDEFAULT, CW_USEDEFAULT		// Position
 		, rc.right - rc.left					// Width
 		, rc.bottom - rc.top					// Height
 		, NULL, NULL
