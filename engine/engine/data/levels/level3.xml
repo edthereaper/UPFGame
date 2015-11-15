@@ -601,7 +601,6 @@
 		<piece kit="bunker_torre" filename="viga_grande_pared" pos="16.6484 83.1699 12.9441" rot="0.451147 0.186867 0.806241 0.333949" spatialIndex="-1" />
 		<piece kit="bunker_torre" filename="viga_grande_pared" pos="9.83012 83.1699 8.75933" rot="0.451147 0.186867 0.806241 0.333949" spatialIndex="-1" />
 		<piece kit="bunker_torre" filename="viga_grande_pared" pos="3.01191 83.1698 4.57461" rot="0.451147 0.186867 0.806241 0.333949" spatialIndex="-1" />
-		<piece kit="arriba_torre" filename="boss" pos="-1.84336 96.8783 -0.246621" rot="0.0 0.0 0.0 1.0" spatialIndex="-1" />
 		<piece kit="arriba_torre" filename="extremo" pos="-18.7659 80.9956 9.43772" rot="0.0 0.866025 0.0 0.5" spatialIndex="-1" />
 		<piece kit="arriba_torre" filename="extremo" pos="14.9496 80.9956 9.43772" rot="0.0 0.866025 0.0 -0.5" spatialIndex="-1" />
 		<piece kit="arriba_torre" filename="extremo" pos="-1.90814 80.9956 -19.7608" rot="0.0 0.0 0.0 1.0" spatialIndex="-1" />
