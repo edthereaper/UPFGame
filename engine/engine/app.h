@@ -310,8 +310,6 @@ class App {
 		void loadlvl();
 		void spawn();
 
-		bool updateCreditsMenu();
-		void renderCreditsMenu();
 		int updateMainMenu();
 		void renderMainMenu();
 		int chapterSelectionState = 0;
