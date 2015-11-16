@@ -1333,7 +1333,7 @@ bool App::doFrame()
 		elapsed2 = elapsed;
 	#endif
 
-		if (!CameraManager::get().isPlayerCam())
+		if (!CameraManager::get().isPlayerCam() && !paused)
 		{
 			updateCinematic(elapsed);
 			render();

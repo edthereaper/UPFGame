@@ -1515,7 +1515,7 @@
 		<object pos="81.9174 16.275 51.9134" rot="-0.201596 -0.488183 -0.117017 0.841037" spatialIndex="9" transformed="false">
 			<cannon fovH="45.0" fovV="45.0" impulse="7.0" />
 		</object>
-		<object pos="111.815 40.2778 50.1949" rot="-0.467852 -0.458249 -0.483941 0.580451" spatialIndex="9" transformed="false">
+		<object pos="111.815 39.8778 50.1949" rot="-0.467852 -0.458249 -0.483941 0.580451" spatialIndex="9" transformed="false">
 			<cannon fovH="10.0" fovV="30.0" impulse="17.0" />
 		</object>
 		<object pos="43.8537 35.6737 51.4957" rot="0.0 0.0 0.0 1.0" spatialIndex="8" transformed="false">
