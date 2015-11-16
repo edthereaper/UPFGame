@@ -184,6 +184,9 @@ void align3D(Transform* t, const XMVECTOR &target, float maxAng_rad)
     // Cross product yields a perpendicular vector that is the
     //axis related to the angle returned by XMVector3AngleBetweenVectors.
     const XMVECTOR normal = XMVector3Cross(front,d);
+    if(normal == zero_v) {
+        return;
+    }
     a = std::min(a, maxAng_rad);
 	const XMVECTOR q = XMQuaternionRotationAxis(normal, a);
     t->applyRotation(q);
