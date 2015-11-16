@@ -35,6 +35,10 @@ using namespace gameElements;
 
 #include "fmod_User/fmodStudio.h"
 
+#include "Cinematic\animation_camera.h"
+#include "Cinematic\camera_manager.h"
+using namespace cinematic;
+
 namespace behavior {
 	PlayerAttackBt::nodeId_t PlayerAttackBt::rootNode = INVALID_NODE;
 	PlayerAttackBt::container_t PlayerAttackBt::nodes;
@@ -377,7 +381,7 @@ ret_e PlayerAttackBtExecutor::aim(float elapsed)
 		auto& bte(bt.getExecutor());
 		Entity* me = bte.meEntity;
 		CPlayerStats* mePS = me->get<CPlayerStats>();
-		if (!mePS->isPlayerDead()){
+		if (!mePS->isPlayerDead() && CameraManager::get().isPlayerCam()){
 			bte.previousAction = bt.getCurrentAction();
 			bte.chooseBestTarget();
 			bt.update(elapsed);

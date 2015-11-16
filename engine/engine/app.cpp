@@ -2134,7 +2134,7 @@ void App::render()
                 Texture::getManager().getByName("cannon_aim"),
                 nullptr, true);
 				float imgPosX, imgPosY, imgWidth, imgHeight;
-				getImgValues(imgPosX, imgPosY, imgWidth, imgHeight, 614, 64, 80, 80);
+				getImgValues(imgPosX, imgPosY, imgWidth, imgHeight, 624, 84, 60, 60);
 			if (playerMov->getCannonState() == 1)
 				drawText(pixelRect(int(imgPosX), int(imgPosY), int(imgWidth), int(imgHeight)),
 				pixelRect(config.xres, config.yres), "3");
