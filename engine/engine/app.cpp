@@ -311,7 +311,7 @@ fsmState_t AppFSMExecutor::credits(float elapsed)
 	App &app = App::get();	
 	fmodUser::fmodUserClass::stopSounds();
 	app.videoEndsTo = 0;
-	app.loadVideo("eyes.ogv", "");
+	app.loadVideo("credits.ogv", "video_credits");
 	return STATE_playvideo;
 #else
 	return STATE_quit;
@@ -334,7 +334,7 @@ fsmState_t AppFSMExecutor::win(float elapsed)
 	MessageManager::dispatchPosts();
 	Handle::setCleanup(false);
 	app.videoEndsTo = 0;
-	app.loadVideo("eyes.ogv", "");
+	app.loadVideo("ending.ogv", "video_ending");
 	return STATE_playvideo;
 #else
 	return STATE_quit;
